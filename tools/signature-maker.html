@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Signature Maker | FormReady India</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f7fb;
+color:#111827;
+}
+
+header{
+background:#111827;
+color:white;
+padding:16px 6%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:22px;
+font-weight:800;
+}
+
+.logo span{
+color:#60a5fa;
+}
+
+header a{
+color:white;
+text-decoration:none;
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:25px 15px;
+}
+
+.back{
+color:#2563eb;
+text-decoration:none;
+font-weight:600;
+}
+
+.card{
+background:white;
+margin-top:18px;
+padding:25px;
+border-radius:22px;
+box-shadow:0 10px 35px #0000000d;
+}
+
+h1{
+text-align:center;
+margin:5px 0;
+}
+
+.sub{
+text-align:center;
+color:#6b7280;
+line-height:1.5;
+}
+
+.controls{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:12px;
+margin-top:22px;
+}
+
+.field label{
+display:block;
+font-size:13px;
+font-weight:700;
+margin-bottom:7px;
+}
+
+input[type=color],
+input[type=range]{
+width:100%;
+}
+
+select{
+width:100%;
+padding:12px;
+border:1px solid #d1d5db;
+border-radius:10px;
+background:white;
+}
+
+.canvas-wrap{
+margin-top:20px;
+background:#eef2f7;
+padding:15px;
+border-radius:16px;
+}
+
+canvas{
+display:block;
+width:100%;
+height:300px;
+background:white;
+border-radius:10px;
+border:1px solid #d1d5db;
+touch-action:none;
+cursor:crosshair;
+}
+
+.buttons{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:18px;
+}
+
+button{
+border:0;
+padding:13px 18px;
+border-radius:11px;
+font-weight:700;
+cursor:pointer;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.success{
+background:#16a34a;
+color:white;
+}
+
+.secondary{
+background:#e5e7eb;
+color:#111827;
+}
+
+.info{
+margin-top:18px;
+padding:14px;
+background:#f1f5f9;
+border-radius:12px;
+font-size:13px;
+color:#475569;
+line-height:1.6;
+}
+
+@media(max-width:600px){
+.controls{
+grid-template-columns:1fr;
+}
+
+.card{
+padding:18px;
+}
+
+canvas{
+height:250px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+FormReady <span>India</span>
+</div>
+
+<a href="/">Home</a>
+
+</header>
+
+
+<div class="container">
+
+<a class="back" href="/">← Back to Tools</a>
+
+<div class="card">
+
+<h1>✍️ Signature Maker</h1>
+
+<p class="sub">
+Draw your signature and download it as a transparent PNG.
+</p>
+
+
+<div class="controls">
+
+<div class="field">
+
+<label>Ink Color</label>
+
+<input
+id="color"
+type="color"
+value="#111111"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Pen Size</label>
+
+<input
+id="size"
+type="range"
+min="1"
+max="15"
+value="4"
+>
+
+</div>
+
+
+<div class="field">
+
+<label>Background</label>
+
+<select id="background">
+
+<option value="transparent">
+Transparent
+</option>
+
+<option value="white">
+White
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="canvas-wrap">
+
+<canvas
+id="canvas"
+width="1200"
+height="600"
+></canvas>
+
+</div>
+
+
+<div class="buttons">
+
+<button
+class="primary"
+id="downloadPng"
+>
+⬇️ Download PNG
+</button>
+
+<button
+class="success"
+id="downloadJpg"
+>
+⬇️ Download JPG
+</button>
+
+<button
+class="secondary"
+id="clearBtn"
+>
+🗑️ Clear
+</button>
+
+</div>
+
+
+<div class="info">
+<b>How to use:</b><br>
+Draw your signature inside the box using your finger or mouse.
+Choose the pen size and color if needed, then download your signature.
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+const color =
+document.getElementById("color");
+
+const size =
+document.getElementById("size");
+
+const background =
+document.getElementById("background");
+
+const clearBtn =
+document.getElementById("clearBtn");
+
+const downloadPng =
+document.getElementById("downloadPng");
+
+const downloadJpg =
+document.getElementById("downloadJpg");
+
+
+let drawing =
+false;
+
+let lastX =
+0;
+
+let lastY =
+0;
+
+
+/* Canvas setup */
+
+ctx.lineCap =
+"round";
+
+ctx.lineJoin =
+"round";
+
+ctx.strokeStyle =
+color.value;
+
+ctx.lineWidth =
+parseInt(size.value);
+
+
+/* Controls */
+
+color.addEventListener(
+"input",
+function(){
+
+ctx.strokeStyle =
+this.value;
+
+});
+
+
+size.addEventListener(
+"input",
+function(){
+
+ctx.lineWidth =
+parseInt(this.value);
+
+});
+
+
+/* Pointer position */
+
+function getPosition(event){
+
+const rect =
+canvas.getBoundingClientRect();
+
+return {
+
+x:
+(event.clientX - rect.left)
+*
+(canvas.width / rect.width),
+
+y:
+(event.clientY - rect.top)
+*
+(canvas.height / rect.height)
+
+};
+
+}
+
+
+/* Start drawing */
+
+canvas.addEventListener(
+"pointerdown",
+function(event){
+
+event.preventDefault();
+
+drawing =
+true;
+
+canvas.setPointerCapture(
+event.pointerId
+);
+
+const p =
+getPosition(event);
+
+lastX =
+p.x;
+
+lastY =
+p.y;
+
+});
+
+
+/* Draw */
+
+canvas.addEventListener(
+"pointermove",
+function(event){
+
+if(!drawing)
+return;
+
+event.preventDefault();
+
+const p =
+getPosition(event);
+
+ctx.beginPath();
+
+ctx.moveTo(
+lastX,
+lastY
+);
+
+ctx.lineTo(
+p.x,
+p.y
+);
+
+ctx.stroke();
+
+lastX =
+p.x;
+
+lastY =
+p.y;
+
+});
+
+
+/* Stop */
+
+canvas.addEventListener(
+"pointerup",
+function(){
+
+drawing =
+false;
+
+});
+
+canvas.addEventListener(
+"pointercancel",
+function(){
+
+drawing =
+false;
+
+});
+
+canvas.addEventListener(
+"pointerleave",
+function(){
+
+drawing =
+false;
+
+});
+
+
+/* Clear */
+
+clearBtn.addEventListener(
+"click",
+function(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+});
+
+
+/* Prepare background */
+
+function prepareBackground(
+type
+){
+
+const temp =
+document.createElement(
+"canvas"
+);
+
+temp.width =
+canvas.width;
+
+temp.height =
+canvas.height;
+
+const tctx =
+temp.getContext("2d");
+
+if(type==="white"){
+
+tctx.fillStyle =
+"#ffffff";
+
+tctx.fillRect(
+0,
+0,
+temp.width,
+temp.height
+);
+
+}
+
+tctx.drawImage(
+canvas,
+0,
+0
+);
+
+return temp;
+
+}
+
+
+/* Download PNG */
+
+downloadPng.addEventListener(
+"click",
+function(){
+
+const temp =
+prepareBackground(
+background.value
+);
+
+const link =
+document.createElement("a");
+
+link.href =
+temp.toDataURL(
+"image/png"
+);
+
+link.download =
+"formready-signature.png";
+
+document.body.appendChild(
+link
+);
+
+link.click();
+
+link.remove();
+
+});
+
+
+/* Download JPG */
+
+downloadJpg.addEventListener(
+"click",
+function(){
+
+const temp =
+prepareBackground(
+"white"
+);
+
+const link =
+document.createElement("a");
+
+link.href =
+temp.toDataURL(
+"image/jpeg",
+0.95
+);
+
+link.download =
+"formready-signature.jpg";
+
+document.body.appendChild(
+link
+);
+
+link.click();
+
+link.remove();
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Merge PDF | FormReady India</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f7fb;
+  color:#111827;
+}
+
+header{
+  background:#111827;
+  color:white;
+  padding:16px 6%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+}
+
+.logo span{
+  color:#60a5fa;
+}
+
+header a{
+  color:white;
+  text-decoration:none;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:25px 15px;
+}
+
+.back{
+  color:#2563eb;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.card{
+  background:white;
+  margin-top:18px;
+  padding:25px;
+  border-radius:22px;
+  box-shadow:0 10px 35px #0000000d;
+}
+
+h1{
+  text-align:center;
+  margin:5px 0;
+}
+
+.sub{
+  text-align:center;
+  color:#6b7280;
+  line-height:1.5;
+}
+
+.upload{
+  margin-top:25px;
+  border:2px dashed #93c5fd;
+  background:#eff6ff;
+  border-radius:18px;
+  padding:35px 15px;
+  text-align:center;
+}
+
+.upload input{
+  display:none;
+}
+
+.choose{
+  display:inline-block;
+  background:#2563eb;
+  color:white;
+  padding:14px 24px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+#work{
+  display:none;
+  margin-top:25px;
+}
+
+.file-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:20px;
+}
+
+.file-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  border-radius:13px;
+}
+
+.number{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#2563eb;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.file-name{
+  flex:1;
+  font-size:14px;
+  font-weight:600;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.file-size{
+  font-size:11px;
+  color:#64748b;
+  margin-top:3px;
+}
+
+.remove{
+  background:#fee2e2;
+  color:#b91c1c;
+  padding:9px 12px;
+  border:0;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.buttons{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+button{
+  border:0;
+  padding:13px 18px;
+  border-radius:11px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.primary{
+  background:#2563eb;
+  color:white;
+}
+
+.secondary{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+.success{
+  background:#16a34a;
+  color:white;
+}
+
+.info{
+  margin-top:18px;
+  padding:14px;
+  background:#f1f5f9;
+  border-radius:12px;
+  font-size:13px;
+  color:#475569;
+  line-height:1.6;
+}
+
+.empty{
+  text-align:center;
+  padding:20px;
+  color:#64748b;
+}
+
+@media(max-width:600px){
+  .card{
+    padding:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    FormReady <span>India</span>
+  </div>
+
+  <a href="/">Home</a>
+</header>
+
+
+<div class="container">
+
+<a class="back" href="/">← Back to Tools</a>
+
+<div class="card">
+
+<h1>📑 Merge PDF</h1>
+
+<p class="sub">
+Combine multiple PDF files into one single PDF.
+</p>
+
+
+<div class="upload">
+
+<label class="choose" for="pdfFiles">
+📄 Choose PDF Files
+</label>
+
+<input
+  id="pdfFiles"
+  type="file"
+  accept="application/pdf,.pdf"
+  multiple
+>
+
+<p>
+Select two or more PDF files.
+</p>
+
+</div>
+
+
+<div id="work">
+
+<div class="info">
+<strong>Tip:</strong>
+PDFs will be merged in the order shown below.
+</div>
+
+
+<div class="file-list" id="fileList"></div>
+
+
+<div class="buttons">
+
+<button
+  class="primary"
+  id="addMore"
+>
+➕ Add More PDFs
+</button>
+
+<button
+  class="success"
+  id="mergeBtn"
+>
+📑 Merge PDFs
+</button>
+
+<button
+  class="secondary"
+  id="resetBtn"
+>
+Reset
+</button>
+
+</div>
+
+
+<div class="info" id="status">
+Ready.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script src="/js/pdf-lib.min.js"></script>
+
+<script>
+
+const pdfFiles =
+document.getElementById("pdfFiles");
+
+const fileList =
+document.getElementById("fileList");
+
+const work =
+document.getElementById("work");
+
+const status =
+document.getElementById("status");
+
+const addMore =
+document.getElementById("addMore");
+
+const mergeBtn =
+document.getElementById("mergeBtn");
+
+const resetBtn =
+document.getElementById("resetBtn");
+
+
+let selectedFiles = [];
+
+
+/* Choose PDFs */
+
+pdfFiles.addEventListener(
+"change",
+function(){
+
+const newFiles =
+Array.from(this.files);
+
+for(const file of newFiles){
+
+if(
+file.type === "application/pdf" ||
+file.name.toLowerCase().endsWith(".pdf")
+){
+
+selectedFiles.push(file);
+
+}
+
+}
+
+pdfFiles.value = "";
+
+renderFiles();
+
+}
+);
+
+
+/* Add more */
+
+addMore.addEventListener(
+"click",
+function(){
+
+pdfFiles.click();
+
+}
+);
+
+
+/* Display files */
+
+function renderFiles(){
+
+fileList.innerHTML = "";
+
+if(selectedFiles.length === 0){
+
+work.style.display = "none";
+
+return;
+
+}
+
+work.style.display = "block";
+
+
+selectedFiles.forEach(
+(file,index)=>{
+
+const item =
+document.createElement("div");
+
+item.className = "file-item";
+
+
+const number =
+document.createElement("div");
+
+number.className = "number";
+
+number.textContent =
+index + 1;
+
+
+const info =
+document.createElement("div");
+
+info.className = "file-name";
+
+info.innerHTML =
+escapeHtml(file.name)
++
+"<div class='file-size'>"
++
+formatBytes(file.size)
++
+"</div>";
+
+
+const remove =
+document.createElement("button");
+
+remove.className = "remove";
+
+remove.textContent = "✕";
+
+remove.onclick =
+function(){
+
+selectedFiles.splice(index,1);
+
+renderFiles();
+
+};
+
+
+item.appendChild(number);
+item.appendChild(info);
+item.appendChild(remove);
+
+fileList.appendChild(item);
+
+});
+
+
+status.textContent =
+selectedFiles.length
++
+" PDF file"
++
+(selectedFiles.length === 1 ? "" : "s")
++
+" selected.";
+
+}
+
+
+/* Merge */
+
+mergeBtn.addEventListener(
+"click",
+async function(){
+
+if(selectedFiles.length < 2){
+
+alert(
+"Please select at least 2 PDF files."
+);
+
+return;
+
+}
+
+
+try{
+
+mergeBtn.disabled = true;
+
+mergeBtn.textContent =
+"⏳ Merging...";
+
+status.textContent =
+"Reading PDF files...";
+
+
+const mergedPdf =
+await PDFLib.PDFDocument.create();
+
+
+for(
+let i = 0;
+i < selectedFiles.length;
+i++
+){
+
+const file =
+selectedFiles[i];
+
+status.textContent =
+"Merging PDF "
++
+(i + 1)
++
+" of "
++
+selectedFiles.length
++
+"...";
+
+
+const arrayBuffer =
+await file.arrayBuffer();
+
+
+const pdf =
+await PDFLib.PDFDocument.load(
+arrayBuffer
+);
+
+
+const pages =
+await mergedPdf.copyPages(
+pdf,
+pdf.getPageIndices()
+);
+
+
+pages.forEach(
+page =>
+mergedPdf.addPage(page)
+);
+
+}
+
+
+/* Save */
+
+status.textContent =
+"Preparing download...";
+
+
+const pdfBytes =
+await mergedPdf.save();
+
+
+const blob =
+new Blob(
+[pdfBytes],
+{
+type:"application/pdf"
+}
+);
+
+
+const url =
+URL.createObjectURL(blob);
+
+
+const link =
+document.createElement("a");
+
+link.href = url;
+
+link.download =
+"formready-merged.pdf";
+
+document.body.appendChild(link);
+
+link.click();
+
+link.remove();
+
+
+setTimeout(
+function(){
+
+URL.revokeObjectURL(url);
+
+},
+2000
+);
+
+
+status.textContent =
+"✅ PDF merged successfully. Download started.";
+
+}
+catch(error){
+
+console.error(error);
+
+status.textContent =
+"❌ Could not merge the PDFs.";
+
+alert(
+"Something went wrong. Please check that the selected files are valid PDFs."
+);
+
+}
+finally{
+
+mergeBtn.disabled = false;
+
+mergeBtn.textContent =
+"📑 Merge PDFs";
+
+}
+
+}
+);
+
+
+/* Reset */
+
+resetBtn.addEventListener(
+"click",
+function(){
+
+selectedFiles = [];
+
+pdfFiles.value = "";
+
+fileList.innerHTML = "";
+
+work.style.display = "none";
+
+status.textContent =
+"Ready.";
+
+}
+);
+
+
+/* Helpers */
+
+function formatBytes(bytes){
+
+if(bytes === 0)
+return "0 Bytes";
+
+const units =
+[
+"Bytes",
+"KB",
+"MB",
+"GB"
+];
+
+const i =
+Math.floor(
+Math.log(bytes) /
+Math.log(1024)
+);
+
+return (
+bytes /
+Math.pow(1024,i)
+).toFixed(2)
++
+" "
++
+units[i];
+
+}
+
+
+function escapeHtml(text){
+
+return text
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
