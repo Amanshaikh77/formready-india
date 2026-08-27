@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF to JPG - FormReady India</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f4f6f9;
+  color:#172033;
+}
+header{
+  background:#fff;
+  padding:16px 20px;
+  border-bottom:1px solid #ddd;
+}
+header a{
+  text-decoration:none;
+  color:#2563eb;
+  font-weight:bold;
+}
+.container{
+  max-width:800px;
+  margin:35px auto;
+  padding:20px;
+}
+.card{
+  background:#fff;
+  border-radius:16px;
+  padding:25px;
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+}
+h1{margin-top:0}
+p{color:#667085}
+input[type=file]{
+  width:100%;
+  padding:15px;
+  border:2px dashed #b8c0cc;
+  border-radius:12px;
+  margin:15px 0;
+}
+button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+}
+button:disabled{
+  background:#9ca3af;
+  cursor:not-allowed;
+}
+#status{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  background:#eef4ff;
+  display:none;
+}
+#results{
+  margin-top:20px;
+}
+.page{
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+  background:#fafafa;
+}
+.page canvas{
+  width:100%;
+  max-width:100%;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
+.download{
+  background:#16a34a;
+}
+.error{
+  background:#fee2e2!important;
+  color:#b91c1c;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="../index.html">← Back to Tools</a>
+</header>
+
+<div class="container">
+  <div class="card">
+    <h1>PDF to JPG Converter</h1>
+    <p>Convert every page of a PDF file into a JPG image directly in your browser.</p>
+
+    <input type="file" id="pdfFile" accept="application/pdf">
+
+    <button id="convertBtn" onclick="convertPDF()" disabled>
+      Convert PDF to JPG
+    </button>
+
+    <div id="status"></div>
+
+    <div id="results"></div>
+  </div>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const fileInput = document.getElementById("pdfFile");
+const convertBtn = document.getElementById("convertBtn");
+const statusBox = document.getElementById("status");
+const results = document.getElementById("results");
+
+fileInput.addEventListener("change", function(){
+  results.innerHTML = "";
+  statusBox.style.display = "none";
+
+  if(this.files.length > 0){
+    convertBtn.disabled = false;
+  }else{
+    convertBtn.disabled = true;
+  }
+});
+
+function showStatus(message, error=false){
+  statusBox.textContent = message;
+  statusBox.style.display = "block";
+
+  if(error){
+    statusBox.classList.add("error");
+  }else{
+    statusBox.classList.remove("error");
+  }
+}
+
+async function convertPDF(){
+
+  const file = fileInput.files[0];
+
+  if(!file){
+    showStatus("Please select a PDF file.", true);
+    return;
+  }
+
+  if(file.type !== "application/pdf"){
+    showStatus("Please select a valid PDF file.", true);
+    return;
+  }
+
+  convertBtn.disabled = true;
+  results.innerHTML = "";
+
+  try{
+
+    showStatus("Reading PDF...");
+
+    const arrayBuffer = await file.arrayBuffer();
+
+    const pdf = await pdfjsLib.getDocument({
+      data: arrayBuffer
+    }).promise;
+
+    showStatus("Converting " + pdf.numPages + " page(s)...");
+
+    for(let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++){
+
+      const page = await pdf.getPage(pageNumber);
+
+      const viewport = page.getViewport({
+        scale: 2
+      });
+
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      await page.render({
+        canvasContext: context,
+        viewport: viewport
+      }).promise;
+
+      const pageBox = document.createElement("div");
+      pageBox.className = "page";
+
+      const title = document.createElement("h3");
+      title.textContent = "Page " + pageNumber;
+
+      const downloadButton = document.createElement("button");
+      downloadButton.className = "download";
+      downloadButton.textContent = "Download JPG";
+
+      downloadButton.onclick = function(){
+
+        canvas.toBlob(function(blob){
+
+          if(!blob){
+            showStatus("Could not create JPG.", true);
+            return;
+          }
+
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "page-" + pageNumber + ".jpg";
+
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          setTimeout(function(){
+            URL.revokeObjectURL(url);
+          },1000);
+
+        },"image/jpeg",0.92);
+
+      };
+
+      pageBox.appendChild(title);
+      pageBox.appendChild(canvas);
+      pageBox.appendChild(downloadButton);
+
+      results.appendChild(pageBox);
+    }
+
+    showStatus(
+      "Done! " + pdf.numPages + " page(s) converted successfully."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      "Could not convert this PDF. Please try another PDF file.",
+      true
+    );
+
+  }finally{
+
+    convertBtn.disabled = false;
+
+  }
+}
+</script>
+
+</body>
+</html>
