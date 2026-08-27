@@ -11,67 +11,46 @@
 body{
 margin:0;
 font-family:Arial,sans-serif;
-background:#f4f6fb;
-color:#182033;
+background:#f5f7fb;
+color:#172033;
 }
 
 .container{
-max-width:760px;
+max-width:720px;
 margin:auto;
-padding:18px;
+padding:14px;
 }
 
 h1{
 text-align:center;
-margin:10px 0 5px;
-font-size:30px;
+font-size:28px;
+margin:8px 0 4px;
 }
 
 .subtitle{
 text-align:center;
-color:#687080;
-margin-bottom:22px;
+color:#707887;
+font-size:16px;
+margin-bottom:18px;
 }
 
 .card{
-background:white;
-border-radius:22px;
-padding:20px;
-margin-bottom:18px;
-box-shadow:0 5px 25px rgba(0,0,0,.06);
-}
-
-label{
-display:block;
-font-weight:700;
-margin-bottom:7px;
-}
-
-input,select{
-width:100%;
-padding:14px;
-border:2px solid #d9dee8;
-border-radius:12px;
-font-size:17px;
-background:white;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
+background:#fff;
+border-radius:20px;
+padding:17px;
+margin-bottom:15px;
+box-shadow:0 4px 18px rgba(0,0,0,.06);
 }
 
 .upload{
 display:block;
-width:100%;
-padding:22px;
-border:2px dashed #4776e6;
-border-radius:16px;
 text-align:center;
-font-size:20px;
-font-weight:700;
-color:#285dcc;
+border:2px dashed #6685d9;
+border-radius:15px;
+padding:18px;
+font-size:19px;
+font-weight:bold;
+color:#315fc7;
 cursor:pointer;
 }
 
@@ -79,77 +58,139 @@ cursor:pointer;
 display:none;
 }
 
-.preview-wrap{
-background:#e9edf5;
-padding:15px;
-border-radius:18px;
-overflow:auto;
+.section-title{
+font-size:19px;
+font-weight:700;
+margin-bottom:14px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+label{
+display:block;
+font-size:15px;
+font-weight:700;
+margin-bottom:6px;
+}
+
+input,select{
+width:100%;
+height:48px;
+padding:0 13px;
+border:1.8px solid #d9dee8;
+border-radius:11px;
+font-size:16px;
+background:#fff;
+color:#172033;
+outline:none;
+}
+
+input:focus,select:focus{
+border-color:#4775df;
+}
+
+details{
+margin-top:14px;
+border-top:1px solid #edf0f5;
+padding-top:13px;
+}
+
+summary{
+font-weight:700;
+font-size:16px;
+cursor:pointer;
+padding:4px 0;
+color:#315fc7;
+}
+
+.advanced{
+margin-top:14px;
+}
+
+.preview-box{
+background:#edf1f8;
+border-radius:17px;
+padding:13px;
+overflow-x:auto;
+overflow-y:hidden;
 -webkit-overflow-scrolling:touch;
+}
+
+.canvas-wrap{
+display:flex;
+justify-content:flex-start;
+align-items:flex-start;
+min-width:max-content;
 }
 
 canvas{
 display:block;
-background:white;
-max-width:none;
-height:auto;
-box-shadow:0 3px 15px rgba(0,0,0,.15);
+background:#fff;
+box-shadow:0 3px 14px rgba(0,0,0,.15);
 }
 
 .info{
 text-align:center;
-color:#6c7482;
-font-size:16px;
-margin:12px 0;
+color:#707887;
+font-size:15px;
+margin:12px 0 4px;
 }
 
 button{
 width:100%;
 border:0;
-border-radius:14px;
-padding:17px;
-font-size:19px;
+border-radius:13px;
+height:52px;
+font-size:18px;
 font-weight:700;
+margin-top:9px;
 cursor:pointer;
-margin-top:10px;
 }
 
 #create{
 background:#2867df;
-color:white;
+color:#fff;
 }
 
 #download{
-background:#182033;
-color:white;
+background:#172033;
+color:#fff;
 }
 
 #reset{
-background:#e9ebf0;
-color:#182033;
+background:#e8ebf1;
+color:#172033;
 }
 
-@media(max-width:520px){
-.container{
-padding:12px;
-}
+@media(max-width:500px){
+.container{padding:11px}
 
-h1{
-font-size:26px;
-}
-
-.grid{
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
+h1{font-size:25px}
 
 .card{
-padding:15px;
+padding:14px;
 border-radius:18px;
 }
 
+.grid{
+gap:9px;
+}
+
 input,select{
-font-size:16px;
-padding:12px;
+height:46px;
+font-size:15px;
+}
+
+label{
+font-size:14px;
+}
+
+.preview-box{
+padding:10px;
 }
 }
 </style>
@@ -160,7 +201,7 @@ padding:12px;
 <div class="container">
 
 <h1>📸 Photo Sheet Maker</h1>
-<div class="subtitle">Create a printable photo sheet with full manual control</div>
+<div class="subtitle">Create a clean printable photo sheet</div>
 
 <div class="card">
 
@@ -173,7 +214,7 @@ padding:12px;
 
 <div class="card">
 
-<h2>⚙️ Manual Settings</h2>
+<div class="section-title">📐 Photo Settings</div>
 
 <div class="grid">
 
@@ -193,16 +234,23 @@ padding:12px;
 </div>
 
 <div>
-<label>DPI</label>
-<input id="dpi" type="number" value="300" min="72" max="1200">
-</div>
-
-<div>
 <label>Paper</label>
 <select id="paper">
 <option value="A4">A4</option>
 <option value="LETTER">Letter</option>
 </select>
+</div>
+
+</div>
+
+<details>
+<summary>⚙️ Advanced Settings</summary>
+
+<div class="advanced grid">
+
+<div>
+<label>DPI</label>
+<input id="dpi" type="number" value="300" min="72" max="1200">
 </div>
 
 <div>
@@ -226,13 +274,18 @@ padding:12px;
 </div>
 
 </div>
+</details>
 
 </div>
 
 <div class="card">
 
-<div class="preview-wrap">
+<div class="section-title">👀 Preview</div>
+
+<div class="preview-box">
+<div class="canvas-wrap">
 <canvas id="canvas"></canvas>
+</div>
 </div>
 
 <div id="info" class="info">
@@ -241,7 +294,7 @@ padding:12px;
 
 <button id="create">✨ Create Sheet</button>
 <button id="download">⬇️ Download JPG</button>
-<button id="reset">Reset</button>
+<button id="reset">↻ Reset</button>
 
 </div>
 
@@ -271,23 +324,14 @@ return Math.round(mm*d/25.4);
 }
 
 function getPaper(){
-if(paper.value==="LETTER"){
-return {
-w:215.9,
-h:279.4
-};
-}
-
-return {
-w:210,
-h:297
-};
+return paper.value==="LETTER"
+?{w:215.9,h:279.4}
+:{w:210,h:297};
 }
 
 photoInput.addEventListener("change",function(){
 
 const file=this.files[0];
-
 if(!file)return;
 
 const reader=new FileReader();
@@ -315,88 +359,76 @@ drawEmpty();
 return;
 }
 
-let d=parseInt(dpi.value)||300;
+const d=Math.max(72,parseInt(dpi.value)||300);
 
-let pw=parseFloat(photoW.value)||35;
-let ph=parseFloat(photoH.value)||45;
+const pw=Math.max(1,parseFloat(photoW.value)||35);
+const ph=Math.max(1,parseFloat(photoH.value)||45);
 
-let total=parseInt(count.value)||8;
+const total=Math.max(1,parseInt(count.value)||8);
 
-let gx=parseFloat(gapX.value)||0;
-let gy=parseFloat(gapY.value)||0;
+const gx=Math.max(0,parseFloat(gapX.value)||0);
+const gy=Math.max(0,parseFloat(gapY.value)||0);
 
-let mt=parseFloat(marginTop.value)||0;
-let ml=parseFloat(marginLeft.value)||0;
+const mt=Math.max(0,parseFloat(marginTop.value)||0);
+const ml=Math.max(0,parseFloat(marginLeft.value)||0);
 
-let p=getPaper();
+const p=getPaper();
 
-let canvasW=mmToPx(p.w,d);
-let canvasH=mmToPx(p.h,d);
+const canvasW=mmToPx(p.w,d);
+const canvasH=mmToPx(p.h,d);
 
 canvas.width=canvasW;
 canvas.height=canvasH;
 
-ctx.fillStyle="#ffffff";
+ctx.fillStyle="#fff";
 ctx.fillRect(0,0,canvasW,canvasH);
 
-let photoWidth=mmToPx(pw,d);
-let photoHeight=mmToPx(ph,d);
+const w=mmToPx(pw,d);
+const h=mmToPx(ph,d);
 
-let gapXPx=mmToPx(gx,d);
-let gapYPx=mmToPx(gy,d);
+const gxPx=mmToPx(gx,d);
+const gyPx=mmToPx(gy,d);
 
-let leftPx=mmToPx(ml,d);
-let topPx=mmToPx(mt,d);
+const left=mmToPx(ml,d);
+const top=mmToPx(mt,d);
 
-/*
-IMPORTANT:
-Photos ALWAYS start from the TOP-LEFT.
-No automatic centering.
-*/
+/* Always start from TOP-LEFT */
 
-let availableW=canvasW-leftPx;
+const availableW=canvasW-left;
 
-let columns=Math.floor(
-(availableW+gapXPx)/
-(photoWidth+gapXPx)
+const columns=Math.max(
+1,
+Math.floor((availableW+gxPx)/(w+gxPx))
 );
-
-if(columns<1)columns=1;
 
 for(let i=0;i<total;i++){
 
-let row=Math.floor(i/columns);
-let col=i%columns;
+const row=Math.floor(i/columns);
+const col=i%columns;
 
-let x=leftPx+
-col*(photoWidth+gapXPx);
+const x=left+col*(w+gxPx);
+const y=top+row*(h+gyPx);
 
-let y=topPx+
-row*(photoHeight+gapYPx);
+if(y+h>canvasH)break;
 
-if(y+photoHeight>canvasH)break;
-
-drawPhoto(image,x,y,photoWidth,photoHeight);
+drawPhoto(image,x,y,w,h);
 
 }
 
 info.textContent=
-`${total} photos • ${pw} × ${ph} mm • ${paper.value==="A4"?"A4":"Letter"} • ${d} DPI • ${columns} per row`;
+`${total} photos • ${pw} × ${ph} mm • ${paper.value} • ${d} DPI`;
 
 }
 
 function drawPhoto(img,x,y,w,h){
 
-let ratio=Math.max(
-w/img.width,
-h/img.height
-);
+const scale=Math.max(w/img.width,h/img.height);
 
-let sw=w/ratio;
-let sh=h/ratio;
+const sw=w/scale;
+const sh=h/scale;
 
-let sx=(img.width-sw)/2;
-let sy=(img.height-sh)/2;
+const sx=(img.width-sw)/2;
+const sy=(img.height-sh)/2;
 
 ctx.drawImage(
 img,
@@ -463,19 +495,14 @@ info.textContent=
 });
 
 [
-photoW,
-photoH,
-count,
-dpi,
-paper,
-gapX,
-gapY,
-marginTop,
-marginLeft
+photoW,photoH,count,dpi,paper,
+gapX,gapY,marginTop,marginLeft
 ].forEach(el=>{
-el.addEventListener("input",()=>{
+
+el.addEventListener("input",function(){
 if(image)createSheet();
 });
+
 });
 
 drawEmpty();
