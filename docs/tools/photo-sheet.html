@@ -2,171 +2,139 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Photo Sheet Maker</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#f5f7fb;
-  color:#18202b;
+  background:#f4f6fb;
+  color:#182033;
 }
 
 .container{
-  width:min(760px,94%);
-  margin:25px auto 50px;
+  max-width:720px;
+  margin:auto;
+  padding:22px 16px 60px;
 }
 
-.header{
+h1{
   text-align:center;
-  margin-bottom:22px;
-}
-
-.header h1{
-  margin:0;
+  margin:5px 0 8px;
   font-size:32px;
 }
 
-.header p{
-  margin:8px 0 0;
-  color:#697386;
-  font-size:17px;
+.subtitle{
+  text-align:center;
+  color:#777;
+  font-size:18px;
+  margin-bottom:25px;
 }
 
 .card{
   background:white;
   border-radius:22px;
-  padding:22px;
+  padding:20px;
   margin-bottom:18px;
-  box-shadow:0 5px 25px rgba(0,0,0,.07);
-}
-
-.upload{
-  border:3px dashed #5d7fe8;
-  border-radius:18px;
-  padding:28px 15px;
-  text-align:center;
-  cursor:pointer;
-  background:#fbfcff;
-}
-
-.upload strong{
-  display:block;
-  font-size:20px;
-  margin-bottom:6px;
-}
-
-.upload span{
-  color:#697386;
-}
-
-input[type=file]{
-  display:none;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+  box-shadow:0 5px 25px #0000000d;
 }
 
 label{
   display:block;
   font-weight:700;
-  margin-bottom:8px;
+  font-size:18px;
+  margin:15px 0 8px;
 }
 
-select{
+input,select{
   width:100%;
-  padding:14px;
-  border:2px solid #d7dce5;
-  border-radius:13px;
-  background:white;
-  font-size:16px;
-}
-
-.sheet-wrap{
-  background:#e9edf5;
-  border-radius:20px;
-  padding:18px;
-  text-align:center;
-  overflow:hidden;
-}
-
-#sheetPreview{
-  width:100%;
-  max-width:500px;
-  height:auto;
-  display:block;
-  margin:auto;
-  background:white;
-  box-shadow:0 4px 18px rgba(0,0,0,.18);
-}
-
-.buttons{
-  display:flex;
-  gap:12px;
-  margin-top:18px;
-}
-
-button{
-  flex:1;
-  border:0;
-  border-radius:14px;
-  padding:15px;
+  padding:16px;
+  border:2px solid #ddd;
+  border-radius:15px;
   font-size:17px;
-  font-weight:700;
+  background:white;
+}
+
+.upload{
+  border:3px dashed #6485df;
+  border-radius:20px;
+  padding:25px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
   cursor:pointer;
 }
 
-#createBtn{
-  background:#2867df;
-  color:white;
+.upload input{
+  display:none;
 }
 
-#downloadBtn{
-  background:#172033;
-  color:white;
+.preview-box{
+  background:#eaf0fb;
+  border-radius:22px;
+  padding:18px;
+  overflow:auto;
 }
 
-#resetBtn{
-  background:#e8ebf0;
-  color:#18202b;
+.sheet-wrap{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+
+#sheet{
+  display:block;
+  background:white;
+  width:min(100%,500px);
+  height:auto;
+  box-shadow:0 3px 15px #0002;
 }
 
 .info{
   text-align:center;
-  color:#697386;
-  margin-top:12px;
-  font-size:14px;
+  color:#777;
+  font-size:17px;
+  margin:18px 0;
 }
 
-@media(max-width:600px){
-  .container{
-    width:94%;
-    margin-top:15px;
-  }
+button{
+  width:100%;
+  border:0;
+  border-radius:17px;
+  padding:18px;
+  font-size:19px;
+  font-weight:bold;
+  margin-top:10px;
+  cursor:pointer;
+}
 
-  .header h1{
-    font-size:27px;
-  }
+.create{
+  background:#2864df;
+  color:white;
+}
 
-  .grid{
-    grid-template-columns:1fr;
-  }
+.download{
+  background:#182033;
+  color:white;
+}
 
-  .card{
-    padding:17px;
-  }
+.reset{
+  background:#e7e9ef;
+  color:#182033;
+}
 
-  .buttons{
-    flex-direction:column;
-  }
+button:disabled{
+  opacity:.45;
+}
+
+@media(max-width:500px){
+  h1{font-size:28px}
+  .container{padding:16px 12px 45px}
+  .card{padding:16px}
 }
 </style>
 </head>
@@ -175,142 +143,262 @@ button{
 
 <div class="container">
 
-  <div class="header">
-    <h1>📸 Photo Sheet Maker</h1>
-    <p>Create a clean printable photo sheet</p>
-  </div>
+<h1>📸 Photo Sheet Maker</h1>
+<div class="subtitle">Create passport & ID photo sheets easily</div>
 
-  <div class="card">
+<div class="card">
 
-    <label class="upload" for="photoInput">
-      <strong>📁 Choose Photo</strong>
-      <span>Upload one photo to create your sheet</span>
-    </label>
+<label class="upload">
+📁 Choose Photo
+<input type="file" id="file" accept="image/*">
+</label>
 
-    <input id="photoInput" type="file" accept="image/*">
+<label>Photo Size</label>
+<select id="size">
+<option value="25x35">25 × 35 mm</option>
+<option value="35x45">35 × 45 mm</option>
+<option value="30x40">30 × 40 mm</option>
+<option value="40x50">40 × 50 mm</option>
+<option value="50x50">50 × 50 mm</option>
+</select>
 
-  </div>
+<label>Number of Photos</label>
+<select id="count">
+<option value="2">2 Photos</option>
+<option value="4">4 Photos</option>
+<option value="6">6 Photos</option>
+<option value="8">8 Photos</option>
+<option value="10">10 Photos</option>
+<option value="12">12 Photos</option>
+<option value="16">16 Photos</option>
+<option value="20">20 Photos</option>
+</select>
 
-  <div class="card">
+<label>Paper</label>
+<select id="paper">
+<option value="A4">A4</option>
+<option value="A5">A5</option>
+<option value="4x6">4 × 6 inch</option>
+</select>
 
-    <div class="grid">
+</div>
 
-      <div>
-        <label for="photoSize">Photo Size</label>
-        <select id="photoSize">
-          <option value="35x45">35 × 45 mm</option>
-          <option value="25x35">25 × 35 mm</option>
-          <option value="30x40">30 × 40 mm</option>
-          <option value="40x50">40 × 50 mm</option>
-          <option value="50x50">50 × 50 mm</option>
-        </select>
-      </div>
+<div class="card">
 
-      <div>
-        <label for="photoCount">Number of Photos</label>
-        <select id="photoCount">
-          <option value="4">4 Photos</option>
-          <option value="6">6 Photos</option>
-          <option value="8">8 Photos</option>
-          <option value="10">10 Photos</option>
-          <option value="12">12 Photos</option>
-          <option value="15">15 Photos</option>
-          <option value="20" selected>20 Photos</option>
-          <option value="24">24 Photos</option>
-          <option value="30">30 Photos</option>
-          <option value="35">35 Photos</option>
-          <option value="40">40 Photos</option>
-        </select>
-      </div>
+<div class="preview-box">
+<div class="sheet-wrap">
+<canvas id="sheet"></canvas>
+</div>
+</div>
 
-    </div>
+<div class="info" id="info">
+Upload a photo to preview the sheet
+</div>
 
-  </div>
+<button class="create" id="create">
+✨ Create Sheet
+</button>
 
-  <div class="card">
+<button class="download" id="download" disabled>
+⬇️ Download JPG
+</button>
 
-    <div class="sheet-wrap">
-      <canvas id="sheetPreview"></canvas>
-    </div>
+<button class="reset" id="reset">
+Reset
+</button>
 
-    <div class="info" id="info">
-      Choose a photo to preview the sheet
-    </div>
-
-    <div class="buttons">
-      <button id="createBtn">✨ Create Sheet</button>
-      <button id="downloadBtn">⬇️ Download JPG</button>
-      <button id="resetBtn">Reset</button>
-    </div>
-
-  </div>
+</div>
 
 </div>
 
 <script>
+const fileInput=document.getElementById("file");
+const sizeSelect=document.getElementById("size");
+const countSelect=document.getElementById("count");
+const paperSelect=document.getElementById("paper");
 
-const photoInput = document.getElementById("photoInput");
-const photoSize = document.getElementById("photoSize");
-const photoCount = document.getElementById("photoCount");
-const canvas = document.getElementById("sheetPreview");
-const ctx = canvas.getContext("2d");
-const info = document.getElementById("info");
+const canvas=document.getElementById("sheet");
+const ctx=canvas.getContext("2d");
 
-const createBtn = document.getElementById("createBtn");
-const downloadBtn = document.getElementById("downloadBtn");
-const resetBtn = document.getElementById("resetBtn");
+const createBtn=document.getElementById("create");
+const downloadBtn=document.getElementById("download");
+const resetBtn=document.getElementById("reset");
+const info=document.getElementById("info");
 
-let uploadedImage = null;
+let image=null;
 
-/*
-  A4 at 300 DPI
-*/
-const A4_W = 2480;
-const A4_H = 3508;
+/* 300 DPI */
+const DPI=300;
 
 function mmToPx(mm){
-  return Math.round(mm * 300 / 25.4);
+  return Math.round(mm/25.4*DPI);
 }
 
-function getPhotoSize(){
+function paperSize(type){
+  if(type==="A4"){
+    return {
+      w:mmToPx(210),
+      h:mmToPx(297)
+    };
+  }
 
-  const value = photoSize.value.split("x");
+  if(type==="A5"){
+    return {
+      w:mmToPx(148),
+      h:mmToPx(210)
+    };
+  }
 
   return {
-    width:mmToPx(Number(value[0])),
-    height:mmToPx(Number(value[1]))
+    w:mmToPx(152.4),
+    h:mmToPx(101.6)
   };
 }
 
-function clearCanvas(){
+function photoSize(type){
+  const [w,h]=type.split("x").map(Number);
 
-  canvas.width = A4_W;
-  canvas.height = A4_H;
-
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0,0,A4_W,A4_H);
+  return {
+    w:mmToPx(w),
+    h:mmToPx(h)
+  };
 }
 
-function drawImageCover(img,x,y,w,h){
+fileInput.addEventListener("change",function(){
 
-  const sourceRatio = img.width / img.height;
-  const targetRatio = w / h;
+  const file=this.files[0];
 
-  let sx = 0;
-  let sy = 0;
-  let sw = img.width;
-  let sh = img.height;
+  if(!file)return;
 
-  if(sourceRatio > targetRatio){
+  const reader=new FileReader();
 
-    sw = img.height * targetRatio;
-    sx = (img.width - sw) / 2;
+  reader.onload=function(e){
+
+    const img=new Image();
+
+    img.onload=function(){
+      image=img;
+      createSheet();
+    };
+
+    img.src=e.target.result;
+  };
+
+  reader.readAsDataURL(file);
+});
+
+
+function createSheet(){
+
+  if(!image){
+    alert("Please choose a photo first.");
+    return;
+  }
+
+  const paper=paperSize(paperSelect.value);
+  const photo=photoSize(sizeSelect.value);
+
+  canvas.width=paper.w;
+  canvas.height=paper.h;
+
+  /* WHITE PAPER */
+  ctx.fillStyle="#ffffff";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  const count=parseInt(countSelect.value);
+
+  /*
+    TOP ALIGNED LAYOUT
+    Photos always start near the top.
+  */
+
+  const margin=mmToPx(8);
+  const gap=mmToPx(4);
+
+  const availableWidth=paper.w-(margin*2);
+
+  let columns=Math.floor(
+    (availableWidth+gap)/(photo.w+gap)
+  );
+
+  if(columns<1)columns=1;
+
+  if(columns>6)columns=6;
+
+  let rows=Math.ceil(count/columns);
+
+  const totalWidth=
+    columns*photo.w+(columns-1)*gap;
+
+  const startX=
+    Math.max(
+      margin,
+      Math.round((paper.w-totalWidth)/2)
+    );
+
+  /*
+    IMPORTANT:
+    Start from TOP.
+    No vertical centering.
+  */
+
+  const startY=margin;
+
+  for(let i=0;i<count;i++){
+
+    const col=i%columns;
+    const row=Math.floor(i/columns);
+
+    const x=startX+col*(photo.w+gap);
+    const y=startY+row*(photo.h+gap);
+
+    drawPhotoCover(image,x,y,photo.w,photo.h);
+  }
+
+  const sizeText=sizeSelect.options[
+    sizeSelect.selectedIndex
+  ].text;
+
+  info.textContent=
+    count+" photos • "+
+    sizeText+" • "+
+    paperSelect.options[
+      paperSelect.selectedIndex
+    ].text+
+    " • 300 DPI";
+
+  downloadBtn.disabled=false;
+}
+
+
+/*
+  High quality crop:
+  fills the selected photo box
+  without stretching the image.
+*/
+function drawPhotoCover(img,x,y,w,h){
+
+  const imageRatio=img.width/img.height;
+  const boxRatio=w/h;
+
+  let sx=0;
+  let sy=0;
+  let sw=img.width;
+  let sh=img.height;
+
+  if(imageRatio>boxRatio){
+
+    sw=img.height*boxRatio;
+    sx=(img.width-sw)/2;
 
   }else{
 
-    sh = img.width / targetRatio;
-    sy = (img.height - sh) / 2;
+    sh=img.width/boxRatio;
+    sy=(img.height-sh)/2;
   }
+
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality="high";
 
   ctx.drawImage(
     img,
@@ -319,198 +407,50 @@ function drawImageCover(img,x,y,w,h){
   );
 }
 
-function calculateLayout(count,photoW,photoH){
-
-  const margin = mmToPx(10);
-  const gap = mmToPx(3);
-
-  const availableW = A4_W - margin * 2;
-  const availableH = A4_H - margin * 2;
-
-  let best = null;
-
-  for(let cols=1; cols<=10; cols++){
-
-    const rows = Math.ceil(count / cols);
-
-    const totalW =
-      cols * photoW +
-      (cols - 1) * gap;
-
-    const totalH =
-      rows * photoH +
-      (rows - 1) * gap;
-
-    if(totalW <= availableW && totalH <= availableH){
-
-      const unused =
-        (availableW-totalW) +
-        (availableH-totalH);
-
-      if(!best || unused < best.unused){
-
-        best = {
-          cols,
-          rows,
-          totalW,
-          totalH,
-          unused
-        };
-      }
-    }
-  }
-
-  return best;
-}
-
-function createSheet(){
-
-  clearCanvas();
-
-  if(!uploadedImage){
-
-    info.textContent = "Please choose a photo first.";
-    return;
-  }
-
-  const size = getPhotoSize();
-
-  const count = Number(photoCount.value);
-
-  const layout = calculateLayout(
-    count,
-    size.width,
-    size.height
-  );
-
-  if(!layout){
-
-    info.textContent =
-      "Too many photos for this size on one A4 sheet.";
-
-    return;
-  }
-
-  const startX =
-    Math.round((A4_W-layout.totalW)/2);
-
-  const startY =
-    Math.round((A4_H-layout.totalH)/2);
-
-  let placed = 0;
-
-  for(let row=0; row<layout.rows; row++){
-
-    for(let col=0; col<layout.cols; col++){
-
-      if(placed >= count) break;
-
-      const x =
-        startX + col * (size.width + mmToPx(3));
-
-      const y =
-        startY + row * (size.height + mmToPx(3));
-
-      /*
-        Thin cutting border
-      */
-      ctx.strokeStyle = "#d5d5d5";
-      ctx.lineWidth = 2;
-
-      ctx.strokeRect(
-        x-1,
-        y-1,
-        size.width+2,
-        size.height+2
-      );
-
-      drawImageCover(
-        uploadedImage,
-        x,
-        y,
-        size.width,
-        size.height
-      );
-
-      placed++;
-    }
-  }
-
-  info.textContent =
-    `${placed} photos • ${photoSize.options[photoSize.selectedIndex].text} • A4 • 300 DPI`;
-}
-
-photoInput.addEventListener("change",function(){
-
-  const file = this.files[0];
-
-  if(!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = function(e){
-
-    const img = new Image();
-
-    img.onload = function(){
-
-      uploadedImage = img;
-
-      createSheet();
-    };
-
-    img.src = e.target.result;
-  };
-
-  reader.readAsDataURL(file);
-});
-
-/*
-  IMPORTANT:
-  Changing either option immediately rebuilds the sheet.
-*/
-photoSize.addEventListener("change",createSheet);
-photoCount.addEventListener("change",createSheet);
 
 createBtn.addEventListener("click",createSheet);
 
+sizeSelect.addEventListener("change",createSheet);
+countSelect.addEventListener("change",createSheet);
+paperSelect.addEventListener("change",createSheet);
+
+
 downloadBtn.addEventListener("click",function(){
 
-  if(!uploadedImage){
+  if(!image)return;
 
-    alert("Please choose a photo first.");
-    return;
-  }
+  const link=document.createElement("a");
 
-  createSheet();
+  link.download="photo-sheet-300dpi.jpg";
 
-  const link = document.createElement("a");
-
-  link.download = "photo-sheet.jpg";
-
-  link.href =
-    canvas.toDataURL("image/jpeg",0.95);
+  link.href=canvas.toDataURL(
+    "image/jpeg",
+    0.98
+  );
 
   link.click();
 });
 
+
 resetBtn.addEventListener("click",function(){
 
-  uploadedImage = null;
+  image=null;
+  fileInput.value="";
 
-  photoInput.value = "";
+  ctx.clearRect(
+    0,0,
+    canvas.width,
+    canvas.height
+  );
 
-  photoSize.value = "35x45";
+  canvas.width=1;
+  canvas.height=1;
 
-  photoCount.value = "20";
+  info.textContent=
+    "Upload a photo to preview the sheet";
 
-  clearCanvas();
-
-  info.textContent =
-    "Choose a photo to preview the sheet";
+  downloadBtn.disabled=true;
 });
-
-clearCanvas();
 
 </script>
 
