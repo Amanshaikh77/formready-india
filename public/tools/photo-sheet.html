@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Photo Sheet Maker | FormReady India</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f7fb;
+color:#111827;
+}
+
+header{
+background:#111827;
+color:white;
+padding:16px 6%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:22px;
+font-weight:800;
+}
+
+.logo span{
+color:#60a5fa;
+}
+
+header a{
+color:white;
+text-decoration:none;
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:25px 15px;
+}
+
+.back{
+color:#2563eb;
+text-decoration:none;
+font-weight:600;
+}
+
+.card{
+background:white;
+margin-top:18px;
+padding:25px;
+border-radius:22px;
+box-shadow:0 10px 35px #0000000d;
+}
+
+h1{
+text-align:center;
+margin:5px 0;
+}
+
+.sub{
+text-align:center;
+color:#6b7280;
+line-height:1.5;
+}
+
+.upload{
+margin-top:25px;
+border:2px dashed #93c5fd;
+background:#eff6ff;
+border-radius:18px;
+padding:30px 15px;
+text-align:center;
+}
+
+.upload input{
+display:none;
+}
+
+.choose{
+display:inline-block;
+background:#2563eb;
+color:white;
+padding:14px 24px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer;
+}
+
+#work{
+display:none;
+margin-top:25px;
+}
+
+.settings{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.field label{
+display:block;
+font-size:13px;
+font-weight:700;
+margin-bottom:7px;
+}
+
+select{
+width:100%;
+padding:13px;
+border:1px solid #d1d5db;
+border-radius:10px;
+font-size:15px;
+background:white;
+}
+
+.preview{
+margin-top:20px;
+padding:20px;
+background:#f1f5f9;
+border-radius:15px;
+text-align:center;
+overflow:auto;
+}
+
+#canvas{
+max-width:100%;
+height:auto;
+background:white;
+box-shadow:0 4px 15px #0002;
+}
+
+.buttons{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:20px;
+}
+
+button{
+border:0;
+padding:13px 18px;
+border-radius:11px;
+font-weight:700;
+cursor:pointer;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.success{
+background:#16a34a;
+color:white;
+}
+
+.secondary{
+background:#e5e7eb;
+color:#111827;
+}
+
+.info{
+margin-top:18px;
+padding:14px;
+background:#f1f5f9;
+border-radius:12px;
+font-size:13px;
+color:#475569;
+line-height:1.6;
+}
+
+#downloadBtn{
+display:none;
+}
+
+@media(max-width:600px){
+.settings{
+grid-template-columns:1fr;
+}
+
+.card{
+padding:18px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+FormReady <span>India</span>
+</div>
+
+<a href="/">Home</a>
+
+</header>
+
+
+<div class="container">
+
+<a class="back" href="/">← Back to Tools</a>
+
+<div class="card">
+
+<h1>🖼️ Photo Sheet Maker</h1>
+
+<p class="sub">
+Create multiple passport-size photos on one printable sheet.
+</p>
+
+
+<div class="upload">
+
+<label class="choose" for="photo">
+📷 Choose Photo
+</label>
+
+<input
+id="photo"
+type="file"
+accept="image/*"
+>
+
+<p>JPG • PNG • WEBP</p>
+
+</div>
+
+
+<div id="work">
+
+<div class="settings">
+
+<div class="field">
+
+<label>Photo Size</label>
+
+<select id="size">
+
+<option value="35x45">
+35 × 45 mm
+</option>
+
+<option value="25x35">
+25 × 35 mm
+</option>
+
+<option value="2x2">
+2 × 2 inch
+</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>Number of Photos</label>
+
+<select id="count">
+
+<option value="4">4 Photos</option>
+<option value="6">6 Photos</option>
+<option value="8" selected>8 Photos</option>
+<option value="10">10 Photos</option>
+<option value="12">12 Photos</option>
+<option value="16">16 Photos</option>
+<option value="20">20 Photos</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="preview">
+
+<canvas id="canvas"></canvas>
+
+</div>
+
+
+<div class="buttons">
+
+<button
+class="primary"
+id="createBtn"
+>
+✨ Create Sheet
+</button>
+
+<button
+class="success"
+id="downloadBtn"
+>
+⬇️ Download Sheet
+</button>
+
+<button
+class="secondary"
+id="resetBtn"
+>
+Reset
+</button>
+
+</div>
+
+
+<div class="info" id="info">
+Choose a photo to begin.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const photo =
+document.getElementById("photo");
+
+const work =
+document.getElementById("work");
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+const size =
+document.getElementById("size");
+
+const count =
+document.getElementById("count");
+
+const createBtn =
+document.getElementById("createBtn");
+
+const downloadBtn =
+document.getElementById("downloadBtn");
+
+const resetBtn =
+document.getElementById("resetBtn");
+
+const info =
+document.getElementById("info");
+
+
+let image =
+new Image();
+
+let imageLoaded =
+false;
+
+
+/* Select photo */
+
+photo.addEventListener(
+"change",
+function(){
+
+const file =
+this.files[0];
+
+if(!file)
+return;
+
+const url =
+URL.createObjectURL(file);
+
+image.onload =
+function(){
+
+imageLoaded =
+true;
+
+work.style.display =
+"block";
+
+info.textContent =
+"Photo loaded. Choose size and number of copies.";
+
+drawSheet();
+
+URL.revokeObjectURL(url);
+
+};
+
+image.src =
+url;
+
+});
+
+
+/* Redraw */
+
+size.addEventListener(
+"change",
+drawSheet
+);
+
+count.addEventListener(
+"change",
+drawSheet
+);
+
+
+/* Create sheet */
+
+function drawSheet(){
+
+if(!imageLoaded)
+return;
+
+
+let photoW;
+let photoH;
+
+
+/* Approximate 300 DPI sizes */
+
+if(size.value==="35x45"){
+
+photoW=413;
+photoH=531;
+
+}
+
+else if(size.value==="25x35"){
+
+photoW=295;
+photoH=413;
+
+}
+
+else{
+
+photoW=600;
+photoH=600;
+
+}
+
+
+/* Sheet A4 at 150 DPI */
+
+const sheetW =
+1240;
+
+const sheetH =
+1754;
+
+const margin =
+55;
+
+const gap =
+20;
+
+const availableW =
+sheetW -
+margin*2;
+
+const cols =
+Math.max(
+1,
+Math.floor(
+(availableW + gap) /
+(photoW + gap)
+)
+);
+
+const n =
+parseInt(count.value);
+
+const rows =
+Math.ceil(n / cols);
+
+
+/* Scale if photos don't fit */
+
+let scale=1;
+
+if(
+cols * photoW +
+(cols-1)*gap
+>
+availableW
+){
+
+scale =
+availableW /
+(
+cols*photoW +
+(cols-1)*gap
+);
+
+}
+
+photoW =
+Math.floor(photoW*scale);
+
+photoH =
+Math.floor(photoH*scale);
+
+
+/* Recalculate columns */
+
+const actualCols =
+Math.max(
+1,
+Math.floor(
+(availableW+gap)/
+(photoW+gap)
+)
+);
+
+const actualRows =
+Math.ceil(n/actualCols);
+
+
+canvas.width =
+sheetW;
+
+canvas.height =
+Math.min(
+sheetH,
+margin*2 +
+actualRows*photoH +
+(actualRows-1)*gap
+);
+
+
+/* White sheet */
+
+ctx.fillStyle =
+"#ffffff";
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+/* Draw photos */
+
+for(
+let i=0;
+i<n;
+i++
+){
+
+const col =
+i % actualCols;
+
+const row =
+Math.floor(i/actualCols);
+
+const x =
+margin +
+col*(photoW+gap);
+
+const y =
+margin +
+row*(photoH+gap);
+
+
+/* Crop image to fill */
+
+const scaleImage =
+Math.max(
+photoW/image.width,
+photoH/image.height
+);
+
+const drawW =
+image.width*scaleImage;
+
+const drawH =
+image.height*scaleImage;
+
+const dx =
+x +
+(photoW-drawW)/2;
+
+const dy =
+y +
+(photoH-drawH)/2;
+
+
+/* Clip each photo */
+
+ctx.save();
+
+ctx.beginPath();
+
+ctx.rect(
+x,
+y,
+photoW,
+photoH
+);
+
+ctx.clip();
+
+ctx.drawImage(
+image,
+dx,
+dy,
+drawW,
+drawH
+);
+
+ctx.restore();
+
+}
+
+
+/* Border */
+
+ctx.strokeStyle =
+"#d1d5db";
+
+ctx.lineWidth =
+2;
+
+for(
+let i=0;
+i<n;
+i++
+){
+
+const col =
+i % actualCols;
+
+const row =
+Math.floor(i/actualCols);
+
+const x =
+margin +
+col*(photoW+gap);
+
+const y =
+margin +
+row*(photoH+gap);
+
+ctx.strokeRect(
+x,
+y,
+photoW,
+photoH
+);
+
+}
+
+
+info.textContent =
+"Sheet ready — "
++
+n
++
+" photos arranged automatically.";
+
+}
+
+
+/* Create */
+
+createBtn.addEventListener(
+"click",
+function(){
+
+if(!imageLoaded){
+
+alert(
+"Please choose a photo first."
+);
+
+return;
+
+}
+
+drawSheet();
+
+downloadBtn.style.display =
+"inline-block";
+
+info.textContent =
+"✅ Photo sheet created successfully.";
+
+});
+
+
+/* Download */
+
+downloadBtn.addEventListener(
+"click",
+function(){
+
+if(!imageLoaded)
+return;
+
+const link =
+document.createElement("a");
+
+link.href =
+canvas.toDataURL(
+"image/jpeg",
+0.95
+);
+
+link.download =
+"formready-photo-sheet.jpg";
+
+document.body.appendChild(link);
+
+link.click();
+
+link.remove();
+
+});
+
+
+/* Reset */
+
+resetBtn.addEventListener(
+"click",
+function(){
+
+photo.value =
+"";
+
+imageLoaded =
+false;
+
+work.style.display =
+"none";
+
+downloadBtn.style.display =
+"none";
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+info.textContent =
+"Choose a photo to begin.";
+
+});
+
+</script>
+
+</body>
+</html>

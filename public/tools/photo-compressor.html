@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Photo Compressor | FormReady India</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f7fb;
+color:#111827
+}
+
+header{
+background:#111827;
+color:white;
+padding:16px 6%;
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.logo{
+font-size:22px;
+font-weight:800
+}
+
+.logo span{
+color:#60a5fa
+}
+
+header a{
+color:white;
+text-decoration:none
+}
+
+.container{
+max-width:850px;
+margin:auto;
+padding:25px 15px
+}
+
+.back{
+color:#2563eb;
+text-decoration:none;
+font-weight:600
+}
+
+.card{
+background:white;
+margin-top:18px;
+padding:25px;
+border-radius:22px;
+box-shadow:0 10px 35px #0000000d
+}
+
+h1{
+text-align:center;
+margin:5px 0
+}
+
+.sub{
+text-align:center;
+color:#6b7280;
+line-height:1.5
+}
+
+.upload{
+margin-top:25px;
+border:2px dashed #93c5fd;
+background:#eff6ff;
+border-radius:18px;
+padding:35px 15px;
+text-align:center
+}
+
+.upload input{
+display:none
+}
+
+.choose{
+display:inline-block;
+background:#2563eb;
+color:white;
+padding:14px 24px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer
+}
+
+#work{
+display:none;
+margin-top:25px
+}
+
+.preview{
+background:#111827;
+border-radius:15px;
+padding:10px;
+text-align:center
+}
+
+#preview{
+max-width:100%;
+max-height:400px;
+border-radius:10px
+}
+
+.control{
+margin-top:22px
+}
+
+.control label{
+font-size:14px;
+font-weight:700
+}
+
+input[type=range]{
+width:100%;
+margin-top:12px
+}
+
+.quality-value{
+text-align:center;
+font-size:24px;
+font-weight:800;
+margin-top:5px
+}
+
+.buttons{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:20px
+}
+
+button{
+border:0;
+padding:13px 18px;
+border-radius:11px;
+font-weight:700;
+cursor:pointer
+}
+
+.primary{
+background:#2563eb;
+color:white
+}
+
+.success{
+background:#16a34a;
+color:white
+}
+
+.secondary{
+background:#e5e7eb;
+color:#111827
+}
+
+.info{
+margin-top:18px;
+padding:14px;
+border-radius:12px;
+background:#f1f5f9;
+color:#475569;
+font-size:13px;
+line-height:1.7
+}
+
+.info strong{
+color:#111827
+}
+
+canvas{
+display:none
+}
+
+@media(max-width:600px){
+.card{
+padding:18px
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+FormReady <span>India</span>
+</div>
+
+<a href="/">Home</a>
+
+</header>
+
+
+<div class="container">
+
+<a class="back" href="/">← Back to Tools</a>
+
+
+<div class="card">
+
+<h1>🗜️ Photo Compressor</h1>
+
+<p class="sub">
+Reduce your photo file size while keeping good image quality.
+</p>
+
+
+<div class="upload">
+
+<label class="choose" for="file">
+📷 Choose Photo
+</label>
+
+<input
+id="file"
+type="file"
+accept="image/*"
+>
+
+<p>JPG • PNG • WEBP</p>
+
+</div>
+
+
+<div id="work">
+
+
+<div class="preview">
+
+<img id="preview">
+
+</div>
+
+
+<div class="control">
+
+<label>
+Compression Quality
+</label>
+
+<input
+id="quality"
+type="range"
+min="10"
+max="100"
+value="80"
+>
+
+<div class="quality-value">
+<span id="qualityValue">80</span>%
+</div>
+
+</div>
+
+
+<div class="buttons">
+
+<button
+class="primary"
+id="compress"
+>
+🗜️ Compress
+</button>
+
+<button
+class="success"
+id="download"
+>
+⬇️ Download
+</button>
+
+<button
+class="secondary"
+id="reset"
+>
+Reset
+</button>
+
+</div>
+
+
+<div class="info" id="info">
+Choose a photo to begin.
+</div>
+
+
+<canvas id="canvas"></canvas>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const file =
+document.getElementById("file");
+
+const preview =
+document.getElementById("preview");
+
+const work =
+document.getElementById("work");
+
+const quality =
+document.getElementById("quality");
+
+const qualityValue =
+document.getElementById("qualityValue");
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+const info =
+document.getElementById("info");
+
+
+let image =
+new Image();
+
+let originalFile =
+null;
+
+let compressedData =
+null;
+
+let ready =
+false;
+
+
+/* Quality display */
+
+quality.addEventListener(
+"input",
+function(){
+
+qualityValue.textContent =
+this.value;
+
+if(ready){
+
+compressImage();
+
+}
+
+});
+
+
+/* Select image */
+
+file.addEventListener(
+"change",
+function(){
+
+const selected =
+this.files[0];
+
+if(!selected)
+return;
+
+originalFile =
+selected;
+
+const url =
+URL.createObjectURL(selected);
+
+image.onload =
+function(){
+
+ready =
+true;
+
+preview.src =
+url;
+
+work.style.display =
+"block";
+
+info.innerHTML =
+"<strong>Original file:</strong> "
++
+formatBytes(originalFile.size)
++
+"<br>"
++
+"<strong>Dimensions:</strong> "
++
+image.width
++
+" × "
++
+image.height
++
+" px";
+
+compressedData =
+null;
+
+URL.revokeObjectURL(url);
+
+};
+
+image.src =
+url;
+
+});
+
+
+/* Compress */
+
+function compressImage(){
+
+if(!ready)
+return;
+
+canvas.width =
+image.width;
+
+canvas.height =
+image.height;
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+ctx.drawImage(
+image,
+0,
+0
+);
+
+const q =
+parseInt(quality.value) / 100;
+
+compressedData =
+canvas.toDataURL(
+"image/jpeg",
+q
+);
+
+const base64 =
+compressedData.split(",")[1];
+
+const bytes =
+Math.ceil(
+(base64.length * 3) / 4
+);
+
+const percent =
+originalFile.size > 0
+?
+Math.max(
+0,
+Math.round(
+(1 - bytes / originalFile.size) * 100
+)
+)
+:
+0;
+
+info.innerHTML =
+"<strong>Original:</strong> "
++
+formatBytes(originalFile.size)
++
+"<br>"
++
+"<strong>Compressed:</strong> "
++
+formatBytes(bytes)
++
+"<br>"
++
+"<strong>Saved:</strong> "
++
+percent
++
+"%"
++
+"<br>"
++
+"<strong>Quality:</strong> "
++
+quality.value
++
+"%";
+
+}
+
+
+/* Compress button */
+
+document.getElementById(
+"compress"
+).onclick =
+function(){
+
+compressImage();
+
+};
+
+
+/* Download */
+
+document.getElementById(
+"download"
+).onclick =
+function(){
+
+if(!ready)
+return;
+
+if(!compressedData){
+
+compressImage();
+
+}
+
+const link =
+document.createElement("a");
+
+link.download =
+"formready-compressed-photo.jpg";
+
+link.href =
+compressedData;
+
+link.click();
+
+};
+
+
+/* Reset */
+
+document.getElementById(
+"reset"
+).onclick =
+function(){
+
+file.value =
+"";
+
+preview.removeAttribute("src");
+
+work.style.display =
+"none";
+
+ready =
+false;
+
+originalFile =
+null;
+
+compressedData =
+null;
+
+quality.value =
+80;
+
+qualityValue.textContent =
+"80";
+
+};
+
+
+/* File size */
+
+function formatBytes(bytes){
+
+if(bytes === 0)
+return "0 Bytes";
+
+const units =
+[
+"Bytes",
+"KB",
+"MB",
+"GB"
+];
+
+const i =
+Math.floor(
+Math.log(bytes) /
+Math.log(1024)
+);
+
+return (
+bytes /
+Math.pow(1024,i)
+).toFixed(2)
++
+" "
++
+units[i];
+
+}
+
+</script>
+
+</body>
+</html>

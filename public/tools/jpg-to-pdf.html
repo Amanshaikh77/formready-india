@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JPG to PDF | FormReady India</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f4f7fb;
+color:#111827
+}
+
+header{
+background:#111827;
+color:white;
+padding:16px 6%;
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.logo{
+font-size:22px;
+font-weight:800
+}
+
+.logo span{
+color:#60a5fa
+}
+
+header a{
+color:white;
+text-decoration:none
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:25px 15px
+}
+
+.back{
+color:#2563eb;
+text-decoration:none;
+font-weight:600
+}
+
+.card{
+background:white;
+margin-top:18px;
+padding:25px;
+border-radius:22px;
+box-shadow:0 10px 35px #0000000d
+}
+
+h1{
+text-align:center;
+margin:5px 0
+}
+
+.sub{
+text-align:center;
+color:#6b7280;
+line-height:1.5
+}
+
+.upload{
+margin-top:25px;
+border:2px dashed #93c5fd;
+background:#eff6ff;
+border-radius:18px;
+padding:35px 15px;
+text-align:center
+}
+
+.upload input{
+display:none
+}
+
+.choose{
+display:inline-block;
+background:#2563eb;
+color:white;
+padding:14px 24px;
+border-radius:12px;
+font-weight:700;
+cursor:pointer
+}
+
+#work{
+display:none;
+margin-top:25px
+}
+
+.settings{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px
+}
+
+.setting label{
+font-size:13px;
+font-weight:700
+}
+
+.setting select{
+width:100%;
+padding:12px;
+margin-top:6px;
+border:1px solid #d1d5db;
+border-radius:10px;
+font-size:15px;
+background:white
+}
+
+.file-list{
+margin-top:20px;
+display:flex;
+flex-direction:column;
+gap:10px
+}
+
+.file-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px;
+background:#f8fafc;
+border:1px solid #e5e7eb;
+border-radius:12px
+}
+
+.file-item img{
+width:60px;
+height:60px;
+object-fit:cover;
+border-radius:8px
+}
+
+.file-name{
+flex:1;
+font-size:13px;
+font-weight:600;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap
+}
+
+.file-size{
+font-size:11px;
+color:#64748b
+}
+
+.buttons{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:20px
+}
+
+button{
+border:0;
+padding:13px 18px;
+border-radius:11px;
+font-weight:700;
+cursor:pointer
+}
+
+.primary{
+background:#2563eb;
+color:white
+}
+
+.success{
+background:#16a34a;
+color:white
+}
+
+.secondary{
+background:#e5e7eb;
+color:#111827
+}
+
+.info{
+margin-top:18px;
+padding:14px;
+background:#f1f5f9;
+border-radius:12px;
+font-size:13px;
+color:#475569;
+line-height:1.6
+}
+
+.empty{
+text-align:center;
+padding:20px;
+color:#64748b
+}
+
+@media(max-width:600px){
+.settings{
+grid-template-columns:1fr
+}
+
+.card{
+padding:18px
+}
+
+.file-item img{
+width:50px;
+height:50px
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+FormReady <span>India</span>
+</div>
+
+<a href="/">Home</a>
+
+</header>
+
+
+<div class="container">
+
+<a class="back" href="/">← Back to Tools</a>
+
+
+<div class="card">
+
+<h1>🖼️ JPG to PDF</h1>
+
+<p class="sub">
+Convert one or multiple images into a PDF document.
+</p>
+
+
+<div class="upload">
+
+<label class="choose" for="files">
+📷 Choose Photos
+</label>
+
+<input
+id="files"
+type="file"
+accept="image/*"
+multiple
+>
+
+<p>
+You can select multiple photos.
+</p>
+
+</div>
+
+
+<div id="work">
+
+<div class="settings">
+
+<div class="setting">
+
+<label>
+Page Size
+</label>
+
+<select id="pageSize">
+
+<option value="a4">
+A4
+</option>
+
+<option value="original">
+Original Image Size
+</option>
+
+<option value="letter">
+Letter
+</option>
+
+</select>
+
+</div>
+
+
+<div class="setting">
+
+<label>
+Orientation
+</label>
+
+<select id="orientation">
+
+<option value="auto">
+Auto
+</option>
+
+<option value="portrait">
+Portrait
+</option>
+
+<option value="landscape">
+Landscape
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="file-list" id="fileList">
+
+<div class="empty">
+No photos selected.
+</div>
+
+</div>
+
+
+<div class="buttons">
+
+<button
+class="success"
+id="createPdf"
+>
+📄 Create PDF
+</button>
+
+<button
+class="secondary"
+id="reset"
+>
+Reset
+</button>
+
+</div>
+
+
+<div class="info" id="info">
+Select photos to begin.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/*
+Simple client-side JPG → PDF creator.
+
+The PDF is created directly in the browser.
+No photo upload to a server is required.
+*/
+
+const filesInput =
+document.getElementById("files");
+
+const fileList =
+document.getElementById("fileList");
+
+const work =
+document.getElementById("work");
+
+const info =
+document.getElementById("info");
+
+let selectedFiles =
+[];
+
+
+/* Select files */
+
+filesInput.addEventListener(
+"change",
+function(){
+
+selectedFiles =
+Array.from(this.files);
+
+if(selectedFiles.length === 0)
+return;
+
+work.style.display =
+"block";
+
+renderList();
+
+}
+);
+
+
+/* Show selected files */
+
+function renderList(){
+
+fileList.innerHTML =
+"";
+
+selectedFiles.forEach(
+(file,index)=>{
+
+const item =
+document.createElement("div");
+
+item.className =
+"file-item";
+
+const img =
+document.createElement("img");
+
+const url =
+URL.createObjectURL(file);
+
+img.src =
+url;
+
+const text =
+document.createElement("div");
+
+text.className =
+"file-name";
+
+text.innerHTML =
+escapeHtml(file.name)
++
+"<div class='file-size'>"
++
+formatBytes(file.size)
++
+"</div>";
+
+const remove =
+document.createElement("button");
+
+remove.className =
+"secondary";
+
+remove.textContent =
+"✕";
+
+remove.onclick =
+function(){
+
+selectedFiles.splice(
+index,
+1
+);
+
+renderList();
+
+};
+
+item.appendChild(img);
+item.appendChild(text);
+item.appendChild(remove);
+
+fileList.appendChild(item);
+
+});
+
+info.textContent =
+selectedFiles.length
++
+" photo"
++
+(selectedFiles.length===1?"":"s")
++
+" selected.";
+
+}
+
+
+/* Create PDF */
+
+document.getElementById(
+"createPdf"
+).onclick =
+async function(){
+
+if(selectedFiles.length===0){
+
+alert(
+"Please choose at least one photo."
+);
+
+return;
+
+}
+
+info.textContent =
+"Creating PDF... Please wait.";
+
+try{
+
+const images =
+[];
+
+for(
+const file of selectedFiles
+){
+
+const data =
+await readFile(file);
+
+const image =
+await loadImage(data);
+
+images.push({
+image:image,
+data:data
+});
+
+}
+
+const pdf =
+createPDF(images);
+
+const blob =
+new Blob(
+[pdf],
+{type:"application/pdf"}
+);
+
+const url =
+URL.createObjectURL(blob);
+
+const link =
+document.createElement("a");
+
+link.href =
+url;
+
+link.download =
+"formready-images.pdf";
+
+link.click();
+
+setTimeout(
+()=>URL.revokeObjectURL(url),
+1000
+);
+
+info.textContent =
+"PDF created successfully. Download started.";
+
+}catch(error){
+
+console.error(error);
+
+info.textContent =
+"Something went wrong while creating the PDF.";
+
+alert(
+"Could not create PDF."
+);
+
+}
+
+};
+
+
+/* Reset */
+
+document.getElementById(
+"reset"
+).onclick =
+function(){
+
+filesInput.value =
+"";
+
+selectedFiles =
+[];
+
+fileList.innerHTML =
+"<div class='empty'>No photos selected.</div>";
+
+work.style.display =
+"none";
+
+info.textContent =
+"Select photos to begin.";
+
+};
+
+
+/* Read file */
+
+function readFile(file){
+
+return new Promise(
+(resolve,reject)=>{
+
+const reader =
+new FileReader();
+
+reader.onload =
+()=>resolve(reader.result);
+
+reader.onerror =
+reject;
+
+reader.readAsDataURL(file);
+
+});
+
+}
+
+
+/* Load image */
+
+function loadImage(src){
+
+return new Promise(
+(resolve,reject)=>{
+
+const image =
+new Image();
+
+image.onload =
+()=>resolve(image);
+
+image.onerror =
+reject;
+
+image.src =
+src;
+
+});
+
+}
+
+
+/*
+Minimal PDF writer.
+Creates pages containing JPEG images.
+*/
+
+function createPDF(images){
+
+const pageSize =
+document.getElementById(
+"pageSize"
+).value;
+
+const orientation =
+document.getElementById(
+"orientation"
+).value;
+
+
+/* PDF objects */
+
+let objects =
+[];
+
+let pages =
+[];
+
+let pageCount =
+images.length;
+
+
+/* Header */
+
+let pdf =
+"%PDF-1.4\n";
+
+function addObject(content){
+
+objects.push(content);
+
+return objects.length;
+
+}
+
+
+/* Reserve catalog/pages */
+
+const catalogId =
+addObject("");
+
+const pagesId =
+addObject("");
+
+
+for(
+let i=0;
+i<images.length;
+i++
+){
+
+const img =
+images[i].image;
+
+
+/* Page dimensions */
+
+let pageW;
+let pageH;
+
+if(pageSize==="a4"){
+
+pageW =
+595.28;
+
+pageH =
+841.89;
+
+}else if(pageSize==="letter"){
+
+pageW =
+612;
+
+pageH =
+792;
+
+}else{
+
+pageW =
+img.width *
+72 /
+96;
+
+pageH =
+img.height *
+72 /
+96;
+
+}
+
+
+/* Orientation */
+
+if(
+orientation==="landscape" ||
+(
+orientation==="auto" &&
+img.width>img.height
+)
+){
+
+if(pageW<pageH){
+
+const temp =
+pageW;
+
+pageW =
+pageH;
+
+pageH =
+temp;
+
+}
+
+}
+
+if(
+orientation==="portrait"
+){
+
+if(pageW>pageH){
+
+const temp =
+pageW;
+
+pageW =
+pageH;
+
+pageH =
+temp;
+
+}
+
+}
+
+
+/* JPEG binary */
+
+const base64 =
+images[i].data.split(",")[1];
+
+const binary =
+atob(base64);
+
+let bytes =
+new Uint8Array(
+binary.length
+);
+
+for(
+let j=0;
+j<binary.length;
+j++
+){
+
+bytes[j] =
+binary.charCodeAt(j);
+
+}
+
+
+/* Image object */
+
+const imageId =
+addObject(
+`<<
+/Type /XObject
+/Subtype /Image
+/Width ${img.width}
+/Height ${img.height}
+/ColorSpace /DeviceRGB
+/BitsPerComponent 8
+/Filter /DCTDecode
+/Length ${bytes.length}
+>>
+stream\n${binary}\nendstream`
+);
+
+
+/* Scale image */
+
+const margin =
+25;
+
+const maxW =
+pageW -
+margin*2;
+
+const maxH =
+pageH -
+margin*2;
+
+const scale =
+Math.min(
+maxW/img.width,
+maxH/img.height
+);
+
+const drawW =
+img.width*scale;
+
+const drawH =
+img.height*scale;
+
+const x =
+(pageW-drawW)/2;
+
+const y =
+(pageH-drawH)/2;
+
+
+/* Page content */
+
+const content =
+`q
+${drawW.toFixed(2)} 0 0 ${drawH.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm
+/Im1 Do
+Q`;
+
+const contentId =
+addObject(
+`<< /Length ${content.length} >>
+stream
+${content}
+endstream`
+);
+
+
+/* Page */
+
+const pageId =
+addObject(
+`<<
+/Type /Page
+/Parent ${pagesId} 0 R
+/MediaBox [0 0 ${pageW.toFixed(2)} ${pageH.toFixed(2)}]
+/Resources <<
+  /XObject <<
+    /Im1 ${imageId} 0 R
+  >>
+>>
+/Contents ${contentId} 0 R
+>>`
+);
+
+pages.push(pageId);
+
+}
+
+
+/* Pages object */
+
+objects[pagesId-1] =
+`<<
+/Type /Pages
+/Count ${pages.length}
+/Kids [${pages.map(id=>id+" 0 R").join(" ")}]
+>>`;
+
+
+/* Catalog */
+
+objects[catalogId-1] =
+`<<
+/Type /Catalog
+/Pages ${pagesId} 0 R
+>>`;
+
+
+/* Build PDF */
+
+const offsets =
+[0];
+
+for(
+let i=0;
+i<objects.length;
+i++
+){
+
+offsets[i+1] =
+pdf.length;
+
+pdf +=
+`${i+1} 0 obj\n`;
+
+pdf +=
+objects[i];
+
+pdf +=
+"\nendobj\n";
+
+}
+
+
+/* Xref */
+
+const xref =
+pdf.length;
+
+pdf +=
+"xref\n";
+
+pdf +=
+`0 ${objects.length+1}\n`;
+
+pdf +=
+"0000000000 65535 f \n";
+
+for(
+let i=1;
+i<offsets.length;
+i++
+){
+
+pdf +=
+String(
+offsets[i]
+).padStart(10,"0")
++
+" 00000 n \n";
+
+}
+
+pdf +=
+"trailer\n";
+
+pdf +=
+`<< /Size ${objects.length+1} /Root ${catalogId} 0 R >>\n`;
+
+pdf +=
+"startxref\n";
+
+pdf +=
+xref
++
+"\n%%EOF";
+
+return pdf;
+
+}
+
+
+/* Helpers */
+
+function formatBytes(bytes){
+
+if(bytes===0)
+return "0 Bytes";
+
+const units=[
+"Bytes",
+"KB",
+"MB",
+"GB"
+];
+
+const i =
+Math.floor(
+Math.log(bytes) /
+Math.log(1024)
+);
+
+return (
+bytes/
+Math.pow(1024,i)
+).toFixed(2)
++
+" "
++
+units[i];
+
+}
+
+
+function escapeHtml(text){
+
+return text
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
