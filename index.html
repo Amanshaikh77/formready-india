@@ -814,5 +814,47 @@ search.addEventListener("input", function(){
 
 </script>
 
+
+<script>
+async function loadWalletBalance(){
+  try{
+    const r = await fetch("/api/token/balance");
+    const data = await r.json();
+
+    if(data.success){
+      const el = document.getElementById("walletTokens");
+      if(el){
+        el.textContent = Number(data.tokens || 0).toLocaleString("en-IN");
+      }
+    }
+  }catch(e){
+    console.log("Wallet balance unavailable");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadWalletBalance);
+</script>
+
+
+<script>
+async function updateWalletPage(){
+  try{
+    const r = await fetch("/api/token/balance");
+    const data = await r.json();
+
+    if(data.success){
+      const tokens = Number(data.tokens || 0);
+      const t = document.getElementById("walletPageTokens");
+      const v = document.getElementById("walletPageValue");
+
+      if(t) t.textContent = tokens.toLocaleString("en-IN");
+      if(v) v.textContent = (tokens / 100).toFixed(2);
+    }
+  }catch(e){}
+}
+
+document.addEventListener("DOMContentLoaded", updateWalletPage);
+</script>
+
 </body>
 </html>
