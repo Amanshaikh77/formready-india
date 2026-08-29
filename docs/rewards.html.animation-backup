@@ -140,46 +140,6 @@ footer{
 @media(max-width:450px){
   .redeem-grid{grid-template-columns:1fr}
 }
-
-<style>
-.reward-success{
- position:fixed;inset:0;display:none;place-items:center;
- background:rgba(10,15,30,.55);backdrop-filter:blur(5px);
- z-index:99999;
-}
-.reward-success.show{display:grid}
-.reward-box{
- width:min(90%,360px);background:white;border-radius:24px;
- padding:30px 20px;text-align:center;
- box-shadow:0 20px 60px #0005;
- animation:rewardPop .45s ease;
-}
-.reward-coin{
- font-size:64px;display:block;
- animation:coinBounce .8s ease infinite alternate;
-}
-.reward-box h2{margin:10px 0 5px;color:#111827}
-.reward-box p{margin:0;color:#667085}
-.reward-ok{
- margin-top:20px;padding:12px 25px;border:0;border-radius:12px;
- background:#2563eb;color:white;font-size:16px;font-weight:800;
-}
-.confetti{
- position:fixed;top:-20px;width:9px;height:14px;
- z-index:100000;animation:fall 2.5s linear forwards;
-}
-@keyframes rewardPop{
- from{transform:scale(.5);opacity:0}
- to{transform:scale(1);opacity:1}
-}
-@keyframes coinBounce{
- from{transform:translateY(0) rotate(-8deg)}
- to{transform:translateY(-12px) rotate(8deg)}
-}
-@keyframes fall{
- to{transform:translateY(110vh) rotate(720deg);opacity:0}
-}
-</style>
 </style>
 </head>
 
@@ -290,43 +250,16 @@ function requestReward(){
     return;
   }
 
+  alert(
+    "Reward request created!\\n\\n" +
+    "Amount: ₹" + selectedReward.toLocaleString("en-IN") +
+    "\\nUPI: " + upi +
+    "\\n\\nPayment will require verification."
+  );
 }
 
 showBalance();
 </script>
 
-
-<div id="rewardSuccess" class="reward-success">
-  <div class="reward-box">
-    <span class="reward-coin">🪙</span>
-    <h2>🎉 Reward Successful!</h2>
-    <p>Your reward request has been created successfully.</p>
-    <button class="reward-ok" onclick="closeRewardSuccess()">Awesome!</button>
-  </div>
-</div>
-
-<script>
-function showRewardSuccess(){
-  const box=document.getElementById("rewardSuccess");
-  if(!box)return;
-  box.classList.add("show");
-
-  for(let i=0;i<45;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.textContent=["🎉","✨","🪙","💰"][Math.floor(Math.random()*4)];
-    c.style.left=Math.random()*100+"vw";
-    c.style.animationDelay=Math.random()*0.7+"s";
-    c.style.fontSize=(12+Math.random()*12)+"px";
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3200);
-  }
-}
-
-function closeRewardSuccess(){
-  const box=document.getElementById("rewardSuccess");
-  if(box)box.classList.remove("show");
-}
-</script>
 </body>
 </html>
