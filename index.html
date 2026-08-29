@@ -315,6 +315,81 @@ footer strong{
     padding:25px;
   }
 }
+
+/* ===== WALLET UI ===== */
+.wallet-bar{
+  margin:18px auto 0;
+  max-width:1100px;
+  padding:0 18px;
+}
+.wallet-card{
+  background:linear-gradient(135deg,#111827,#1e293b);
+  border:1px solid rgba(96,165,250,.35);
+  border-radius:20px;
+  padding:18px 20px;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+.wallet-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.wallet-icon{
+  width:50px;
+  height:50px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#facc15,#f59e0b);
+  font-size:25px;
+}
+.wallet-title{
+  font-size:13px;
+  color:#94a3b8;
+  margin-bottom:3px;
+}
+.wallet-balance{
+  font-size:25px;
+  font-weight:900;
+}
+.wallet-button{
+  border:0;
+  border-radius:12px;
+  padding:12px 17px;
+  background:#60a5fa;
+  color:#07111f;
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.wallet-button:active{
+  transform:scale(.97);
+}
+@media(max-width:600px){
+  .wallet-card{
+    padding:15px;
+  }
+  .wallet-balance{
+    font-size:21px;
+  }
+  .wallet-button{
+    padding:10px 12px;
+    font-size:13px;
+  }
+  .wallet-icon{
+    width:44px;
+    height:44px;
+    font-size:22px;
+  }
+}
+
 </style>
 </head>
 
@@ -332,6 +407,27 @@ footer strong{
   </nav>
 
 </header>
+
+<!-- WALLET -->
+<div class="wallet-bar">
+  <div class="wallet-card">
+    <div class="wallet-left">
+      <div class="wallet-icon">🪙</div>
+      <div>
+        <div class="wallet-title">YOUR TOKEN WALLET</div>
+        <div class="wallet-balance">
+          <span id="walletTokens">0</span> Tokens
+        </div>
+      </div>
+    </div>
+
+    <a href="#wallet" class="wallet-button">
+      ENTER WALLET →
+    </a>
+  </div>
+</div>
+<!-- END WALLET -->
+
 
 
 <section class="hero">
