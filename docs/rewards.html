@@ -2,90 +2,264 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rewards & Tokens - FormReady India</title>
-<meta name="description" content="Earn tokens by using FormReady India tools and view your rewards balance.">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Rewards & Tokens - FormReady India</title>
+<meta name="description" content="Use FormReady India tools, earn tokens and view your rewards balance.">
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#171717}
-.container{max-width:700px;margin:auto;padding:20px}
-.header{background:#111827;color:white;padding:22px;border-radius:18px;margin-bottom:18px}
-.header h1{margin:0 0 6px;font-size:25px}
-.header p{margin:0;color:#d1d5db}
-.card{background:white;border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 5px 20px #0000000d}
-.balance{text-align:center;background:linear-gradient(135deg,#111827,#374151);color:white}
-.balance .coins{font-size:38px;font-weight:800;margin:10px 0}
-.balance .value{font-size:16px;color:#d1d5db}
-h2{margin-top:0;font-size:20px}
-.reward{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #eee}
-.reward:last-child{border-bottom:0}
-.reward small{display:block;color:#777;margin-top:3px}
-.amounts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.amount{border:2px solid #e5e7eb;border-radius:14px;padding:16px;text-align:center;background:#fafafa}
-.amount strong{display:block;font-size:22px}
-.amount span{display:block;color:#666;margin-top:5px}
-input{width:100%;padding:14px;border:1px solid #d1d5db;border-radius:12px;font-size:16px;margin:8px 0 12px}
-button{width:100%;border:0;border-radius:12px;padding:14px;background:#111827;color:white;font-size:16px;font-weight:700}
-.note{font-size:12px;color:#777;line-height:1.5;margin-top:12px}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f6fb;
+  color:#111827;
+}
+header{
+  background:#111827;
+  color:white;
+  padding:22px 16px;
+  text-align:center;
+}
+header h1{margin:0;font-size:25px}
+header p{margin:8px 0 0;color:#cbd5e1}
+
+.container{
+  width:min(700px,92%);
+  margin:25px auto 50px;
+}
+
+.card{
+  background:white;
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 5px 20px #00000010;
+}
+
+.balance{
+  background:#111827;
+  color:white;
+  text-align:center;
+}
+.balance .coin{font-size:38px}
+.balance h2{font-size:34px;margin:8px 0}
+.balance p{color:#cbd5e1;margin:5px 0}
+
+.info{
+  text-align:center;
+  color:#475569;
+  line-height:1.6;
+}
+
+h2{margin-top:0}
+
+.redeem-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.redeem{
+  border:1px solid #dbe1ea;
+  background:#f8fafc;
+  border-radius:14px;
+  padding:16px;
+  text-align:center;
+  cursor:pointer;
+  font-weight:700;
+  font-size:16px;
+}
+
+.redeem:hover{
+  background:#eef2ff;
+}
+
+.redeem small{
+  display:block;
+  margin-top:5px;
+  color:#64748b;
+  font-weight:400;
+}
+
+label{
+  display:block;
+  margin:14px 0 7px;
+  font-weight:700;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  font-size:16px;
+  outline:none;
+}
+
+input:focus{border-color:#2563eb}
+
+button{
+  width:100%;
+  margin-top:16px;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+  font-weight:800;
+}
+
+button:disabled{
+  background:#94a3b8;
+}
+
+.note{
+  font-size:13px;
+  color:#64748b;
+  text-align:center;
+  line-height:1.5;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:20px;
+  color:#2563eb;
+  text-decoration:none;
+  font-weight:700;
+}
+
+footer{
+  text-align:center;
+  padding:25px;
+  color:#64748b;
+  font-size:14px;
+}
+
+@media(max-width:450px){
+  .redeem-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
+
 <body>
+
+<header>
+  <h1>🪙 My Rewards & Tokens</h1>
+  <p>FormReady India Rewards</p>
+</header>
+
 <div class="container">
 
-<div class="header">
-<h1>🪙 FormReady India Rewards</h1>
-<p>Use our tools and collect tokens.</p>
+  <div class="card balance">
+    <div class="coin">🪙</div>
+    <div>Your Token Balance</div>
+    <h2 id="balance">0</h2>
+    <p>20,000 Tokens = ₹200</p>
+  </div>
+
+  <div class="card info">
+    <h2>🎁 Earn Tokens</h2>
+    <p>
+      Use eligible FormReady India tools and collect tokens.
+      Your token balance is saved on this device.
+    </p>
+    <p><b>Typical reward: 20–25 tokens</b></p>
+  </div>
+
+  <div class="card">
+    <h2>💰 Redeem Rewards</h2>
+
+    <div class="redeem-grid">
+      <div class="redeem" onclick="selectReward(200)">
+        ₹200
+        <small>20,000 Tokens</small>
+      </div>
+
+      <div class="redeem" onclick="selectReward(500)">
+        ₹500
+        <small>50,000 Tokens</small>
+      </div>
+
+      <div class="redeem" onclick="selectReward(1000)">
+        ₹1,000
+        <small>1,00,000 Tokens</small>
+      </div>
+
+      <div class="redeem" onclick="selectReward(5000)">
+        ₹5,000
+        <small>5,00,000 Tokens</small>
+      </div>
+    </div>
+
+    <label>Selected Reward</label>
+    <input id="reward" value="₹200" readonly>
+
+    <label>UPI ID</label>
+    <input id="upi" type="text" placeholder="example@upi">
+
+    <button onclick="requestReward()">Request Reward</button>
+
+    <p class="note">
+      Reward requests are subject to eligibility and verification.
+      This page currently creates a request record only; actual payment
+      requires a secure server-side payment system.
+    </p>
+  </div>
+
+  <a class="back" href="index.html">← Back to FormReady India</a>
+
 </div>
 
-<div class="card balance">
-<div>Current Token Balance</div>
-<div class="coins" data-token-balance>0 🪙</div>
-<div class="value">100 Tokens = ₹1</div>
-</div>
+<footer>
+  © 2026 FormReady India. All rights reserved.
+</footer>
 
-<div class="card">
-<h2>⚡ Earn Tokens</h2>
-
-<div class="reward"><div>JPG to PDF<small>Successful tool use</small></div><b>+20 🪙</b></div>
-<div class="reward"><div>Merge PDF</div><b>+25 🪙</b></div>
-<div class="reward"><div>Passport Photo</div><b>+25 🪙</b></div>
-<div class="reward"><div>PDF Compressor</div><b>+25 🪙</b></div>
-<div class="reward"><div>PDF to JPG</div><b>+20 🪙</b></div>
-<div class="reward"><div>Photo Compressor</div><b>+20 🪙</b></div>
-<div class="reward"><div>Photo Resizer</div><b>+20 🪙</b></div>
-<div class="reward"><div>Photo Sheet</div><b>+25 🪙</b></div>
-<div class="reward"><div>Signature Maker</div><b>+20 🪙</b></div>
-<div class="reward"><div>Split PDF</div><b>+25 🪙</b></div>
-</div>
-
-<div class="card">
-<h2>💸 Redeem</h2>
-<p>Choose a fixed reward amount.</p>
-
-<div class="amounts">
-<div class="amount"><strong>₹200</strong><span>20,000 🪙</span></div>
-<div class="amount"><strong>₹500</strong><span>50,000 🪙</span></div>
-<div class="amount"><strong>₹1,000</strong><span>1,00,000 🪙</span></div>
-<div class="amount"><strong>₹5,000</strong><span>5,00,000 🪙</span></div>
-</div>
-</div>
-
-<div class="card">
-<h2>UPI Details</h2>
-<input type="text" placeholder="Enter UPI ID">
-<button type="button" onclick="demoRequest()">Request Withdrawal</button>
-<div class="note">
-Reward requests are recorded as virtual/demo requests only. No actual UPI payment is processed by this website.
-</div>
-</div>
-
-</div>
-
-<script src="token-system.js"></script>
 <script>
-function demoRequest(){
-  alert("Withdrawal request demo submitted.");
+let balance = Number(localStorage.getItem("formready_tokens") || 0);
+let selectedReward = 200;
+
+function showBalance(){
+  document.getElementById("balance").textContent =
+    balance.toLocaleString("en-IN");
 }
+
+function selectReward(amount){
+  selectedReward = amount;
+  document.getElementById("reward").value =
+    "₹" + amount.toLocaleString("en-IN");
+}
+
+function requestReward(){
+  const upi = document.getElementById("upi").value.trim();
+  const required = selectedReward * 100;
+
+  if(!upi){
+    alert("Please enter your UPI ID.");
+    return;
+  }
+
+  if(balance < required){
+    alert(
+      "Not enough tokens.\\n\\n" +
+      "Required: " + required.toLocaleString("en-IN") +
+      " tokens\\n" +
+      "Your balance: " + balance.toLocaleString("en-IN") + " tokens"
+    );
+    return;
+  }
+
+  alert(
+    "Reward request created!\\n\\n" +
+    "Amount: ₹" + selectedReward.toLocaleString("en-IN") +
+    "\\nUPI: " + upi +
+    "\\n\\nPayment will require verification."
+  );
+}
+
+showBalance();
 </script>
+
 </body>
 </html>
