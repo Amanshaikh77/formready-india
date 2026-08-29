@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
+<title>Photo Resizer | FormReady India</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#111827}
@@ -33,28 +33,6 @@ input[type=number],select{width:100%;padding:12px;margin-top:6px;border:1px soli
 .info{margin-top:15px;background:#f1f5f9;padding:12px;border-radius:10px;color:#475569;font-size:13px;text-align:center}
 @media(max-width:600px){.controls{grid-template-columns:1fr}.card{padding:18px}}
 </style>
-<title>Photo Resizer Online Free</title>
-
-<meta name="description" content="Resize photos and images online for free. Change image dimensions quickly with this simple photo resizer.">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/photo-resizer.html">
-<meta property="og:title" content="Photo Resizer Online Free">
-<meta property="og:description" content="Resize photos and images online for free. Change image dimensions quickly with this simple photo resizer.">
-<meta property="og:url" content="https://amanshaikh77.github.io/formready-india/tools/photo-resizer.html">
-<meta property="og:type" content="website">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Photo Resizer",
-  "url": "https://amanshaikh77.github.io/formready-india/tools/photo-resizer.html",
-  "description": "Resize photos and images online for free. Change image dimensions quickly with this simple photo resizer.",
-  "applicationCategory": "UtilityApplication",
-  "operatingSystem": "Any"
-}
-</script>
-
-<script src="../token-system.js"></script>
 </head>
 <body>
 
@@ -220,36 +198,6 @@ height.value=img.height;
 preview.src=img.src;
 info.textContent="Original: "+img.width+" × "+img.height+" px";
 };
-</script>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const rewardKey = "formready_reward_photo-resizer_" + new Date().toISOString().slice(0,10);
-
-  function rewardUser() {
-    if (localStorage.getItem(rewardKey)) return;
-    if (window.FormReadyTokens) {
-      window.FormReadyTokens.addTokens("photo-resizer");
-    }
-  }
-
-  document.querySelectorAll(
-    '#download, #downloadBtn, #downloadButton, button[id*="download" i], a[id*="download" i]'
-  ).forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      setTimeout(rewardUser, 1000);
-    });
-  });
-
-  const originalAlert = window.alert;
-  window.alert = function(msg) {
-    if (msg && /download|success|created|converted|compressed|generated|saved/i.test(String(msg))) {
-      setTimeout(rewardUser, 500);
-    }
-    originalAlert.apply(window, arguments);
-  };
-});
 </script>
 
 </body>

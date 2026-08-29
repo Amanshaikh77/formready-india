@@ -316,7 +316,7 @@ footer strong{
   }
 }
 </style>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQS397P13G"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-ZQS397P13G");</script></head>
+</head>
 
 <body>
 
@@ -636,23 +636,6 @@ search.addEventListener("input", function(){
 });
 
 </script>
-
-
-<a href="rewards.html" style="
-display:block;
-margin:15px auto;
-max-width:500px;
-padding:15px 20px;
-background:#111827;
-color:white;
-text-decoration:none;
-border-radius:14px;
-text-align:center;
-font-weight:700;
-font-size:17px;
-">
-🪙 My Rewards & Tokens
-</a>
 
 </body>
 </html>

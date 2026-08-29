@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rewards & Tokens - FormReady India</title>
+<meta name="description" content="Earn tokens by using FormReady India tools and view your rewards balance.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#171717}
+.container{max-width:700px;margin:auto;padding:20px}
+.header{background:#111827;color:white;padding:22px;border-radius:18px;margin-bottom:18px}
+.header h1{margin:0 0 6px;font-size:25px}
+.header p{margin:0;color:#d1d5db}
+.card{background:white;border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 5px 20px #0000000d}
+.balance{text-align:center;background:linear-gradient(135deg,#111827,#374151);color:white}
+.balance .coins{font-size:38px;font-weight:800;margin:10px 0}
+.balance .value{font-size:16px;color:#d1d5db}
+h2{margin-top:0;font-size:20px}
+.reward{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid #eee}
+.reward:last-child{border-bottom:0}
+.reward small{display:block;color:#777;margin-top:3px}
+.amounts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.amount{border:2px solid #e5e7eb;border-radius:14px;padding:16px;text-align:center;background:#fafafa}
+.amount strong{display:block;font-size:22px}
+.amount span{display:block;color:#666;margin-top:5px}
+input{width:100%;padding:14px;border:1px solid #d1d5db;border-radius:12px;font-size:16px;margin:8px 0 12px}
+button{width:100%;border:0;border-radius:12px;padding:14px;background:#111827;color:white;font-size:16px;font-weight:700}
+.note{font-size:12px;color:#777;line-height:1.5;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+<h1>🪙 FormReady India Rewards</h1>
+<p>Use our tools and collect tokens.</p>
+</div>
+
+<div class="card balance">
+<div>Current Token Balance</div>
+<div class="coins" data-token-balance>0 🪙</div>
+<div class="value">100 Tokens = ₹1</div>
+</div>
+
+<div class="card">
+<h2>⚡ Earn Tokens</h2>
+
+<div class="reward"><div>JPG to PDF<small>Successful tool use</small></div><b>+20 🪙</b></div>
+<div class="reward"><div>Merge PDF</div><b>+25 🪙</b></div>
+<div class="reward"><div>Passport Photo</div><b>+25 🪙</b></div>
+<div class="reward"><div>PDF Compressor</div><b>+25 🪙</b></div>
+<div class="reward"><div>PDF to JPG</div><b>+20 🪙</b></div>
+<div class="reward"><div>Photo Compressor</div><b>+20 🪙</b></div>
+<div class="reward"><div>Photo Resizer</div><b>+20 🪙</b></div>
+<div class="reward"><div>Photo Sheet</div><b>+25 🪙</b></div>
+<div class="reward"><div>Signature Maker</div><b>+20 🪙</b></div>
+<div class="reward"><div>Split PDF</div><b>+25 🪙</b></div>
+</div>
+
+<div class="card">
+<h2>💸 Redeem</h2>
+<p>Choose a fixed reward amount.</p>
+
+<div class="amounts">
+<div class="amount"><strong>₹200</strong><span>20,000 🪙</span></div>
+<div class="amount"><strong>₹500</strong><span>50,000 🪙</span></div>
+<div class="amount"><strong>₹1,000</strong><span>1,00,000 🪙</span></div>
+<div class="amount"><strong>₹5,000</strong><span>5,00,000 🪙</span></div>
+</div>
+</div>
+
+<div class="card">
+<h2>UPI Details</h2>
+<input type="text" placeholder="Enter UPI ID">
+<button type="button" onclick="demoRequest()">Request Withdrawal</button>
+<div class="note">
+Reward requests are recorded as virtual/demo requests only. No actual UPI payment is processed by this website.
+</div>
+</div>
+
+</div>
+
+<script src="token-system.js"></script>
+<script>
+function demoRequest(){
+  alert("Withdrawal request demo submitted.");
+}
+</script>
+</body>
+</html>
