@@ -45,3 +45,85 @@ header, .site-header {
   position: relative;
   z-index: 1;
 }
+
+body, .hero, .hero-content, header, .site-header, footer, .site-footer, .tools-section, .about-section {
+  background-color: initial;
+}
+
+body {
+  color: #1f2937 !important;
+}
+
+.hero, .hero-content {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1e40af 100%) !important;
+}
+.hero *, .hero-content * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+.hero p, .hero-content p {
+  color: #dbeafe !important;
+  -webkit-text-fill-color: #dbeafe !important;
+}
+
+header, .site-header {
+  background: #ffffff !important;
+}
+header *, .site-header * {
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+header a:hover, .site-header a:hover {
+  color: #1a56db !important;
+  -webkit-text-fill-color: #1a56db !important;
+}
+
+.tools-section, section.tools-section {
+  background: #ffffff !important;
+}
+.tools-section h2, .tools-section p, .tools-section * {
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+
+.tool-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+}
+.tool-card * {
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+.tool-card .tool-desc {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+}
+
+.about-section {
+  background: #f8fafc !important;
+}
+.about-section * {
+  color: #1f2937 !important;
+  -webkit-text-fill-color: #1f2937 !important;
+}
+
+footer, .site-footer {
+  background: #f1f5f9 !important;
+}
+footer *, .site-footer * {
+  color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
+}
+
+.btn-primary, a.btn-primary {
+  background: #1a56db !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.btn-secondary, a.btn-secondary {
+  background: #ffffff !important;
+  color: #1a56db !important;
+  -webkit-text-fill-color: #1a56db !important;
+  border: 1.5px solid #1a56db !important;
+}
