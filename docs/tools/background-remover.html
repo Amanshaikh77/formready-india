@@ -453,9 +453,7 @@ removeBtn.addEventListener("click", async function(){
   statusText.textContent = "Removing background… first time may take 10-20 seconds while the tool loads.";
 
   try{
-    const blob = await removeBackground(originalFile, {
-      publicPath: "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.6.0/dist/"
-    });
+    const blob = await removeBackground(originalFile);
 
     const url = URL.createObjectURL(blob);
     const img = new Image();
