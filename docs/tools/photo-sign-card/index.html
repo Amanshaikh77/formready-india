@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Passport Photo + Sign Card - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar { max-width: 600px; margin: 0 auto 20px; width: 100%; }
+.back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
+.header p { font-size: 13px; color: var(--muted); }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto 24px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.upload-group {
+  margin-bottom: 16px;
+}
+.upload-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+.upload-zone {
+  border: 2px dashed var(--line);
+  padding: 16px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--panel-2);
+  transition: border-color 0.2s;
+  display: block;
+  width: 100%;
+  font-size: 13px;
+  color: var(--muted);
+}
+.upload-zone:hover { border-color: var(--amber); }
+.upload-zone b { color: var(--amber); }
+
+.preview-box { display: flex; gap: 10px; margin-top: 8px; font-size: 12px; color: var(--muted); align-items: center; }
+
+.preview-container { display: none; text-align: center; margin: 20px 0; }
+.preview-canvas { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); background: #fff; }
+
+.btn {
+  background: var(--amber);
+  color: #151210;
+  border: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+.btn:hover { background: var(--amber-bright); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-download { background: #2ea043; color: #fff; display: none; }
+.btn-download:hover { background: #3fb950; }
+
+footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: auto; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="../../" class="back-btn">← Back to Dashboard</a>
+</div>
+
+<div class="header">
+  <h1>Passport Photo + Sign Card</h1>
+  <p>Merge identity photo and signature onto a single composite frame</p>
+</div>
+
+<div class="card">
+  <div class="upload-group">
+    <label>1. Upload Passport Photo:</label>
+    <label for="photoInput" class="upload-zone">📁 Tap to select Photo <br><b>JPG, PNG</b></label>
+    <input type="file" id="photoInput" accept="image/*" style="display:none;">
+    <div class="preview-box" id="photoStatus" style="display:none;">✅ Photo loaded</div>
+  </div>
+
+  <div class="upload-group">
+    <label>2. Upload Signature:</label>
+    <label for="signInput" class="upload-zone">📁 Tap to select Signature <br><b>JPG, PNG</b></label>
+    <input type="file" id="signInput" accept="image/*" style="display:none;">
+    <div class="preview-box" id="signStatus" style="display:none;">✅ Signature loaded</div>
+  </div>
+
+  <div class="preview-container" id="previewContainer">
+    <canvas id="resultCanvas" class="preview-canvas"></canvas>
+  </div>
+
+  <button class="btn" id="generateBtn" disabled>Generate Combined Card</button>
+  <a id="downloadLink" style="text-decoration:none;"><button class="btn btn-download" id="downloadBtn">📥 Download Combined Card</button></a>
+</div>
+
+<footer>
+  &copy; 2026 FormReady India. 100% Secure Client-Side Processing.
+</footer>
+
+<script>
+const photoInput = document.getElementById("photoInput");
+const signInput = document.getElementById("signInput");
+const photoStatus = document.getElementById("photoStatus");
+const signStatus = document.getElementById("signStatus");
+const generateBtn = document.getElementById("generateBtn");
+const previewContainer = document.getElementById("previewContainer");
+const resultCanvas = document.getElementById("resultCanvas");
+const downloadBtn = document.getElementById("downloadBtn");
+const downloadLink = document.getElementById("downloadLink");
+
+let photoImg = null;
+let signImg = null;
+
+photoInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      photoImg = img;
+      photoStatus.style.display = "block";
+      checkReady();
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+signInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      signImg = img;
+      signStatus.style.display = "block";
+      checkReady();
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+function checkReady() {
+  if (photoImg && signImg) {
+    generateBtn.disabled = false;
+  }
+}
+
+generateBtn.addEventListener("click", () => {
+  if (!photoImg || !signImg) return;
+
+  // Standard official ratio layout: Photo on top, Signature right below in a stacked card
+  const cardWidth = 400;
+  const photoH = 450;
+  const signH = 150;
+  const padding = 20;
+  const cardHeight = photoH + signH + (padding * 3);
+
+  resultCanvas.width = cardWidth;
+  resultCanvas.height = cardHeight;
+  const ctx = resultCanvas.getContext("2d");
+
+  // White background
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, cardWidth, cardHeight);
+
+  // Draw Photo Centered Top
+  const pW = cardWidth - (padding * 2);
+  const pH = photoH;
+  ctx.drawImage(photoImg, padding, padding, pW, pH);
+
+  // Draw Border around photo
+  ctx.strokeStyle = "#CCCCCC";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(padding, padding, pW, pH);
+
+  // Draw Signature Centered Bottom
+  const sY = padding * 2 + photoH;
+  const sW = cardWidth - (padding * 2);
+  const sH = signH;
+  ctx.drawImage(signImg, padding, sY, sW, sH);
+
+  // Draw Border around signature
+  ctx.strokeRect(padding, sY, sW, sH);
+
+  previewContainer.style.display = "block";
+
+  resultCanvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = "photo-and-signature-card.jpg";
+    downloadBtn.style.display = "block";
+  }, "image/jpeg", 0.95);
+});
+</script>
+</body>
+</html>
