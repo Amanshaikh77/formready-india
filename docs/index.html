@@ -280,8 +280,16 @@ function renderCatalog(filter = "all", query = "") {
         <p class="category-desc">${cat.categoryDesc}</p>
       </div>
       <div class="tools-grid">
-        ${matchedTools.map(t => `
-          <a href="${t.link}" class="tool-card">
+        ${matchedTools.map(t => {
+          const isActive = [
+            "Image Format Converter", "Photo Cropper", "Photo Resizer", "Photo Compressor", 
+            "Passport Photo Maker", "Photo Sheet Maker", "Background Remover", "Signature Maker", "Image to Text (OCR)",
+            "Aadhaar / PAN Photo Resizer", "Signature Resizer & Enhancer", "Passport Photo + Sign Card", 
+            "Document Scanner", "Govt Form PDF Helper",
+            "PDF Text Inspector & Editor", "Merge PDF", "Split PDF", "JPG to PDF", "PDF to JPG", "Compress PDF", "Rotate PDF"
+          ].includes(t.name);
+          return `
+          <a href="${isActive ? t.link : '#'}" class="tool-card" ${!isActive ? 'onclick="event.preventDefault(); alert('This tool is Coming Soon!');"' : ''}>
             <div class="tool-card-head">
               <span class="tool-icon">${t.icon}</span>
               <div class="tool-info">
@@ -289,9 +297,9 @@ function renderCatalog(filter = "all", query = "") {
                 <p>${t.desc}</p>
               </div>
             </div>
-            <span class="tool-badge badge-ready">Active Tool</span>
-          </a>
-        `).join("")}
+            <span class="tool-badge ${isActive ? 'badge-ready' : 'badge-upcoming'}">${isActive ? 'Active Tool' : 'Coming Soon'}</span>
+          </a>`;
+        }).join("")}
       </div>
     `;
     container.appendChild(section);
