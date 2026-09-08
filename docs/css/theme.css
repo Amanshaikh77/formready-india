@@ -69,3 +69,90 @@ button, input[type="submit"] {
   border-radius: 10px !important;
   font-weight: 600 !important;
 }
+
+/* ---------- Universal tool page polish (works across all tools) ---------- */
+
+body { background: #f1f5f9 !important; }
+
+input[type="text"], input[type="number"], input[type="file"], select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #1f2937;
+  margin-top: 4px;
+}
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+  border-color: #1a56db;
+  outline: none;
+}
+
+label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+/* All action buttons - minimum touch target, consistent radius */
+button, input[type="submit"], input[type="button"] {
+  min-height: 46px;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+button:hover:not(:disabled), input[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Upload / choose file zones */
+.upload-zone, .drop-area, [style*="dashed"] {
+  border: 2px dashed #93c5fd !important;
+  background: #eff6ff !important;
+  border-radius: 12px !important;
+}
+
+/* Sliders (pen size etc.) */
+input[type="range"] {
+  accent-color: #1a56db;
+  height: 6px;
+}
+
+/* Dropdowns arrow spacing */
+select { appearance: auto; }
+
+/* Preview boxes (photo sheet, signature canvas) */
+canvas, [class*="preview" i], [id*="preview" i] {
+  border-radius: 10px !important;
+}
+
+/* Section headings inside tool pages */
+h1 { font-size: 1.5rem !important; color: #0f172a !important; }
+h2, h3 { color: #1e293b !important; }
+
+/* Info/settings sub-cards inside a tool page */
+body > div > div {
+  border-radius: 12px;
+}
+
+/* Mobile spacing */
+@media (max-width: 480px) {
+  body > div:not(header):not(.site-header) {
+    margin: 16px 12px 32px !important;
+    padding: 20px 16px !important;
+  }
+  h1 { font-size: 1.3rem !important; }
+}
+
+/* Desktop - center content, don't stretch too wide */
+@media (min-width: 900px) {
+  body > div:not(header):not(.site-header) {
+    max-width: 680px;
+  }
+}
