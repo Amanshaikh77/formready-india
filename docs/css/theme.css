@@ -471,3 +471,15 @@ html body .about p {
   color: #9ca3af !important;
   -webkit-text-fill-color: #9ca3af !important;
 }
+
+html body .controls {
+  background: #131316 !important;
+  border: 1px solid #232328 !important;
+}
+html body .control label {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+}
+html body .container, html body .photo-card {
+  background: transparent !important;
+}
