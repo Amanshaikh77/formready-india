@@ -188,37 +188,139 @@
     gap:8px;
   }
 
-  .preview-stage{
+  /* ---- crop / preview frame ---- */
+  .crop-frame{
+    position:relative;
     width:100%;
-    min-height:280px;
+    aspect-ratio:3/4;
+    min-height:220px;
     border-radius:14px;
     background:#0e0c0b;
     border:1px solid var(--line);
+    overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
-    overflow:hidden;
-    padding:14px;
+    touch-action:none;
+    cursor:grab;
+    user-select:none;
+    -webkit-user-select:none;
   }
 
-  .preview-stage.checker{
+  .crop-frame.dragging{cursor:grabbing;}
+  .crop-frame.no-drag{cursor:default;}
+
+  .crop-frame.checker{
     background-image:repeating-conic-gradient(#3a352f 0% 25%, #201c19 0% 50%);
     background-size:20px 20px;
   }
 
-  #resultCanvas{
-    display:block;
-    max-width:100%;
-    max-height:280px;
-    width:auto;
-    height:auto;
-    box-shadow:0 8px 24px rgba(0,0,0,.5);
+  .crop-frame .cutout-layer{
+    position:absolute;
+    top:0;
+    left:0;
+    pointer-events:none;
+    -webkit-user-drag:none;
   }
 
   .placeholder-text{
     color:var(--muted);
     font-size:13px;
     text-align:center;
+    padding:0 20px;
+  }
+
+  .drag-hint{
+    display:none;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    margin:8px 0 0;
+    line-height:1.5;
+  }
+
+  /* ---- custom aspect-ratio dropdown ---- */
+  .custom-select{
+    position:relative;
+    margin-bottom:2px;
+  }
+
+  .select-trigger{
+    width:100%;
+    height:48px;
+    padding:0 14px;
+    border-radius:12px;
+    background:var(--panel-2);
+    border:1.5px solid var(--line);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    cursor:pointer;
+    transition:border-color .15s ease;
+  }
+
+  .select-trigger:hover,
+  .custom-select.open .select-trigger{border-color:var(--amber-dim);}
+
+  .chevron{
+    stroke:var(--muted);
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition:transform .15s ease;
+    flex-shrink:0;
+  }
+
+  .custom-select.open .chevron{transform:rotate(180deg);}
+
+  .select-menu{
+    position:absolute;
+    left:0;right:0;
+    top:calc(100% + 6px);
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:6px;
+    z-index:15;
+    box-shadow:0 10px 30px rgba(0,0,0,.45);
+    display:none;
+  }
+
+  .custom-select.open .select-menu{display:block;}
+
+  .select-option{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:11px 12px;
+    border-radius:9px;
+    font-size:14.5px;
+    color:var(--paper);
+    cursor:pointer;
+  }
+
+  .select-option:hover{background:rgba(217,154,63,.1);}
+
+  .select-option.active{
+    background:rgba(217,154,63,.15);
+    color:var(--amber-bright);
+  }
+
+  .tag-recommended{
+    font-size:10.5px;
+    font-weight:600;
+    color:#1a1410;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    padding:2px 8px;
+    border-radius:20px;
+    letter-spacing:.3px;
+    flex-shrink:0;
   }
 
   button{
@@ -272,6 +374,7 @@
     flex-wrap:wrap;
     justify-content:center;
     align-items:center;
+    margin-bottom:16px;
   }
 
   .swatch{
@@ -340,8 +443,6 @@
   @media(max-width:500px){
     h1{font-size:22px;}
     .card{padding:15px;border-radius:16px;}
-    .preview-stage{min-height:240px;}
-    #resultCanvas{max-height:240px;}
   }
 </style>
 </head>
@@ -377,14 +478,14 @@
     <div class="status" id="status">Choose a photo to get started.</div>
   </div>
 
-  <!-- PREVIEW + COLOR -->
+  <!-- PREVIEW + COLOR + CROP -->
   <div class="card">
     <div class="section-title">👀 Preview</div>
 
-    <div class="preview-stage checker" id="previewStage">
-      <canvas id="resultCanvas" style="display:none;"></canvas>
+    <div class="crop-frame checker" id="cropFrame">
       <div class="placeholder-text" id="placeholderText">Your result will appear here</div>
     </div>
+    <div class="drag-hint" id="dragHint">↔ Drag the photo to reposition it — only what's inside the frame gets downloaded</div>
 
     <div class="swatch-label">Choose background colour</div>
     <div class="swatch-row">
@@ -399,12 +500,26 @@
     </div>
 
     <div class="swatch-label">Choose photo shape</div>
-    <select id="aspectSelect">
-      <option value="3:4" selected>3:4 (Portrait)</option>
-      <option value="1:1">1:1 (Square)</option>
-      <option value="4:5">4:5 (Instagram)</option>
-      <option value="original">Original (no crop)</option>
-    </select>
+    <div class="custom-select" id="aspectSelect">
+      <button type="button" class="select-trigger" id="aspectTrigger">
+        <span id="aspectValueLabel">3:4 (Portrait)</span>
+        <svg class="chevron" viewBox="0 0 24 24" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="select-menu" id="aspectMenu" role="listbox">
+        <div class="select-option active" data-value="3:4" role="option" aria-selected="true">
+          <span>3:4 (Portrait)</span><span class="tag-recommended">Recommended</span>
+        </div>
+        <div class="select-option" data-value="1:1" role="option" aria-selected="false">
+          <span>1:1 (Square)</span>
+        </div>
+        <div class="select-option" data-value="4:5" role="option" aria-selected="false">
+          <span>4:5 (Instagram)</span>
+        </div>
+        <div class="select-option" data-value="original" role="option" aria-selected="false">
+          <span>Original (no crop)</span>
+        </div>
+      </div>
+    </div>
 
     <button id="download" class="btn-primary" disabled>⬇️ Download PNG</button>
     <button id="reset" class="btn-secondary">↻ Reset</button>
@@ -428,19 +543,30 @@ const photoInput = document.getElementById("photo");
 const fileNameLabel = document.getElementById("fileName");
 const removeBtn = document.getElementById("removeBtn");
 const statusText = document.getElementById("status");
-const previewStage = document.getElementById("previewStage");
+const cropFrame = document.getElementById("cropFrame");
 const placeholderText = document.getElementById("placeholderText");
-const resultCanvas = document.getElementById("resultCanvas");
-const ctx = resultCanvas.getContext("2d");
+const dragHint = document.getElementById("dragHint");
 const downloadBtn = document.getElementById("download");
 const resetBtn = document.getElementById("reset");
 const swatches = document.querySelectorAll(".swatch");
 const customColor = document.getElementById("customColor");
-const aspectSelect = document.getElementById("aspectSelect");
+
+const aspectSelectWrap = document.getElementById("aspectSelect");
+const aspectTrigger = document.getElementById("aspectTrigger");
+const aspectOptions = document.querySelectorAll(".select-option");
+const aspectValueLabel = document.getElementById("aspectValueLabel");
 
 let originalFile = null;
 let cutoutImage = null;
 let currentColor = "transparent";
+let currentAspect = "3:4";
+
+let panX = 0, panY = 0;
+let imgDispW = 0, imgDispH = 0;
+let coverScale = 1;
+let isDragging = false;
+let dragStartX = 0, dragStartY = 0;
+let panStartX = 0, panStartY = 0;
 
 function erodeAlpha(imageData, iterations){
   const width = imageData.width;
@@ -483,7 +609,6 @@ function erodeAlpha(imageData, iterations){
   }
 }
 
-
 photoInput.addEventListener("change", function(){
   const file = this.files[0];
   if(!file) return;
@@ -493,8 +618,9 @@ photoInput.addEventListener("change", function(){
   removeBtn.disabled = false;
   cutoutImage = null;
   downloadBtn.disabled = true;
-  resultCanvas.style.display = "none";
+  clearFrame();
   placeholderText.style.display = "block";
+  dragHint.style.display = "none";
   statusText.textContent = "Photo selected — tap Remove Background to continue.";
 });
 
@@ -524,11 +650,10 @@ removeBtn.addEventListener("click", async function(){
       octx.putImageData(imgData, 0, 0);
 
       cutoutImage = off;
-      drawResult();
       placeholderText.style.display = "none";
-      resultCanvas.style.display = "block";
+      mountImageInFrame();
       downloadBtn.disabled = false;
-      statusText.textContent = "Done! Pick a background colour above, then download.";
+      statusText.textContent = "Done! Drag the photo to reposition, pick a background colour, then download.";
       removeBtn.disabled = false;
     };
 
@@ -540,70 +665,217 @@ removeBtn.addEventListener("click", async function(){
   }
 });
 
-function getAspectRatio(){
-  const v = aspectSelect.value;
-  if(v === "1:1") return 1;
-  if(v === "4:5") return 5/4;
-  if(v === "original") return null;
-  return 4/3;
+function getAspectWH(){
+  if(currentAspect === "1:1") return [1, 1];
+  if(currentAspect === "4:5") return [4, 5];
+  if(currentAspect === "original") return null;
+  return [3, 4];
 }
 
-function drawResult(){
+function clearFrame(){
+  const old = cropFrame.querySelector(".cutout-layer");
+  if(old) old.remove();
+  cropFrame.classList.add("checker");
+  cropFrame.classList.remove("no-drag");
+  cropFrame.style.backgroundColor = "";
+  cropFrame.style.aspectRatio = "3/4";
+}
+
+function applyFrameBackground(){
+  if(currentColor === "transparent"){
+    cropFrame.classList.add("checker");
+    cropFrame.style.backgroundColor = "";
+  } else {
+    cropFrame.classList.remove("checker");
+    cropFrame.style.backgroundColor = currentColor;
+  }
+}
+
+function updateDragHint(){
+  dragHint.style.display = (cutoutImage && currentAspect !== "original") ? "block" : "none";
+}
+
+function mountImageInFrame(){
   if(!cutoutImage) return;
 
+  const old = cropFrame.querySelector(".cutout-layer");
+  if(old) old.remove();
+
+  cutoutImage.classList.add("cutout-layer");
+  cropFrame.appendChild(cutoutImage);
+
+  applyFrameBackground();
+  layoutFrame();
+  updateDragHint();
+}
+
+function layoutFrame(){
+  if(!cutoutImage) return;
+
+  const wh = getAspectWH();
   const srcW = cutoutImage.width;
   const srcH = cutoutImage.height;
 
-  const ratio = getAspectRatio();
-  let outH;
+  if(wh === null){
+    cropFrame.style.aspectRatio = srcW + " / " + srcH;
+    cropFrame.classList.add("no-drag");
 
-  if(ratio === null){
-    outH = srcH;
-  } else {
-    const targetH = Math.round(srcW * ratio);
-    outH = Math.min(srcH, targetH);
+    requestAnimationFrame(function(){
+      const frameW = cropFrame.clientWidth;
+      const frameH = cropFrame.clientHeight;
+      coverScale = frameW / srcW;
+      imgDispW = frameW;
+      imgDispH = frameH;
+      panX = 0;
+      panY = 0;
+      applyTransform();
+    });
+    return;
   }
 
-  resultCanvas.width = srcW;
-  resultCanvas.height = outH;
+  cropFrame.classList.remove("no-drag");
+  cropFrame.style.aspectRatio = wh[0] + " / " + wh[1];
 
-  ctx.clearRect(0,0,resultCanvas.width,resultCanvas.height);
+  requestAnimationFrame(function(){
+    const frameW = cropFrame.clientWidth;
+    const frameH = cropFrame.clientHeight;
 
-  if(currentColor !== "transparent"){
-    ctx.fillStyle = currentColor;
-    ctx.fillRect(0,0,resultCanvas.width,resultCanvas.height);
-  }
+    coverScale = Math.max(frameW / srcW, frameH / srcH);
+    imgDispW = srcW * coverScale;
+    imgDispH = srcH * coverScale;
 
-  ctx.drawImage(cutoutImage, 0, 0, srcW, outH, 0, 0, srcW, outH);
+    panX = (frameW - imgDispW) / 2;
+    panY = (frameH - imgDispH) / 2;
 
-  previewStage.classList.toggle("checker", currentColor === "transparent");
+    applyTransform();
+  });
 }
+
+function clampPan(){
+  const frameW = cropFrame.clientWidth;
+  const frameH = cropFrame.clientHeight;
+
+  const minX = Math.min(0, frameW - imgDispW);
+  const minY = Math.min(0, frameH - imgDispH);
+
+  panX = Math.max(minX, Math.min(0, panX));
+  panY = Math.max(minY, Math.min(0, panY));
+}
+
+cropFrame.addEventListener("pointerdown", function(e){
+  if(!cutoutImage || currentAspect === "original") return;
+  isDragging = true;
+  cropFrame.classList.add("dragging");
+  dragStartX = e.clientX;
+  dragStartY = e.clientY;
+  panStartX = panX;
+  panStartY = panY;
+  cropFrame.setPointerCapture(e.pointerId);
+});
+
+cropFrame.addEventListener("pointermove", function(e){
+  if(!isDragging) return;
+  panX = panStartX + (e.clientX - dragStartX);
+  panY = panStartY + (e.clientY - dragStartY);
+  clampPan();
+  applyTransform();
+});
+
+function endDrag(){
+  isDragging = false;
+  cropFrame.classList.remove("dragging");
+}
+cropFrame.addEventListener("pointerup", endDrag);
+cropFrame.addEventListener("pointercancel", endDrag);
+
+window.addEventListener("resize", function(){
+  if(cutoutImage) layoutFrame();
+});
 
 swatches.forEach(function(btn){
   btn.addEventListener("click", function(){
     swatches.forEach(function(b){ b.classList.remove("active"); });
     btn.classList.add("active");
     currentColor = btn.dataset.color;
-    drawResult();
+    applyFrameBackground();
   });
 });
 
 customColor.addEventListener("input", function(){
   swatches.forEach(function(b){ b.classList.remove("active"); });
   currentColor = customColor.value;
-  drawResult();
+  applyFrameBackground();
 });
 
-aspectSelect.addEventListener("change", function(){
-  if(cutoutImage) drawResult();
+aspectTrigger.addEventListener("click", function(){
+  aspectSelectWrap.classList.toggle("open");
+});
+
+document.addEventListener("click", function(e){
+  if(!aspectSelectWrap.contains(e.target)){
+    aspectSelectWrap.classList.remove("open");
+  }
+});
+
+aspectOptions.forEach(function(opt){
+  opt.addEventListener("click", function(){
+    aspectOptions.forEach(function(o){
+      o.classList.remove("active");
+      o.setAttribute("aria-selected", "false");
+    });
+    opt.classList.add("active");
+    opt.setAttribute("aria-selected", "true");
+
+    currentAspect = opt.dataset.value;
+    aspectValueLabel.textContent = opt.querySelector("span").textContent;
+    aspectSelectWrap.classList.remove("open");
+
+    if(cutoutImage) layoutFrame();
+    updateDragHint();
+  });
 });
 
 downloadBtn.addEventListener("click", function(){
   if(!cutoutImage) return;
 
+  const srcW = cutoutImage.width;
+  const srcH = cutoutImage.height;
+  const out = document.createElement("canvas");
+  const octx = out.getContext("2d");
+
+  if(currentAspect === "original"){
+    out.width = srcW;
+    out.height = srcH;
+
+    if(currentColor !== "transparent"){
+      octx.fillStyle = currentColor;
+      octx.fillRect(0, 0, out.width, out.height);
+    }
+    octx.drawImage(cutoutImage, 0, 0);
+  } else {
+    let sx = -panX / coverScale;
+    let sy = -panY / coverScale;
+    let sw = cropFrame.clientWidth / coverScale;
+    let sh = cropFrame.clientHeight / coverScale;
+
+    sx = Math.max(0, sx);
+    sy = Math.max(0, sy);
+    sw = Math.min(sw, srcW - sx);
+    sh = Math.min(sh, srcH - sy);
+
+    out.width = Math.round(sw);
+    out.height = Math.round(sh);
+
+    if(currentColor !== "transparent"){
+      octx.fillStyle = currentColor;
+      octx.fillRect(0, 0, out.width, out.height);
+    }
+    octx.drawImage(cutoutImage, sx, sy, sw, sh, 0, 0, out.width, out.height);
+  }
+
   const link = document.createElement("a");
   link.download = "background-removed.png";
-  link.href = resultCanvas.toDataURL("image/png");
+  link.href = out.toDataURL("image/png");
   link.click();
 });
 
@@ -614,15 +886,23 @@ resetBtn.addEventListener("click", function(){
   fileNameLabel.textContent = "No photo selected yet";
   removeBtn.disabled = true;
   downloadBtn.disabled = true;
-  resultCanvas.style.display = "none";
+  clearFrame();
   placeholderText.style.display = "block";
+  dragHint.style.display = "none";
   statusText.textContent = "Choose a photo to get started.";
 
   swatches.forEach(function(b){ b.classList.remove("active"); });
   document.querySelector('[data-color="transparent"]').classList.add("active");
   currentColor = "transparent";
-  previewStage.classList.add("checker");
-  aspectSelect.value = "3:4";
+
+  aspectOptions.forEach(function(o){
+    o.classList.remove("active");
+    o.setAttribute("aria-selected", "false");
+  });
+  document.querySelector('.select-option[data-value="3:4"]').classList.add("active");
+  document.querySelector('.select-option[data-value="3:4"]').setAttribute("aria-selected", "true");
+  currentAspect = "3:4";
+  aspectValueLabel.textContent = "3:4 (Portrait)";
 });
 </script>
 
