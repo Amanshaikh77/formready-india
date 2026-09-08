@@ -1,193 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="../css/theme.css?v=2">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-<style>
-*{box-sizing:border-box}
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f7fb;
-color:#111827;
-}
-
-header{
-background:#111827;
-color:white;
-padding:16px 6%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.logo{
-font-size:22px;
-font-weight:800;
-}
-
-.logo span{color:#60a5fa}
-
-header a{
-color:white;
-text-decoration:none;
-}
-
-.container{
-max-width:850px;
-margin:auto;
-padding:25px 15px;
-}
-
-.back{
-color:#2563eb;
-text-decoration:none;
-font-weight:600;
-}
-
-.card{
-background:white;
-margin-top:18px;
-padding:25px;
-border-radius:22px;
-box-shadow:0 10px 35px #0000000d;
-}
-
-h1{
-text-align:center;
-margin:5px 0;
-}
-
-.sub{
-text-align:center;
-color:#6b7280;
-line-height:1.5;
-}
-
-.upload{
-margin-top:25px;
-border:2px dashed #93c5fd;
-background:#eff6ff;
-border-radius:18px;
-padding:30px 15px;
-text-align:center;
-}
-
-.upload input{
-display:none;
-}
-
-.choose{
-display:inline-block;
-background:#2563eb;
-color:white;
-padding:14px 24px;
-border-radius:12px;
-font-weight:700;
-cursor:pointer;
-}
-
-#work{
-display:none;
-margin-top:25px;
-}
-
-.settings{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
-
-.field label{
-display:block;
-font-size:13px;
-font-weight:700;
-margin-bottom:7px;
-}
-
-select{
-width:100%;
-padding:13px;
-border:1px solid #d1d5db;
-border-radius:10px;
-font-size:15px;
-background:white;
-}
-
-.preview{
-margin-top:20px;
-padding:20px;
-background:#f1f5f9;
-border-radius:15px;
-text-align:center;
-}
-
-#canvas{
-max-width:100%;
-background:white;
-box-shadow:0 4px 15px #0002;
-}
-
-.buttons{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:20px;
-}
-
-button{
-border:0;
-padding:13px 18px;
-border-radius:11px;
-font-weight:700;
-cursor:pointer;
-}
-
-.primary{
-background:#2563eb;
-color:white;
-}
-
-.success{
-background:#16a34a;
-color:white;
-}
-
-.secondary{
-background:#e5e7eb;
-color:#111827;
-}
-
-.info{
-margin-top:18px;
-padding:14px;
-background:#f1f5f9;
-border-radius:12px;
-font-size:13px;
-color:#475569;
-line-height:1.6;
-}
-
-#downloadBtn{
-display:none;
-}
-
-@media(max-width:600px){
-.settings{
-grid-template-columns:1fr;
-}
-
-.card{
-padding:18px;
-}
-}
-</style>
 <title>Passport Photo Maker Online Free</title>
-
 <meta name="description" content="Create passport size photos online for free. Make passport photos quickly with this easy mobile-friendly tool.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/passport-photo.html">
@@ -208,160 +29,424 @@ padding:18px;
 </script>
 
 <script src="../token-system.js"></script>
+
+<style>
+:root{
+  --bg:#151210;
+  --panel:#1e1a17;
+  --panel-2:#262019;
+  --line:#39322b;
+  --amber:#d99a3f;
+  --amber-bright:#f0b158;
+  --amber-dim:#8a6329;
+  --teal:#5fada0;
+  --paper:#f2ece2;
+  --muted:#a89a89;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--paper);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+}
+
+h1,h2,h3,.brand,.upload-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:600;
+}
+
+/* Topbar */
+header.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  background:rgba(21,18,16,.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+
+.brand{
+  font-size:19px;
+  color:var(--paper);
+}
+.brand span{ color:var(--amber); }
+
+header.topbar a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+}
+header.topbar a:hover{ color:var(--amber-bright); }
+
+.breadcrumb{
+  display:block;
+  width:min(600px,92%);
+  margin:16px auto 0;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+}
+.breadcrumb:hover{ color:var(--amber-bright); }
+
+/* Container */
+.container{
+  width:min(600px,92%);
+  margin:16px auto 40px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:26px 22px;
+  margin-bottom:16px;
+}
+
+.icon-badge{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:14px;
+}
+
+.card-head h1{
+  margin:0 0 6px;
+  font-size:24px;
+  color:var(--paper);
+}
+
+.card-head p{
+  margin:0 0 4px;
+  color:var(--muted);
+  font-size:14.5px;
+}
+
+/* How it works */
+.steps{
+  margin-top:18px;
+  padding:14px 16px;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.steps-title{
+  font-size:13px;
+  font-weight:600;
+  color:var(--amber-bright);
+  margin-bottom:8px;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+
+.step-row{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:8px;
+  font-size:13.5px;
+  color:var(--paper);
+}
+.step-row:last-child{ margin-bottom:0; }
+
+.step-num{
+  flex-shrink:0;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:var(--amber-dim);
+  color:var(--paper);
+  font-size:11.5px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Upload box */
+.upload-box{
+  margin-top:18px;
+  border:2px dashed var(--line);
+  border-radius:14px;
+  padding:26px 16px;
+  text-align:center;
+  background:var(--panel-2);
+}
+
+.upload-box svg{
+  width:30px;
+  height:30px;
+  margin-bottom:8px;
+}
+
+.upload-title{
+  margin:0 0 4px;
+  font-size:16px;
+  color:var(--paper);
+}
+
+.upload-hint{
+  margin:0 0 16px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.btn-choose{
+  display:inline-block;
+  padding:11px 22px;
+  border-radius:10px;
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  color:#1a1410;
+  font-weight:600;
+  font-size:14.5px;
+  cursor:pointer;
+}
+
+#photo{ display:none; }
+
+#work{ display:none; margin-top:6px; }
+
+/* Settings */
+.settings{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin-bottom:7px;
+}
+
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--panel-2);
+  color:var(--paper);
+  font-size:15px;
+  font-family:'Inter',sans-serif;
+}
+select:focus{
+  outline:none;
+  border-color:var(--amber);
+}
+
+/* Preview */
+.preview{
+  margin-top:18px;
+  padding:20px;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  text-align:center;
+}
+
+#canvas{
+  max-width:100%;
+  border-radius:6px;
+  box-shadow:0 4px 18px rgba(0,0,0,.35);
+}
+
+.badge-auto{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:12px;
+  padding:6px 12px;
+  border-radius:20px;
+  background:#132420;
+  border:1px solid #2e5045;
+  color:var(--teal);
+  font-size:12.5px;
+  font-weight:600;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+button{
+  border:0;
+  border-radius:11px;
+  padding:13px 18px;
+  font-weight:600;
+  font-size:14.5px;
+  font-family:'Inter',sans-serif;
+  cursor:pointer;
+}
+
+.primary{
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  color:#1a1410;
+  flex:1 1 100%;
+}
+
+.secondary{
+  background:transparent;
+  color:var(--paper);
+  border:1px solid var(--line);
+  flex:1;
+}
+
+.info{
+  margin-top:16px;
+  padding:13px 14px;
+  border-radius:12px;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  font-size:13.5px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+/* Ad slot */
+.ad-slot{ margin:16px 0; }
+
+.ad-box{
+  min-height:100px;
+  border:1.5px dashed var(--line);
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* Footer */
+footer.credit{
+  text-align:center;
+  color:var(--muted);
+  font-size:12.5px;
+  padding:20px 0 30px;
+}
+
+@media(max-width:600px){
+  .settings{ grid-template-columns:1fr; }
+}
+</style>
 </head>
 
 <body>
 
-<header>
-
-<div class="logo">
-FormReady <span>India</span>
-</div>
-
-<a href="../">Home</a>
-
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
 </header>
 
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
 
 <div class="container">
 
-<a class="back" href="/formready-india/index.html#tools"> Back to Tools</a>
+  <div class="card">
+    <div class="card-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <circle cx="8.5" cy="11" r="2"/>
+          <path d="M4 18c0-2 2-3.5 4.5-3.5S13 16 13 18"/>
+          <line x1="15" y1="9" x2="19" y2="9"/>
+          <line x1="15" y1="13" x2="19" y2="13"/>
+        </svg>
+      </div>
+      <h1>Passport Photo Maker</h1>
+      <p>Turn any photo into a ready-to-print passport size photo — fully automatic.</p>
+    </div>
 
+    <div class="steps">
+      <div class="steps-title">How this works</div>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div>Choose a photo from your phone.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div>It's <strong style="color:var(--paper)">automatically cropped and centered</strong> to your chosen passport size — no manual editing needed.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div>The <strong style="color:var(--paper)">Download</strong> button appears right away with your finished photo.</div>
+      </div>
+    </div>
 
-<div class="card">
+    <div class="upload-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      <p class="upload-title">Choose Photo</p>
+      <p class="upload-hint">JPG · PNG · WEBP</p>
+      <label class="btn-choose" for="photo">Browse Files</label>
+      <input id="photo" type="file" accept="image/*">
+    </div>
 
-<h1>🪪 Passport Photo Maker</h1>
+    <div id="work">
 
-<p class="sub">
-Create a passport-size photo from your phone or computer.
-</p>
+      <div class="settings">
+        <div class="field">
+          <label>Photo Size</label>
+          <select id="size">
+            <option value="35x45">35 × 45 mm</option>
+            <option value="25x35">25 × 35 mm</option>
+            <option value="2x2">2 × 2 inch</option>
+            <option value="40x50">40 × 50 mm</option>
+          </select>
+        </div>
 
+        <div class="field">
+          <label>Background</label>
+          <select id="background">
+            <option value="white">White</option>
+            <option value="lightblue">Light Blue</option>
+            <option value="gray">Light Gray</option>
+          </select>
+        </div>
+      </div>
 
-<div class="upload">
+      <div class="preview">
+        <canvas id="canvas" width="413" height="531"></canvas>
+        <div class="badge-auto" id="autoBadge" style="display:none">✓ Auto-cropped &amp; ready</div>
+      </div>
 
-<label class="choose" for="photo">
-📷 Choose Photo
-</label>
+      <div class="buttons">
+        <button class="primary" id="downloadBtn">Download Photo</button>
+        <button class="secondary" id="resetBtn">Reset</button>
+      </div>
 
-<input
-id="photo"
-type="file"
-accept="image/*"
->
+      <div class="info" id="info">Choose a photo to begin.</div>
 
-<p>
-JPG • PNG • WEBP
-</p>
+    </div>
 
-</div>
+  </div>
 
+  <div class="ad-slot">
+    <div class="ad-box">Advertisement</div>
+  </div>
 
-<div id="work">
-
-
-<div class="settings">
-
-<div class="field">
-
-<label>
-Photo Size
-</label>
-
-<select id="size">
-
-<option value="35x45">
-35 × 45 mm
-</option>
-
-<option value="25x35">
-25 × 35 mm
-</option>
-
-<option value="2x2">
-2 × 2 inch
-</option>
-
-<option value="40x50">
-40 × 50 mm
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>
-Background
-</label>
-
-<select id="background">
-
-<option value="white">
-White
-</option>
-
-<option value="lightblue">
-Light Blue
-</option>
-
-<option value="gray">
-Light Gray
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-<div class="preview">
-
-<canvas
-id="canvas"
-width="413"
-height="531"
-></canvas>
-
-</div>
-
-
-<div class="buttons">
-
-<button
-class="primary"
-id="createBtn"
->
-✨ Create Photo
-</button>
-
-<button
-class="success"
-id="downloadBtn"
->
-⬇️ Download Photo
-</button>
-
-<button
-class="secondary"
-id="resetBtn"
->
-Reset
-</button>
-
-</div>
-
-
-<div class="info" id="info">
-Choose a photo to begin.
-</div>
-
-
-</div>
-
-</div>
+  <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
 
 </div>
 
@@ -386,9 +471,6 @@ document.getElementById("size");
 const background =
 document.getElementById("background");
 
-const createBtn =
-document.getElementById("createBtn");
-
 const downloadBtn =
 document.getElementById("downloadBtn");
 
@@ -398,6 +480,9 @@ document.getElementById("resetBtn");
 const info =
 document.getElementById("info");
 
+const autoBadge =
+document.getElementById("autoBadge");
+
 
 let image =
 new Image();
@@ -406,7 +491,7 @@ let imageLoaded =
 false;
 
 
-/* Select photo */
+/* Select photo — fully automatic, draws + shows download instantly */
 
 photo.addEventListener(
 "change",
@@ -417,6 +502,9 @@ this.files[0];
 
 if(!file)
 return;
+
+info.textContent =
+"Processing your photo...";
 
 const url =
 URL.createObjectURL(file);
@@ -430,22 +518,38 @@ true;
 work.style.display =
 "block";
 
-info.textContent =
-"Photo loaded. Choose size and create your passport photo.";
-
 drawPhoto();
 
+autoBadge.style.display =
+"inline-flex";
+
+info.textContent =
+"Done! Your passport photo was created automatically. Change size or background anytime — it updates instantly.";
+
 URL.revokeObjectURL(url);
+
+};
+
+image.onerror =
+function(){
+
+alert(
+"Could not load this image. Please try another photo."
+);
+
+info.textContent =
+"Choose a photo to begin.";
 
 };
 
 image.src =
 url;
 
-});
+}
+);
 
 
-/* Settings */
+/* Settings — auto redraw on change, no extra click needed */
 
 size.addEventListener(
 "change",
@@ -458,7 +562,7 @@ drawPhoto
 );
 
 
-/* Draw */
+/* Draw (auto crop + center, cover-fit) */
 
 function drawPhoto(){
 
@@ -511,7 +615,6 @@ width;
 canvas.height =
 height;
 
-
 /* Background */
 
 let bg =
@@ -536,7 +639,7 @@ height
 );
 
 
-/* Fit image */
+/* Auto fit + center crop (cover mode) */
 
 const scale =
 Math.max(
@@ -557,8 +660,6 @@ const y =
 (height - drawHeight) / 2;
 
 
-/* Draw */
-
 ctx.drawImage(
 image,
 x,
@@ -570,9 +671,9 @@ drawHeight
 }
 
 
-/* Create */
+/* Download */
 
-createBtn.addEventListener(
+downloadBtn.addEventListener(
 "click",
 function(){
 
@@ -585,26 +686,6 @@ alert(
 return;
 
 }
-
-drawPhoto();
-
-downloadBtn.style.display =
-"inline-block";
-
-info.textContent =
-"✅ Passport photo created successfully.";
-
-});
-
-
-/* Download */
-
-downloadBtn.addEventListener(
-"click",
-function(){
-
-if(!imageLoaded)
-return;
 
 const link =
 document.createElement("a");
@@ -624,7 +705,8 @@ link.click();
 
 link.remove();
 
-});
+}
+);
 
 
 /* Reset */
@@ -642,7 +724,7 @@ false;
 work.style.display =
 "none";
 
-downloadBtn.style.display =
+autoBadge.style.display =
 "none";
 
 ctx.clearRect(
@@ -655,7 +737,8 @@ canvas.height
 info.textContent =
 "Choose a photo to begin.";
 
-});
+}
+);
 
 </script>
 
