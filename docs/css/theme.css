@@ -188,3 +188,42 @@ a.back {
   display: inline-block;
   margin: 16px 20px 0;
 }
+
+body > div:not(header):not(.site-header) {
+  text-align: center;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.upload-zone, .drop-area, [style*="dashed"] {
+  border: 1.5px dashed #1a56db !important;
+  background: #eef2ff !important;
+  padding: 28px 16px !important;
+}
+
+button, input[type="submit"] {
+  background: #1a56db !important;
+  color: #ffffff !important;
+}
+button.secondary, button[id*="reset" i], button[id*="clear" i] {
+  background: #f1f5f9 !important;
+  color: #1f2937 !important;
+}
+button[style*="#111827"], button[style*="background:#000"], button[style*="background: #000"] {
+  background: #1f2937 !important;
+}
+
+input[type="text"], input[type="number"] {
+  text-align: center;
+}
+
+label {
+  display: block;
+  text-align: left;
+  margin-bottom: 4px;
+}
