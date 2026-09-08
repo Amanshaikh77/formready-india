@@ -40,3 +40,32 @@ input[type="text"]:focus, input[type="search"]:focus {
 .tool-card:nth-child(3n+1) { border-left-color: #1a56db !important; }
 .tool-card:nth-child(3n+2) { border-left-color: #7c3aed !important; }
 .tool-card:nth-child(3n+3) { border-left-color: #059669 !important; }
+
+.logo span { color: #1a56db; }
+a.back {
+  display: inline-block;
+  margin: 16px 20px 0;
+  color: #1a56db;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+a.back:hover { text-decoration: underline; }
+
+body > div:not(.tool-page-container):not(header):not(.site-header) {
+  max-width: 720px;
+  margin: 24px auto 40px !important;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 28px 22px;
+  box-shadow: 0 2px 10px rgba(15,23,42,0.06);
+}
+
+input[type="file"], .tool-workspace label {
+  border-radius: 10px !important;
+}
+
+button, input[type="submit"] {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+}
