@@ -534,8 +534,14 @@ removeBtn.addEventListener("click", async function(){
 function drawResult(){
   if(!cutoutImage) return;
 
-  resultCanvas.width = cutoutImage.width;
-  resultCanvas.height = cutoutImage.height;
+  const srcW = cutoutImage.width;
+  const srcH = cutoutImage.height;
+
+  const targetH = Math.round(srcW * 4 / 3);
+  const outH = Math.min(srcH, targetH);
+
+  resultCanvas.width = srcW;
+  resultCanvas.height = outH;
 
   ctx.clearRect(0,0,resultCanvas.width,resultCanvas.height);
 
@@ -544,7 +550,7 @@ function drawResult(){
     ctx.fillRect(0,0,resultCanvas.width,resultCanvas.height);
   }
 
-  ctx.drawImage(cutoutImage,0,0);
+  ctx.drawImage(cutoutImage, 0, 0, srcW, outH, 0, 0, srcW, outH);
 
   previewStage.classList.toggle("checker", currentColor === "transparent");
 }
