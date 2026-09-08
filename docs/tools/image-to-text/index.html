@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Image to Text (OCR) - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Tesseract.js for Browser OCR -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar {
+  max-width: 600px;
+  margin: 0 auto 20px;
+  width: 100%;
+}
+.back-btn {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
+.header p { font-size: 13px; color: var(--muted); }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto 24px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.upload-zone {
+  border: 2px dashed var(--line);
+  padding: 28px 16px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--panel-2);
+  transition: border-color 0.2s;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+}
+.upload-zone:hover { border-color: var(--amber); }
+#fileInput { display: none; }
+.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.upload-text b { color: var(--amber); }
+
+.preview-container {
+  display: none;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.preview-img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  object-fit: contain;
+}
+
+.btn {
+  background: var(--amber);
+  color: #151210;
+  border: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn:hover { background: var(--amber-bright); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.status-box {
+  margin-top: 15px;
+  font-size: 13px;
+  color: var(--amber);
+  text-align: center;
+  display: none;
+}
+
+.output-section {
+  margin-top: 20px;
+  display: none;
+}
+.output-section label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.text-output {
+  width: 100%;
+  height: 150px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  resize: vertical;
+  outline: none;
+  font-family: inherit;
+}
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.btn-secondary {
+  background: var(--panel-2);
+  color: var(--paper);
+  border: 1px solid var(--line);
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+}
+.btn-secondary:hover { border-color: var(--amber); }
+
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="../../" class="back-btn">← Back to Dashboard</a>
+</div>
+
+<div class="header">
+  <h1>Image to Text (OCR)</h1>
+  <p>Extract editable text directly from any image or document screenshot</p>
+</div>
+
+<div class="card">
+  <label for="fileInput" class="upload-zone" id="dropZone">
+    <div class="upload-text">📁 Tap to upload image for OCR<br><b>Supports JPG, PNG, WebP</b></div>
+  </label>
+  <input type="file" id="fileInput" accept="image/*">
+
+  <div class="preview-container" id="previewContainer">
+    <img id="imagePreview" class="preview-img" alt="Preview">
+  </div>
+
+  <button class="btn" id="extractBtn" disabled>Extract Text (OCR)</button>
+  <div class="status-box" id="statusBox">Processing image... Please wait.</div>
+
+  <div class="output-section" id="outputSection">
+    <label>Extracted Text:</label>
+    <textarea id="resultText" class="text-output" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn-secondary" id="copyBtn">📋 Copy Text</button>
+      <button class="btn-secondary" id="downloadBtn">📥 Download TXT</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 FormReady India. 100% Secure Client-Side Processing.
+</footer>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const previewContainer = document.getElementById("previewContainer");
+const imagePreview = document.getElementById("imagePreview");
+const extractBtn = document.getElementById("extractBtn");
+const statusBox = document.getElementById("statusBox");
+const outputSection = document.getElementById("outputSection");
+const resultText = document.getElementById("resultText");
+const copyBtn = document.getElementById("copyBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+let selectedFile = null;
+
+fileInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  selectedFile = file;
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    imagePreview.src = event.target.result;
+    previewContainer.style.display = "block";
+    extractBtn.disabled = false;
+    outputSection.style.display = "none";
+  };
+  reader.readAsDataURL(file);
+});
+
+extractBtn.addEventListener("click", async () => {
+  if (!selectedFile) return;
+
+  extractBtn.disabled = true;
+  statusBox.style.display = "block";
+  statusBox.textContent = "Loading OCR engine & scanning text...";
+  outputSection.style.display = "none";
+
+  try {
+    const worker = await Tesseract.createWorker('eng');
+    statusBox.textContent = "Recognizing characters...";
+    const ret = await worker.recognize(selectedFile);
+    await worker.terminate();
+
+    resultText.value = ret.data.text.trim() || "No text found in the image.";
+    statusBox.style.display = "none";
+    outputSection.style.display = "block";
+    extractBtn.disabled = false;
+  } catch (err) {
+    console.error(err);
+    statusBox.textContent = "Error extracting text. Please try another image.";
+    extractBtn.disabled = false;
+  }
+});
+
+copyBtn.addEventListener("click", () => {
+  resultText.select();
+  document.execCommand("copy");
+  copyBtn.textContent = "✅ Copied!";
+  setTimeout(() => copyBtn.textContent = "📋 Copy Text", 2000);
+});
+
+downloadBtn.addEventListener("click", () => {
+  const blob = new Blob([resultText.value], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "extracted-text.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
