@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
 <title>Merge PDF Files Online Free</title>
 <meta name="description" content="Merge multiple PDF files into one PDF online for free. Easy, fast and mobile-friendly PDF merger.">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -27,9 +25,7 @@
   "operatingSystem": "Any"
 }
 </script>
-
 <script src="../token-system.js"></script>
-
 <style>
 :root{
   --bg:#151210;
@@ -42,10 +38,10 @@
   --teal:#5fada0;
   --paper:#f2ece2;
   --muted:#a89a89;
+  --error:#e06c75;
+  --success:#98c379;
 }
-
 *{ box-sizing:border-box; }
-
 body{
   margin:0;
   background:var(--bg);
@@ -53,13 +49,10 @@ body{
   font-family:'Inter',sans-serif;
   min-height:100vh;
 }
-
 h1,h2,h3,.brand,.upload-title{
   font-family:'Space Grotesk',sans-serif;
   font-weight:600;
 }
-
-/* Topbar */
 header.topbar{
   position:sticky;
   top:0;
@@ -72,343 +65,53 @@ header.topbar{
   backdrop-filter:blur(6px);
   border-bottom:1px solid var(--line);
 }
-
-.brand{
-  font-size:19px;
-  color:var(--paper);
-}
+.brand{ font-size:19px; color:var(--paper); }
 .brand span{ color:var(--amber); }
-
-header.topbar a{
-  color:var(--muted);
-  text-decoration:none;
-  font-size:14px;
-  font-weight:500;
-}
+header.topbar a{ color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; }
 header.topbar a:hover{ color:var(--amber-bright); }
-
-.breadcrumb{
-  display:block;
-  width:min(600px,92%);
-  margin:16px auto 0;
-  color:var(--muted);
-  text-decoration:none;
-  font-size:14px;
-}
+.breadcrumb{ display:block; width:min(600px,92%); margin:16px auto 0; color:var(--muted); text-decoration:none; font-size:14px; }
 .breadcrumb:hover{ color:var(--amber-bright); }
-
-/* Container */
-.container{
-  width:min(600px,92%);
-  margin:16px auto 40px;
-}
-
-.card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:26px 22px;
-  margin-bottom:16px;
-}
-
-.icon-badge{
-  width:46px;
-  height:46px;
-  border-radius:12px;
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-bottom:14px;
-}
-
-.card-head h1{
-  margin:0 0 6px;
-  font-size:24px;
-  color:var(--paper);
-}
-
-.card-head p{
-  margin:0 0 4px;
-  color:var(--muted);
-  font-size:14.5px;
-}
-
-/* How it works */
-.steps{
-  margin-top:18px;
-  padding:14px 16px;
-  background:var(--panel-2);
-  border:1px solid var(--line);
-  border-radius:14px;
-}
-
-.steps-title{
-  font-size:13px;
-  font-weight:600;
-  color:var(--amber-bright);
-  margin-bottom:8px;
-  letter-spacing:.3px;
-  text-transform:uppercase;
-}
-
-.step-row{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  margin-bottom:8px;
-  font-size:13.5px;
-  color:var(--paper);
-}
+.container{ width:min(600px,92%); margin:16px auto 40px; }
+.card{ background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:26px 22px; margin-bottom:16px; }
+.icon-badge{ width:46px; height:46px; border-radius:12px; background:linear-gradient(155deg,var(--amber-bright),var(--amber)); display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+.card-head h1{ margin:0 0 6px; font-size:24px; color:var(--paper); }
+.card-head p{ margin:0 0 4px; color:var(--muted); font-size:14.5px; }
+.steps{ margin-top:18px; padding:14px 16px; background:var(--panel-2); border:1px solid var(--line); border-radius:14px; }
+.steps-title{ font-size:13px; font-weight:600; color:var(--amber-bright); margin-bottom:8px; letter-spacing:.3px; text-transform:uppercase; }
+.step-row{ display:flex; gap:10px; align-items:flex-start; margin-bottom:8px; font-size:13.5px; color:var(--paper); }
 .step-row:last-child{ margin-bottom:0; }
-
-.step-num{
-  flex-shrink:0;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:var(--amber-dim);
-  color:var(--paper);
-  font-size:11.5px;
-  font-weight:700;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* Upload box */
-.upload-box{
-  margin-top:18px;
-  border:2px dashed var(--line);
-  border-radius:14px;
-  padding:26px 16px;
-  text-align:center;
-  background:var(--panel-2);
-}
-
-.upload-box svg{
-  width:30px;
-  height:30px;
-  margin-bottom:8px;
-}
-
-.upload-title{
-  margin:0 0 4px;
-  font-size:16px;
-  color:var(--paper);
-}
-
-.upload-hint{
-  margin:0 0 16px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.btn-choose{
-  display:inline-block;
-  padding:11px 22px;
-  border-radius:10px;
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  color:#1a1410;
-  font-weight:600;
-  font-size:14.5px;
-  cursor:pointer;
-}
-
+.step-num{ flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--amber-dim); color:var(--paper); font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.upload-box{ margin-top:18px; border:2px dashed var(--line); border-radius:14px; padding:26px 16px; text-align:center; background:var(--panel-2); }
+.upload-box svg{ width:30px; height:30px; margin-bottom:8px; }
+.upload-title{ margin:0 0 4px; font-size:16px; color:var(--paper); }
+.upload-hint{ margin:0 0 16px; color:var(--muted); font-size:13px; }
+.btn-choose{ display:inline-block; padding:10px 22px; background:var(--amber); color:#151210; border-radius:10px; font-weight:600; font-size:14px; cursor:pointer; }
+.btn-choose:hover{ background:var(--amber-bright); }
 #pdfFiles{ display:none; }
-
-#work{ display:none; margin-top:6px; }
-
-.info{
-  margin-top:16px;
-  padding:13px 14px;
-  background:var(--panel-2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.6;
-}
-
-.info strong{ color:var(--amber-bright); }
-
-/* File list */
-.file-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:16px;
-}
-
-.file-item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:12px;
-  background:var(--panel-2);
-  border:1px solid var(--line);
-  border-radius:13px;
-}
-
-.number{
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  color:#1a1410;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  font-size:13px;
-  flex-shrink:0;
-}
-
-.file-name{
-  flex:1;
-  min-width:0;
-  font-size:13.5px;
-  font-weight:600;
-  color:var(--paper);
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.file-size{
-  font-size:11px;
-  color:var(--muted);
-  margin-top:3px;
-  font-weight:400;
-}
-
-.item-actions{
-  display:flex;
-  gap:6px;
-  flex-shrink:0;
-}
-
-.icon-btn{
-  width:30px;
-  height:30px;
-  border-radius:8px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  color:var(--paper);
-  font-size:14px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:0;
-}
-.icon-btn:disabled{
-  opacity:.3;
-  cursor:not-allowed;
-}
-
-.remove{
-  background:#2b1614;
-  color:#e08a7d;
-  border-color:#5a2a24;
-}
-
-/* Buttons */
-.buttons{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:18px;
-}
-
-button{
-  border:0;
-  border-radius:11px;
-  padding:13px 18px;
-  font-weight:600;
-  font-size:14.5px;
-  font-family:'Inter',sans-serif;
-  cursor:pointer;
-}
-
-.primary{
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  color:#1a1410;
-  flex:1 1 100%;
-}
-
-.primary:disabled{
-  background:var(--amber-dim);
-  color:#3a2e1a;
-  cursor:not-allowed;
-}
-
-.secondary{
-  background:transparent;
-  color:var(--paper);
-  border:1px solid var(--line);
-  flex:1;
-}
-
-/* Status */
-#status{
-  margin-top:16px;
-  padding:13px 14px;
-  border-radius:12px;
-  background:var(--panel-2);
-  border:1px solid var(--line);
-  font-size:13.5px;
-  color:var(--muted);
-  line-height:1.5;
-}
-
-#status.success{
-  background:#132420;
-  border-color:#2e5045;
-  color:var(--teal);
-}
-
-#status.error{
-  background:#2b1614;
-  border-color:#5a2a24;
-  color:#e08a7d;
-}
-
-/* Ad slot */
-.ad-slot{ margin:16px 0; }
-
-.ad-box{
-  min-height:100px;
-  border:1.5px dashed var(--line);
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* Footer */
-footer.credit{
-  text-align:center;
-  color:var(--muted);
-  font-size:12.5px;
-  padding:20px 0 30px;
-}
+#work{ display:none; margin-top:20px; }
+.info{ background:var(--panel-2); border:1px solid var(--line); padding:12px 14px; border-radius:10px; font-size:13px; color:var(--muted); margin-bottom:14px; }
+.info.error{ border-color:var(--error); color:var(--error); }
+.info.success{ border-color:var(--success); color:var(--success); }
+.file-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.file-item{ display:flex; align-items:center; justify-content:space-between; background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:10px 14px; font-size:14px; }
+.file-name{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:65%; }
+.file-actions{ display:flex; gap:6px; }
+.btn-action{ background:transparent; border:1px solid var(--line); color:var(--paper); border-radius:6px; padding:4px 8px; cursor:pointer; font-size:12px; }
+.btn-action:hover{ border-color:var(--amber); }
+.buttons{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px; }
+button.primary{ background:linear-gradient(155deg,var(--amber-bright),var(--amber)); border:none; color:#151210; font-weight:600; padding:12px 20px; border-radius:10px; cursor:pointer; flex:1; }
+button.secondary{ background:transparent; border:1px solid var(--line); color:var(--paper); font-weight:500; padding:12px 16px; border-radius:10px; cursor:pointer; }
+button:disabled{ opacity:0.5; cursor:not-allowed; }
+.credit{ text-align:center; font-size:12px; color:var(--muted); margin-top:20px; }
 </style>
 </head>
-
 <body>
-
 <header class="topbar">
   <div class="brand">FormReady <span>India</span></div>
   <a href="/formready-india/index.html#tools">Home</a>
 </header>
-
 <a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
-
 <div class="container">
-
   <div class="card">
     <div class="card-head">
       <div class="icon-badge">
@@ -421,23 +124,12 @@ footer.credit{
       <h1>Merge PDF</h1>
       <p>Combine multiple PDF files into one single PDF — free, in your browser.</p>
     </div>
-
     <div class="steps">
       <div class="steps-title">How this works</div>
-      <div class="step-row">
-        <div class="step-num">1</div>
-        <div>Choose 2 or more PDF files from your phone.</div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">2</div>
-        <div>Check the order below — files merge <strong style="color:var(--paper)">top to bottom</strong>. Use ↑ ↓ to rearrange, or ✕ to remove a file.</div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">3</div>
-        <div>Tap <strong style="color:var(--paper)">Merge PDFs</strong> — one combined PDF will download automatically.</div>
-      </div>
+      <div class="step-row"><div class="step-num">1</div><div>Choose 2 or more PDF files from your phone.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div>Check the order below — files merge top to bottom. Use ↑ ↓ to rearrange.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div>Tap Merge PDFs — one combined PDF will download automatically.</div></div>
     </div>
-
     <div class="upload-box">
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -448,556 +140,134 @@ footer.credit{
       <label class="btn-choose" for="pdfFiles">Browse Files</label>
       <input id="pdfFiles" type="file" accept="application/pdf,.pdf" multiple>
     </div>
-
     <div id="work">
-
-      <div class="info">
-        <strong>Tip:</strong> PDFs are merged in the order shown below. Use the ↑ ↓ buttons on each file to change the order before merging.
-      </div>
-
+      <div class="info"><strong>Tip:</strong> PDFs are merged in the order shown below. Use ↑ ↓ to reorder.</div>
       <div class="file-list" id="fileList"></div>
-
       <div class="buttons">
         <button class="primary" id="mergeBtn">Merge PDFs</button>
         <button class="secondary" id="addMore">Add More PDFs</button>
         <button class="secondary" id="resetBtn">Reset</button>
       </div>
-
       <div class="info" id="status">Ready. Select your PDF files above to begin.</div>
-
     </div>
-
   </div>
-
-  <div class="ad-slot">
-    <div class="ad-box">Advertisement</div>
-  </div>
-
   <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
-
 </div>
 
-<script src="/js/pdf-lib.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
-
-const pdfFilesInput =
-document.getElementById("pdfFiles");
-
-const fileList =
-document.getElementById("fileList");
-
-const work =
-document.getElementById("work");
-
-const status =
-document.getElementById("status");
-
-const addMore =
-document.getElementById("addMore");
-
-const mergeBtn =
-document.getElementById("mergeBtn");
-
-const resetBtn =
-document.getElementById("resetBtn");
-
+const pdfFilesInput = document.getElementById("pdfFiles");
+const fileList = document.getElementById("fileList");
+const work = document.getElementById("work");
+const status = document.getElementById("status");
+const addMore = document.getElementById("addMore");
+const mergeBtn = document.getElementById("mergeBtn");
+const resetBtn = document.getElementById("resetBtn");
 
 let selectedFiles = [];
 
-function setStatus(message, type){
-
-  status.textContent = message;
-  status.classList.remove("success","error");
-
-  if(type === "success"){
-    status.classList.add("success");
-  }else if(type === "error"){
-    status.classList.add("error");
-  }
-
+function setStatus(msg, type){
+  status.textContent = msg;
+  status.className = "info " + (type || "");
 }
-
-
-/* Choose PDFs */
-
-pdfFilesInput.addEventListener(
-"change",
-function(){
-
-const newFiles =
-Array.from(this.files);
-
-let addedCount = 0;
-let skippedCount = 0;
-
-for(const file of newFiles){
-
-if(
-file.type === "application/pdf" ||
-file.name.toLowerCase().endsWith(".pdf")
-){
-
-selectedFiles.push(file);
-addedCount++;
-
-}else{
-
-skippedCount++;
-
-}
-
-}
-
-pdfFilesInput.value = "";
-
-renderFiles();
-
-if(skippedCount > 0){
-
-setStatus(
-addedCount +
-" PDF file" +
-(addedCount === 1 ? "" : "s") +
-" added. " +
-skippedCount +
-" file" +
-(skippedCount === 1 ? "" : "s") +
-" skipped (not a PDF).",
-"error"
-);
-
-}
-
-}
-);
-
-
-/* Add more */
-
-addMore.addEventListener(
-"click",
-function(){
-
-pdfFilesInput.click();
-
-}
-);
-
-
-/* Move file up/down */
-
-function moveFile(index, direction){
-
-const newIndex = index + direction;
-
-if(newIndex < 0 || newIndex >= selectedFiles.length){
-return;
-}
-
-const temp = selectedFiles[index];
-selectedFiles[index] = selectedFiles[newIndex];
-selectedFiles[newIndex] = temp;
-
-renderFiles();
-
-}
-
-
-/* Display files */
 
 function renderFiles(){
-
-fileList.innerHTML = "";
-
-if(selectedFiles.length === 0){
-
-work.style.display = "none";
-
-return;
-
+  if(selectedFiles.length === 0){
+    work.style.display = "none";
+    return;
+  }
+  work.style.display = "block";
+  fileList.innerHTML = "";
+  selectedFiles.forEach((f, i) => {
+    const item = document.createElement("div");
+    item.className = "file-item";
+    item.innerHTML = `
+      <span class="file-name">${i+1}. ${f.name}</span>
+      <div class="file-actions">
+        ${i > 0 ? `<button class="btn-action" onclick="moveFile(${i}, -1)">↑</button>` : ''}
+        ${i < selectedFiles.length - 1 ? `<button class="btn-action" onclick="moveFile(${i}, 1)">↓</button>` : ''}
+        <button class="btn-action" onclick="removeFile(${i})">✕</button>
+      </div>
+    `;
+    fileList.appendChild(item);
+  });
 }
 
-work.style.display = "block";
-
-
-selectedFiles.forEach(
-(file,index)=>{
-
-const item =
-document.createElement("div");
-
-item.className = "file-item";
-
-
-const number =
-document.createElement("div");
-
-number.className = "number";
-
-number.textContent =
-index + 1;
-
-
-const info =
-document.createElement("div");
-
-info.className = "file-name";
-
-info.innerHTML =
-escapeHtml(file.name)
-+
-"<div class='file-size'>"
-+
-formatBytes(file.size)
-+
-"</div>";
-
-
-const actions =
-document.createElement("div");
-
-actions.className = "item-actions";
-
-
-const upBtn =
-document.createElement("button");
-
-upBtn.className = "icon-btn";
-upBtn.textContent = "↑";
-upBtn.title = "Move up";
-upBtn.disabled = (index === 0);
-
-upBtn.onclick = function(){
-moveFile(index, -1);
-};
-
-
-const downBtn =
-document.createElement("button");
-
-downBtn.className = "icon-btn";
-downBtn.textContent = "↓";
-downBtn.title = "Move down";
-downBtn.disabled = (index === selectedFiles.length - 1);
-
-downBtn.onclick = function(){
-moveFile(index, 1);
-};
-
-
-const remove =
-document.createElement("button");
-
-remove.className = "icon-btn remove";
-remove.textContent = "✕";
-remove.title = "Remove";
-
-remove.onclick =
-function(){
-
-selectedFiles.splice(index,1);
-
-renderFiles();
-
-setStatus(
-selectedFiles.length +
-" PDF file" +
-(selectedFiles.length === 1 ? "" : "s") +
-" selected.",
-null
-);
-
-};
-
-
-actions.appendChild(upBtn);
-actions.appendChild(downBtn);
-actions.appendChild(remove);
-
-item.appendChild(number);
-item.appendChild(info);
-item.appendChild(actions);
-
-fileList.appendChild(item);
-
-});
-
-
-if(selectedFiles.length < 2){
-
-setStatus(
-selectedFiles.length +
-" PDF file selected. Add at least one more file to merge.",
-null
-);
-
-}else{
-
-setStatus(
-selectedFiles.length +
-" PDF files selected, ready to merge in this order.",
-null
-);
-
+function moveFile(index, dir){
+  const target = index + dir;
+  if(target < 0 || target >= selectedFiles.length) return;
+  const temp = selectedFiles[index];
+  selectedFiles[index] = selectedFiles[target];
+  selectedFiles[target] = temp;
+  renderFiles();
 }
 
+function removeFile(index){
+  selectedFiles.splice(index, 1);
+  renderFiles();
 }
 
-
-/* Merge */
-
-mergeBtn.addEventListener(
-"click",
-async function(){
-
-if(selectedFiles.length < 2){
-
-alert(
-"Please select at least 2 PDF files."
-);
-
-return;
-
-}
-
-
-try{
-
-mergeBtn.disabled = true;
-
-mergeBtn.textContent =
-"Merging...";
-
-setStatus("Reading PDF files...", null);
-
-
-const mergedPdf =
-await PDFLib.PDFDocument.create();
-
-
-for(
-let i = 0;
-i < selectedFiles.length;
-i++
-){
-
-const file =
-selectedFiles[i];
-
-setStatus(
-"Merging file " +
-(i + 1) +
-" of " +
-selectedFiles.length +
-": " +
-file.name,
-null
-);
-
-
-const arrayBuffer =
-await file.arrayBuffer();
-
-
-const pdf =
-await PDFLib.PDFDocument.load(
-arrayBuffer
-);
-
-
-const pages =
-await mergedPdf.copyPages(
-pdf,
-pdf.getPageIndices()
-);
-
-
-pages.forEach(
-page =>
-mergedPdf.addPage(page)
-);
-
-}
-
-
-/* Save */
-
-setStatus("Preparing your merged PDF for download...", null);
-
-
-const pdfBytes =
-await mergedPdf.save();
-
-
-const blob =
-new Blob(
-[pdfBytes],
-{
-type:"application/pdf"
-}
-);
-
-
-const url =
-URL.createObjectURL(blob);
-
-
-const link =
-document.createElement("a");
-
-link.href = url;
-
-link.download =
-"formready-merged.pdf";
-
-document.body.appendChild(link);
-
-link.click();
-
-link.remove();
-
-
-setTimeout(
-function(){
-
-URL.revokeObjectURL(url);
-
-},
-2000
-);
-
-
-setStatus(
-"Done! Your " +
-selectedFiles.length +
-" PDFs were merged successfully and the download has started.",
-"success"
-);
-
-}
-catch(error){
-
-console.error(error);
-
-setStatus(
-"Something went wrong — could not merge these PDFs. Please make sure every file is a valid, non-password-protected PDF.",
-"error"
-);
-
-alert(
-"Something went wrong. Please check that the selected files are valid PDFs."
-);
-
-}
-finally{
-
-mergeBtn.disabled = false;
-
-mergeBtn.textContent =
-"Merge PDFs";
-
-}
-
-}
-);
-
-
-/* Reset */
-
-resetBtn.addEventListener(
-"click",
-function(){
-
-selectedFiles = [];
-
-pdfFilesInput.value = "";
-
-fileList.innerHTML = "";
-
-work.style.display = "none";
-
-setStatus("Ready. Select your PDF files above to begin.", null);
-
-}
-);
-
-
-/* Helpers */
-
-function formatBytes(bytes){
-
-if(bytes === 0)
-return "0 Bytes";
-
-const units =
-[
-"Bytes",
-"KB",
-"MB",
-"GB"
-];
-
-const i =
-Math.floor(
-Math.log(bytes) /
-Math.log(1024)
-);
-
-return (
-bytes /
-Math.pow(1024,i)
-).toFixed(2)
-+
-" "
-+
-units[i];
-
-}
-
-
-function escapeHtml(text){
-
-return text
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
-</script>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const rewardKey = "formready_reward_merge-pdf_" + new Date().toISOString().slice(0,10);
-
-  function rewardUser() {
-    if (localStorage.getItem(rewardKey)) return;
-    if (window.FormReadyTokens) {
-      window.FormReadyTokens.addTokens("merge-pdf");
+pdfFilesInput.addEventListener("change", function(){
+  for(const file of this.files){
+    if(file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")){
+      selectedFiles.push(file);
     }
   }
+  this.value = "";
+  renderFiles();
+  setStatus(`${selectedFiles.length} file(s) selected. Click 'Merge PDFs' when ready.`);
+});
 
-  document.querySelectorAll(
-    '#download, #downloadBtn, #downloadButton, button[id*="download" i], a[id*="download" i]'
-  ).forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      setTimeout(rewardUser, 1000);
-    });
-  });
+addMore.addEventListener("click", () => pdfFilesInput.click());
 
-  const originalAlert = window.alert;
-  window.alert = function(msg) {
-    if (msg && /download|success|created|converted|compressed|generated|saved/i.test(String(msg))) {
-      setTimeout(rewardUser, 500);
+resetBtn.addEventListener("click", () => {
+  selectedFiles = [];
+  renderFiles();
+  setStatus("Ready. Select your PDF files above to begin.");
+});
+
+mergeBtn.addEventListener("click", async () => {
+  if(selectedFiles.length < 2){
+    alert("Please select at least 2 PDF files to merge.");
+    return;
+  }
+  mergeBtn.disabled = true;
+  setStatus("Merging PDFs, please wait...", "");
+
+  try {
+    const { PDFDocument } = PDFLib;
+    const mergedPdf = await PDFDocument.create();
+
+    for(let i = 0; i < selectedFiles.length; i++){
+      const file = selectedFiles[i];
+      setStatus(`Processing file ${i + 1} of ${selectedFiles.length}: ${file.name}`);
+      const arrayBuffer = await file.arrayBuffer();
+      const loadedPdf = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+      const copiedPages = await mergedPdf.copyPages(loadedPdf, loadedPdf.getPageIndices());
+      copiedPages.forEach(page => mergedPdf.addPage(page));
     }
-    originalAlert.apply(window, arguments);
-  };
+
+    setStatus("Finalizing merged PDF...", "");
+    const mergedPdfBytes = await mergedPdf.save();
+    const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+    const downloadUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = "merged-document.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(downloadUrl);
+
+    setStatus("Successfully merged and downloaded!", "success");
+  } catch(err) {
+    console.error(err);
+    alert("Something went wrong. Please check that the selected files are valid PDFs.");
+    setStatus("Error merging files.", "error");
+  } finally {
+    mergeBtn.disabled = false;
+  }
 });
 </script>
-
 </body>
 </html>
