@@ -25,7 +25,6 @@
 </script>
 
 <script src="../token-system.js"></script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -474,7 +473,6 @@
     </label>
 
     <button id="removeBtn" class="btn-primary" disabled>🪄 Remove Background</button>
-
     <div class="status" id="status">Choose a photo to get started.</div>
   </div>
 
@@ -485,7 +483,7 @@
     <div class="crop-frame checker" id="cropFrame">
       <div class="placeholder-text" id="placeholderText">Your result will appear here</div>
     </div>
-    <div class="drag-hint" id="dragHint">↔ Drag the photo to reposition it — only what's inside the frame gets downloaded</div>
+    <div class="drag-hint" id="dragHint">↔ Drag to move · pinch with two fingers to zoom — only what's inside the frame gets downloaded</div>
 
     <div class="swatch-label">Choose background colour</div>
     <div class="swatch-row">
@@ -498,8 +496,7 @@
         <input type="color" id="customColor" style="width:100%;height:100%;border:0;padding:0;cursor:pointer;">
       </label>
     </div>
-
-    <div class="swatch-label">Choose photo shape</div>
+   <div class="swatch-label">Choose photo shape</div>
     <div class="custom-select" id="aspectSelect">
       <button type="button" class="select-trigger" id="aspectTrigger">
         <span id="aspectValueLabel">3:4 (Portrait)</span>
@@ -564,9 +561,19 @@ let currentAspect = "3:4";
 let panX = 0, panY = 0;
 let imgDispW = 0, imgDispH = 0;
 let coverScale = 1;
+let zoom = 1;
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 4;
+
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let panStartX = 0, panStartY = 0;
+
+const activePointers = new Map();
+let pinchStartDist = 0;
+let pinchStartZoom = 1;
+let pinchStartPanX = 0, pinchStartPanY = 0;
+let pinchMidX = 0, pinchMidY = 0;
 
 function erodeAlpha(imageData, iterations){
   const width = imageData.width;
@@ -644,7 +651,6 @@ removeBtn.addEventListener("click", async function(){
       off.height = img.height;
       const octx = off.getContext("2d");
       octx.drawImage(img, 0, 0);
-
       const imgData = octx.getImageData(0, 0, off.width, off.height);
       erodeAlpha(imgData, 2);
       octx.putImageData(imgData, 0, 0);
@@ -653,7 +659,7 @@ removeBtn.addEventListener("click", async function(){
       placeholderText.style.display = "none";
       mountImageInFrame();
       downloadBtn.disabled = false;
-      statusText.textContent = "Done! Drag the photo to reposition, pick a background colour, then download.";
+      statusText.textContent = "Done! Drag to move, pinch to zoom, pick a background colour, then download.";
       removeBtn.disabled = false;
     };
 
@@ -709,12 +715,21 @@ function mountImageInFrame(){
   updateDragHint();
 }
 
+function applyTransform(){
+  if(!cutoutImage) return;
+  cutoutImage.style.width = imgDispW + "px";
+  cutoutImage.style.height = imgDispH + "px";
+  cutoutImage.style.transform = "translate(" + panX + "px," + panY + "px)";
+}
+
 function layoutFrame(){
   if(!cutoutImage) return;
 
   const wh = getAspectWH();
   const srcW = cutoutImage.width;
   const srcH = cutoutImage.height;
+
+  zoom = 1;
 
   if(wh === null){
     cropFrame.style.aspectRatio = srcW + " / " + srcH;
@@ -741,8 +756,8 @@ function layoutFrame(){
     const frameH = cropFrame.clientHeight;
 
     coverScale = Math.max(frameW / srcW, frameH / srcH);
-    imgDispW = srcW * coverScale;
-    imgDispH = srcH * coverScale;
+    imgDispW = srcW * coverScale * zoom;
+    imgDispH = srcH * coverScale * zoom;
 
     panX = (frameW - imgDispW) / 2;
     panY = (frameH - imgDispH) / 2;
@@ -762,31 +777,85 @@ function clampPan(){
   panY = Math.max(minY, Math.min(0, panY));
 }
 
-cropFrame.addEventListener("pointerdown", function(e){
-  if(!cutoutImage || currentAspect === "original") return;
+function startPan(pointer){
   isDragging = true;
   cropFrame.classList.add("dragging");
-  dragStartX = e.clientX;
-  dragStartY = e.clientY;
+  dragStartX = pointer.x;
+  dragStartY = pointer.y;
   panStartX = panX;
   panStartY = panY;
+}
+
+function startPinch(){
+  isDragging = false;
+  cropFrame.classList.remove("dragging");
+
+  const pts = Array.from(activePointers.values());
+  pinchStartDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+  pinchStartZoom = zoom;
+  pinchStartPanX = panX;
+  pinchStartPanY = panY;
+
+  const rect = cropFrame.getBoundingClientRect();
+  pinchMidX = (pts[0].x + pts[1].x) / 2 - rect.left;
+  pinchMidY = (pts[0].y + pts[1].y) / 2 - rect.top;
+}
+
+cropFrame.addEventListener("pointerdown", function(e){
+  if(!cutoutImage || currentAspect === "original") return;
+
   cropFrame.setPointerCapture(e.pointerId);
+  activePointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+
+  if(activePointers.size === 1){
+    startPan({x:e.clientX, y:e.clientY});
+  } else if(activePointers.size === 2){
+    startPinch();
+  }
 });
 
 cropFrame.addEventListener("pointermove", function(e){
-  if(!isDragging) return;
-  panX = panStartX + (e.clientX - dragStartX);
-  panY = panStartY + (e.clientY - dragStartY);
-  clampPan();
-  applyTransform();
+  if(!activePointers.has(e.pointerId)) return;
+  activePointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+
+  if(activePointers.size === 1 && isDragging){
+    panX = panStartX + (e.clientX - dragStartX);
+    panY = panStartY + (e.clientY - dragStartY);
+    clampPan();
+    applyTransform();
+  } else if(activePointers.size === 2 && pinchStartDist > 0){
+    const pts = Array.from(activePointers.values());
+    const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+
+    let newZoom = pinchStartZoom * (dist / pinchStartDist);
+    newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
+
+    const factor = newZoom / pinchStartZoom;
+    panX = pinchMidX - (pinchMidX - pinchStartPanX) * factor;
+    panY = pinchMidY - (pinchMidY - pinchStartPanY) * factor;
+
+    zoom = newZoom;
+    imgDispW = cutoutImage.width * coverScale * zoom;
+    imgDispH = cutoutImage.height * coverScale * zoom;
+
+    clampPan();
+    applyTransform();
+  }
 });
 
-function endDrag(){
-  isDragging = false;
-  cropFrame.classList.remove("dragging");
+function endPointer(e){
+  activePointers.delete(e.pointerId);
+
+  if(activePointers.size === 0){
+    isDragging = false;
+    cropFrame.classList.remove("dragging");
+  } else if(activePointers.size === 1){
+    const remaining = Array.from(activePointers.values())[0];
+    startPan(remaining);
+  }
 }
-cropFrame.addEventListener("pointerup", endDrag);
-cropFrame.addEventListener("pointercancel", endDrag);
+cropFrame.addEventListener("pointerup", endPointer);
+cropFrame.addEventListener("pointercancel", endPointer);
 
 window.addEventListener("resize", function(){
   if(cutoutImage) layoutFrame();
@@ -853,10 +922,12 @@ downloadBtn.addEventListener("click", function(){
     }
     octx.drawImage(cutoutImage, 0, 0);
   } else {
-    let sx = -panX / coverScale;
-    let sy = -panY / coverScale;
-    let sw = cropFrame.clientWidth / coverScale;
-    let sh = cropFrame.clientHeight / coverScale;
+    const effScale = coverScale * zoom;
+
+    let sx = -panX / effScale;
+    let sy = -panY / effScale;
+    let sw = cropFrame.clientWidth / effScale;
+    let sh = cropFrame.clientHeight / effScale;
 
     sx = Math.max(0, sx);
     sy = Math.max(0, sy);
@@ -886,6 +957,7 @@ resetBtn.addEventListener("click", function(){
   fileNameLabel.textContent = "No photo selected yet";
   removeBtn.disabled = true;
   downloadBtn.disabled = true;
+  zoom = 1;
   clearFrame();
   placeholderText.style.display = "block";
   dragHint.style.display = "none";
