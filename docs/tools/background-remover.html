@@ -413,7 +413,7 @@
 <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
 
 <script type="module">
-import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.6.0/dist/index.mjs";
+import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.0.0/dist/index.mjs";
 
 const photoInput = document.getElementById("photo");
 const fileNameLabel = document.getElementById("fileName");
@@ -453,7 +453,9 @@ removeBtn.addEventListener("click", async function(){
   statusText.textContent = "Removing background… first time may take 10-20 seconds while the tool loads.";
 
   try{
-    const blob = await removeBackground(originalFile);
+    const blob = await removeBackground(originalFile, {
+      publicPath: "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.0.0/dist/"
+    });
 
     const url = URL.createObjectURL(blob);
     const img = new Image();
