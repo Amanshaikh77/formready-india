@@ -227,3 +227,40 @@ label {
   text-align: left;
   margin-bottom: 4px;
 }
+
+html body button.primary,
+html body button#applySize,
+html body .buttons button.primary {
+  background: #1a56db !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+html body button.secondary,
+html body button#reset,
+html body .buttons button.secondary {
+  background: #f1f5f9 !important;
+  color: #1f2937 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+html body label.upload {
+  display: block !important;
+  border: 1.5px dashed #1a56db !important;
+  background: #eef2ff !important;
+  border-radius: 12px !important;
+  padding: 28px 16px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+}
+
+html body button#compress,
+html body button#download,
+html body button[id*="crop" i],
+html body button[id*="convert" i],
+html body button[id*="merge" i],
+html body button[id*="split" i] {
+  background: #1a56db !important;
+  color: #ffffff !important;
+  border: none !important;
+}
