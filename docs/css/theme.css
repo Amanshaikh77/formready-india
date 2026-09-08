@@ -352,3 +352,19 @@ html body input[type="range"] {
 html body canvas {
   background: #1e2333 !important;
 }
+
+.tool-card, .tool-card * {
+  color: #0f172a !important;
+}
+.tool-card .tool-desc {
+  color: #6b7280 !important;
+}
+.tool-card .tag {
+  color: #ffffff !important;
+}
+.tools-section h2 {
+  color: #f8fafc !important;
+}
+.tools-section .section-sub, .tools-section > p {
+  color: #cbd5e1 !important;
+}
