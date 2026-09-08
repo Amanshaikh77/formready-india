@@ -472,7 +472,8 @@ removeBtn.addEventListener("click", async function(){
 
     img.src = url;
   }catch(err){
-    statusText.textContent = "Something went wrong. Please try a different photo.";
+    console.error("Background removal error:", err);
+    statusText.textContent = "Error: " + (err && err.message ? err.message : String(err));
     removeBtn.disabled = false;
   }
 });
