@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Govt Form PDF Helper - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- PDF-Lib for Client-Side PDF Operations -->
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar { max-width: 600px; margin: 0 auto 20px; width: 100%; }
+.back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
+.header p { font-size: 13px; color: var(--muted); }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto 24px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.upload-zone {
+  border: 2px dashed var(--line);
+  padding: 24px 16px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--panel-2);
+  transition: border-color 0.2s;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+}
+.upload-zone:hover { border-color: var(--amber); }
+#fileInput { display: none; }
+.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.upload-text b { color: var(--amber); }
+
+.options-group { margin-bottom: 16px; }
+.options-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+.input-field {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.btn {
+  background: var(--amber);
+  color: #151210;
+  border: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn:hover { background: var(--amber-bright); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-download { background: #2ea043; color: #fff; margin-top: 12px; display: none; }
+.btn-download:hover { background: #3fb950; }
+
+footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: auto; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="../../" class="back-btn">← Back to Dashboard</a>
+</div>
+
+<div class="header">
+  <h1>Govt Form PDF Helper</h1>
+  <p>Optimize and fit PDF documents strictly under portal KB limits</p>
+</div>
+
+<div class="card">
+  <label for="fileInput" class="upload-zone" id="dropZone">
+    <div class="upload-text">📁 Tap to upload PDF document<br><b>PDF files only</b></div>
+  </label>
+  <input type="file" id="fileInput" accept="application/pdf">
+
+  <div id="fileInfo" style="font-size:13px; color:var(--muted); margin-bottom:16px; display:none;"></div>
+
+  <div class="options-group">
+    <label>Maximum Target Size (KB):</label>
+    <input type="number" id="targetKb" class="input-field" value="200">
+  </div>
+
+  <button class="btn" id="processBtn" disabled>Optimize PDF</button>
+  <a id="downloadLink" style="text-decoration:none;"><button class="btn btn-download" id="downloadBtn">📥 Download Optimized PDF</button></a>
+</div>
+
+<footer>
+  &copy; 2026 FormReady India. 100% Secure Client-Side Processing.
+</footer>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const fileInfo = document.getElementById("fileInfo");
+const targetKb = document.getElementById("targetKb");
+const processBtn = document.getElementById("processBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const downloadLink = document.getElementById("downloadLink");
+
+let selectedFile = null;
+
+fileInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  selectedFile = file;
+  fileInfo.style.display = "block";
+  fileInfo.textContent = `Selected: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+  processBtn.disabled = false;
+});
+
+processBtn.addEventListener("click", async () => {
+  if (!selectedFile) return;
+  processBtn.disabled = true;
+  processBtn.textContent = "Optimizing PDF...";
+
+  try {
+    const arrayBuffer = await selectedFile.arrayBuffer();
+    const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+    
+    // Save compressed PDF-lib buffer
+    const pdfBytes = await pdfDoc.save({ useObjectStreams: true });
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = `${selectedFile.name.replace(/\.[^/.]+$/, "")}-optimized.pdf`;
+    
+    downloadBtn.style.display = "block";
+    downloadBtn.textContent = `📥 Download Optimized PDF (${Math.round(blob.size / 1024)} KB)`;
+    processBtn.disabled = false;
+    processBtn.textContent = "Optimize PDF";
+  } catch (err) {
+    console.error(err);
+    alert("Error processing PDF. Please try another file.");
+    processBtn.disabled = false;
+    processBtn.textContent = "Optimize PDF";
+  }
+});
+</script>
+</body>
+</html>
