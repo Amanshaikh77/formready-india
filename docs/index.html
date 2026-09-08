@@ -1,118 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="css/theme.css">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FormReady India | Free Online Tools</title>
-<meta name="description" content="FormReady India - Free and easy online tools for photos, PDFs and documents.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>FormReady India - Fast, Private & Mobile-Friendly Online Tools</title>
+<meta name="description" content="Free, secure, and client-side photo and PDF tools. Crop, resize, compress photos, split, merge PDFs locally in your browser with zero data uploads.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/">
+<link rel="stylesheet" href="./css/theme.css">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{font-family:'Inter',Arial,sans-serif;background:var(--bg);color:var(--text);}
-
+:root{
+  --bg:#151210;
+  --bg-deep:#0f0d0c;
+  --panel:#1e1a17;
+  --panel-soft:#25201c;
+  --line:#39322b;
+  --amber:#d99a3f;
+  --amber-bright:#f0b158;
+  --amber-dim:#8a6329;
+  --paper:#f2ece2;
+  --text:#f2ece2;
+  --muted:#a89a89;
+  --teal:#5fada0;
+}
+html{ scroll-behavior:smooth; }
+*{ box-sizing:border-box; margin:0; padding:0; }
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+h1,h2,h3,.brand{ font-family:'Space Grotesk',sans-serif; font-weight:600; }
 header{
-  position:sticky;top:0;z-index:100;
-  background:var(--bg-deep);
-  backdrop-filter:blur(12px);
-  color:var(--text);
-  padding:15px 6%;
-  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(21,18,16,.92);
+  backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 8%;
 }
-.logo{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.3px;}
-.logo span{color:var(--amber);}
-nav{display:flex;gap:22px;}
-nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;}
-nav a:hover{color:var(--amber-bright);}
+.brand{ font-size:20px; color:var(--paper); text-decoration:none; }
+.brand span{ color:var(--amber); }
+nav{ display:flex; gap:20px; align-items:center; }
+nav a{ color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; transition:color .2s; }
+nav a:hover{ color:var(--amber-bright); }
 
-.hero{
-  display:flex;align-items:center;justify-content:center;text-align:center;
-  padding:46px 6% 40px;
-  color:var(--text);
-  background:
-    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(217,154,63,0.10), transparent),
-    linear-gradient(135deg, var(--bg-deep) 0%, #17130f 100%);
-}
-.hero-content{max-width:800px;}
-.hero-badge{
-  display:inline-block;padding:8px 14px;border-radius:30px;
-  background:#ffffff10;border:1px solid var(--line);
-  color:var(--muted);font-size:13px;font-weight:700;margin-bottom:18px;
-}
-.hero h1{
-  font-family:'Space Grotesk',sans-serif;
-  font-size:clamp(34px,8vw,60px);line-height:1.05;letter-spacing:-1.5px;margin-bottom:16px;
-}
-.hero h1 span{color:var(--amber-bright);}
-.hero p{max-width:600px;margin:auto;color:var(--muted);font-size:16px;line-height:1.6;}
-.hero-buttons{margin-top:24px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+.hero{ text-align:center; padding:54px 20px 40px; }
+.hero-badge{ display:inline-block; font-size:12px; font-weight:600; background:var(--panel-soft); border:1px solid var(--line); color:var(--amber-bright); padding:6px 14px; border-radius:20px; margin-bottom:16px; }
+.hero h1{ font-size:clamp(26px, 5vw, 42px); line-height:1.2; margin-bottom:12px; }
+.hero h1 span{ color:var(--amber); }
+.hero p{ color:var(--muted); font-size:15px; max-width:560px; margin:0 auto 24px; line-height:1.6; }
+.hero-buttons{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.btn{ padding:11px 22px; border-radius:10px; font-size:14px; font-weight:600; text-decoration:none; transition:all .2s; }
+.btn-primary{ background:linear-gradient(155deg,var(--amber-bright),var(--amber)); color:#151210; }
+.btn-primary:hover{ opacity:.9; }
+.btn-secondary{ background:var(--panel); border:1px solid var(--line); color:var(--paper); }
+.btn-secondary:hover{ border-color:var(--amber); color:var(--amber); }
 
-.btn{display:inline-block;padding:13px 22px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14.5px;}
-.btn-primary{background:linear-gradient(155deg,var(--amber-bright),var(--amber));color:#1a1410;}
-.btn-secondary{border:1px solid var(--line);color:var(--text);background:#ffffff0d;}
+.section{ padding:36px 0; }
+.container{ width:min(1100px, 92%); margin:0 auto; }
+.section-title{ text-align:center; margin-bottom:24px; }
+.section-title h2{ font-size:26px; margin-bottom:6px; }
+.section-title p{ color:var(--muted); font-size:14px; }
 
-.container{width:min(1180px,92%);margin:auto;}
-.section{padding:38px 0 52px;}
-.section-head{text-align:center;margin-bottom:26px;}
-.section-head h2{font-family:'Space Grotesk',sans-serif;font-size:30px;margin-bottom:8px;color:var(--text);}
-.section-head p{color:var(--muted);}
+.search-box{ max-width:440px; margin:0 auto 30px; position:relative; }
+.search-box input{ width:100%; background:var(--panel); border:1px solid var(--line); color:var(--paper); padding:12px 16px; border-radius:12px; font-size:14px; outline:none; }
+.search-box input:focus{ border-color:var(--amber); }
 
-.search{
-  width:100%;max-width:550px;display:block;margin:0 auto 26px;
-  padding:14px 18px;border:1px solid var(--line);border-radius:14px;outline:none;
-  background:var(--panel-soft);color:var(--text);font-size:15px;
-}
-.search:focus{border-color:var(--amber);}
+.tools-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
+.tool{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px; text-decoration:none; color:inherit; display:flex; flex-direction:column; justify-content:space-between; transition:transform .2s, border-color .2s; }
+.tool:hover{ transform:translateY(-2px); border-color:var(--amber); }
+.tool-top{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+.tool-icon{ font-size:20px; width:40px; height:40px; border-radius:10px; background:var(--panel-soft); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; }
+.tool h3{ font-size:16px; color:var(--paper); }
+.tool p{ font-size:13px; color:var(--muted); line-height:1.5; margin-bottom:14px; }
+.tool-tag{ align-self:flex-start; font-size:10.5px; font-weight:700; color:var(--amber-bright); background:rgba(217,154,63,.12); border:1px solid rgba(217,154,63,.3); border-radius:6px; padding:3px 8px; text-transform:uppercase; letter-spacing:.5px; }
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
-.tool{
-  display:block;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--amber);
-  border-radius:18px;padding:22px;text-decoration:none;color:var(--text);transition:.2s;
-}
-.tool:hover{transform:translateY(-4px);border-left-color:var(--amber-bright);}
-.tool-icon{
-  width:48px;height:48px;display:flex;align-items:center;justify-content:center;
-  border-radius:13px;background:var(--panel-soft);margin-bottom:16px;color:var(--amber-bright);
-}
-.tool-icon svg{width:24px;height:24px;}
-.tool h3{font-family:'Space Grotesk',sans-serif;font-size:17px;margin-bottom:6px;color:var(--text);}
-.tool p{color:var(--muted);font-size:13.5px;line-height:1.5;}
-.tag{
-  display:inline-block;margin-top:14px;padding:5px 10px;border-radius:20px;
-  background:var(--amber);color:#1a1410;font-size:11px;font-weight:800;
-}
+/* How It Works Section */
+.workflow-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-top:20px; }
+.flow-card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px 20px; }
+.flow-header{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.flow-num{ width:26px; height:26px; border-radius:50%; background:var(--amber); color:#151210; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.flow-card h3{ font-size:16px; color:var(--paper); }
+.flow-card p{ font-size:13.5px; color:var(--muted); line-height:1.6; }
 
-.about{background:var(--panel);border-radius:20px;padding:36px;border:1px solid var(--line);}
-.about h2{font-family:'Space Grotesk',sans-serif;margin-bottom:10px;color:var(--text);}
-.about p{color:var(--muted);line-height:1.7;}
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:22px;}
-.feature{padding:16px;background:var(--panel-soft);border-radius:13px;border:1px solid var(--line);}
-.feature b{display:block;margin-bottom:4px;color:var(--text);}
-.feature span{color:var(--muted);font-size:13px;}
+/* About Section */
+.about{ background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:30px 24px; }
+.privacy-banner{ background:linear-gradient(145deg, rgba(217,154,63,.12), rgba(95,173,160,.12)); border:1px solid var(--amber-dim); border-radius:14px; padding:18px 20px; margin-bottom:24px; display:flex; gap:16px; align-items:flex-start; }
+.privacy-badge{ font-size:26px; }
+.privacy-text h3{ font-size:16px; color:var(--amber-bright); margin-bottom:4px; }
+.privacy-text p{ font-size:13.5px; color:var(--paper); line-height:1.5; }
+.about h2{ font-size:24px; margin-bottom:10px; color:var(--paper); }
+.about > p{ color:var(--muted); font-size:14.5px; line-height:1.6; }
+.features{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin-top:22px; }
+.feature{ padding:16px; background:var(--panel-soft); border-radius:13px; border:1px solid var(--line); }
+.feature b{ display:block; margin-bottom:4px; color:var(--text); font-size:14px; }
+.feature span{ color:var(--muted); font-size:13px; }
 
-footer{background:var(--bg-deep);color:var(--muted);text-align:center;padding:30px 20px;border-top:1px solid var(--line);}
-footer strong{color:var(--text);}
-footer a{color:var(--muted);text-decoration:none;font-size:13px;}
-footer a:hover{color:var(--amber-bright);}
+footer{ background:var(--bg-deep); color:var(--muted); text-align:center; padding:34px 20px; border-top:1px solid var(--line); margin-top:auto; }
+footer strong{ color:var(--text); }
+footer a{ color:var(--muted); text-decoration:none; font-size:13px; }
+footer a:hover{ color:var(--amber-bright); }
 
 @media(max-width:650px){
-  header{padding:14px 5%;}
-  nav{gap:12px;}
-  nav a{font-size:12px;}
-  .about{padding:22px;}
+  header{ padding:14px 5%; }
+  nav{ gap:14px; }
+  nav a{ font-size:13px; }
+  .privacy-banner{ flex-direction:column; gap:8px; }
 }
 </style>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZQS397P13G"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-ZQS397P13G");</script>
 </head>
 <body>
 
 <header>
-  <div class="logo">FormReady <span>India</span></div>
+  <a class="brand" href="./index.html">FormReady <span>India</span></a>
   <nav>
     <a href="#tools">Tools</a>
     <a href="#about">About</a>
@@ -120,128 +131,148 @@ footer a:hover{color:var(--amber-bright);}
 </header>
 
 <section class="hero">
-  <div class="hero-content">
+  <div class="container">
     <div class="hero-badge">⚡ Fast • Simple • Mobile Friendly</div>
     <h1>Everything You Need, <span>Ready Online.</span></h1>
-    <p>Free and easy-to-use tools for photos, PDFs and documents. No complicated software required.</p>
+    <p>Free, secure, and easy-to-use tools for photos, PDFs and documents. Complete your official form requirements directly on your device.</p>
     <div class="hero-buttons">
       <a class="btn btn-primary" href="#tools">Explore Tools</a>
-      <a class="btn btn-secondary" href="#about">Learn More</a>
+      <a class="btn btn-secondary" href="#how-it-works">Learn More</a>
     </div>
   </div>
 </section>
 
 <section class="section" id="tools">
-<div class="container">
-  <div class="section-head">
-    <h2>Our Tools</h2>
-    <p>Choose a tool and get your work done quickly.</p>
-  </div>
-
-  <input id="search" class="search" type="search" placeholder="🔎 Search a tool...">
-
-  <div class="grid" id="toolGrid">
-
-    <a class="tool" href="./tools/crop/">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg></div>
-      <h3>Photo Cropper</h3>
-      <p>Crop photos easily with touch-friendly controls.</p>
-      <span class="tag">PHOTO</span>
-    </a>
-
-    <a class="tool" href="./tools/photo-resizer.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 3 21 9 15 9"/><polyline points="3 21 3 15 9 15"/><line x1="21" y1="3" x2="13" y2="11"/><line x1="3" y1="21" x2="11" y2="13"/></svg></div>
-      <h3>Photo Resizer</h3>
-      <p>Resize photos to your required dimensions.</p>
-      <span class="tag">PHOTO</span>
-    </a>
-
-    <a class="tool" href="./tools/photo-compressor.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg></div>
-      <h3>Photo Compressor</h3>
-      <p>Reduce image file size while keeping quality.</p>
-      <span class="tag">PHOTO</span>
-    </a>
-
-    <a class="tool" href="./tools/jpg-to-pdf.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-      <h3>JPG to PDF</h3>
-      <p>Convert your images into PDF documents.</p>
-      <span class="tag">PDF</span>
-    </a>
-
-    <a class="tool" href="./tools/pdf-to-jpg.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-      <h3>PDF to JPG</h3>
-      <p>Convert PDF pages into image files.</p>
-      <span class="tag">PDF</span>
-    </a>
-
-    <a class="tool" href="./tools/merge-pdf.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
-      <h3>Merge PDF</h3>
-      <p>Combine multiple PDF files into one.</p>
-      <span class="tag">PDF</span>
-    </a>
-
-    <a class="tool" href="./tools/split-pdf.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="4" y1="14" x2="20" y2="14" stroke-dasharray="2 2.5"/></svg></div>
-      <h3>Split PDF</h3>
-      <p>Split PDF documents into separate pages.</p>
-      <span class="tag">PDF</span>
-    </a>
-
-    <a class="tool" href="./tools/passport-photo.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M5 17c0-1.7 1.8-3 4-3s4 1.3 4 3"/><line x1="15" y1="9" x2="19" y2="9"/><line x1="15" y1="13" x2="19" y2="13"/></svg></div>
-      <h3>Passport Photo</h3>
-      <p>Create passport-size photos easily.</p>
-      <span class="tag">PHOTO</span>
-    </a>
-
-    <a class="tool" href="./tools/photo-sheet.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-      <h3>Photo Sheet</h3>
-      <p>Create printable sheets with multiple photos.</p>
-      <span class="tag">PHOTO</span>
-    </a>
-
-    <a class="tool" href="./tools/signature-maker.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
-      <h3>Signature Maker</h3>
-      <p>Create and download your digital signature.</p>
-      <span class="tag">UTILITY</span>
-    </a>
-
-    <a class="tool" href="./tools/background-remover.html">
-      <div class="tool-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8L19 13"/><path d="M17.8 6.2L19 5"/><path d="M3 21l9-9"/><path d="M12.2 6.2L11 5"/></svg></div>
-      <h3>Background Remover</h3>
-      <p>Remove photo background and choose a new colour.</p>
-      <span class="tag">PHOTO</span>
-    </a>
-
-  </div>
-</div>
-</section>
-
-<section class="section" id="about">
-<div class="container">
-  <div class="about">
-    <h2>About FormReady India</h2>
-    <p>FormReady India is designed to make everyday photo, document and PDF tasks simple. Our tools are made with mobile users in mind, so you can complete your work directly from your phone.</p>
-    <div class="features">
-      <div class="feature"><b>📱 Mobile Friendly</b><span>Works comfortably on phones.</span></div>
-      <div class="feature"><b>⚡ Fast</b><span>Simple and lightweight tools.</span></div>
-      <div class="feature"><b>🔒 Private</b><span>Tools can process files locally.</span></div>
-      <div class="feature"><b>💻 Easy</b><span>No complicated software required.</span></div>
+  <div class="container">
+    <div class="section-title">
+      <h2>Our Tools</h2>
+      <p>Choose a tool and get your work done quickly.</p>
+    </div>
+    <div class="search-box">
+      <input type="text" id="search" placeholder="🔍 Search a tool...">
+    </div>
+    <div class="tools-grid">
+      <a class="tool" href="./tools/crop/index.html">
+        <div class="tool-top"><div class="tool-icon">✂️</div><h3>Photo Cropper</h3></div>
+        <p>Crop photos easily with precise, touch-friendly handles.</p>
+        <span class="tool-tag">Photo</span>
+      </a>
+      <a class="tool" href="./tools/photo-resizer.html">
+        <div class="tool-top"><div class="tool-icon">📐</div><h3>Photo Resizer</h3></div>
+        <p>Resize photos to your required exact dimensions and aspect ratio.</p>
+        <span class="tool-tag">Photo</span>
+      </a>
+      <a class="tool" href="./tools/photo-compressor.html">
+        <div class="tool-top"><div class="tool-icon">🗜️</div><h3>Photo Compressor</h3></div>
+        <p>Reduce image file size in KB/MB while keeping crisp clarity.</p>
+        <span class="tool-tag">Photo</span>
+      </a>
+      <a class="tool" href="./tools/jpg-to-pdf.html">
+        <div class="tool-top"><div class="tool-icon">📄</div><h3>JPG to PDF</h3></div>
+        <p>Convert your image photos into single or multi-page PDF documents.</p>
+        <span class="tool-tag">PDF</span>
+      </a>
+      <a class="tool" href="./tools/pdf-to-jpg.html">
+        <div class="tool-top"><div class="tool-icon">🖼️</div><h3>PDF to JPG</h3></div>
+        <p>Convert PDF document pages directly into high quality JPG image files.</p>
+        <span class="tool-tag">PDF</span>
+      </a>
+      <a class="tool" href="./tools/merge-pdf.html">
+        <div class="tool-top"><div class="tool-icon">📑</div><h3>Merge PDF</h3></div>
+        <p>Combine multiple PDF files into one neatly organized single PDF.</p>
+        <span class="tool-tag">PDF</span>
+      </a>
+      <a class="tool" href="./tools/split-pdf.html">
+        <div class="tool-top"><div class="tool-icon">✂️</div><h3>Split PDF</h3></div>
+        <p>Extract selected pages or custom page ranges into a new PDF document.</p>
+        <span class="tool-tag">PDF</span>
+      </a>
+      <a class="tool" href="./tools/passport-photo.html">
+        <div class="tool-top"><div class="tool-icon">👤</div><h3>Passport Photo</h3></div>
+        <p>Create government standard passport-size photos with custom backgrounds.</p>
+        <span class="tool-tag">Photo</span>
+      </a>
+      <a class="tool" href="./tools/photo-sheet.html">
+        <div class="tool-top"><div class="tool-icon">🖨️</div><h3>Photo Sheet</h3></div>
+        <p>Create printable A4 sheets loaded with multiple photo copies.</p>
+        <span class="tool-tag">Photo</span>
+      </a>
+      <a class="tool" href="./tools/signature-maker.html">
+        <div class="tool-top"><div class="tool-icon">✍️</div><h3>Signature Maker</h3></div>
+        <p>Draw, smooth, and download transparent digital signatures instantly.</p>
+        <span class="tool-tag">Utility</span>
+      </a>
+      <a class="tool" href="./tools/background-remover.html">
+        <div class="tool-top"><div class="tool-icon">🪄</div><h3>Background Remover</h3></div>
+        <p>Remove photo background cleanly and choose customized solid colours.</p>
+        <span class="tool-tag">Photo</span>
+      </a>
     </div>
   </div>
-</div>
+</section>
+
+<!-- How Tools Work Section (Linked to Learn More) -->
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="section-title">
+      <h2>How Our Tools Work</h2>
+      <p>Instant processing directly in your browser without waiting for server queues.</p>
+    </div>
+    <div class="workflow-grid">
+      <div class="flow-card">
+        <div class="flow-header">
+          <div class="flow-num">1</div>
+          <h3>Image Processing Tools</h3>
+        </div>
+        <p>Tools like Photo Cropper, Resizer, and Compressor read your images through your browser’s HTML5 Canvas. Adjustments and quality compression run on your device's memory, giving immediate downloads without uploading a single pixel.</p>
+      </div>
+      <div class="flow-card">
+        <div class="flow-header">
+          <div class="flow-num">2</div>
+          <h3>PDF Tools (Merge & Split)</h3>
+        </div>
+        <p>Built using client-side WebAssembly and <code>pdf-lib</code>, our PDF tools parse document structures, rearrange pages, and compile new files in your device RAM. Your private certificates and identity proofs stay strictly offline.</p>
+      </div>
+      <div class="flow-card">
+        <div class="flow-header">
+          <div class="flow-num">3</div>
+          <h3>Form Utilities</h3>
+        </div>
+        <p>The Signature Maker, Passport Photo generator, and Photo Sheet tool apply predefined government standard ratios locally. Once you preview and tap download, files are saved directly into your device storage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section (Linked to top About & footer About Us) -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about">
+      <!-- 100% Client-side Local Privacy Banner -->
+      <div class="privacy-banner">
+        <div class="privacy-badge">🛡️</div>
+        <div class="privacy-text">
+          <h3>Zero Server Uploads · 100% Private Local Processing</h3>
+          <p>Unlike other converters, FormReady India does not upload your Aadhaar, PAN, certificates, or personal photos to external servers or databases. All file processing, cropping, and PDF manipulation happens <b>locally inside your phone/computer browser</b>. Your personal data never leaves your device.</p>
+        </div>
+      </div>
+
+      <h2>About FormReady India</h2>
+      <p>FormReady India is designed to make everyday photo, document, and PDF preparation effortless for recruitment forms, admissions, and competitive exams. Engineered specifically with mobile users in mind, you can complete all document criteria on your smartphone smoothly.</p>
+      <div class="features">
+        <div class="feature"><b>📱 Mobile Friendly</b><span>Works comfortably on phones.</span></div>
+        <div class="feature"><b>⚡ Fast</b><span>Simple and lightweight tools.</span></div>
+        <div class="feature"><b>🔒 100% Private</b><span>Files processed locally on your phone.</span></div>
+        <div class="feature"><b>✨ Free to Use</b><span>No complex installations or logins.</span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <footer>
   <strong>FormReady India</strong>
   <br><br>
-  <a href="./about.html">About Us</a> |
+  <a href="#about">About Us</a> |
   <a href="./contact.html">Contact Us</a> |
   <a href="./privacy-policy.html">Privacy Policy</a> |
   <a href="./terms.html">Terms &amp; Conditions</a>
@@ -252,13 +283,15 @@ footer a:hover{color:var(--amber-bright);}
 <script>
 const search = document.getElementById("search");
 const tools = document.querySelectorAll(".tool");
-search.addEventListener("input", function(){
-  const value = this.value.toLowerCase().trim();
-  tools.forEach(tool => {
-    const text = tool.innerText.toLowerCase();
-    tool.style.display = text.includes(value) ? "block" : "none";
+if(search){
+  search.addEventListener("input", function(){
+    const query = this.value.toLowerCase().trim();
+    tools.forEach(tool => {
+      const text = tool.textContent.toLowerCase();
+      tool.style.display = text.includes(query) ? "flex" : "none";
+    });
   });
-});
+}
 </script>
 
 </body>
