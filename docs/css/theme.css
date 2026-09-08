@@ -264,3 +264,91 @@ html body button[id*="split" i] {
   color: #ffffff !important;
   border: none !important;
 }
+
+html body {
+  background: #12141c !important;
+  color: #e5e7eb !important;
+}
+
+html body header, html body .site-header {
+  background: #181b26 !important;
+  border-bottom: 1px solid #262a38 !important;
+}
+html body header .logo, html body .site-header .logo {
+  color: #f1f5f9 !important;
+}
+html body header a, html body .site-header a {
+  color: #9ca3af !important;
+}
+html body header a:hover, html body .site-header a:hover {
+  color: #60a5fa !important;
+}
+html body a.back {
+  color: #60a5fa !important;
+}
+
+html body > div:not(header):not(.site-header) {
+  background: #1a1d29 !important;
+  border: 1px solid #262a38 !important;
+  color: #e5e7eb !important;
+}
+
+html body h1, html body h2, html body h3 {
+  color: #f8fafc !important;
+}
+html body p, html body label, html body span {
+  color: #cbd5e1 !important;
+}
+
+html body label.upload,
+html body .upload-zone,
+html body .drop-area,
+html body [style*="dashed"] {
+  background: #1e2333 !important;
+  border: 1.5px dashed #3b82f6 !important;
+  color: #cbd5e1 !important;
+}
+
+html body input[type="text"],
+html body input[type="number"],
+html body select {
+  background: #1e2333 !important;
+  border: 1.5px solid #2f3547 !important;
+  color: #f1f5f9 !important;
+}
+
+html body input[type="file"] {
+  color: #cbd5e1 !important;
+}
+
+html body button.primary,
+html body button#applySize,
+html body button#compress,
+html body button#download,
+html body button[id*="crop" i],
+html body button[id*="convert" i],
+html body button[id*="merge" i],
+html body button[id*="split" i] {
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+html body button.secondary,
+html body button#reset {
+  background: #262a38 !important;
+  color: #e5e7eb !important;
+  border: 1px solid #3a3f52 !important;
+}
+
+html body button, html body input[type="submit"] {
+  background: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+html body input[type="range"] {
+  accent-color: #3b82f6 !important;
+}
+
+html body canvas {
+  background: #1e2333 !important;
+}
