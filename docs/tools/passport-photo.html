@@ -204,9 +204,16 @@ header.topbar a:hover{ color:var(--amber-bright); }
   font-size:13px;
 }
 
+.upload-btn-row{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
 .btn-choose{
   display:inline-block;
-  padding:11px 22px;
+  padding:11px 20px;
   border-radius:10px;
   background:linear-gradient(155deg,var(--amber-bright),var(--amber));
   color:#1a1410;
@@ -215,7 +222,19 @@ header.topbar a:hover{ color:var(--amber-bright); }
   cursor:pointer;
 }
 
-#photo{ display:none; }
+.btn-choose-alt{
+  display:inline-block;
+  padding:11px 20px;
+  border-radius:10px;
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--paper);
+  font-weight:600;
+  font-size:14.5px;
+  cursor:pointer;
+}
+
+#photo, #cameraInput{ display:none; }
 
 #work{ display:none; margin-top:6px; }
 
@@ -249,6 +268,15 @@ select:focus{
   outline:none;
   border-color:var(--amber);
 }
+
+.size-hint{
+  grid-column:1 / -1;
+  margin-top:2px;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.size-hint b{ color:var(--amber-bright); font-weight:600; }
 
 /* Preview */
 .preview{
@@ -380,7 +408,7 @@ footer.credit{
       <div class="steps-title">How this works</div>
       <div class="step-row">
         <div class="step-num">1</div>
-        <div>Choose a photo from your phone.</div>
+        <div>Take a new photo with your camera, or choose one from your gallery.</div>
       </div>
       <div class="step-row">
         <div class="step-num">2</div>
@@ -397,9 +425,15 @@ footer.credit{
         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
         <circle cx="12" cy="13" r="4"/>
       </svg>
-      <p class="upload-title">Choose Photo</p>
+      <p class="upload-title">Add Your Photo</p>
       <p class="upload-hint">JPG · PNG · WEBP</p>
-      <label class="btn-choose" for="photo">Browse Files</label>
+
+      <div class="upload-btn-row">
+        <label class="btn-choose" for="cameraInput">Take Photo</label>
+        <label class="btn-choose-alt" for="photo">Browse Files</label>
+      </div>
+
+      <input id="cameraInput" type="file" accept="image/*" capture="user">
       <input id="photo" type="file" accept="image/*">
     </div>
 
@@ -409,9 +443,9 @@ footer.credit{
         <div class="field">
           <label>Photo Size</label>
           <select id="size">
+            <option value="2x2" selected>2 × 2 inch (Recommended for Passport)</option>
             <option value="35x45">35 × 45 mm</option>
             <option value="25x35">25 × 35 mm</option>
-            <option value="2x2">2 × 2 inch</option>
             <option value="40x50">40 × 50 mm</option>
           </select>
         </div>
@@ -424,10 +458,14 @@ footer.credit{
             <option value="gray">Light Gray</option>
           </select>
         </div>
+
+        <div class="size-hint">
+          💡 <b>2 × 2 inch (51 × 51 mm)</b> with a white background is the standard size accepted for Indian passport applications.
+        </div>
       </div>
 
       <div class="preview">
-        <canvas id="canvas" width="413" height="531"></canvas>
+        <canvas id="canvas" width="600" height="600"></canvas>
         <div class="badge-auto" id="autoBadge" style="display:none">✓ Auto-cropped &amp; ready</div>
       </div>
 
@@ -455,6 +493,9 @@ footer.credit{
 
 const photo =
 document.getElementById("photo");
+
+const cameraInput =
+document.getElementById("cameraInput");
 
 const work =
 document.getElementById("work");
@@ -491,14 +532,9 @@ let imageLoaded =
 false;
 
 
-/* Select photo — fully automatic, draws + shows download instantly */
+/* Shared handler — works for both camera capture and gallery browse */
 
-photo.addEventListener(
-"change",
-function(){
-
-const file =
-this.files[0];
+function handleFileSelected(file){
 
 if(!file)
 return;
@@ -546,6 +582,29 @@ image.src =
 url;
 
 }
+
+
+/* Take Photo (camera) */
+
+cameraInput.addEventListener(
+"change",
+function(){
+
+handleFileSelected(this.files[0]);
+
+}
+);
+
+
+/* Browse Files (gallery) */
+
+photo.addEventListener(
+"change",
+function(){
+
+handleFileSelected(this.files[0]);
+
+}
 );
 
 
@@ -562,7 +621,7 @@ drawPhoto
 );
 
 
-/* Draw (auto crop + center, cover-fit) */
+/* Draw (auto crop + center, contain-fit so background shows) */
 
 function drawPhoto(){
 
@@ -573,10 +632,20 @@ return;
 /* Canvas dimensions */
 
 let width =
-413;
+600;
 
 let height =
+600;
+
+if(size.value==="35x45"){
+
+width =
+413;
+
+height =
 531;
+
+}
 
 if(size.value==="25x35"){
 
@@ -585,16 +654,6 @@ width =
 
 height =
 413;
-
-}
-
-if(size.value==="2x2"){
-
-width =
-600;
-
-height =
-600;
 
 }
 
@@ -639,7 +698,7 @@ height
 );
 
 
-/* Auto fit + center crop (cover mode) */
+/* Auto fit + center (contain mode, so background is visible) */
 
 const scale =
 Math.min(
@@ -716,6 +775,9 @@ resetBtn.addEventListener(
 function(){
 
 photo.value =
+"";
+
+cameraInput.value =
 "";
 
 imageLoaded =
