@@ -433,6 +433,48 @@ let originalFile = null;
 let cutoutImage = null;
 let currentColor = "transparent";
 
+function erodeAlpha(imageData, iterations){
+  const width = imageData.width;
+  const height = imageData.height;
+  const data = imageData.data;
+
+  let alpha = new Uint8ClampedArray(width * height);
+  for(let i = 0; i < width * height; i++){
+    alpha[i] = data[i * 4 + 3];
+  }
+
+  for(let it = 0; it < iterations; it++){
+    const next = new Uint8ClampedArray(width * height);
+
+    for(let y = 0; y < height; y++){
+      for(let x = 0; x < width; x++){
+        let minA = 255;
+
+        for(let dy = -1; dy <= 1; dy++){
+          for(let dx = -1; dx <= 1; dx++){
+            const nx = x + dx;
+            const ny = y + dy;
+
+            if(nx >= 0 && nx < width && ny >= 0 && ny < height){
+              const a = alpha[ny * width + nx];
+              if(a < minA) minA = a;
+            }
+          }
+        }
+
+        next[y * width + x] = minA;
+      }
+    }
+
+    alpha = next;
+  }
+
+  for(let i = 0; i < width * height; i++){
+    data[i * 4 + 3] = alpha[i];
+  }
+}
+
+
 photoInput.addEventListener("change", function(){
   const file = this.files[0];
   if(!file) return;
@@ -460,7 +502,19 @@ removeBtn.addEventListener("click", async function(){
     const img = new Image();
 
     img.onload = function(){
-      cutoutImage = img;
+      statusText.textContent = "Cleaning up edges…";
+
+      const off = document.createElement("canvas");
+      off.width = img.width;
+      off.height = img.height;
+      const octx = off.getContext("2d");
+      octx.drawImage(img, 0, 0);
+
+      const imgData = octx.getImageData(0, 0, off.width, off.height);
+      erodeAlpha(imgData, 2);
+      octx.putImageData(imgData, 0, 0);
+
+      cutoutImage = off;
       drawResult();
       placeholderText.style.display = "none";
       resultCanvas.style.display = "block";
