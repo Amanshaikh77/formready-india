@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Document Scanner - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar { max-width: 600px; margin: 0 auto 20px; width: 100%; }
+.back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
+.header p { font-size: 13px; color: var(--muted); }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto 24px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.upload-zone {
+  border: 2px dashed var(--line);
+  padding: 24px 16px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--panel-2);
+  transition: border-color 0.2s;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+}
+.upload-zone:hover { border-color: var(--amber); }
+#fileInput { display: none; }
+.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.upload-text b { color: var(--amber); }
+
+.preview-container { display: none; text-align: center; margin-bottom: 20px; }
+.preview-img { max-width: 100%; max-height: 250px; border-radius: 8px; border: 1px solid var(--line); object-fit: contain; }
+
+.options-group { margin-bottom: 16px; }
+.options-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+.filter-select {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.btn {
+  background: var(--amber);
+  color: #151210;
+  border: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn:hover { background: var(--amber-bright); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-download { background: #2ea043; color: #fff; margin-top: 12px; display: none; }
+.btn-download:hover { background: #3fb950; }
+
+footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: auto; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="../../" class="back-btn">← Back to Dashboard</a>
+</div>
+
+<div class="header">
+  <h1>Document Scanner</h1>
+  <p>Apply clean high-contrast black &amp; white filters to documents and ID proofs</p>
+</div>
+
+<div class="card">
+  <label for="fileInput" class="upload-zone" id="dropZone">
+    <div class="upload-text">📁 Tap to upload document photo<br><b>Camera capture or image file</b></div>
+  </label>
+  <input type="file" id="fileInput" accept="image/*">
+
+  <div class="preview-container" id="previewContainer">
+    <img id="imagePreview" class="preview-img" alt="Scanned Preview">
+  </div>
+
+  <div class="options-group">
+    <label>Scanner Filter Mode:</label>
+    <select id="filterMode" class="filter-select">
+      <option value="magic">Magic Color / Enhanced</option>
+      <option value="bw">Black &amp; White (B&amp;W Doc)</option>
+      <option value="grayscale">Grayscale Document</option>
+    </select>
+  </div>
+
+  <button class="btn" id="processBtn" disabled>Process Document</button>
+  <a id="downloadLink" style="text-decoration:none;"><button class="btn btn-download" id="downloadBtn">📥 Download Scanned Document</button></a>
+</div>
+
+<footer>
+  &copy; 2026 FormReady India. 100% Secure Client-Side Processing.
+</footer>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const previewContainer = document.getElementById("previewContainer");
+const imagePreview = document.getElementById("imagePreview");
+const filterMode = document.getElementById("filterMode");
+const processBtn = document.getElementById("processBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const downloadLink = document.getElementById("downloadLink");
+
+let loadedImage = null;
+let originalName = "";
+
+fileInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  originalName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+  const reader = new FileReader();
+  
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      loadedImage = img;
+      imagePreview.src = event.target.result;
+      previewContainer.style.display = "block";
+      processBtn.disabled = false;
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+processBtn.addEventListener("click", () => {
+  if (!loadedImage) return;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = loadedImage.width;
+  canvas.height = loadedImage.height;
+  const ctx = canvas.getContext("2d");
+
+  ctx.drawImage(loadedImage, 0, 0);
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imgData.data;
+  const mode = filterMode.value;
+
+  for (let i = 0; i < data.length; i += 4) {
+    let r = data[i];
+    let g = data[i+1];
+    let b = data[i+2];
+    let avg = (r + g + b) / 3;
+
+    if (mode === "bw") {
+      // High contrast thresholding for crisp B&W text
+      let val = avg > 130 ? 255 : 0;
+      data[i] = val;
+      data[i+1] = val;
+      data[i+2] = val;
+    } else if (mode === "grayscale") {
+      data[i] = avg;
+      data[i+1] = avg;
+      data[i+2] = avg;
+    } else if (mode === "magic") {
+      // Boost contrast and brightness for magic scan effect
+      let enhanced = avg < 100 ? avg * 0.8 : (avg > 200 ? 255 : avg * 1.2);
+      data[i] = Math.min(255, enhanced);
+      data[i+1] = Math.min(255, enhanced);
+      data[i+2] = Math.min(255, enhanced);
+    }
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+
+  canvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = `${originalName}-scanned.jpg`;
+    downloadBtn.style.display = "block";
+  }, "image/jpeg", 0.95);
+});
+</script>
+</body>
+</html>
