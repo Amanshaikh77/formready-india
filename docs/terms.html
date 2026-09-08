@@ -12,17 +12,17 @@
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#f4f6f9;
-  color:#172033;
+  background:var(--bg);
+  color:var(--text);
   line-height:1.7;
 }
 header{
-  background:#fff;
-  border-bottom:1px solid #ddd;
+  background:var(--bg-deep);
+  border-bottom:1px solid var(--line);
   padding:16px 20px;
 }
 header a{
-  color:#2563eb;
+  color:var(--amber-bright);
   text-decoration:none;
   font-weight:bold;
 }
@@ -32,18 +32,19 @@ header a{
   padding:20px;
 }
 .card{
-  background:#fff;
+  background:var(--panel);
+  border:1px solid var(--line);
   padding:30px;
   border-radius:16px;
-  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  box-shadow:0 4px 20px rgba(0,0,0,.35);
 }
-h1{margin-top:0}
-h2{margin-top:28px}
-p{color:#475467}
+h1{margin-top:0;color:var(--text)}
+h2{margin-top:28px;color:var(--text)}
+p{color:var(--muted)}
 footer{
   text-align:center;
   padding:25px;
-  color:#667085;
+  color:var(--muted);
 }
 </style>
 </head>
