@@ -2,100 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:#f5f7fb;
-  color:#172033;
-  font-family:Arial,Helvetica,sans-serif
-}
-.container{
-  max-width:720px;
-  margin:auto;
-  padding:14px
-}
-h1{
-  text-align:center;
-  font-size:28px;
-  margin:8px 0 5px
-}
-.subtitle{
-  text-align:center;
-  color:#707887;
-  margin-bottom:18px
-}
-.card{
-  background:#fff;
-  border-radius:20px;
-  padding:17px;
-  margin-bottom:15px;
-  box-shadow:0 4px 18px rgba(0,0,0,.06)
-}
-.section-title{
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:12px
-}
-canvas{
-  width:100%;
-  height:240px;
-  display:block;
-  background:#fff;
-  border:2px dashed #6685d9;
-  border-radius:14px;
-  touch-action:none
-}
-.controls{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:12px
-}
-button{
-  width:100%;
-  height:48px;
-  border:0;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer
-}
-#clear{
-  background:#e8ebf1;
-  color:#172033
-}
-#download{
-  background:#2867df;
-  color:#fff
-}
-input[type=color]{
-  width:100%;
-  height:48px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:4px
-}
-input[type=range]{
-  width:100%
-}
-label{
-  display:block;
-  font-weight:bold;
-  margin-top:12px;
-  margin-bottom:7px
-}
-.note{
-  text-align:center;
-  color:#707887;
-  font-size:13px;
-  line-height:1.5;
-  margin-top:12px
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Signature Maker Online Free</title>
 
 <meta name="description" content="Create a digital signature online for free. Make and download your signature easily on mobile.">
@@ -118,51 +25,317 @@ label{
 </script>
 
 <script src="../token-system.js"></script>
-<link rel="stylesheet" href="css/theme.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#151210;
+    --panel:#1e1a17;
+    --panel-2:#262019;
+    --line:#39322b;
+    --amber:#d99a3f;
+    --amber-bright:#f0b158;
+    --amber-dim:#8a6329;
+    --teal:#5fada0;
+    --paper:#f2ece2;
+    --muted:#a89a89;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'Inter',Arial,sans-serif;
+  }
+
+  h1,.section-title,.brand{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+  }
+
+  /* TOPBAR */
+
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 18px;
+    background:rgba(21,18,16,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+
+  .brand{
+    font-size:18px;
+    color:var(--paper);
+  }
+
+  .brand span{color:var(--amber-bright);}
+
+  .topbar a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+  }
+
+  .topbar a:hover{color:var(--amber-bright);}
+
+  .breadcrumb{
+    display:block;
+    padding:12px 18px 0;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:13px;
+  }
+
+  .breadcrumb:hover{color:var(--amber-bright);}
+
+  .container{
+    width:100%;
+    max-width:600px;
+    margin:auto;
+    padding:16px;
+  }
+
+  h1{
+    text-align:center;
+    font-size:26px;
+    margin:14px 0 4px;
+    color:var(--paper);
+  }
+
+  .subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:12px;
+    font-size:15px;
+  }
+
+  .icon-badge{
+    width:46px;
+    height:46px;
+    margin:0 auto 10px;
+    border-radius:14px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .icon-badge svg{
+    width:24px;
+    height:24px;
+    stroke:#1a1410;
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .mobile-tag{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin:0 auto 20px;
+    color:var(--teal);
+    font-size:12.5px;
+    font-weight:600;
+  }
+
+  .mobile-tag svg{
+    width:14px;
+    height:14px;
+    stroke:var(--teal);
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+  }
+
+  .section-title{
+    font-size:16px;
+    color:var(--paper);
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  canvas{
+    width:100%;
+    height:420px;
+    display:block;
+    background:#fff;
+    border:2px dashed var(--amber-dim);
+    border-radius:14px;
+    touch-action:none;
+  }
+
+  .controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:14px;
+  }
+
+  button{
+    width:100%;
+    height:50px;
+    border:0;
+    border-radius:12px;
+    font-size:15.5px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;
+    transition:opacity .15s ease;
+  }
+
+  button:active{opacity:.85;}
+
+  .btn-secondary{
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--paper);
+  }
+
+  .btn-secondary:hover{border-color:var(--amber-dim);}
+
+  .btn-primary{
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;
+  }
+
+  label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--muted);
+    margin-top:16px;
+    margin-bottom:8px;
+  }
+
+  input[type=color]{
+    width:100%;
+    height:46px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:4px;
+    background:var(--panel-2);
+    cursor:pointer;
+  }
+
+  input[type=range]{
+    width:100%;
+    accent-color:var(--amber);
+  }
+
+  .hint{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+    margin-top:14px;
+  }
+
+  .ad-slot{
+    max-width:600px;
+    margin:0 auto 20px;
+    padding:0 16px;
+  }
+
+  .ad-box{
+    min-height:100px;
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  footer.credit{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    padding:10px 16px 30px;
+  }
+
+  @media(max-width:500px){
+    h1{font-size:22px;}
+    .card{padding:15px;border-radius:16px;}
+    canvas{height:380px;}
+  }
+</style>
 </head>
 
 <body>
-<header>
-<div class="logo">FormReady <span>India</span></div>
-<a href="/formready-india/index.html#tools">Home</a>
+
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
 </header>
-<a class="back" href="/formready-india/index.html#tools"> Back to Tools</a>
+
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
 
 <div class="container">
 
-<h1>✍️ Signature Maker</h1>
+  <div class="icon-badge">
+    <svg viewBox="0 0 24 24"><path d="M3 21l3.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L2 20"/><path d="M14.5 6.5l3 3"/></svg>
+  </div>
 
-<div class="subtitle">
-Create and download your digital signature
+  <h1>Signature Maker</h1>
+  <div class="subtitle">Draw and download your digital signature</div>
+
+  <div class="mobile-tag">
+    <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+    Best on mobile — use your finger to sign, not built for desktop/mouse
+  </div>
+
+  <div class="card">
+    <div class="section-title">✍️ Draw Your Signature</div>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="controls">
+      <button id="clear" class="btn-secondary">↻ Clear</button>
+      <button id="download" class="btn-primary">⬇️ Download</button>
+    </div>
+
+    <label for="color">🖊️ Pen Color</label>
+    <input type="color" id="color" value="#f2ece2">
+
+    <label for="size">📏 Pen Size</label>
+    <input type="range" id="size" min="1" max="10" value="3">
+
+    <div class="hint">Sign with your finger in the box above — take your time, there's plenty of room. Your signature stays on your device and is never uploaded anywhere.</div>
+  </div>
+
 </div>
 
-<div class="card">
-
-<div class="section-title">
-✍️ Draw Your Signature
+<div class="ad-slot">
+  <div class="ad-box">Advertisement</div>
 </div>
 
-<canvas id="canvas"></canvas>
-
-<div class="controls">
-<button id="clear">↻ Clear</button>
-<button id="download">⬇️ Download</button>
-</div>
-
-<label for="color">🖊️ Pen Color</label>
-<input type="color" id="color" value="#172033">
-
-<label for="size">📏 Pen Size</label>
-<input type="range" id="size" min="1" max="10" value="3">
-
-<div class="note">
-Draw your signature with your finger on the box above.
-Your signature stays on your device.
-</div>
-
-</div>
-
-</div>
+<footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
 
 <script>
 const canvas=document.getElementById("canvas");
@@ -185,7 +358,7 @@ function resizeCanvas(){
   }
 
   canvas.width=rect.width;
-  canvas.height=240;
+  canvas.height=rect.height;
 
   ctx.lineCap="round";
   ctx.lineJoin="round";
@@ -277,7 +450,6 @@ downloadBtn.addEventListener("click",function(){
 });
 
 </script>
-
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
