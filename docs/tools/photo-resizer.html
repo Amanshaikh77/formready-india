@@ -1,41 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="../css/theme.css?v=2">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#111827}
-header{background:#111827;color:#fff;padding:16px 6%;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:22px;font-weight:800}.logo span{color:#60a5fa}
-header a{color:#fff;text-decoration:none}
-.container{max-width:850px;margin:auto;padding:25px 15px}
-.back{color:#2563eb;text-decoration:none;font-weight:600}
-.card{background:#fff;margin-top:18px;padding:25px;border-radius:22px;box-shadow:0 10px 35px #0000000d}
-h1{text-align:center;margin:5px 0}
-.sub{text-align:center;color:#6b7280}
-.upload{margin-top:25px;border:2px dashed #93c5fd;background:#eff6ff;border-radius:18px;padding:35px;text-align:center}
-.upload input{display:none}
-.choose{display:inline-block;background:#2563eb;color:#fff;padding:14px 24px;border-radius:12px;font-weight:700;cursor:pointer}
-#work{display:none;margin-top:25px}
-.preview{background:#111827;border-radius:15px;padding:10px;text-align:center}
-#preview{max-width:100%;max-height:400px;border-radius:10px}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
-label{font-size:13px;font-weight:700}
-input[type=number],select{width:100%;padding:12px;margin-top:6px;border:1px solid #d1d5db;border-radius:10px;font-size:15px}
-.lock{margin-top:14px;display:flex;align-items:center;gap:8px;color:#475569;font-size:14px}
-.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.presets button,.actions button{border:0;padding:10px 13px;border-radius:10px;font-weight:700;cursor:pointer}
-.presets button{background:#e5e7eb}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.primary{background:#2563eb;color:white}.success{background:#16a34a;color:white}.reset{background:#e5e7eb}
-.info{margin-top:15px;background:#f1f5f9;padding:12px;border-radius:10px;color:#475569;font-size:13px;text-align:center}
-@media(max-width:600px){.controls{grid-template-columns:1fr}.card{padding:18px}}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Photo Resizer Online Free</title>
-
 <meta name="description" content="Resize photos and images online for free. Change image dimensions quickly with this simple photo resizer.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/photo-resizer.html">
@@ -54,75 +22,231 @@ input[type=number],select{width:100%;padding:12px;margin-top:6px;border:1px soli
   "operatingSystem": "Any"
 }
 </script>
-
-<script src="../token-system.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#151210;
+    --panel:#1e1a17;
+    --panel-2:#262019;
+    --line:#39322b;
+    --amber:#d99a3f;
+    --amber-bright:#f0b158;
+    --amber-dim:#8a6329;
+    --teal:#5fada0;
+    --paper:#f2ece2;
+    --muted:#a89a89;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(217,154,63,0.08), transparent),
+      var(--bg);
+    color:var(--paper);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    padding:0 0 70px;
+    min-height:100vh;
+  }
+  header.topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 18px;border-bottom:1px solid var(--line);
+    background:rgba(20,17,15,0.7);
+    backdrop-filter:blur(6px);
+    position:sticky;top:0;z-index:5;
+  }
+  .brand{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:16px;letter-spacing:0.01em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .brand-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);}
+  .home-link{color:var(--muted);font-size:13.5px;text-decoration:none;}
+  .home-link:hover{color:var(--paper);}
+  .crumb{max-width:600px;margin:16px auto 0;padding:0 18px;}
+  .crumb a{color:var(--amber);font-size:13.5px;text-decoration:none;font-weight:500;}
+  .crumb a:hover{color:var(--amber-bright);}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    max-width:600px;
+    margin:18px auto 0;
+    padding:30px 26px 26px;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.6);
+  }
+  .head{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+  .icon-badge{
+    width:46px;height:46px;flex:0 0 auto;border-radius:12px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber-dim));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 16px -4px rgba(217,154,63,0.5);
+  }
+  .icon-badge svg{width:24px;height:24px;}
+  .head-text h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:20px;font-weight:600;margin:0 0 3px;letter-spacing:0.01em;
+  }
+  .head-text p{margin:0;color:var(--muted);font-size:13.5px;}
+  .choose-box{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    border:1.5px dashed var(--amber-dim);
+    border-radius:12px;
+    background:rgba(217,154,63,0.05);
+    padding:26px 18px;
+    cursor:pointer;
+    margin-bottom:6px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .choose-box:hover{border-color:var(--amber);background:rgba(217,154,63,0.09);}
+  .choose-box input{display:none;}
+  .choose-btn{
+    display:flex;align-items:center;gap:8px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;font-weight:700;font-size:14.5px;
+    padding:12px 20px;border-radius:10px;
+  }
+  .choose-btn svg{width:17px;height:17px;}
+  .filetypes{color:var(--muted);font-size:12.5px;margin-top:6px;}
+  #work{display:none;margin-top:22px;}
+  .preview-wrap{
+    background:#0a0908;border:1px solid var(--line);border-radius:12px;
+    padding:10px;text-align:center;margin-bottom:20px;
+  }
+  #preview{max-width:100%;max-height:360px;border-radius:8px;}
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+  .field label{
+    display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:6px;
+  }
+  input[type=number]{
+    width:100%;background:var(--panel-2);border:1.5px solid var(--line);
+    color:var(--paper);padding:11px 12px;border-radius:8px;font-size:15px;
+  }
+  input[type=number]:focus{outline:none;border-color:var(--amber);}
+  .lock{
+    display:flex;align-items:center;gap:8px;color:var(--muted);
+    font-size:13.5px;margin-bottom:16px;
+  }
+  .lock input{accent-color:var(--amber);width:15px;height:15px;}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  .presets button{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--paper);
+    padding:9px 13px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;
+  }
+  .presets button:hover{border-color:var(--amber-dim);}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .btn{
+    flex:1;min-width:100px;border:none;border-radius:10px;padding:13px;
+    font-size:14.5px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;
+    transition:transform .08s ease, filter .15s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:linear-gradient(155deg,var(--amber-bright),var(--amber));color:#1a1410;}
+  .btn-primary:hover{filter:brightness(1.06);}
+  .btn-secondary{background:transparent;border:1px solid var(--line);color:var(--paper);}
+  .btn-secondary:hover{border-color:var(--muted);}
+  .info{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+    padding:11px;color:var(--muted);font-size:12.5px;text-align:center;
+  }
+  .hint{text-align:center;color:var(--muted);font-size:12px;margin-top:14px;line-height:1.5;}
+  .ad-slot{
+    max-width:600px;margin:22px auto 0;padding:0 18px;
+  }
+  .ad-box{
+    border:1px dashed var(--line);
+    border-radius:12px;
+    min-height:100px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);
+    font-size:12px;
+    letter-spacing:0.04em;
+    background:rgba(255,255,255,0.015);
+  }
+  .credit{text-align:center;color:var(--muted);font-size:11.5px;margin-top:22px;opacity:0.7;}
+  .credit span{color:var(--teal);}
+  @media(max-width:480px){.controls{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
-<header>
-<div class="logo">FormReady <span>India</span></div>
-<a href="../index.html#tools">Home</a>
+<header class="topbar">
+  <div class="brand"><span class="brand-dot"></span>FormReady India</div>
+  <a class="home-link" href="../index.html#tools">Home</a>
 </header>
 
-<div class="container">
-<a class="back" href="/formready-india/index.html#tools"> Back to Tools</a>
+<div class="crumb"><a href="/formready-india/index.html#tools">‹ Back to Tools</a></div>
 
 <div class="card">
-<h1>📐 Photo Resizer</h1>
-<p class="sub">Resize your photo to any size without complicated software.</p>
+  <div class="head">
+    <div class="icon-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1a1410" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="21 3 21 9 15 9"/>
+        <polyline points="3 21 3 15 9 15"/>
+        <line x1="21" y1="3" x2="13" y2="11"/>
+        <line x1="3" y1="21" x2="11" y2="13"/>
+      </svg>
+    </div>
+    <div class="head-text">
+      <h1>Photo Resizer</h1>
+      <p>Resize your photo to any size without complicated software</p>
+    </div>
+  </div>
 
-<div class="upload">
-<label class="choose" for="file">📷 Choose Photo</label>
-<input id="file" type="file" accept="image/*">
-<p>JPG • PNG • WEBP</p>
+  <label class="choose-box" for="file">
+    <span class="choose-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Choose Photo
+    </span>
+    <input id="file" type="file" accept="image/*">
+    <div class="filetypes">JPG · PNG · WEBP</div>
+  </label>
+
+  <div id="work">
+    <div class="preview-wrap"><img id="preview"></div>
+
+    <div class="controls">
+      <div class="field">
+        <label>Width (px)</label>
+        <input id="width" type="number" min="1">
+      </div>
+      <div class="field">
+        <label>Height (px)</label>
+        <input id="height" type="number" min="1">
+      </div>
+    </div>
+
+    <label class="lock">
+      <input id="lock" type="checkbox" checked>
+      Keep aspect ratio
+    </label>
+
+    <div class="presets">
+      <button data-w="100" data-h="100">100×100</button>
+      <button data-w="300" data-h="300">300×300</button>
+      <button data-w="600" data-h="600">600×600</button>
+      <button data-w="1080" data-h="1080">1080×1080</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" id="resize">Resize</button>
+      <button class="btn btn-primary" id="download">Download</button>
+      <button class="btn btn-secondary" id="reset">Reset</button>
+    </div>
+
+    <div class="info" id="info"></div>
+    <canvas id="canvas" style="display:none"></canvas>
+  </div>
+
+  <div class="hint">Choose a photo, set the size you need, then resize and download.</div>
 </div>
 
-<div id="work">
+<div class="ad-slot"><div class="ad-box">Advertisement</div></div>
 
-<div class="preview">
-<img id="preview">
-</div>
+<div class="credit">Built with <span>Termux</span> · hosted on <span>GitHub Pages</span></div>
 
-<div class="controls">
-
-<div>
-<label>Width (px)</label>
-<input id="width" type="number" min="1">
-</div>
-
-<div>
-<label>Height (px)</label>
-<input id="height" type="number" min="1">
-</div>
-
-</div>
-
-<label class="lock">
-<input id="lock" type="checkbox" checked>
-🔒 Keep aspect ratio
-</label>
-
-<div class="presets">
-<button data-w="100" data-h="100">100×100</button>
-<button data-w="300" data-h="300">300×300</button>
-<button data-w="600" data-h="600">600×600</button>
-<button data-w="1080" data-h="1080">1080×1080</button>
-</div>
-
-<div class="actions">
-<button class="primary" id="resize">Resize</button>
-<button class="success" id="download">⬇️ Download</button>
-<button class="reset" id="reset">Reset</button>
-</div>
-
-<div class="info" id="info"></div>
-
-<canvas id="canvas" style="display:none"></canvas>
-
-</div>
-</div>
-</div>
-
+<script src="../token-system.js"></script>
 <script>
 const file=document.getElementById("file");
 const preview=document.getElementById("preview");
@@ -141,22 +265,16 @@ let ready=false;
 file.addEventListener("change",function(){
 const f=this.files[0];
 if(!f)return;
-
 const url=URL.createObjectURL(f);
-
 img.onload=function(){
 ready=true;
 ratio=img.width/img.height;
-
 width.value=img.width;
 height.value=img.height;
-
 preview.src=url;
 work.style.display="block";
-
 info.textContent="Original: "+img.width+" × "+img.height+" px";
 };
-
 img.src=url;
 });
 
@@ -181,32 +299,25 @@ height.value=btn.dataset.h;
 
 document.getElementById("resize").onclick=function(){
 if(!ready)return;
-
 const w=parseInt(width.value);
 const h=parseInt(height.value);
-
 if(!w||!h||w<1||h<1){
 alert("Please enter valid dimensions.");
 return;
 }
-
 canvas.width=w;
 canvas.height=h;
-
 ctx.clearRect(0,0,w,h);
 ctx.drawImage(img,0,0,w,h);
-
 preview.src=canvas.toDataURL("image/png");
 info.textContent="New size: "+w+" × "+h+" px";
 };
 
 document.getElementById("download").onclick=function(){
 if(!ready)return;
-
 if(canvas.width===0){
 document.getElementById("resize").click();
 }
-
 const link=document.createElement("a");
 link.download="formready-resized-photo.png";
 link.href=canvas.toDataURL("image/png");
@@ -215,7 +326,6 @@ link.click();
 
 document.getElementById("reset").onclick=function(){
 if(!ready)return;
-
 width.value=img.width;
 height.value=img.height;
 preview.src=img.src;
@@ -223,18 +333,15 @@ info.textContent="Original: "+img.width+" × "+img.height+" px";
 };
 </script>
 
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const rewardKey = "formready_reward_photo-resizer_" + new Date().toISOString().slice(0,10);
-
   function rewardUser() {
     if (localStorage.getItem(rewardKey)) return;
     if (window.FormReadyTokens) {
       window.FormReadyTokens.addTokens("photo-resizer");
     }
   }
-
   document.querySelectorAll(
     '#download, #downloadBtn, #downloadButton, button[id*="download" i], a[id*="download" i]'
   ).forEach(function(btn) {
@@ -242,7 +349,6 @@ document.addEventListener("DOMContentLoaded", function() {
       setTimeout(rewardUser, 1000);
     });
   });
-
   const originalAlert = window.alert;
   window.alert = function(msg) {
     if (msg && /download|success|created|converted|compressed|generated|saved/i.test(String(msg))) {
