@@ -398,6 +398,14 @@
       </label>
     </div>
 
+    <div class="swatch-label">Choose photo shape</div>
+    <select id="aspectSelect">
+      <option value="3:4" selected>3:4 (Portrait)</option>
+      <option value="1:1">1:1 (Square)</option>
+      <option value="4:5">4:5 (Instagram)</option>
+      <option value="original">Original (no crop)</option>
+    </select>
+
     <button id="download" class="btn-primary" disabled>⬇️ Download PNG</button>
     <button id="reset" class="btn-secondary">↻ Reset</button>
 
@@ -428,6 +436,7 @@ const downloadBtn = document.getElementById("download");
 const resetBtn = document.getElementById("reset");
 const swatches = document.querySelectorAll(".swatch");
 const customColor = document.getElementById("customColor");
+const aspectSelect = document.getElementById("aspectSelect");
 
 let originalFile = null;
 let cutoutImage = null;
@@ -531,14 +540,29 @@ removeBtn.addEventListener("click", async function(){
   }
 });
 
+function getAspectRatio(){
+  const v = aspectSelect.value;
+  if(v === "1:1") return 1;
+  if(v === "4:5") return 5/4;
+  if(v === "original") return null;
+  return 4/3;
+}
+
 function drawResult(){
   if(!cutoutImage) return;
 
   const srcW = cutoutImage.width;
   const srcH = cutoutImage.height;
 
-  const targetH = Math.round(srcW * 4 / 3);
-  const outH = Math.min(srcH, targetH);
+  const ratio = getAspectRatio();
+  let outH;
+
+  if(ratio === null){
+    outH = srcH;
+  } else {
+    const targetH = Math.round(srcW * ratio);
+    outH = Math.min(srcH, targetH);
+  }
 
   resultCanvas.width = srcW;
   resultCanvas.height = outH;
@@ -570,6 +594,10 @@ customColor.addEventListener("input", function(){
   drawResult();
 });
 
+aspectSelect.addEventListener("change", function(){
+  if(cutoutImage) drawResult();
+});
+
 downloadBtn.addEventListener("click", function(){
   if(!cutoutImage) return;
 
@@ -594,6 +622,7 @@ resetBtn.addEventListener("click", function(){
   document.querySelector('[data-color="transparent"]').classList.add("active");
   currentColor = "transparent";
   previewStage.classList.add("checker");
+  aspectSelect.value = "3:4";
 });
 </script>
 
