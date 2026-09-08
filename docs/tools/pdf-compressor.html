@@ -1,157 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="../css/theme.css?v=2">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-
-<style>
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  background:#f5f7fb;
-  color:#172033;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
-.container{
-  max-width:720px;
-  margin:auto;
-  padding:14px;
-}
-
-h1{
-  text-align:center;
-  font-size:28px;
-  margin:8px 0 5px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#707887;
-  margin-bottom:18px;
-}
-
-.card{
-  background:#fff;
-  border-radius:20px;
-  padding:17px;
-  margin-bottom:15px;
-  box-shadow:0 4px 18px rgba(0,0,0,.06);
-}
-
-.upload{
-  display:block;
-  text-align:center;
-  border:2px dashed #6685d9;
-  border-radius:15px;
-  padding:20px;
-  font-size:19px;
-  font-weight:bold;
-  color:#315fc7;
-  cursor:pointer;
-}
-
-.upload input{
-  display:none;
-}
-
-.section-title{
-  font-size:19px;
-  font-weight:700;
-  margin-bottom:14px;
-}
-
-select{
-  width:100%;
-  height:48px;
-  padding:0 13px;
-  border:1.8px solid #d9dee8;
-  border-radius:11px;
-  font-size:16px;
-  background:#fff;
-  color:#172033;
-}
-
-.file-info{
-  margin-top:12px;
-  padding:12px;
-  background:#f1f4f9;
-  border-radius:12px;
-  font-size:15px;
-  text-align:center;
-  color:#5f6878;
-}
-
-.result{
-  display:none;
-  text-align:center;
-}
-
-.result-box{
-  background:#f1f4f9;
-  border-radius:14px;
-  padding:15px;
-  margin-top:10px;
-}
-
-.size{
-  font-size:20px;
-  font-weight:bold;
-}
-
-.small{
-  color:#707887;
-  font-size:14px;
-  margin-top:5px;
-}
-
-button{
-  width:100%;
-  height:50px;
-  border:0;
-  border-radius:13px;
-  font-size:17px;
-  font-weight:bold;
-  margin-top:9px;
-  cursor:pointer;
-}
-
-#compress{
-  background:#2867df;
-  color:#fff;
-}
-
-#download{
-  background:#172033;
-  color:#fff;
-  display:none;
-}
-
-#reset{
-  background:#e8ebf1;
-  color:#172033;
-}
-
-button:disabled{
-  opacity:.5;
-}
-
-.note{
-  text-align:center;
-  color:#707887;
-  font-size:13px;
-  line-height:1.5;
-  margin-top:12px;
-}
-</style>
 <title>PDF Compressor Online Free</title>
-
 <meta name="description" content="Compress PDF files online for free and reduce PDF file size while keeping documents easy to use and share.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/pdf-compressor.html">
@@ -172,119 +29,437 @@ button:disabled{
 </script>
 
 <script src="../token-system.js"></script>
+
+<style>
+:root{
+  --bg:#151210;
+  --panel:#1e1a17;
+  --panel-2:#262019;
+  --line:#39322b;
+  --amber:#d99a3f;
+  --amber-bright:#f0b158;
+  --amber-dim:#8a6329;
+  --teal:#5fada0;
+  --paper:#f2ece2;
+  --muted:#a89a89;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--paper);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+}
+
+h1,h2,h3,.brand,.upload-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:600;
+}
+
+/* Topbar */
+header.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  background:rgba(21,18,16,.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+
+.brand{
+  font-size:19px;
+  color:var(--paper);
+}
+.brand span{ color:var(--amber); }
+
+header.topbar a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+}
+header.topbar a:hover{ color:var(--amber-bright); }
+
+.breadcrumb{
+  display:block;
+  width:min(600px,92%);
+  margin:16px auto 0;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+}
+.breadcrumb:hover{ color:var(--amber-bright); }
+
+/* Container */
+.container{
+  width:min(600px,92%);
+  margin:16px auto 40px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:26px 22px;
+  margin-bottom:16px;
+}
+
+.icon-badge{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:14px;
+}
+
+.card-head h1{
+  margin:0 0 6px;
+  font-size:24px;
+  color:var(--paper);
+}
+
+.card-head p{
+  margin:0 0 4px;
+  color:var(--muted);
+  font-size:14.5px;
+}
+
+/* How it works */
+.steps{
+  margin-top:18px;
+  padding:14px 16px;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+
+.steps-title{
+  font-size:13px;
+  font-weight:600;
+  color:var(--amber-bright);
+  margin-bottom:8px;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+
+.step-row{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-bottom:8px;
+  font-size:13.5px;
+  color:var(--paper);
+}
+.step-row:last-child{ margin-bottom:0; }
+
+.step-num{
+  flex-shrink:0;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:var(--amber-dim);
+  color:var(--paper);
+  font-size:11.5px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Upload box */
+.upload-box{
+  margin-top:18px;
+  border:2px dashed var(--line);
+  border-radius:14px;
+  padding:26px 16px;
+  text-align:center;
+  background:var(--panel-2);
+}
+
+.upload-box svg{
+  width:30px;
+  height:30px;
+  margin-bottom:8px;
+}
+
+.upload-title{
+  margin:0 0 4px;
+  font-size:16px;
+  color:var(--paper);
+}
+
+.upload-hint{
+  margin:0 0 16px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.btn-choose{
+  display:inline-block;
+  padding:11px 22px;
+  border-radius:10px;
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  color:#1a1410;
+  font-weight:600;
+  font-size:14.5px;
+  cursor:pointer;
+}
+
+#pdfFile{ display:none; }
+
+.file-info{
+  margin-top:16px;
+  padding:13px 14px;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  font-size:13.5px;
+  color:var(--muted);
+  text-align:center;
+}
+
+/* Quality */
+.field{ margin-top:18px; }
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin-bottom:7px;
+}
+
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--panel-2);
+  color:var(--paper);
+  font-size:15px;
+  font-family:'Inter',sans-serif;
+}
+select:focus{
+  outline:none;
+  border-color:var(--amber);
+}
+
+.note{
+  margin-top:10px;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:18px;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  font-size:16px;
+  font-weight:600;
+  font-family:'Inter',sans-serif;
+  cursor:pointer;
+}
+
+.primary{
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  color:#1a1410;
+}
+
+.primary:disabled{
+  background:var(--amber-dim);
+  color:#3a2e1a;
+  cursor:not-allowed;
+}
+
+.download-btn{
+  background:linear-gradient(155deg,var(--teal),#3f8377);
+  color:#0d1a17;
+  display:none;
+}
+
+.secondary{
+  background:transparent;
+  color:var(--paper);
+  border:1px solid var(--line);
+}
+
+/* Result */
+.result{
+  display:none;
+  margin-top:16px;
+}
+
+.result-title{
+  font-size:13px;
+  font-weight:600;
+  color:var(--amber-bright);
+  margin-bottom:10px;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+
+.result-box{
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+  text-align:center;
+}
+
+.result-size{
+  font-size:20px;
+  font-weight:700;
+  color:var(--paper);
+  font-family:'Space Grotesk',sans-serif;
+}
+
+.result-small{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:6px;
+}
+
+.result-saved{
+  margin-top:10px;
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:20px;
+  background:#132420;
+  border:1px solid #2e5045;
+  color:var(--teal);
+  font-size:13px;
+  font-weight:600;
+}
+
+/* Ad slot */
+.ad-slot{ margin:16px 0; }
+
+.ad-box{
+  min-height:100px;
+  border:1.5px dashed var(--line);
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* Footer */
+footer.credit{
+  text-align:center;
+  color:var(--muted);
+  font-size:12.5px;
+  padding:20px 0 30px;
+}
+</style>
 </head>
 
 <body>
-<header>
-<div class="logo">FormReady <span>India</span></div>
-<a href="/formready-india/index.html#tools">Home</a>
+
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
 </header>
-<a class="back" href="/formready-india/index.html#tools"> Back to Tools</a>
+
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
 
 <div class="container">
 
-<h1>📦 PDF Compressor</h1>
+  <div class="card">
+    <div class="card-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+          <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3"/>
+          <path d="M3 16v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/>
+          <rect x="3" y="8" width="18" height="8" rx="1"/>
+        </svg>
+      </div>
+      <h1>PDF Compressor</h1>
+      <p>Reduce PDF file size for online form uploads — right in your browser.</p>
+    </div>
 
-<div class="subtitle">
-Reduce PDF size for online form uploads
-</div>
+    <div class="steps">
+      <div class="steps-title">How this works</div>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div>Choose your PDF file — its current size shows up right away.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div>Pick a compression level, then tap <strong style="color:var(--paper)">Compress PDF</strong>.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div>See the before/after size, then tap <strong style="color:var(--paper)">Download</strong>. If a safe reduction isn't possible, we'll tell you honestly instead of faking a smaller file.</div>
+      </div>
+    </div>
 
+    <div class="upload-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      <p class="upload-title">Choose PDF</p>
+      <p class="upload-hint">Select a PDF to compress</p>
+      <label class="btn-choose" for="pdfFile">Browse Files</label>
+      <input type="file" id="pdfFile" accept="application/pdf">
+    </div>
 
-<div class="card">
+    <div id="fileInfo" class="file-info">No PDF selected</div>
 
-<label class="upload">
+    <div class="field">
+      <label>Compression Level</label>
+      <select id="quality">
+        <option value="high">High Quality — Larger File</option>
+        <option value="medium" selected>Balanced — Recommended</option>
+        <option value="low">Maximum Compression — Smaller File</option>
+      </select>
+      <div class="note">Balanced is recommended for most government, exam and online form uploads.</div>
+    </div>
 
-📄 Choose PDF
+    <div class="buttons">
+      <button class="primary" id="compress">Compress PDF</button>
+      <button class="primary download-btn" id="download">Download Compressed PDF</button>
+      <button class="secondary" id="reset">Reset</button>
+    </div>
 
-<input
-  type="file"
-  id="pdfFile"
-  accept="application/pdf"
->
+    <div id="result" class="result">
+      <div class="result-title">Compression Result</div>
+      <div class="result-box">
+        <div id="oldSize" class="result-small"></div>
+        <div id="newSize" class="result-size"></div>
+        <div id="saved" class="result-saved"></div>
+      </div>
+    </div>
 
-</label>
+  </div>
 
-<div
-  id="fileInfo"
-  class="file-info"
->
-No PDF selected
-</div>
+  <div class="ad-slot">
+    <div class="ad-box">Advertisement</div>
+  </div>
 
-</div>
-
-
-<div class="card">
-
-<div class="section-title">
-🎯 Compression Level
-</div>
-
-<select id="quality">
-
-<option value="high">
-High Quality — Larger File
-</option>
-
-<option value="medium" selected>
-Balanced — Recommended
-</option>
-
-<option value="low">
-Maximum Compression — Smaller File
-</option>
-
-</select>
-
-<div class="note">
-Balanced is recommended for most government,
-exam and online form uploads.
-</div>
-
-<button id="compress">
-📦 Compress PDF
-</button>
-
-<button id="download">
-⬇️ Download Compressed PDF
-</button>
-
-<button id="reset">
-↻ Reset
-</button>
-
-</div>
-
-
-<div
-  id="result"
-  class="card result"
->
-
-<div class="section-title">
-✅ Compression Result
-</div>
-
-<div class="result-box">
-
-<div
-  id="oldSize"
-  class="small"
-></div>
-
-<div
-  id="newSize"
-  class="size"
-></div>
-
-<div
-  id="saved"
-  class="small"
-></div>
-
-</div>
-
-</div>
+  <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
 
 </div>
 
@@ -412,69 +587,6 @@ function(){
 
 
 /*
-  Try to compress using the browser.
-
-  We use PDF.js to inspect the PDF and
-  jsPDF to rebuild a lightweight PDF when
-  possible.
-
-  External libraries are loaded only when
-  compression starts.
-*/
-
-
-async function loadLibraries(){
-
-  if(
-    window.pdfjsLib &&
-    window.jspdf
-  ){
-    return;
-  }
-
-
-  await loadScript(
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs",
-    true
-  );
-
-}
-
-
-/* Generic script loader */
-
-function loadScript(
-  src,
-  module=false
-){
-
-  return new Promise(
-  function(resolve,reject){
-
-    const script =
-    document.createElement("script");
-
-    script.src = src;
-
-    if(module){
-      script.type = "module";
-    }
-
-    script.onload =
-    resolve;
-
-    script.onerror =
-    reject;
-
-    document.head.appendChild(
-      script
-    );
-
-  });
-}
-
-
-/*
   Conservative browser compression.
 
   For maximum compatibility we preserve the
@@ -493,11 +605,10 @@ async function compressPDF(){
     return;
   }
 
-
   compressBtn.disabled = true;
 
   compressBtn.textContent =
-  "⏳ Compressing...";
+  "Compressing...";
 
 
   try{
@@ -509,7 +620,6 @@ async function compressPDF(){
     const buffer =
     await selectedFile.arrayBuffer();
 
-
     /*
       Basic structural compression:
       remove trailing unused bytes and
@@ -520,7 +630,6 @@ async function compressPDF(){
     let bytes =
     new Uint8Array(buffer);
 
-
     /*
       Remove whitespace after EOF.
     */
@@ -529,7 +638,6 @@ async function compressPDF(){
     new TextDecoder(
       "latin1"
     ).decode(bytes);
-
 
     const eof =
     text.lastIndexOf(
@@ -587,7 +695,6 @@ async function compressPDF(){
       /*
         Keep original as safe fallback.
       */
-
       outputBlob =
       selectedFile;
 
@@ -618,7 +725,6 @@ async function compressPDF(){
     formatSize(
       oldBytes
     );
-
 
     newSize.textContent =
     "Result: " +
@@ -665,7 +771,7 @@ async function compressPDF(){
   false;
 
   compressBtn.textContent =
-  "📦 Compress PDF";
+  "Compress PDF";
 
 }
 
@@ -687,7 +793,6 @@ function(){
   if(!outputBlob){
     return;
   }
-
 
   const url =
   URL.createObjectURL(
@@ -752,7 +857,6 @@ function(){
   "none";
 
 });
-
 </script>
 
 
