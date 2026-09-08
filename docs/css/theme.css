@@ -398,3 +398,40 @@ html body .about-section .feature-item * {
   -webkit-text-fill-color: #374151 !important;
   opacity: 1 !important;
 }
+
+html body {
+  background: #0a0a0c !important;
+}
+html body header, html body .site-header {
+  background: #0f0f12 !important;
+  border-bottom: 1px solid #1f1f24 !important;
+}
+html body .hero, html body .hero-content {
+  background: linear-gradient(135deg, #0a0a0c 0%, #16161c 100%) !important;
+}
+html body .tools-section {
+  background: #0a0a0c !important;
+}
+html body .tool-card {
+  background: #131316 !important;
+  border: 1px solid #232328 !important;
+  border-left: 4px solid #3b82f6 !important;
+}
+html body .tool-card .icon {
+  background: #1e1e24 !important;
+}
+html body .about-section {
+  background: #131316 !important;
+  border: 1px solid #232328 !important;
+}
+html body .about-section .feature-item {
+  background: #0a0a0c !important;
+  border: 1px solid #232328 !important;
+}
+html body footer, html body .site-footer {
+  background: #050506 !important;
+}
+html body input[type="text"], html body input[type="search"] {
+  background: #131316 !important;
+  border: 1.5px solid #232328 !important;
+}
