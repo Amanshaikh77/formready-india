@@ -1,0 +1,42 @@
+
+.tools-section {
+  background: linear-gradient(180deg, #eef2ff 0%, #f1f5f9 100%) !important;
+  padding: 48px 20px 56px !important;
+}
+
+.tools-section h2 {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+.tools-section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #1a56db;
+  border-radius: 4px;
+}
+
+.tools-section .section-sub, .tools-section > p {
+  color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
+}
+
+input[type="text"], input[type="search"] {
+  border: 1.5px solid #cbd5e1 !important;
+  background: #ffffff !important;
+}
+input[type="text"]:focus, input[type="search"]:focus {
+  border-color: #1a56db !important;
+  outline: none !important;
+}
+
+.tool-card:nth-child(3n+1) { border-left-color: #1a56db !important; }
+.tool-card:nth-child(3n+2) { border-left-color: #7c3aed !important; }
+.tool-card:nth-child(3n+3) { border-left-color: #059669 !important; }

@@ -76,34 +76,45 @@ app.get("/api/token/balance", (req, res) => {
 ========================= */
 
 app.post("/api/token/earn", (req, res) => {
+
     try {
+
         const userKey = getUserKey(req, res);
 
-        const tool = String(
-            req.body.tool || "unknown-tool"
-        );
+        const amount =
+            Number(req.body.amount || 0);
 
-        const result = tokenDB.addTokens(
-            userKey,
-            0,
-            tool
-        );
+        const tool =
+            String(
+                req.body.tool || "unknown-tool"
+            );
 
-        if (!result.success) {
+        if (
+            !Number.isFinite(amount) ||
+            amount <= 0 ||
+            amount > 1000
+        ) {
             return res.status(400).json({
                 success: false,
-                error: result.error,
-                balance: tokenDB.getTokens(userKey)
+                error: "Invalid token amount"
             });
         }
 
+        const balance =
+            tokenDB.addTokens(
+                userKey,
+                amount,
+                tool
+            );
+
         res.json({
             success: true,
-            earned: result.earned,
-            balance: result.balance
+            earned: amount,
+            balance
         });
 
     } catch (error) {
+
         console.error("Earn Error:", error);
 
         res.status(500).json({

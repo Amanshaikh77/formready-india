@@ -1,8 +1,7 @@
 (function () {
   "use strict";
 
-  const TOKEN_KEY = "formready_tokens";
-  const HISTORY_KEY = "formready_token_history";
+  const USER_KEY = "formready_user_key";
 
   const REWARDS = {
     "jpg-to-pdf": 20,
@@ -14,74 +13,171 @@
     "photo-resizer": 20,
     "photo-sheet": 25,
     "signature-maker": 20,
-    "split-pdf": 25
+    "split-pdf": 25,
+    "crop": 40
   };
 
-  const WITHDRAWALS = [
-    { amount: 200, tokens: 20000 },
-    { amount: 500, tokens: 50000 },
-    { amount: 1000, tokens: 100000 },
-    { amount: 5000, tokens: 500000 }
-  ];
+  let userKey =
+    localStorage.getItem(USER_KEY) || "";
 
-  function getTokens() {
-    return Number(localStorage.getItem(TOKEN_KEY) || 0);
+  async function api(path, options = {}) {
+
+    options.headers = {
+      ...(options.headers || {})
+    };
+
+    if (userKey) {
+      options.headers["X-User-Key"] = userKey;
+    }
+
+    const response =
+      await fetch("/api/token" + path, options);
+
+    const data =
+      await response.json();
+
+    if (data.userKey) {
+      userKey = data.userKey;
+
+      localStorage.setItem(
+        USER_KEY,
+        userKey
+      );
+    }
+
+    return data;
   }
 
-  function saveTokens(value) {
-    localStorage.setItem(TOKEN_KEY, String(value));
-    updateWallet();
+  async function getTokens() {
+    try {
+      const data = await api("/balance");
+
+      if (data.success) {
+        return Number(data.tokens || 0);
+      }
+    } catch (error) {
+      console.error("Token balance error:", error);
+    }
+
+    return 0;
   }
 
-  function addTokens(toolName) {
+  async function updateWallet() {
+
+    const tokens = await getTokens();
+
+    document
+      .querySelectorAll("[data-token-balance]")
+      .forEach(el => {
+        el.textContent =
+          tokens.toLocaleString("en-IN") + " 🪙";
+      });
+
+    const balanceElement =
+      document.getElementById("balance");
+
+    if (balanceElement) {
+      balanceElement.textContent =
+        tokens.toLocaleString("en-IN");
+    }
+
+    return tokens;
+  }
+
+  async function addTokens(toolName) {
+
     const reward = REWARDS[toolName];
-    if (!reward) return;
 
-    const todayKey = "formready_reward_" + toolName + "_" +
-      new Date().toISOString().slice(0, 10);
+    if (!reward) {
+      console.warn(
+        "Unknown reward tool:",
+        toolName
+      );
+      return false;
+    }
 
-    if (localStorage.getItem(todayKey)) return;
+    try {
 
-    const newBalance = getTokens() + reward;
-    saveTokens(newBalance);
+      const data = await api("/earn", {
+        method: "POST",
 
-    const history = JSON.parse(
-      localStorage.getItem(HISTORY_KEY) || "[]"
-    );
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-    history.unshift({
-      type: "earn",
-      tool: toolName,
-      tokens: reward,
-      date: new Date().toLocaleString()
-    });
+        body: JSON.stringify({
+          amount: reward,
+          tool: toolName
+        })
+      });
 
-    localStorage.setItem(
-      HISTORY_KEY,
-      JSON.stringify(history.slice(0, 100))
-    );
+      if (data.success) {
 
-    localStorage.setItem(todayKey, "1");
+        showToast(
+          "+" +
+          data.earned +
+          " 🪙 Tokens earned!"
+        );
 
-    showToast("+" + reward + " 🪙 Tokens earned!");
+        await updateWallet();
+
+        return true;
+      }
+
+      if (
+        data.error ===
+        "Reward already claimed today"
+      ) {
+        return false;
+      }
+
+      console.warn(
+        "Token reward failed:",
+        data.error
+      );
+
+      return false;
+
+    } catch (error) {
+
+      console.error(
+        "Token earn error:",
+        error
+      );
+
+      return false;
+    }
   }
 
-  function updateWallet() {
-    document.querySelectorAll("[data-token-balance]").forEach(el => {
-      el.textContent = getTokens().toLocaleString() + " 🪙";
-    });
+  function getReward(toolName) {
+    return REWARDS[toolName] || 0;
   }
 
   function showToast(message) {
-    let toast = document.getElementById("token-toast");
+
+    let toast =
+      document.getElementById("token-toast");
 
     if (!toast) {
-      toast = document.createElement("div");
+
+      toast =
+        document.createElement("div");
+
       toast.id = "token-toast";
+
       toast.style.cssText =
-        "position:fixed;bottom:20px;left:50%;transform:translateX(-50%);" +
-        "background:#111;color:#fff;padding:12px 18px;border-radius:12px;" +
-        "z-index:99999;font-weight:600;box-shadow:0 5px 20px #0004;";
+        "position:fixed;" +
+        "bottom:20px;" +
+        "left:50%;" +
+        "transform:translateX(-50%);" +
+        "background:#111;" +
+        "color:#fff;" +
+        "padding:12px 18px;" +
+        "border-radius:12px;" +
+        "z-index:99999;" +
+        "font-weight:700;" +
+        "box-shadow:0 5px 20px #0004;";
+
       document.body.appendChild(toast);
     }
 
@@ -90,18 +186,23 @@
 
     clearTimeout(window.__tokenToastTimer);
 
-    window.__tokenToastTimer = setTimeout(() => {
-      toast.style.display = "none";
-    }, 2500);
+    window.__tokenToastTimer =
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 2500);
   }
 
   window.FormReadyTokens = {
     getTokens,
     addTokens,
     updateWallet,
-    rewards: REWARDS,
-    withdrawals: WITHDRAWALS
+    getReward,
+    rewards: REWARDS
   };
 
-  document.addEventListener("DOMContentLoaded", updateWallet);
+  document.addEventListener(
+    "DOMContentLoaded",
+    updateWallet
+  );
+
 })();
