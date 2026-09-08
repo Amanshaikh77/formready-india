@@ -2,297 +2,319 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FormReady India - All-in-One Offline Document &amp; Photo Toolbox</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<title>FormReady India - Fast, Private & Mobile-Friendly Online Tools</title>
-<meta name="description" content="Free, secure, and client-side photo and PDF tools. Crop, resize, compress photos, split, merge PDFs locally in your browser with zero data uploads.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/">
-<link rel="stylesheet" href="./css/theme.css">
 <style>
-:root{
-  --bg:#151210;
-  --bg-deep:#0f0d0c;
-  --panel:#1e1a17;
-  --panel-soft:#25201c;
-  --line:#39322b;
-  --amber:#d99a3f;
-  --amber-bright:#f0b158;
-  --amber-dim:#8a6329;
-  --paper:#f2ece2;
-  --text:#f2ece2;
-  --muted:#a89a89;
-  --teal:#5fada0;
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
 }
-html{ scroll-behavior:smooth; }
-*{ box-sizing:border-box; margin:0; padding:0; }
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Inter',sans-serif;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-h1,h2,h3,.brand{ font-family:'Space Grotesk',sans-serif; font-weight:600; }
-header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:rgba(21,18,16,.92);
-  backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--line);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:16px 8%;
+header {
+  text-align: center;
+  max-width: 800px;
+  margin: 30px auto 20px;
 }
-.brand{ font-size:20px; color:var(--paper); text-decoration:none; }
-.brand span{ color:var(--amber); }
-nav{ display:flex; gap:20px; align-items:center; }
-nav a{ color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; transition:color .2s; }
-nav a:hover{ color:var(--amber-bright); }
-
-.hero{ text-align:center; padding:54px 20px 40px; }
-.hero-badge{ display:inline-block; font-size:12px; font-weight:600; background:var(--panel-soft); border:1px solid var(--line); color:var(--amber-bright); padding:6px 14px; border-radius:20px; margin-bottom:16px; }
-.hero h1{ font-size:clamp(26px, 5vw, 42px); line-height:1.2; margin-bottom:12px; }
-.hero h1 span{ color:var(--amber); }
-.hero p{ color:var(--muted); font-size:15px; max-width:560px; margin:0 auto 24px; line-height:1.6; }
-.hero-buttons{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-.btn{ padding:11px 22px; border-radius:10px; font-size:14px; font-weight:600; text-decoration:none; transition:all .2s; }
-.btn-primary{ background:linear-gradient(155deg,var(--amber-bright),var(--amber)); color:#151210; }
-.btn-primary:hover{ opacity:.9; }
-.btn-secondary{ background:var(--panel); border:1px solid var(--line); color:var(--paper); }
-.btn-secondary:hover{ border-color:var(--amber); color:var(--amber); }
-
-.section{ padding:36px 0; }
-.container{ width:min(1100px, 92%); margin:0 auto; }
-.section-title{ text-align:center; margin-bottom:24px; }
-.section-title h2{ font-size:26px; margin-bottom:6px; }
-.section-title p{ color:var(--muted); font-size:14px; }
-
-.search-box{ max-width:440px; margin:0 auto 30px; position:relative; }
-.search-box input{ width:100%; background:var(--panel); border:1px solid var(--line); color:var(--paper); padding:12px 16px; border-radius:12px; font-size:14px; outline:none; }
-.search-box input:focus{ border-color:var(--amber); }
-
-.tools-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
-.tool{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px; text-decoration:none; color:inherit; display:flex; flex-direction:column; justify-content:space-between; transition:transform .2s, border-color .2s; }
-.tool:hover{ transform:translateY(-2px); border-color:var(--amber); }
-.tool-top{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-.tool-icon{ font-size:20px; width:40px; height:40px; border-radius:10px; background:var(--panel-soft); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; }
-.tool h3{ font-size:16px; color:var(--paper); }
-.tool p{ font-size:13px; color:var(--muted); line-height:1.5; margin-bottom:14px; }
-.tool-tag{ align-self:flex-start; font-size:10.5px; font-weight:700; color:var(--amber-bright); background:rgba(217,154,63,.12); border:1px solid rgba(217,154,63,.3); border-radius:6px; padding:3px 8px; text-transform:uppercase; letter-spacing:.5px; }
-
-/* How It Works Section */
-.workflow-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-top:20px; }
-.flow-card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px 20px; }
-.flow-header{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-.flow-num{ width:26px; height:26px; border-radius:50%; background:var(--amber); color:#151210; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; }
-.flow-card h3{ font-size:16px; color:var(--paper); }
-.flow-card p{ font-size:13.5px; color:var(--muted); line-height:1.6; }
-
-/* About Section */
-.about{ background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:30px 24px; }
-.privacy-banner{ background:linear-gradient(145deg, rgba(217,154,63,.12), rgba(95,173,160,.12)); border:1px solid var(--amber-dim); border-radius:14px; padding:18px 20px; margin-bottom:24px; display:flex; gap:16px; align-items:flex-start; }
-.privacy-badge{ font-size:26px; }
-.privacy-text h3{ font-size:16px; color:var(--amber-bright); margin-bottom:4px; }
-.privacy-text p{ font-size:13.5px; color:var(--paper); line-height:1.5; }
-.about h2{ font-size:24px; margin-bottom:10px; color:var(--paper); }
-.about > p{ color:var(--muted); font-size:14.5px; line-height:1.6; }
-.features{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; margin-top:22px; }
-.feature{ padding:16px; background:var(--panel-soft); border-radius:13px; border:1px solid var(--line); }
-.feature b{ display:block; margin-bottom:4px; color:var(--text); font-size:14px; }
-.feature span{ color:var(--muted); font-size:13px; }
-
-footer{ background:var(--bg-deep); color:var(--muted); text-align:center; padding:34px 20px; border-top:1px solid var(--line); margin-top:auto; }
-footer strong{ color:var(--text); }
-footer a{ color:var(--muted); text-decoration:none; font-size:13px; }
-footer a:hover{ color:var(--amber-bright); }
-
-@media(max-width:650px){
-  header{ padding:14px 5%; }
-  nav{ gap:14px; }
-  nav a{ font-size:13px; }
-  .privacy-banner{ flex-direction:column; gap:8px; }
+header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  color: var(--amber);
+  margin-bottom: 8px;
+}
+header p {
+  font-size: 14px;
+  color: var(--muted);
+}
+.search-container {
+  max-width: 600px;
+  margin: 0 auto 20px;
+  padding: 0 16px;
+}
+.search-input {
+  width: 100%;
+  padding: 12px 18px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 14.5px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-input:focus { border-color: var(--amber); }
+.category-wrapper {
+  max-width: 1100px;
+  margin: 0 auto 24px;
+  padding: 0 16px;
+}
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+}
+.category-tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  background: var(--panel);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab-btn:hover { border-color: var(--amber); color: #fff; }
+.tab-btn.active {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #151210;
+}
+.category-section {
+  max-width: 1100px;
+  margin: 0 auto 36px;
+  padding: 0 16px;
+}
+.category-header {
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+.category-title { font-size: 18px; color: var(--paper); }
+.category-desc { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.tool-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.tool-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--amber);
+}
+.tool-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.tool-icon {
+  font-size: 20px;
+  background: var(--panel-2);
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.tool-info h3 { font-size: 15px; color: var(--paper); margin-bottom: 4px; }
+.tool-info p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.tool-badge {
+  align-self: flex-start;
+  margin-top: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.badge-ready { background: rgba(46, 160, 67, 0.2); color: #3fb950; border: 1px solid rgba(46, 160, 67, 0.4); }
+.badge-upcoming { background: rgba(217, 154, 63, 0.15); color: #f0b158; border: 1px solid rgba(217, 154, 63, 0.3); }
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  margin-top: auto;
 }
 </style>
 </head>
 <body>
-
 <header>
-  <a class="brand" href="./index.html">FormReady <span>India</span></a>
-  <nav>
-    <a href="#tools">Tools</a>
-    <a href="#about">About</a>
-  </nav>
+  <h1>FormReady India</h1>
+  <p>Fast, Simple, Mobile-Friendly &amp; 100% Private Client-Side Toolbox</p>
 </header>
-
-<section class="hero">
-  <div class="container">
-    <div class="hero-badge">⚡ Fast • Simple • Mobile Friendly</div>
-    <h1>Everything You Need, <span>Ready Online.</span></h1>
-    <p>Free, secure, and easy-to-use tools for photos, PDFs and documents. Complete your official form requirements directly on your device.</p>
-    <div class="hero-buttons">
-      <a class="btn btn-primary" href="#tools">Explore Tools</a>
-      <a class="btn btn-secondary" href="#how-it-works">Learn More</a>
-    </div>
+<div class="search-container">
+  <input type="search" id="searchInput" class="search-input" placeholder="🔍 Search any tool (e.g. Resizer, Age, PDF)...">
+</div>
+<div class="category-wrapper">
+  <div class="category-tabs" id="categoryTabs">
+    <button class="tab-btn active" data-filter="all">🌟 All Tools</button>
+    <button class="tab-btn" data-filter="photo">📸 Image &amp; Photo</button>
+    <button class="tab-btn" data-filter="govt">🪪 Govt Form &amp; ID</button>
+    <button class="tab-btn" data-filter="pdf">📄 PDF Tools</button>
+    <button class="tab-btn" data-filter="text">📝 Text Utilities</button>
+    <button class="tab-btn" data-filter="calculators">🧮 Calculators</button>
   </div>
-</section>
-
-<section class="section" id="tools">
-  <div class="container">
-    <div class="section-title">
-      <h2>Our Tools</h2>
-      <p>Choose a tool and get your work done quickly.</p>
-    </div>
-    <div class="search-box">
-      <input type="text" id="search" placeholder="🔍 Search a tool...">
-    </div>
-    <div class="tools-grid">
-      <a class="tool" href="./tools/crop/index.html">
-        <div class="tool-top"><div class="tool-icon">✂️</div><h3>Photo Cropper</h3></div>
-        <p>Crop photos easily with precise, touch-friendly handles.</p>
-        <span class="tool-tag">Photo</span>
-      </a>
-      <a class="tool" href="./tools/photo-resizer.html">
-        <div class="tool-top"><div class="tool-icon">📐</div><h3>Photo Resizer</h3></div>
-        <p>Resize photos to your required exact dimensions and aspect ratio.</p>
-        <span class="tool-tag">Photo</span>
-      </a>
-      <a class="tool" href="./tools/photo-compressor.html">
-        <div class="tool-top"><div class="tool-icon">🗜️</div><h3>Photo Compressor</h3></div>
-        <p>Reduce image file size in KB/MB while keeping crisp clarity.</p>
-        <span class="tool-tag">Photo</span>
-      </a>
-      <a class="tool" href="./tools/jpg-to-pdf.html">
-        <div class="tool-top"><div class="tool-icon">📄</div><h3>JPG to PDF</h3></div>
-        <p>Convert your image photos into single or multi-page PDF documents.</p>
-        <span class="tool-tag">PDF</span>
-      </a>
-      <a class="tool" href="./tools/pdf-to-jpg.html">
-        <div class="tool-top"><div class="tool-icon">🖼️</div><h3>PDF to JPG</h3></div>
-        <p>Convert PDF document pages directly into high quality JPG image files.</p>
-        <span class="tool-tag">PDF</span>
-      </a>
-      <a class="tool" href="./tools/merge-pdf.html">
-        <div class="tool-top"><div class="tool-icon">📑</div><h3>Merge PDF</h3></div>
-        <p>Combine multiple PDF files into one neatly organized single PDF.</p>
-        <span class="tool-tag">PDF</span>
-      </a>
-      <a class="tool" href="./tools/split-pdf.html">
-        <div class="tool-top"><div class="tool-icon">✂️</div><h3>Split PDF</h3></div>
-        <p>Extract selected pages or custom page ranges into a new PDF document.</p>
-        <span class="tool-tag">PDF</span>
-      </a>
-      <a class="tool" href="./tools/passport-photo.html">
-        <div class="tool-top"><div class="tool-icon">👤</div><h3>Passport Photo</h3></div>
-        <p>Create government standard passport-size photos with custom backgrounds.</p>
-        <span class="tool-tag">Photo</span>
-      </a>
-      <a class="tool" href="./tools/photo-sheet.html">
-        <div class="tool-top"><div class="tool-icon">🖨️</div><h3>Photo Sheet</h3></div>
-        <p>Create printable A4 sheets loaded with multiple photo copies.</p>
-        <span class="tool-tag">Photo</span>
-      </a>
-      <a class="tool" href="./tools/signature-maker.html">
-        <div class="tool-top"><div class="tool-icon">✍️</div><h3>Signature Maker</h3></div>
-        <p>Draw, smooth, and download transparent digital signatures instantly.</p>
-        <span class="tool-tag">Utility</span>
-      </a>
-      <a class="tool" href="./tools/background-remover.html">
-        <div class="tool-top"><div class="tool-icon">🪄</div><h3>Background Remover</h3></div>
-        <p>Remove photo background cleanly and choose customized solid colours.</p>
-        <span class="tool-tag">Photo</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- How Tools Work Section (Linked to Learn More) -->
-<section class="section" id="how-it-works">
-  <div class="container">
-    <div class="section-title">
-      <h2>How Our Tools Work</h2>
-      <p>Instant processing directly in your browser without waiting for server queues.</p>
-    </div>
-    <div class="workflow-grid">
-      <div class="flow-card">
-        <div class="flow-header">
-          <div class="flow-num">1</div>
-          <h3>Image Processing Tools</h3>
-        </div>
-        <p>Tools like Photo Cropper, Resizer, and Compressor read your images through your browser’s HTML5 Canvas. Adjustments and quality compression run on your device's memory, giving immediate downloads without uploading a single pixel.</p>
-      </div>
-      <div class="flow-card">
-        <div class="flow-header">
-          <div class="flow-num">2</div>
-          <h3>PDF Tools (Merge & Split)</h3>
-        </div>
-        <p>Built using client-side WebAssembly and <code>pdf-lib</code>, our PDF tools parse document structures, rearrange pages, and compile new files in your device RAM. Your private certificates and identity proofs stay strictly offline.</p>
-      </div>
-      <div class="flow-card">
-        <div class="flow-header">
-          <div class="flow-num">3</div>
-          <h3>Form Utilities</h3>
-        </div>
-        <p>The Signature Maker, Passport Photo generator, and Photo Sheet tool apply predefined government standard ratios locally. Once you preview and tap download, files are saved directly into your device storage.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- About Section (Linked to top About & footer About Us) -->
-<section class="section" id="about">
-  <div class="container">
-    <div class="about">
-      <!-- 100% Client-side Local Privacy Banner -->
-      <div class="privacy-banner">
-        <div class="privacy-badge">🛡️</div>
-        <div class="privacy-text">
-          <h3>Zero Server Uploads · 100% Private Local Processing</h3>
-          <p>Unlike other converters, FormReady India does not upload your Aadhaar, PAN, certificates, or personal photos to external servers or databases. All file processing, cropping, and PDF manipulation happens <b>locally inside your phone/computer browser</b>. Your personal data never leaves your device.</p>
-        </div>
-      </div>
-
-      <h2>About FormReady India</h2>
-      <p>FormReady India is designed to make everyday photo, document, and PDF preparation effortless for recruitment forms, admissions, and competitive exams. Engineered specifically with mobile users in mind, you can complete all document criteria on your smartphone smoothly.</p>
-      <div class="features">
-        <div class="feature"><b>📱 Mobile Friendly</b><span>Works comfortably on phones.</span></div>
-        <div class="feature"><b>⚡ Fast</b><span>Simple and lightweight tools.</span></div>
-        <div class="feature"><b>🔒 100% Private</b><span>Files processed locally on your phone.</span></div>
-        <div class="feature"><b>✨ Free to Use</b><span>No complex installations or logins.</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
+</div>
+<div id="catalogContainer"></div>
 <footer>
-  <strong>FormReady India</strong>
-  <br><br>
-  <a href="#about">About Us</a> |
-  <a href="./contact.html">Contact Us</a> |
-  <a href="./privacy-policy.html">Privacy Policy</a> |
-  <a href="./terms.html">Terms &amp; Conditions</a>
-  <br><br>
-  © 2026 FormReady India. All rights reserved.
+  &copy; 2026 FormReady India. Zero Server Uploads — 100% Secure Local Processing.
 </footer>
-
 <script>
-const search = document.getElementById("search");
-const tools = document.querySelectorAll(".tool");
-if(search){
-  search.addEventListener("input", function(){
-    const query = this.value.toLowerCase().trim();
-    tools.forEach(tool => {
-      const text = tool.textContent.toLowerCase();
-      tool.style.display = text.includes(query) ? "flex" : "none";
-    });
+const toolsCatalog = [
+  {
+    category: "photo",
+    categoryTitle: "📸 Image & Photo Utilities",
+    categoryDesc: "High-resolution photo editing, precision cropping, and background tools",
+    tools: [
+      { name: "Photo Cropper", desc: "Touch-friendly precision aspect-ratio cropper", icon: "✂️", status: "ready", link: "tools/photo-cropper/" },
+      { name: "Photo Resizer", desc: "Resize dimensions in pixels, cm, or mm directly", icon: "📐", status: "ready", link: "tools/photo-resizer/" },
+      { name: "Photo Compressor", desc: "Shrink photo KB/MB size while maintaining resolution", icon: "🗜️", status: "ready", link: "tools/photo-compressor/" },
+      { name: "Passport Photo Maker", desc: "Govt standard passport photos with clean backgrounds", icon: "👤", status: "ready", link: "tools/passport-photo/" },
+      { name: "Photo Sheet Maker", desc: "Printable A4 grid sheets with multiple photo copies", icon: "🖨️", status: "ready", link: "tools/photo-sheet/" },
+      { name: "Background Remover", desc: "Client-side transparent background cutter", icon: "🪄", status: "ready", link: "tools/background-remover/" },
+      { name: "Signature Maker", desc: "Draw, smooth, and export transparent digital signatures", icon: "✍️", status: "ready", link: "tools/signature-maker/" },
+      { name: "Image Format Converter", desc: "Instant format swap: JPG, PNG, and WebP", icon: "🔄", status: "upcoming", link: "#" },
+      { name: "Image to Text (OCR)", desc: "Copy text directly from any picture or screenshot", icon: "👁️", status: "upcoming", link: "#" }
+    ]
+  },
+  {
+    category: "govt",
+    categoryTitle: "🪪 Indian Govt Form & ID Utilities",
+    categoryDesc: "Official Indian exam & recruitment portal formats (SSC, UPSC, State IDs)",
+    tools: [
+      { name: "Aadhaar / PAN Photo Resizer", desc: "Strict 200x230 px & size limit crop/resizer", icon: "🪪", status: "upcoming", link: "#" },
+      { name: "Signature Resizer & Enhancer", desc: "Strict size limit with contrast booster for portal upload", icon: "✍️", status: "upcoming", link: "#" },
+      { name: "Passport Photo + Sign Card", desc: "Merge identity photo and signature onto one frame", icon: "👥", status: "upcoming", link: "#" },
+      { name: "Document Scanner", desc: "Camera scan with high-contrast B&W clean doc filter", icon: "📄", status: "upcoming", link: "#" },
+      { name: "Govt Form PDF Helper", desc: "Compress and fit PDF strictly under required portal limits", icon: "📋", status: "upcoming", link: "#" }
+    ]
+  },
+  {
+    category: "pdf",
+    categoryTitle: "📄 PDF Tools & Editors",
+    categoryDesc: "Client-side private PDF manipulation, inspection, and redaction",
+    tools: [
+      { name: "PDF Text Inspector & Editor", desc: "Edit text, redactions, auto-font detect on digital & scanned PDFs", icon: "📝", status: "ready", link: "tools/pdf-editor/" },
+      { name: "Merge PDF", desc: "Combine multiple PDF documents into one ordered file", icon: "📑", status: "ready", link: "tools/merge-pdf/" },
+      { name: "Split PDF", desc: "Extract pages or custom page ranges into a new PDF", icon: "✂️", status: "ready", link: "tools/split-pdf/" },
+      { name: "JPG to PDF", desc: "Convert photo image files into multi-page PDFs", icon: "🖼️", status: "ready", link: "tools/jpg-to-pdf/" },
+      { name: "PDF to JPG", desc: "Extract high-resolution JPG images from PDF pages", icon: "📸", status: "ready", link: "tools/pdf-to-jpg/" },
+      { name: "Compress PDF", desc: "Client-side file size compressor keeping clarity intact", icon: "🗜️", status: "upcoming", link: "#" },
+      { name: "Rotate PDF", desc: "Fix orientation of 90°, 180°, or inverted pages", icon: "🔄", status: "upcoming", link: "#" },
+      { name: "PDF Page Organizer", desc: "Drag to reorder pages or delete unwanted sheets", icon: "📑", status: "upcoming", link: "#" },
+      { name: "Add Watermark", desc: "Stamp confidential or custom text/logo over PDF", icon: "💧", status: "upcoming", link: "#" }
+    ]
+  },
+  {
+    category: "text",
+    categoryTitle: "📝 Text, Code & Content Tools",
+    categoryDesc: "Quick string formatters, counters, and offline code utilities",
+    tools: [
+      { name: "Word & Character Counter", desc: "Real-time count of words, characters, and reading time", icon: "🔢", status: "upcoming", link: "#" },
+      { name: "Case Converter", desc: "Toggle UPPERCASE, lowercase, Title Case & camelCase", icon: "🔤", status: "upcoming", link: "#" },
+      { name: "Text Cleaner", desc: "Strip accidental double spaces, tabs, and blank lines", icon: "🧹", status: "upcoming", link: "#" },
+      { name: "QR Code Generator", desc: "Create QR codes for links, UPI payments, and Wi-Fi", icon: "🏁", status: "upcoming", link: "#" },
+      { name: "Barcode Generator", desc: "Generate standard barcodes easily", icon: "|||", status: "upcoming", link: "#" },
+      { name: "Text to PDF / Image", desc: "Convert plain text notes into a printable document", icon: "📄", status: "upcoming", link: "#" },
+      { name: "Lorem Ipsum Generator", desc: "Generate placeholder text for layouts and forms", icon: "📜", status: "upcoming", link: "#" }
+    ]
+  },
+  {
+    category: "calculators",
+    categoryTitle: "🧮 Daily & Finance Calculators",
+    categoryDesc: "Instant eligibility calculations, loan EMI, GST, and daily math tools",
+    tools: [
+      { name: "Govt Form Age Calculator", desc: "Calculate exact age as on notification date (Y/M/D)", icon: "🎂", status: "upcoming", link: "#" },
+      { name: "GST Calculator", desc: "Breakdown CGST, SGST & total amount addition or removal", icon: "📊", status: "upcoming", link: "#" },
+      { name: "EMI Calculator", desc: "Calculate monthly installments and total loan interest", icon: "💳", status: "upcoming", link: "#" },
+      { name: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins", icon: "🏷️", status: "upcoming", link: "#" },
+      { name: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators", icon: "⚖️", status: "upcoming", link: "#" },
+      { name: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates", icon: "📅", status: "upcoming", link: "#" },
+      { name: "Unit Converter", desc: "Convert Land, Weight, Length & Units", icon: "📐", status: "upcoming", link: "#" },
+      { name: "Currency Converter", desc: "Quick currency rate estimations and conversions", icon: "💱", status: "upcoming", link: "#" }
+    ]
+  }
+];
+
+function renderCatalog(filter = "all", query = "") {
+  const container = document.getElementById("catalogContainer");
+  container.innerHTML = "";
+  const q = query.trim().toLowerCase();
+
+  toolsCatalog.forEach(cat => {
+    if (filter !== "all" && cat.category !== filter) return;
+    const matchedTools = cat.tools.filter(t => 
+      t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)
+    );
+    if (matchedTools.length === 0) return;
+
+    const section = document.createElement("section");
+    section.className = "category-section";
+    section.innerHTML = `
+      <div class="category-header">
+        <h2 class="category-title">${cat.categoryTitle}</h2>
+        <p class="category-desc">${cat.categoryDesc}</p>
+      </div>
+      <div class="tools-grid">
+        ${matchedTools.map(t => `
+          <a href="${t.link}" class="tool-card">
+            <div class="tool-card-head">
+              <span class="tool-icon">${t.icon}</span>
+              <div class="tool-info">
+                <h3>${t.name}</h3>
+                <p>${t.desc}</p>
+              </div>
+            </div>
+            <span class="tool-badge ${t.status === 'ready' ? 'badge-ready' : 'badge-upcoming'}">
+              ${t.status === 'ready' ? 'Active Tool' : 'Coming Soon'}
+            </span>
+          </a>
+        `).join("")}
+      </div>
+    `;
+    container.appendChild(section);
   });
 }
-</script>
 
+let activeFilter = "all";
+const searchInput = document.getElementById("searchInput");
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeFilter = btn.dataset.filter;
+    renderCatalog(activeFilter, searchInput.value);
+  });
+});
+
+searchInput.addEventListener("input", (e) => {
+  renderCatalog(activeFilter, e.target.value);
+});
+
+renderCatalog();
+</script>
 </body>
 </html>
