@@ -368,3 +368,33 @@ html body canvas {
 .tools-section .section-sub, .tools-section > p {
   color: #cbd5e1 !important;
 }
+
+html body .tool-card .tool-name,
+html body .tool-card h3,
+html body .tool-card h2,
+html body a.tool-card .tool-name {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  opacity: 1 !important;
+}
+html body .tool-card .tool-desc,
+html body .tool-card p {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+  opacity: 1 !important;
+}
+html body .about-section,
+html body .about-section h2,
+html body .about-section h3 {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  opacity: 1 !important;
+}
+html body .about-section p,
+html body .about-section .feature-item,
+html body .about-section .feature-item * {
+  color: #374151 !important;
+  -webkit-text-fill-color: #374151 !important;
+  opacity: 1 !important;
+}
