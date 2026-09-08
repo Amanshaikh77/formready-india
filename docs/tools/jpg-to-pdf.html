@@ -4,186 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<style>
-*{
-  box-sizing:border-box;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f4f6f8;
-  color:#202124;
-}
-
-.container{
-  width:min(760px,94%);
-  margin:25px auto 50px;
-}
-
-.header{
-  text-align:center;
-  margin-bottom:22px;
-}
-
-.header h1{
-  margin:0;
-  font-size:32px;
-}
-
-.header p{
-  color:#6b7280;
-  font-size:16px;
-}
-
-.card{
-  background:#fff;
-  padding:20px;
-  border-radius:18px;
-  margin-bottom:18px;
-  box-shadow:0 4px 18px rgba(0,0,0,.07);
-}
-
-.upload{
-  display:block;
-  text-align:center;
-  padding:28px 15px;
-  border:3px dashed #6078d8;
-  border-radius:16px;
-  cursor:pointer;
-  background:#fafbff;
-}
-
-.upload strong{
-  display:block;
-  font-size:20px;
-  margin-bottom:6px;
-}
-
-.upload span{
-  color:#70757a;
-}
-
-#fileInput{
-  display:none;
-}
-
-.options{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-label{
-  display:block;
-  font-weight:bold;
-  margin-bottom:7px;
-}
-
-select{
-  width:100%;
-  padding:13px;
-  border:2px solid #ddd;
-  border-radius:10px;
-  background:#fff;
-  font-size:16px;
-}
-
-.preview{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-
-.preview-item{
-  background:#f1f3f5;
-  border-radius:12px;
-  padding:8px;
-  text-align:center;
-}
-
-.preview-item img{
-  display:block;
-  width:100%;
-  height:180px;
-  object-fit:contain;
-  background:white;
-  border-radius:8px;
-}
-
-.preview-item div{
-  font-size:13px;
-  color:#666;
-  margin-top:6px;
-}
-
-.buttons{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-button{
-  width:100%;
-  border:0;
-  border-radius:12px;
-  padding:15px;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.primary{
-  background:#2867df;
-  color:white;
-}
-
-.secondary{
-  background:#e9edf2;
-  color:#202124;
-}
-
-.status{
-  text-align:center;
-  margin-top:12px;
-  color:#667085;
-  font-size:14px;
-}
-
-@media(max-width:600px){
-
-  .container{
-    width:94%;
-    margin-top:15px;
-  }
-
-  .header h1{
-    font-size:28px;
-  }
-
-  .card{
-    padding:16px;
-  }
-
-  .options{
-    grid-template-columns:1fr;
-  }
-
-  .preview{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .preview-item img{
-    height:140px;
-  }
-}
-</style>
 <title>JPG to PDF Converter Online Free</title>
-
 <meta name="description" content="Convert JPG images to PDF online for free. Fast, simple and mobile-friendly JPG to PDF converter.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/jpg-to-pdf.html">
@@ -204,46 +31,317 @@ button{
 </script>
 
 <script src="../token-system.js"></script>
-<link rel="stylesheet" href="css/theme.css">
+
+<style>
+:root{
+  --bg:#151210;
+  --panel:#1e1a17;
+  --panel-2:#262019;
+  --line:#39322b;
+  --amber:#d99a3f;
+  --amber-bright:#f0b158;
+  --amber-dim:#8a6329;
+  --teal:#5fada0;
+  --paper:#f2ece2;
+  --muted:#a89a89;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--paper);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+}
+
+h1,h2,h3,.brand,.upload-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:600;
+}
+
+/* Topbar */
+header.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  background:rgba(21,18,16,.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+
+.brand{
+  font-size:19px;
+  color:var(--paper);
+}
+.brand span{ color:var(--amber); }
+
+header.topbar a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+}
+header.topbar a:hover{ color:var(--amber-bright); }
+
+.breadcrumb{
+  display:block;
+  width:min(600px,92%);
+  margin:16px auto 0;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+}
+.breadcrumb:hover{ color:var(--amber-bright); }
+
+/* Container */
+.container{
+  width:min(600px,92%);
+  margin:16px auto 40px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:26px 22px;
+  margin-bottom:16px;
+}
+
+.icon-badge{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:14px;
+}
+
+.card-head h1{
+  margin:0 0 6px;
+  font-size:24px;
+  color:var(--paper);
+}
+
+.card-head p{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:14.5px;
+}
+
+/* Upload box */
+.upload-box{
+  border:2px dashed var(--line);
+  border-radius:14px;
+  padding:26px 16px;
+  text-align:center;
+  background:var(--panel-2);
+}
+
+.upload-box svg{
+  width:30px;
+  height:30px;
+  margin-bottom:8px;
+}
+
+.upload-title{
+  margin:0 0 4px;
+  font-size:16px;
+  color:var(--paper);
+}
+
+.upload-hint{
+  margin:0 0 16px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.btn-choose{
+  display:inline-block;
+  padding:11px 22px;
+  border-radius:10px;
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  color:#1a1410;
+  font-weight:600;
+  font-size:14.5px;
+  cursor:pointer;
+}
+
+/* Options */
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field label{
+  display:block;
+  font-weight:600;
+  font-size:13.5px;
+  color:var(--muted);
+  margin-bottom:7px;
+}
+
+select{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--panel-2);
+  color:var(--paper);
+  font-size:15px;
+  font-family:'Inter',sans-serif;
+}
+select:focus{
+  outline:none;
+  border-color:var(--amber);
+}
+
+/* Preview */
+.preview{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-top:16px;
+}
+
+.preview-item{
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:8px;
+  text-align:center;
+}
+
+.preview-item img{
+  display:block;
+  width:100%;
+  height:160px;
+  object-fit:contain;
+  background:#0f0d0b;
+  border-radius:8px;
+}
+
+.preview-item div{
+  font-size:12.5px;
+  color:var(--muted);
+  margin-top:6px;
+  word-break:break-all;
+}
+
+.status{
+  text-align:center;
+  margin-top:14px;
+  color:var(--muted);
+  font-size:13.5px;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  font-size:16px;
+  font-weight:600;
+  font-family:'Inter',sans-serif;
+  cursor:pointer;
+}
+
+.primary{
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  color:#1a1410;
+}
+
+.secondary{
+  background:transparent;
+  color:var(--paper);
+  border:1px solid var(--line);
+}
+
+/* Ad slot */
+.ad-slot{ margin:16px 0; }
+
+.ad-box{
+  min-height:100px;
+  border:1.5px dashed var(--line);
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* Footer */
+footer.credit{
+  text-align:center;
+  color:var(--muted);
+  font-size:12.5px;
+  padding:20px 0 30px;
+}
+
+@media(max-width:600px){
+  .options{ grid-template-columns:1fr; }
+  .preview-item img{ height:130px; }
+}
+</style>
 </head>
 
 <body>
-<header>
-<div class="logo">FormReady <span>India</span></div>
-<a href="/formready-india/index.html#tools">Home</a>
+
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
 </header>
-<a class="back" href="/formready-india/index.html#tools"> Back to Tools</a>
+
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
 
 <div class="container">
 
-  <div class="header">
-    <h1>📄 JPG to PDF</h1>
-    <p>Convert your JPG images into a PDF easily</p>
+  <div class="card">
+    <div class="card-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="9" y1="13" x2="15" y2="13"/>
+          <line x1="9" y1="17" x2="15" y2="17"/>
+        </svg>
+      </div>
+      <h1>JPG to PDF</h1>
+      <p>Convert your JPG images into a PDF easily</p>
+    </div>
+
+    <div class="upload-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      <p class="upload-title">Choose JPG Images</p>
+      <p class="upload-hint">Select one or multiple images</p>
+      <label class="btn-choose" for="fileInput">Browse Files</label>
+      <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" multiple hidden>
+    </div>
   </div>
 
   <div class="card">
-
-    <label class="upload" for="fileInput">
-      <strong>📷 Choose JPG Images</strong>
-      <span>Select one or multiple images</span>
-    </label>
-
-    <input
-      type="file"
-      id="fileInput"
-      accept="image/jpeg,image/jpg,image/png"
-      multiple
-    >
-
-  </div>
-
-  <div class="card">
-
     <div class="options">
-
-      <div>
+      <div class="field">
         <label for="pageSize">PDF Page Size</label>
-
         <select id="pageSize">
           <option value="a4">A4</option>
           <option value="a5">A5</option>
@@ -251,18 +349,16 @@ button{
         </select>
       </div>
 
-      <div>
+      <div class="field">
         <label for="orientation">Orientation</label>
-
         <select id="orientation">
           <option value="portrait">Portrait</option>
           <option value="landscape">Landscape</option>
         </select>
       </div>
 
-      <div>
+      <div class="field">
         <label for="margin">Margin</label>
-
         <select id="margin">
           <option value="5">5 mm</option>
           <option value="10" selected>10 mm</option>
@@ -271,44 +367,34 @@ button{
         </select>
       </div>
 
-      <div>
+      <div class="field">
         <label for="fit">Image Fit</label>
-
         <select id="fit">
           <option value="contain">Fit to Page</option>
           <option value="cover">Fill Page</option>
         </select>
       </div>
-
     </div>
-
   </div>
 
   <div class="card" id="previewCard" style="display:none">
-
-    <h3>Selected Images</h3>
-
+    <h3 style="margin:0 0 4px;font-size:16px;">Selected Images</h3>
     <div class="preview" id="preview"></div>
-
     <div class="status" id="status"></div>
-
   </div>
 
   <div class="card">
-
     <div class="buttons">
-
-      <button class="primary" id="convertBtn">
-        📄 Convert to PDF
-      </button>
-
-      <button class="secondary" id="clearBtn">
-        Reset
-      </button>
-
+      <button class="primary" id="convertBtn">Convert to PDF</button>
+      <button class="secondary" id="clearBtn">Reset</button>
     </div>
-
   </div>
+
+  <div class="ad-slot">
+    <div class="ad-box">Advertisement</div>
+  </div>
+
+  <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
 
 </div>
 
@@ -379,13 +465,6 @@ function loadImage(file){
         );
 
       };
-
-      /*
-        IMPORTANT:
-        Use Data URL instead of temporary
-        object URL so jsPDF always receives
-        a completely loaded image.
-      */
 
       img.src = e.target.result;
 
@@ -473,7 +552,6 @@ fileInput.addEventListener(
       item.appendChild(name);
 
       preview.appendChild(item);
-
     });
 
   }
@@ -600,10 +678,6 @@ function addImageToPDF(
 
   }else{
 
-    /*
-      FIT TO PAGE
-    */
-
     if(imageRatio > pageRatio){
 
       drawWidth =
@@ -633,13 +707,6 @@ function addImageToPDF(
   let y =
     (pageHeight -
      drawHeight) / 2;
-
-
-  /*
-    COVER MODE:
-    Keep image centered and allow
-    it to extend beyond the page.
-  */
 
   pdf.addImage(
     img,
@@ -676,7 +743,7 @@ convertBtn.addEventListener(
     convertBtn.disabled = true;
 
     convertBtn.textContent =
-      "⏳ Creating PDF...";
+      "Creating PDF...";
 
     try{
 
@@ -717,13 +784,6 @@ convertBtn.addEventListener(
           files.length +
           "...";
 
-
-        /*
-          IMPORTANT:
-          Wait for every image to fully load
-          BEFORE adding it to jsPDF.
-        */
-
         const img =
           await loadImage(
             files[i]
@@ -742,12 +802,6 @@ convertBtn.addEventListener(
 
         }
 
-
-        /*
-          White background first.
-          Prevents transparent/empty page issues.
-        */
-
         pdf.setFillColor(
           255,
           255,
@@ -761,7 +815,6 @@ convertBtn.addEventListener(
           dimensions.height,
           "F"
         );
-
 
         addImageToPDF(
           pdf,
@@ -777,11 +830,6 @@ convertBtn.addEventListener(
       status.textContent =
         "PDF created successfully!";
 
-
-      /*
-        Generate and download only after
-        every image has been added.
-      */
 
       pdf.save(
         "converted-images.pdf"
@@ -805,7 +853,7 @@ convertBtn.addEventListener(
     convertBtn.disabled = false;
 
     convertBtn.textContent =
-      "📄 Convert to PDF";
+      "Convert to PDF";
 
   }
 );
