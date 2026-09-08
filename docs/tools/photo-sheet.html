@@ -3,222 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-
-<style>
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  background:#f5f7fb;
-  color:#172033;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
-.container{
-  width:100%;
-  max-width:720px;
-  margin:auto;
-  padding:14px;
-}
-
-h1{
-  text-align:center;
-  font-size:28px;
-  margin:8px 0 5px;
-}
-
-.subtitle{
-  text-align:center;
-  color:#707887;
-  margin-bottom:18px;
-  font-size:16px;
-}
-
-.card{
-  background:#fff;
-  border-radius:20px;
-  padding:17px;
-  margin-bottom:15px;
-  box-shadow:0 4px 18px rgba(0,0,0,.06);
-}
-
-.upload{
-  display:block;
-  text-align:center;
-  border:2px dashed #6685d9;
-  border-radius:15px;
-  padding:18px;
-  font-size:19px;
-  font-weight:bold;
-  color:#315fc7;
-  cursor:pointer;
-}
-
-.upload input{
-  display:none;
-}
-
-.section-title{
-  font-size:19px;
-  font-weight:700;
-  margin-bottom:14px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-}
-
-label{
-  display:block;
-  font-size:14px;
-  font-weight:700;
-  margin-bottom:6px;
-}
-
-input,
-select{
-  width:100%;
-  height:47px;
-  padding:0 12px;
-  border:1.8px solid #d9dee8;
-  border-radius:11px;
-  background:#fff;
-  color:#172033;
-  font-size:16px;
-  outline:none;
-}
-
-input:focus,
-select:focus{
-  border-color:#4775df;
-}
-
-details{
-  margin-top:14px;
-  padding-top:13px;
-  border-top:1px solid #edf0f5;
-}
-
-summary{
-  color:#315fc7;
-  font-size:15px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.advanced{
-  margin-top:14px;
-}
-
-/* COMPACT PREVIEW */
-
-.preview-card{
-  padding:14px;
-}
-
-.preview-title{
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:10px;
-}
-
-.preview-stage{
-  width:100%;
-  height:390px;
-  border-radius:15px;
-  background:#17191e;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  padding:14px;
-}
-
-/*
-  Canvas is displayed small on screen.
-  Its real pixel dimensions remain 300 DPI.
-*/
-
-#canvas{
-  display:block;
-  background:#fff;
-  max-width:100%;
-  max-height:100%;
-  width:auto;
-  height:auto;
-  box-shadow:0 5px 20px rgba(0,0,0,.45);
-}
-
-.info{
-  text-align:center;
-  color:#707887;
-  font-size:14px;
-  margin:10px 0;
-}
-
-button{
-  width:100%;
-  height:50px;
-  border:0;
-  border-radius:13px;
-  font-size:17px;
-  font-weight:bold;
-  margin-top:8px;
-  cursor:pointer;
-}
-
-#create{
-  background:#2867df;
-  color:#fff;
-}
-
-#download{
-  background:#172033;
-  color:#fff;
-}
-
-#reset{
-  background:#e8ebf1;
-  color:#172033;
-}
-
-@media(max-width:500px){
-
-  .container{
-    padding:10px;
-  }
-
-  h1{
-    font-size:25px;
-  }
-
-  .card{
-    padding:14px;
-    border-radius:18px;
-  }
-
-  .preview-stage{
-    height:350px;
-    padding:12px;
-  }
-
-  input,
-  select{
-    height:45px;
-    font-size:15px;
-  }
-
-  label{
-    font-size:13px;
-  }
-}
-</style>
 <title>Photo Sheet Maker Online Free</title>
 
 <meta name="description" content="Create a photo sheet online for free. Arrange multiple photos on one sheet quickly from your phone.">
@@ -241,784 +25,598 @@ button{
 </script>
 
 <script src="../token-system.js"></script>
-<link rel="stylesheet" href="css/theme.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#151210;
+    --panel:#1e1a17;
+    --panel-2:#262019;
+    --line:#39322b;
+    --amber:#d99a3f;
+    --amber-bright:#f0b158;
+    --amber-dim:#8a6329;
+    --teal:#5fada0;
+    --paper:#f2ece2;
+    --muted:#a89a89;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'Inter',Arial,sans-serif;
+  }
+
+  h1,h2,.section-title,.preview-title,.brand{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+  }
+
+  /* TOPBAR */
+
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 18px;
+    background:rgba(21,18,16,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+
+  .brand{
+    font-size:18px;
+    color:var(--paper);
+  }
+
+  .brand span{color:var(--amber-bright);}
+
+  .topbar a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+  }
+
+  .topbar a:hover{color:var(--amber-bright);}
+
+  .breadcrumb{
+    display:block;
+    padding:12px 18px 0;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:13px;
+  }
+
+  .breadcrumb:hover{color:var(--amber-bright);}
+
+  .container{
+    width:100%;
+    max-width:600px;
+    margin:auto;
+    padding:16px;
+  }
+
+  h1{
+    text-align:center;
+    font-size:26px;
+    margin:14px 0 4px;
+    color:var(--paper);
+  }
+
+  .subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:20px;
+    font-size:15px;
+  }
+
+  .icon-badge{
+    width:46px;
+    height:46px;
+    margin:0 auto 10px;
+    border-radius:14px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .icon-badge svg{
+    width:24px;
+    height:24px;
+    stroke:#1a1410;
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+  }
+
+  .upload-box{
+    display:block;
+    text-align:center;
+    border:2px dashed var(--amber-dim);
+    border-radius:14px;
+    padding:22px 14px;
+    cursor:pointer;
+    color:var(--muted);
+    font-size:14px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+
+  .upload-box:hover{
+    border-color:var(--amber);
+    background:rgba(217,154,63,.05);
+  }
+
+  .upload-box input{display:none;}
+
+  .upload-btn{
+    display:inline-block;
+    margin-bottom:10px;
+    padding:10px 22px;
+    border-radius:10px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;
+    font-weight:600;
+    font-size:14px;
+  }
+
+  .upload-name{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  .section-title{
+    font-size:16px;
+    color:var(--paper);
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    margin-bottom:6px;
+    color:var(--muted);
+  }
+
+  input,select{
+    width:100%;
+    height:44px;
+    padding:0 12px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--paper);
+    font-size:15px;
+    outline:none;
+    font-family:'Inter',sans-serif;
+  }
+
+  input:focus,select:focus{
+    border-color:var(--amber);
+  }
+
+  select{
+    -webkit-appearance:none;
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a89a89' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    padding-right:34px;
+  }
+
+  details{
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+
+  summary{
+    color:var(--amber-bright);
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    list-style:none;
+  }
+
+  summary::-webkit-details-marker{display:none;}
+
+  .advanced{margin-top:14px;}
+
+  .hint{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin:12px 0;
+    line-height:1.5;
+  }
+
+  .preview-stage{
+    width:100%;
+    height:360px;
+    border-radius:14px;
+    background:#0e0c0b;
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    padding:14px;
+  }
+
+  #canvas{
+    display:block;
+    background:#fff;
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);
+  }
+
+  button{
+    width:100%;
+    height:50px;
+    border:0;
+    border-radius:12px;
+    font-size:15.5px;
+    font-weight:600;
+    margin-top:10px;
+    cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;
+    transition:opacity .15s ease;
+  }
+
+  button:active{opacity:.85;}
+
+  .btn-primary{
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;
+  }
+
+  .btn-secondary{
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--paper);
+  }
+
+  .btn-secondary:hover{border-color:var(--amber-dim);}
+
+  .ad-slot{
+    max-width:600px;
+    margin:0 auto 20px;
+    padding:0 16px;
+  }
+
+  .ad-box{
+    min-height:100px;
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  footer.credit{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    padding:10px 16px 30px;
+  }
+
+  @media(max-width:500px){
+    h1{font-size:22px;}
+    .card{padding:15px;border-radius:16px;}
+    .preview-stage{height:320px;padding:10px;}
+    input,select{height:42px;font-size:14px;}
+  }
+</style>
 </head>
 
 <body>
-<header>
-<div class="logo">FormReady <span>India</span></div>
-<a href="/formready-india/index.html#tools">Home</a>
+
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
 </header>
-<a class="back" href="/formready-india/index.html#tools"> Back to Tools</a>
+
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
 
 <div class="container">
 
-<h1>📸 Photo Sheet Maker</h1>
+  <div class="icon-badge">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+  </div>
 
-<div class="subtitle">
-Create a clean printable photo sheet
-</div>
+  <h1>Photo Sheet Maker</h1>
+  <div class="subtitle">Arrange multiple copies of one photo on a single printable sheet</div>
 
+  <!-- UPLOAD -->
+  <div class="card">
+    <label class="upload-box">
+      <span class="upload-btn">📁 Choose Photo</span>
+      <span class="upload-name" id="fileName">No photo selected yet</span>
+      <input type="file" id="photo" accept="image/*">
+    </label>
+  </div>
 
-<!-- PHOTO UPLOAD -->
+  <!-- SETTINGS -->
+  <div class="card">
+    <div class="section-title">📐 Photo Settings</div>
 
-<div class="card">
+    <div class="grid">
+      <div>
+        <label>Photo Width (mm)</label>
+        <input id="photoW" type="number" value="35" min="1" step="0.1">
+      </div>
+      <div>
+        <label>Photo Height (mm)</label>
+        <input id="photoH" type="number" value="45" min="1" step="0.1">
+      </div>
+      <div>
+        <label>Number of Photos</label>
+        <input id="count" type="number" value="8" min="1" max="100">
+      </div>
+      <div>
+        <label>Paper Size</label>
+        <select id="paper">
+          <option value="A4">A4</option>
+          <option value="LETTER">Letter</option>
+        </select>
+      </div>
+    </div>
 
-<label class="upload">
+    <details>
+      <summary>⚙️ Advanced Settings</summary>
+      <div class="advanced grid">
+        <div>
+          <label>DPI (print quality)</label>
+          <input id="dpi" type="number" value="300" min="72" max="1200">
+        </div>
+        <div>
+          <label>Horizontal Gap (mm)</label>
+          <input id="gapX" type="number" value="3" min="0" step="0.5">
+        </div>
+        <div>
+          <label>Vertical Gap (mm)</label>
+          <input id="gapY" type="number" value="3" min="0" step="0.5">
+        </div>
+        <div>
+          <label>Top Margin (mm)</label>
+          <input id="marginTop" type="number" value="10" min="0" step="0.5">
+        </div>
+        <div>
+          <label>Left Margin (mm)</label>
+          <input id="marginLeft" type="number" value="10" min="0" step="0.5">
+        </div>
+      </div>
+    </details>
+  </div>
 
-📁 Choose Photo
+  <!-- PREVIEW -->
+  <div class="card">
+    <div class="section-title">👀 Sheet Preview</div>
 
-<input
-  type="file"
-  id="photo"
-  accept="image/*"
->
+    <div class="preview-stage">
+      <canvas id="canvas"></canvas>
+    </div>
 
-</label>
+    <div id="info" class="hint">8 photos • 35 × 45 mm • A4 • 300 DPI</div>
 
-</div>
+    <button id="create" class="btn-primary">✨ Create Sheet</button>
+    <button id="download" class="btn-primary">⬇️ Download JPG</button>
+    <button id="reset" class="btn-secondary">↻ Reset</button>
 
-
-<!-- SETTINGS -->
-
-<div class="card">
-
-<div class="section-title">
-📐 Photo Settings
-</div>
-
-<div class="grid">
-
-<div>
-<label>Photo Width (mm)</label>
-
-<input
-  id="photoW"
-  type="number"
-  value="35"
-  min="1"
-  step="0.1"
->
-</div>
-
-
-<div>
-<label>Photo Height (mm)</label>
-
-<input
-  id="photoH"
-  type="number"
-  value="45"
-  min="1"
-  step="0.1"
->
-</div>
-
-
-<div>
-<label>Number of Photos</label>
-
-<input
-  id="count"
-  type="number"
-  value="8"
-  min="1"
-  max="100"
->
-</div>
-
-
-<div>
-<label>Paper</label>
-
-<select id="paper">
-
-<option value="A4">A4</option>
-<option value="LETTER">Letter</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-<!-- ADVANCED -->
-
-<details>
-
-<summary>
-⚙️ Advanced Settings
-</summary>
-
-<div class="advanced grid">
-
-<div>
-
-<label>DPI</label>
-
-<input
-  id="dpi"
-  type="number"
-  value="300"
-  min="72"
-  max="1200"
->
+    <div class="hint">Upload a photo above, adjust size/count if needed — the sheet updates automatically, then download when ready.</div>
+  </div>
 
 </div>
 
-
-<div>
-
-<label>Horizontal Gap (mm)</label>
-
-<input
-  id="gapX"
-  type="number"
-  value="3"
-  min="0"
-  step="0.5"
->
-
+<div class="ad-slot">
+  <div class="ad-box">Advertisement</div>
 </div>
 
-
-<div>
-
-<label>Vertical Gap (mm)</label>
-
-<input
-  id="gapY"
-  type="number"
-  value="3"
-  min="0"
-  step="0.5"
->
-
-</div>
-
-
-<div>
-
-<label>Top Margin (mm)</label>
-
-<input
-  id="marginTop"
-  type="number"
-  value="10"
-  min="0"
-  step="0.5"
->
-
-</div>
-
-
-<div>
-
-<label>Left Margin (mm)</label>
-
-<input
-  id="marginLeft"
-  type="number"
-  value="10"
-  min="0"
-  step="0.5"
->
-
-</div>
-
-</div>
-
-</details>
-
-</div>
-
-
-<!-- PREVIEW -->
-
-<div class="card preview-card">
-
-<div class="preview-title">
-👀 Sheet Preview
-</div>
-
-
-<div class="preview-stage">
-
-<canvas id="canvas"></canvas>
-
-</div>
-
-
-<div
-  id="info"
-  class="info"
->
-8 photos • 35 × 45 mm • A4 • 300 DPI
-</div>
-
-
-<button id="create">
-✨ Create Sheet
-</button>
-
-
-<button id="download">
-⬇️ Download JPG
-</button>
-
-
-<button id="reset">
-↻ Reset
-</button>
-
-</div>
-
-</div>
-
+<footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
 
 <script>
 
-const photoInput =
-document.getElementById("photo");
-
-const canvas =
-document.getElementById("canvas");
-
-const ctx =
-canvas.getContext("2d");
-
+const photoInput = document.getElementById("photo");
+const fileNameLabel = document.getElementById("fileName");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
 let image = null;
 
-
-/* SETTINGS */
-
-const photoW =
-document.getElementById("photoW");
-
-const photoH =
-document.getElementById("photoH");
-
-const count =
-document.getElementById("count");
-
-const dpi =
-document.getElementById("dpi");
-
-const paper =
-document.getElementById("paper");
-
-const gapX =
-document.getElementById("gapX");
-
-const gapY =
-document.getElementById("gapY");
-
-const marginTop =
-document.getElementById("marginTop");
-
-const marginLeft =
-document.getElementById("marginLeft");
-
-const info =
-document.getElementById("info");
-
-
-/* MM TO PIXELS */
+const photoW = document.getElementById("photoW");
+const photoH = document.getElementById("photoH");
+const count = document.getElementById("count");
+const dpi = document.getElementById("dpi");
+const paper = document.getElementById("paper");
+const gapX = document.getElementById("gapX");
+const gapY = document.getElementById("gapY");
+const marginTop = document.getElementById("marginTop");
+const marginLeft = document.getElementById("marginLeft");
+const info = document.getElementById("info");
 
 function mmToPx(mm,d){
-
-  return Math.round(
-    mm * d / 25.4
-  );
-
+  return Math.round(mm * d / 25.4);
 }
-
-
-/* PAPER SIZE */
 
 function getPaper(){
-
   if(paper.value === "LETTER"){
-
-    return {
-      w:215.9,
-      h:279.4
-    };
-
+    return { w:215.9, h:279.4 };
   }
-
-  return {
-    w:210,
-    h:297
-  };
-
+  return { w:210, h:297 };
 }
 
+photoInput.addEventListener("change", function(){
+  const file = this.files[0];
+  if(!file) return;
 
-/* UPLOAD */
+  fileNameLabel.textContent = file.name;
 
-photoInput.addEventListener(
-"change",
-function(){
-
-  const file =
-  this.files[0];
-
-  if(!file)return;
-
-
-  const reader =
-  new FileReader();
-
-
-  reader.onload =
-  function(e){
-
-    image =
-    new Image();
-
-
-    image.onload =
-    function(){
-
+  const reader = new FileReader();
+  reader.onload = function(e){
+    image = new Image();
+    image.onload = function(){
       createSheet();
-
     };
-
-
-    image.src =
-    e.target.result;
-
+    image.src = e.target.result;
   };
-
-
   reader.readAsDataURL(file);
-
 });
 
-
-/* CREATE SHEET */
-
 function createSheet(){
+  const d = Math.max(72, parseInt(dpi.value) || 300);
+  const pw = Math.max(1, parseFloat(photoW.value) || 35);
+  const ph = Math.max(1, parseFloat(photoH.value) || 45);
+  const total = Math.max(1, parseInt(count.value) || 8);
+  const gx = Math.max(0, parseFloat(gapX.value) || 0);
+  const gy = Math.max(0, parseFloat(gapY.value) || 0);
+  const mt = Math.max(0, parseFloat(marginTop.value) || 0);
+  const ml = Math.max(0, parseFloat(marginLeft.value) || 0);
 
-  const d =
-  Math.max(
-    72,
-    parseInt(dpi.value) || 300
-  );
+  const p = getPaper();
 
+  const canvasW = mmToPx(p.w,d);
+  const canvasH = mmToPx(p.h,d);
 
-  const pw =
-  Math.max(
-    1,
-    parseFloat(photoW.value) || 35
-  );
+  canvas.width = canvasW;
+  canvas.height = canvasH;
 
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0,0,canvasW,canvasH);
 
-  const ph =
-  Math.max(
-    1,
-    parseFloat(photoH.value) || 45
-  );
+  const w = mmToPx(pw,d);
+  const h = mmToPx(ph,d);
+  const gxPx = mmToPx(gx,d);
+  const gyPx = mmToPx(gy,d);
+  const left = mmToPx(ml,d);
+  const top = mmToPx(mt,d);
 
-
-  const total =
-  Math.max(
-    1,
-    parseInt(count.value) || 8
-  );
-
-
-  const gx =
-  Math.max(
-    0,
-    parseFloat(gapX.value) || 0
-  );
-
-
-  const gy =
-  Math.max(
-    0,
-    parseFloat(gapY.value) || 0
-  );
-
-
-  const mt =
-  Math.max(
-    0,
-    parseFloat(marginTop.value) || 0
-  );
-
-
-  const ml =
-  Math.max(
-    0,
-    parseFloat(marginLeft.value) || 0
-  );
-
-
-  const p =
-  getPaper();
-
-
-  /* REAL OUTPUT SIZE */
-
-  const canvasW =
-  mmToPx(p.w,d);
-
-  const canvasH =
-  mmToPx(p.h,d);
-
-
-  canvas.width =
-  canvasW;
-
-  canvas.height =
-  canvasH;
-
-
-  /* WHITE PAPER */
-
-  ctx.fillStyle =
-  "#ffffff";
-
-  ctx.fillRect(
-    0,
-    0,
-    canvasW,
-    canvasH
-  );
-
-
-  /* PHOTO SIZE */
-
-  const w =
-  mmToPx(pw,d);
-
-  const h =
-  mmToPx(ph,d);
-
-
-  const gxPx =
-  mmToPx(gx,d);
-
-  const gyPx =
-  mmToPx(gy,d);
-
-
-  const left =
-  mmToPx(ml,d);
-
-  const top =
-  mmToPx(mt,d);
-
-
-  /*
-    TOP-LEFT START
-  */
-
-  const availableW =
-  canvasW - left;
-
-
-  const columns =
-  Math.max(
-    1,
-    Math.floor(
-      (availableW + gxPx) /
-      (w + gxPx)
-    )
-  );
-
-
-  /*
-    If no photo uploaded,
-    keep paper blank.
-  */
+  const availableW = canvasW - left;
+  const columns = Math.max(1, Math.floor((availableW + gxPx) / (w + gxPx)));
 
   if(image){
+    for(let i=0; i<total; i++){
+      const row = Math.floor(i / columns);
+      const col = i % columns;
+      const x = left + col * (w + gxPx);
+      const y = top + row * (h + gyPx);
 
-    for(
-      let i=0;
-      i<total;
-      i++
-    ){
-
-      const row =
-      Math.floor(
-        i / columns
-      );
-
-
-      const col =
-      i % columns;
-
-
-      const x =
-      left +
-      col * (w + gxPx);
-
-
-      const y =
-      top +
-      row * (h + gyPx);
-
-
-      /*
-        Stop when photo
-        would go outside paper.
-      */
-
-      if(
-        y + h >
-        canvasH
-      ){
+      if(y + h > canvasH){
         break;
       }
 
-
-      drawPhoto(
-        image,
-        x,
-        y,
-        w,
-        h
-      );
-
+      drawPhoto(image, x, y, w, h);
     }
-
   }
 
-
-  info.textContent =
-  `${total} photos • ${pw} × ${ph} mm • ${paper.value} • ${d} DPI`;
-
+  info.textContent = `${total} photos • ${pw} × ${ph} mm • ${paper.value} • ${d} DPI`;
 }
 
+function drawPhoto(img,x,y,w,h){
+  const scale = Math.max(w / img.width, h / img.height);
+  const sw = w / scale;
+  const sh = h / scale;
+  const sx = (img.width - sw) / 2;
+  const sy = (img.height - sh) / 2;
 
-/* HIGH QUALITY PHOTO DRAW */
-
-function drawPhoto(
-  img,
-  x,
-  y,
-  w,
-  h
-){
-
-  /*
-    Cover crop:
-    photo completely fills
-    selected size.
-  */
-
-  const scale =
-  Math.max(
-    w / img.width,
-    h / img.height
-  );
-
-
-  const sw =
-  w / scale;
-
-  const sh =
-  h / scale;
-
-
-  const sx =
-  (img.width - sw) / 2;
-
-  const sy =
-  (img.height - sh) / 2;
-
-
-  ctx.drawImage(
-    img,
-    sx,
-    sy,
-    sw,
-    sh,
-    x,
-    y,
-    w,
-    h
-  );
-
+  ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
 }
 
-
-/* CREATE BUTTON */
-
-document
-.getElementById("create")
-.addEventListener(
-"click",
-function(){
-
+document.getElementById("create").addEventListener("click", function(){
   if(!image){
-
-    alert(
-      "Please choose a photo first."
-    );
-
+    alert("Please choose a photo first.");
     return;
   }
-
   createSheet();
-
 });
 
-
-/* DOWNLOAD JPG */
-
-document
-.getElementById("download")
-.addEventListener(
-"click",
-function(){
-
+document.getElementById("download").addEventListener("click", function(){
   if(!image){
-
-    alert(
-      "Please choose a photo first."
-    );
-
+    alert("Please choose a photo first.");
     return;
   }
 
-
   createSheet();
 
-
-  const link =
-  document.createElement("a");
-
-
-  link.download =
-  "photo-sheet.jpg";
-
-
-  link.href =
-  canvas.toDataURL(
-    "image/jpeg",
-    0.98
-  );
-
-
+  const link = document.createElement("a");
+  link.download = "photo-sheet.jpg";
+  link.href = canvas.toDataURL("image/jpeg", 0.98);
   link.click();
-
 });
 
-
-/* RESET */
-
-document
-.getElementById("reset")
-.addEventListener(
-"click",
-function(){
-
+document.getElementById("reset").addEventListener("click", function(){
   photoInput.value = "";
-
   image = null;
-
+  fileNameLabel.textContent = "No photo selected yet";
 
   photoW.value = 35;
-
   photoH.value = 45;
-
   count.value = 8;
-
   dpi.value = 300;
-
   paper.value = "A4";
-
   gapX.value = 3;
-
   gapY.value = 3;
-
   marginTop.value = 10;
-
   marginLeft.value = 10;
-
 
   drawEmpty();
 
-
-  info.textContent =
-  "8 photos • 35 × 45 mm • A4 • 300 DPI";
-
+  info.textContent = "8 photos • 35 × 45 mm • A4 • 300 DPI";
 });
 
-
-/* LIVE SETTINGS */
-
-[
-  photoW,
-  photoH,
-  count,
-  dpi,
-  paper,
-  gapX,
-  gapY,
-  marginTop,
-  marginLeft
-]
-.forEach(
-function(el){
-
-  el.addEventListener(
-    "input",
-    function(){
-
-      if(image){
-        createSheet();
-      }
-
+[photoW, photoH, count, dpi, paper, gapX, gapY, marginTop, marginLeft].forEach(function(el){
+  el.addEventListener("input", function(){
+    if(image){
+      createSheet();
     }
-  );
-
+  });
 });
-
-
-/* EMPTY COMPACT PREVIEW */
 
 function drawEmpty(){
+  canvas.width = mmToPx(210,300);
+  canvas.height = mmToPx(297,300);
 
-  /*
-    Real A4 300 DPI canvas
-    but CSS keeps it compact.
-  */
-
-  canvas.width =
-  mmToPx(210,300);
-
-  canvas.height =
-  mmToPx(297,300);
-
-
-  ctx.fillStyle =
-  "#ffffff";
-
-  ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 }
-
-
-/* INITIAL */
 
 drawEmpty();
 
 </script>
-
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
