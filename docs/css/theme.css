@@ -156,3 +156,35 @@ body > div > div {
     max-width: 680px;
   }
 }
+
+header, .site-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: #ffffff !important;
+  padding: 14px 24px !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+}
+.logo {
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  color: #0f172a !important;
+}
+header a, .site-header a {
+  color: #6b7280 !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+}
+header a:hover, .site-header a:hover {
+  color: #1a56db !important;
+}
+a.back {
+  color: #1a56db !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  display: inline-block;
+  margin: 16px 20px 0;
+}
