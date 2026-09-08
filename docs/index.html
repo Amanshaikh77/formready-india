@@ -165,7 +165,7 @@ footer {
   <p>Fast, Simple, Mobile-Friendly &amp; 100% Private Client-Side Toolbox</p>
 </header>
 <div class="search-container">
-  <input type="search" id="searchInput" class="search-input" placeholder="🔍 Search any tool (e.g. Resizer, Age, PDF)...">
+  <input type="search" id="searchInput" class="search-input" placeholder="🔍 Search any tool (e.g. Converter, Resizer, PDF)...">
 </div>
 <div class="category-wrapper">
   <div class="category-tabs" id="categoryTabs">
@@ -188,14 +188,14 @@ const toolsCatalog = [
     categoryTitle: "📸 Image & Photo Utilities",
     categoryDesc: "High-resolution photo editing, precision cropping, and background tools",
     tools: [
-      { name: "Photo Cropper", desc: "Touch-friendly precision aspect-ratio cropper", icon: "✂️", status: "ready", link: "tools/photo-cropper/" },
-      { name: "Photo Resizer", desc: "Resize dimensions in pixels, cm, or mm directly", icon: "📐", status: "ready", link: "tools/photo-resizer/" },
-      { name: "Photo Compressor", desc: "Shrink photo KB/MB size while maintaining resolution", icon: "🗜️", status: "ready", link: "tools/photo-compressor/" },
-      { name: "Passport Photo Maker", desc: "Govt standard passport photos with clean backgrounds", icon: "👤", status: "ready", link: "tools/passport-photo/" },
-      { name: "Photo Sheet Maker", desc: "Printable A4 grid sheets with multiple photo copies", icon: "🖨️", status: "ready", link: "tools/photo-sheet/" },
-      { name: "Background Remover", desc: "Client-side transparent background cutter", icon: "🪄", status: "ready", link: "tools/background-remover/" },
-      { name: "Signature Maker", desc: "Draw, smooth, and export transparent digital signatures", icon: "✍️", status: "ready", link: "tools/signature-maker/" },
-      { name: "Image Format Converter", desc: "Instant format swap: JPG, PNG, and WebP", icon: "🔄", status: "upcoming", link: "#" },
+      { name: "Image Format Converter", desc: "Instant format swap: JPG, PNG, and WebP", icon: "🔄", status: "ready", link: "tools/image-converter/" },
+      { name: "Photo Cropper", desc: "Touch-friendly precision aspect-ratio cropper", icon: "✂️", status: "upcoming", link: "#" },
+      { name: "Photo Resizer", desc: "Resize dimensions in pixels, cm, or mm directly", icon: "📐", status: "upcoming", link: "#" },
+      { name: "Photo Compressor", desc: "Shrink photo KB/MB size while maintaining resolution", icon: "🗜️", status: "upcoming", link: "#" },
+      { name: "Passport Photo Maker", desc: "Govt standard passport photos with clean backgrounds", icon: "👤", status: "upcoming", link: "#" },
+      { name: "Photo Sheet Maker", desc: "Printable A4 grid sheets with multiple photo copies", icon: "🖨️", status: "upcoming", link: "#" },
+      { name: "Background Remover", desc: "Client-side transparent background cutter", icon: "🪄", status: "upcoming", link: "#" },
+      { name: "Signature Maker", desc: "Draw, smooth, and export transparent digital signatures", icon: "✍️", status: "upcoming", link: "#" },
       { name: "Image to Text (OCR)", desc: "Copy text directly from any picture or screenshot", icon: "👁️", status: "upcoming", link: "#" }
     ]
   },
@@ -216,11 +216,11 @@ const toolsCatalog = [
     categoryTitle: "📄 PDF Tools & Editors",
     categoryDesc: "Client-side private PDF manipulation, inspection, and redaction",
     tools: [
-      { name: "PDF Text Inspector & Editor", desc: "Edit text, redactions, auto-font detect on digital & scanned PDFs", icon: "📝", status: "ready", link: "tools/pdf-editor/" },
-      { name: "Merge PDF", desc: "Combine multiple PDF documents into one ordered file", icon: "📑", status: "ready", link: "tools/merge-pdf/" },
-      { name: "Split PDF", desc: "Extract pages or custom page ranges into a new PDF", icon: "✂️", status: "ready", link: "tools/split-pdf/" },
-      { name: "JPG to PDF", desc: "Convert photo image files into multi-page PDFs", icon: "🖼️", status: "ready", link: "tools/jpg-to-pdf/" },
-      { name: "PDF to JPG", desc: "Extract high-resolution JPG images from PDF pages", icon: "📸", status: "ready", link: "tools/pdf-to-jpg/" },
+      { name: "PDF Text Inspector & Editor", desc: "Edit text, redactions, auto-font detect on digital & scanned PDFs", icon: "📝", status: "upcoming", link: "#" },
+      { name: "Merge PDF", desc: "Combine multiple PDF documents into one ordered file", icon: "📑", status: "upcoming", link: "#" },
+      { name: "Split PDF", desc: "Extract pages or custom page ranges into a new PDF", icon: "✂️", status: "upcoming", link: "#" },
+      { name: "JPG to PDF", desc: "Convert photo image files into multi-page PDFs", icon: "🖼️", status: "upcoming", link: "#" },
+      { name: "PDF to JPG", desc: "Extract high-resolution JPG images from PDF pages", icon: "📸", status: "upcoming", link: "#" },
       { name: "Compress PDF", desc: "Client-side file size compressor keeping clarity intact", icon: "🗜️", status: "upcoming", link: "#" },
       { name: "Rotate PDF", desc: "Fix orientation of 90°, 180°, or inverted pages", icon: "🔄", status: "upcoming", link: "#" },
       { name: "PDF Page Organizer", desc: "Drag to reorder pages or delete unwanted sheets", icon: "📑", status: "upcoming", link: "#" },
@@ -279,7 +279,7 @@ function renderCatalog(filter = "all", query = "") {
       </div>
       <div class="tools-grid">
         ${matchedTools.map(t => `
-          <a href="${t.link}" class="tool-card">
+          <a href="${t.link}" class="tool-card" ${t.link === '#' ? 'onclick="alert(\'This tool is coming soon in the next update!\'); return false;"' : ''}>
             <div class="tool-card-head">
               <span class="tool-icon">${t.icon}</span>
               <div class="tool-info">
