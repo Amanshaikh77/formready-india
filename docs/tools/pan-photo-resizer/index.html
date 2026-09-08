@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PAN &amp; Govt Photo Resizer - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar {
+  max-width: 600px;
+  margin: 0 auto 20px;
+  width: 100%;
+}
+.back-btn {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
+.header p { font-size: 13px; color: var(--muted); }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto 24px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.upload-zone {
+  border: 2px dashed var(--line);
+  padding: 24px 16px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--panel-2);
+  transition: border-color 0.2s;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+}
+.upload-zone:hover { border-color: var(--amber); }
+#fileInput { display: none; }
+.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.upload-text b { color: var(--amber); }
+
+.preview-container {
+  display: none;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.preview-img {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  object-fit: contain;
+}
+
+.options-group {
+  margin-bottom: 16px;
+}
+.options-group label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.preset-select, .input-field {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.btn {
+  background: var(--amber);
+  color: #151210;
+  border: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn:hover { background: var(--amber-bright); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-download { background: #2ea043; color: #fff; margin-top: 12px; display: none; }
+.btn-download:hover { background: #3fb950; }
+
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="../../" class="back-btn">← Back to Dashboard</a>
+</div>
+
+<div class="header">
+  <h1>PAN &amp; Govt Photo Resizer</h1>
+  <p>Resize and compress photos exactly to portal pixel &amp; KB limits</p>
+</div>
+
+<div class="card">
+  <label for="fileInput" class="upload-zone" id="dropZone">
+    <div class="upload-text">📁 Tap to upload photo or sign<br><b>JPG, PNG supported</b></div>
+  </label>
+  <input type="file" id="fileInput" accept="image/jpeg, image/png">
+
+  <div class="preview-container" id="previewContainer">
+    <img id="imagePreview" class="preview-img" alt="Preview">
+    <p id="fileDetails" style="font-size:12px; color:var(--muted); margin-top:6px;"></p>
+  </div>
+
+  <div class="options-group">
+    <label>Select Portal Preset:</label>
+    <select id="presetSelect" class="preset-select">
+      <option value="pan">PAN Card Photo (200 x 230 px | Max 50KB)</option>
+      <option value="ssc_photo">SSC / Govt Exam Photo (100 x 120 px | Max 50KB)</option>
+      <option value="ssc_sign">SSC / Govt Exam Signature (140 x 60 px | Max 20KB)</option>
+      <option value="custom">Custom Dimensions &amp; Size</option>
+    </select>
+  </div>
+
+  <div class="grid-2 options-group">
+    <div>
+      <label>Width (px):</label>
+      <input type="number" id="widthInput" class="input-field" value="200">
+    </div>
+    <div>
+      <label>Height (px):</label>
+      <input type="number" id="heightInput" class="input-field" value="230">
+    </div>
+  </div>
+
+  <div class="options-group">
+    <label>Max File Size Limit (KB):</label>
+    <input type="number" id="maxKbInput" class="input-field" value="50">
+  </div>
+
+  <button class="btn" id="processBtn" disabled>Process &amp; Resize Image</button>
+  <a id="downloadLink" style="text-decoration:none;"><button class="btn btn-download" id="downloadBtn">📥 Download Processed Image</button></a>
+</div>
+
+<footer>
+  &copy; 2026 FormReady India. 100% Secure Client-Side Processing.
+</footer>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const previewContainer = document.getElementById("previewContainer");
+const imagePreview = document.getElementById("imagePreview");
+const fileDetails = document.getElementById("fileDetails");
+const presetSelect = document.getElementById("presetSelect");
+const widthInput = document.getElementById("widthInput");
+const heightInput = document.getElementById("heightInput");
+const maxKbInput = document.getElementById("maxKbInput");
+const processBtn = document.getElementById("processBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const downloadLink = document.getElementById("downloadLink");
+
+let loadedImage = null;
+let originalName = "";
+
+presetSelect.addEventListener("change", (e) => {
+  const val = e.target.value;
+  if (val === "pan") {
+    widthInput.value = 200; heightInput.value = 230; maxKbInput.value = 50;
+  } else if (val === "ssc_photo") {
+    widthInput.value = 100; heightInput.value = 120; maxKbInput.value = 50;
+  } else if (val === "ssc_sign") {
+    widthInput.value = 140; heightInput.value = 60; maxKbInput.value = 20;
+  }
+});
+
+fileInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  originalName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+  const reader = new FileReader();
+  
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      loadedImage = img;
+      imagePreview.src = event.target.result;
+      previewContainer.style.display = "block";
+      fileDetails.textContent = `Original: ${Math.round(file.size / 1024)} KB - ${img.width}x${img.height}px`;
+      processBtn.disabled = false;
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+processBtn.addEventListener("click", () => {
+  if (!loadedImage) return;
+
+  const targetW = parseInt(widthInput.value, 10) || 200;
+  const targetH = parseInt(heightInput.value, 10) || 230;
+  const maxBytes = (parseInt(maxKbInput.value, 10) || 50) * 1024;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = targetW;
+  canvas.height = targetH;
+  const ctx = canvas.getContext("2d");
+
+  // Fill white background to avoid transparent black PNG issues
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, targetW, targetH);
+  ctx.drawImage(loadedImage, 0, 0, targetW, targetH);
+
+  // Compress iteratively to meet KB limit
+  let quality = 0.95;
+  let dataUrl = "";
+  let blobSize = Infinity;
+
+  const attemptCompression = () => {
+    canvas.toBlob((blob) => {
+      blobSize = blob.size;
+      if (blobSize > maxBytes && quality > 0.1) {
+        quality -= 0.1;
+        attemptCompression();
+      } else {
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = `${originalName}-govt-resized.jpg`;
+        downloadBtn.style.display = "block";
+        downloadBtn.textContent = `📥 Download (${Math.round(blobSize / 1024)} KB - ${targetW}x${targetH}px)`;
+      }
+    }, "image/jpeg", quality);
+  };
+
+  attemptCompression();
+});
+</script>
+</body>
+</html>
