@@ -47,6 +47,35 @@ body {
   width: 100%;
   box-shadow: 0 8px 30px rgba(0,0,0,0.5);
 }
+
+/* Instructions Manual Box */
+.instructions-box {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.instructions-box h3 {
+  font-size: 13.5px;
+  color: var(--amber);
+  font-family: 'Space Grotesk', sans-serif;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.instructions-box ol {
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.instructions-box li {
+  margin-bottom: 3px;
+}
+
 .upload-zone {
   border: 2px dashed var(--line);
   padding: 28px 16px;
@@ -198,6 +227,28 @@ body {
 }
 .btn-batch-download:hover { background: #3fb950; }
 
+/* Advertisement Box */
+.ad-container {
+  margin-top: 24px;
+  background: var(--panel-2);
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+.ad-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.ad-banner {
+  font-size: 12.5px;
+  color: var(--muted);
+  padding: 10px;
+}
+
 footer {
   text-align: center;
   padding: 20px;
@@ -220,7 +271,16 @@ footer {
 </div>
 
 <div class="card">
-  <!-- Input nested inside label for 100% reliable mobile touch triggering -->
+  <!-- How to Use Instructions Manual -->
+  <div class="instructions-box">
+    <h3>📖 How to Use Image Converter</h3>
+    <ol>
+      <li>Tap the upload zone to select one or multiple images (JPG, PNG, WebP).</li>
+      <li>Choose your desired target format and adjust the quality slider if needed.</li>
+      <li>Tap <b>Convert Images</b> and download individual files or get all as a ZIP archive.</li>
+    </ol>
+  </div>
+
   <label class="upload-zone" id="uploadZone">
     <input type="file" id="fileInput" accept="image/*" multiple>
     <div class="upload-text">📁 Tap here to upload images or drag here<br><b>Supports multiple files</b></div>
@@ -256,6 +316,12 @@ footer {
       <button class="btn btn-batch-download" id="downloadAllBtn">📥 Download All as ZIP</button>
     </div>
   </div>
+
+  <!-- Advertisement Placeholder Box -->
+  <div class="ad-container">
+    <div class="ad-label">Sponsored Advertisement</div>
+    <div class="ad-banner">📢 Advertisement Space (Google AdSense / Banner Placeholder)</div>
+  </div>
 </div>
 
 <footer>
@@ -278,7 +344,6 @@ const downloadAllBtn = document.getElementById("downloadAllBtn");
 
 let fileQueue = [];
 
-// Fix Slider Quality Display Binding
 qualitySlider.addEventListener("input", (e) => {
   qualityVal.textContent = e.target.value;
 });
@@ -325,7 +390,7 @@ fileInput.addEventListener("change", (e) => {
     };
     reader.readAsDataURL(file);
   });
-  fileInput.value = ""; // Reset input so same file can be chosen again if needed
+  fileInput.value = "";
 });
 
 function updateQueueUI() {
