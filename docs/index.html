@@ -151,6 +151,7 @@ header p {
   border-radius: 6px;
 }
 .badge-ready { background: rgba(46, 160, 67, 0.2); color: #3fb950; border: 1px solid rgba(46, 160, 67, 0.4); }
+.badge-upcoming { background: rgba(217, 154, 63, 0.15); color: var(--amber); border: 1px solid rgba(217, 154, 63, 0.3); }
 footer {
   text-align: center;
   padding: 20px;
@@ -184,6 +185,14 @@ footer {
   &copy; 2026 FormReady India. Zero Server Uploads — 100% Secure Local Processing.
 </footer>
 <script>
+const activeToolsList = [
+  "Image Format Converter", "Photo Cropper", "Photo Resizer", "Photo Compressor", 
+  "Passport Photo Maker", "Photo Sheet Maker", "Background Remover", "Signature Maker", "Image to Text (OCR)",
+  "Aadhaar / PAN Photo Resizer", "Signature Resizer & Enhancer", "Passport Photo + Sign Card", 
+  "Document Scanner", "Govt Form PDF Helper",
+  "PDF Text Inspector & Editor", "Merge PDF", "Split PDF", "JPG to PDF", "PDF to JPG", "Compress PDF", "Rotate PDF"
+];
+
 const toolsCatalog = [
   {
     category: "photo",
@@ -225,8 +234,8 @@ const toolsCatalog = [
       { name: "PDF to JPG", desc: "Extract high-resolution JPG images from PDF pages", icon: "📸", link: "tools/pdf-to-jpg/" },
       { name: "Compress PDF", desc: "Client-side file size compressor keeping clarity intact", icon: "🗜️", link: "tools/compress-pdf/" },
       { name: "Rotate PDF", desc: "Fix orientation of 90°, 180°, or inverted pages", icon: "🔄", link: "tools/rotate-pdf/" },
-      { name: "PDF Page Organizer", desc: "Drag to reorder pages or delete unwanted sheets", icon: "📑", link: "#" },
-      { name: "Add Watermark", desc: "Stamp confidential or custom text/logo over PDF", icon: "💧", link: "#" }
+      { name: "PDF Page Organizer", desc: "Drag to reorder pages or delete unwanted sheets", icon: "📑", link: "tools/pdf-page-organizer/" },
+      { name: "Add Watermark", desc: "Stamp confidential or custom text/logo over PDF", icon: "💧", link: "tools/add-watermark/" }
     ]
   },
   {
@@ -234,13 +243,13 @@ const toolsCatalog = [
     categoryTitle: "📝 Text, Code & Content Tools",
     categoryDesc: "Quick string formatters, counters, and offline code utilities",
     tools: [
-      { name: "Word & Character Counter", desc: "Real-time count of words, characters, and reading time", icon: "🔢", link: "#" },
-      { name: "Case Converter", desc: "Toggle UPPERCASE, lowercase, Title Case & camelCase", icon: "🔤", link: "#" },
-      { name: "Text Cleaner", desc: "Strip accidental double spaces, tabs, and blank lines", icon: "🧹", link: "#" },
-      { name: "QR Code Generator", desc: "Create QR codes for links, UPI payments, and Wi-Fi", icon: "🏁", link: "#" },
-      { name: "Barcode Generator", desc: "Generate standard barcodes easily", icon: "|||", link: "#" },
-      { name: "Text to PDF / Image", desc: "Convert plain text notes into a printable document", icon: "📄", link: "#" },
-      { name: "Lorem Ipsum Generator", desc: "Generate placeholder text for layouts and forms", icon: "📜", link: "#" }
+      { name: "Word & Character Counter", desc: "Real-time count of words, characters, and reading time", icon: "🔢", link: "tools/word-counter/" },
+      { name: "Case Converter", desc: "Toggle UPPERCASE, lowercase, Title Case & camelCase", icon: "🔤", link: "tools/case-converter/" },
+      { name: "Text Cleaner", desc: "Strip accidental double spaces, tabs, and blank lines", icon: "🧹", link: "tools/text-cleaner/" },
+      { name: "QR Code Generator", desc: "Create QR codes for links, UPI payments, and Wi-Fi", icon: "🏁", link: "tools/qr-generator/" },
+      { name: "Barcode Generator", desc: "Generate standard barcodes easily", icon: "|||", link: "tools/barcode-generator/" },
+      { name: "Text to PDF / Image", desc: "Convert plain text notes into a printable document", icon: "📄", link: "tools/text-to-pdf/" },
+      { name: "Lorem Ipsum Generator", desc: "Generate placeholder text for layouts and forms", icon: "📜", link: "tools/lorem-generator/" }
     ]
   },
   {
@@ -248,14 +257,14 @@ const toolsCatalog = [
     categoryTitle: "🧮 Daily & Finance Calculators",
     categoryDesc: "Instant eligibility calculations, loan EMI, GST, and daily math tools",
     tools: [
-      { name: "Govt Form Age Calculator", desc: "Calculate exact age as on notification date (Y/M/D)", icon: "🎂", link: "#" },
-      { name: "GST Calculator", desc: "Breakdown CGST, SGST & total amount addition or removal", icon: "📊", link: "#" },
-      { name: "EMI Calculator", desc: "Calculate monthly installments and total loan interest", icon: "💳", link: "#" },
-      { name: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins", icon: "🏷️", link: "#" },
-      { name: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators", icon: "⚖️", link: "#" },
-      { name: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates", icon: "📅", link: "#" },
-      { name: "Unit Converter", desc: "Convert Land, Weight, Length & Units", icon: "📐", link: "#" },
-      { name: "Currency Converter", desc: "Quick currency rate estimations and conversions", icon: "💱", link: "#" }
+      { name: "Govt Form Age Calculator", desc: "Calculate exact age as on notification date (Y/M/D)", icon: "🎂", link: "tools/age-calculator/" },
+      { name: "GST Calculator", desc: "Breakdown CGST, SGST & total amount addition or removal", icon: "📊", link: "tools/gst-calculator/" },
+      { name: "EMI Calculator", desc: "Calculate monthly installments and total loan interest", icon: "💳", link: "tools/emi-calculator/" },
+      { name: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins", icon: "🏷️", link: "tools/percentage-calculator/" },
+      { name: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators", icon: "⚖️", link: "tools/bmi-calculator/" },
+      { name: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates", icon: "📅", link: "tools/date-gap-calculator/" },
+      { name: "Unit Converter", desc: "Convert Land, Weight, Length & Units", icon: "📐", link: "tools/unit-converter/" },
+      { name: "Currency Converter", desc: "Quick currency rate estimations and conversions", icon: "💱", link: "tools/currency-converter/" }
     ]
   }
 ];
@@ -281,24 +290,19 @@ function renderCatalog(filter = "all", query = "") {
       </div>
       <div class="tools-grid">
         ${matchedTools.map(t => {
-          const isActive = [
-            "Image Format Converter", "Photo Cropper", "Photo Resizer", "Photo Compressor", 
-            "Passport Photo Maker", "Photo Sheet Maker", "Background Remover", "Signature Maker", "Image to Text (OCR)",
-            "Aadhaar / PAN Photo Resizer", "Signature Resizer & Enhancer", "Passport Photo + Sign Card", 
-            "Document Scanner", "Govt Form PDF Helper",
-            "PDF Text Inspector & Editor", "Merge PDF", "Split PDF", "JPG to PDF", "PDF to JPG", "Compress PDF", "Rotate PDF"
-          ].includes(t.name);
+          const isActive = activeToolsList.includes(t.name);
           return `
-          <a href="${isActive ? t.link : '#'}" class="tool-card" ${!isActive ? 'onclick="event.preventDefault(); alert('This tool is Coming Soon!');"' : ''}>
-            <div class="tool-card-head">
-              <span class="tool-icon">${t.icon}</span>
-              <div class="tool-info">
-                <h3>${t.name}</h3>
-                <p>${t.desc}</p>
+            <a href="${isActive ? t.link : '#'}" class="tool-card" ${!isActive ? 'onclick="event.preventDefault(); alert(\'' + t.name + ' is Coming Soon!\');"' : ''}>
+              <div class="tool-card-head">
+                <span class="tool-icon">${t.icon}</span>
+                <div class="tool-info">
+                  <h3>${t.name}</h3>
+                  <p>${t.desc}</p>
+                </div>
               </div>
-            </div>
-            <span class="tool-badge ${isActive ? 'badge-ready' : 'badge-upcoming'}">${isActive ? 'Active Tool' : 'Coming Soon'}</span>
-          </a>`;
+              <span class="tool-badge ${isActive ? 'badge-ready' : 'badge-upcoming'}">${isActive ? 'Active Tool' : 'Coming Soon'}</span>
+            </a>
+          `;
         }).join("")}
       </div>
     `;
