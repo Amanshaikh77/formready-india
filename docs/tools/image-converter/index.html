@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- JSZip for Download All archive -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root {
@@ -60,7 +61,7 @@ body {
 }
 .upload-zone:hover { border-color: var(--amber); }
 #fileInput { display: none; }
-.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; pointer-events: none; }
 .upload-text b { color: var(--amber); }
 
 .controls-row {
@@ -118,9 +119,6 @@ body {
   color: var(--paper);
   font-weight: 600;
   margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 .file-list {
   max-height: 350px;
@@ -218,14 +216,15 @@ footer {
 
 <div class="header">
   <h1>Image Format Converter</h1>
-  <p>Convert multiple images (JPG, PNG, WebP, GIF, BMP, TIFF) instantly offline</p>
+  <p>Convert multiple images (JPG, PNG, WebP) instantly offline</p>
 </div>
 
 <div class="card">
-  <label for="fileInput" class="upload-zone">
-    <div class="upload-text">📁 Tap to upload images or drag here<br><b>Supports multiple files</b></div>
+  <!-- Input nested inside label for 100% reliable mobile touch triggering -->
+  <label class="upload-zone" id="uploadZone">
+    <input type="file" id="fileInput" accept="image/*" multiple>
+    <div class="upload-text">📁 Tap here to upload images or drag here<br><b>Supports multiple files</b></div>
   </label>
-  <input type="file" id="fileInput" accept="image/*" multiple>
 
   <div class="controls-row">
     <div class="options-group">
@@ -279,7 +278,11 @@ const downloadAllBtn = document.getElementById("downloadAllBtn");
 
 let fileQueue = [];
 
+// Fix Slider Quality Display Binding
 qualitySlider.addEventListener("input", (e) => {
+  qualityVal.textContent = e.target.value;
+});
+qualitySlider.addEventListener("change", (e) => {
   qualityVal.textContent = e.target.value;
 });
 
@@ -303,23 +306,26 @@ fileInput.addEventListener("change", (e) => {
       const img = new Image();
       img.onload = () => {
         fileQueue.push({
-          id: Math.random().toString(36.substring(2)),
+          id: Math.random().toString(36).substring(2),
           file: file,
           name: file.name.substring(0, file.name.lastIndexOf('.')) || file.name,
           img: img,
           originalSize: file.size,
-          status: "ready", // ready, converting, done
+          status: "ready",
           convertedBlob: null,
           convertedSize: 0,
           downloadUrl: null
         });
         updateQueueUI();
       };
+      img.onerror = () => {
+        alert(`Failed to load image: ${file.name}`);
+      };
       img.src = event.target.result;
     };
     reader.readAsDataURL(file);
   });
-  fileInput.value = "";
+  fileInput.value = ""; // Reset input so same file can be chosen again if needed
 });
 
 function updateQueueUI() {
@@ -352,6 +358,8 @@ function updateQueueUI() {
   const allDone = fileQueue.length > 0 && fileQueue.every(i => i.status === "done");
   if (allDone) {
     batchActions.style.display = "flex";
+  } else {
+    batchActions.style.display = "none";
   }
 }
 
@@ -372,6 +380,7 @@ convertBtn.addEventListener("click", async () => {
   const ext = getExtension();
 
   for (let item of fileQueue) {
+    if (item.status === "done") continue;
     item.status = "converting";
     updateQueueUI();
 
@@ -382,7 +391,6 @@ convertBtn.addEventListener("click", async () => {
         canvas.height = item.img.height;
         const ctx = canvas.getContext("2d");
 
-        // Preserve transparency if PNG/WebP, fill white for JPEG
         if (mime === "image/jpeg") {
           ctx.fillStyle = "#FFFFFF";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
