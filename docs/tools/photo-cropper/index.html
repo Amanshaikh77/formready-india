@@ -4,82 +4,246 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Photo Cropper - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Cropper.js CSS & JS for Interactive Manual Cropping -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <style>
-:root { --bg: #151210; --panel: #1e1a17; --panel-2: #262019; --line: #39322b; --amber: #d99a3f; --amber-bright: #f0b158; --paper: #f2ece2; --muted: #a89a89; }
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+  --green: #2ea043;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--paper); font-family: 'Inter', sans-serif; padding: 16px; min-height: 100vh; display: flex; flex-direction: column; }
-.nav-bar { max-width: 600px; margin: 0 auto 20px; width: 100%; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar { max-width: 650px; margin: 0 auto 20px; width: 100%; }
 .back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
 .header { text-align: center; margin-bottom: 20px; }
 .header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
 .header p { font-size: 13px; color: var(--muted); }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 24px; max-width: 600px; margin: 0 auto 24px; width: 100%; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
-.upload-zone { border: 2px dashed var(--line); padding: 24px 16px; text-align: center; border-radius: 10px; cursor: pointer; background: var(--panel-2); margin-bottom: 20px; display: block; width: 100%; }
-.upload-zone b { color: var(--amber); }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 650px;
+  margin: 0 auto 24px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.upload-zone {
+  border: 2px dashed var(--line);
+  padding: 28px 16px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--panel-2);
+  transition: border-color 0.2s;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+}
+.upload-zone:hover { border-color: var(--amber); }
 #fileInput { display: none; }
+.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; pointer-events: none; }
+.upload-text b { color: var(--amber); }
+
+.editor-container {
+  display: none;
+  margin-bottom: 20px;
+}
+.img-wrap {
+  max-height: 380px;
+  width: 100%;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.img-wrap img {
+  display: block;
+  max-width: 100%;
+}
+
 .options-group { margin-bottom: 16px; }
 .options-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-.input-select { width: 100%; padding: 12px 14px; background: var(--panel-2); border: 1px solid var(--line); color: var(--paper); border-radius: 8px; font-size: 14px; outline: none; }
-.btn { background: var(--amber); color: #151210; border: none; width: 100%; padding: 14px; border-radius: 9px; font-weight: 700; font-size: 14px; cursor: pointer; }
+.input-select {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.btn {
+  background: var(--amber);
+  color: #151210;
+  border: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
 .btn:hover { background: var(--amber-bright); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-download { background: #2ea043; color: #fff; margin-top: 12px; display: none; }
-footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: auto; }
+.btn-download { background: var(--green); color: #fff; margin-top: 12px; display: none; }
+.btn-download:hover { background: #3fb950; }
+
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
 </style>
 </head>
 <body>
-<div class="nav-bar"><a href="../../" class="back-btn">← Back to Dashboard</a></div>
-<div class="header"><h1>Photo Cropper</h1><p>Crop images cleanly for portal requirements</p></div>
+
+<div class="nav-bar">
+  <a href="../../" class="back-btn">← Back to Dashboard</a>
+</div>
+
+<div class="header">
+  <h1>Photo Cropper</h1>
+  <p>Manually crop, drag lines, and select exact area to keep</p>
+</div>
+
 <div class="card">
-  <label for="fileInput" class="upload-zone">
-    <div style="font-size:14px; color:var(--muted);">📁 Tap to upload image to crop<br><b>JPG, PNG supported</b></div>
+  <label class="upload-zone" id="uploadZone">
+    <input type="file" id="fileInput" accept="image/*">
+    <div class="upload-text">📁 Tap here to upload image<br><b>JPG, PNG supported</b></div>
   </label>
-  <input type="file" id="fileInput" accept="image/*">
-  <div id="previewContainer" style="display:none; text-align:center; margin-bottom:20px;">
-    <img id="imagePreview" style="max-width:100%; max-height:220px; border-radius:8px; border:1px solid var(--line); object-fit:contain;" alt="Preview">
+
+  <div class="editor-container" id="editorContainer">
+    <div class="img-wrap">
+      <img id="imageToCrop" alt="Source">
+    </div>
+
+    <div class="options-group">
+      <label>Aspect Ratio Preset:</label>
+      <select id="aspectRatioSelect" class="input-select">
+        <option value="free">Freehand (Manual Drag)</option>
+        <option value="1">Square (1:1)</option>
+        <option value="1.3333">4:3 Landscape</option>
+        <option value="0.75">3:4 Portrait</option>
+        <option value="1.7777">16:9 Widescreen</option>
+      </select>
+    </div>
+
+    <button class="btn" id="cropBtn">✂️ Crop &amp; Save Image</button>
   </div>
-  <div class="options-group">
-    <label>Aspect Ratio:</label>
-    <select id="aspectRatio" class="input-select">
-      <option value="1">Square (1:1)</option>
-      <option value="0.75">Passport (3:4)</option>
-      <option value="1.33">Landscape (4:3)</option>
-      <option value="0">Freehand</option>
-    </select>
-  </div>
-  <button class="btn" id="processBtn" disabled>Crop &amp; Save Image</button>
+
   <a id="downloadLink" style="text-decoration:none;"><button class="btn btn-download" id="downloadBtn">📥 Download Cropped Image</button></a>
 </div>
-<footer>&copy; 2026 FormReady India. 100% Secure Client-Side Processing.</footer>
+
+<footer>
+  &copy; 2026 FormReady India. 100% Secure Client-Side Processing.
+</footer>
+
 <script>
-const fileInput = document.getElementById("fileInput"), previewContainer = document.getElementById("previewContainer"), imagePreview = document.getElementById("imagePreview"), processBtn = document.getElementById("processBtn"), downloadBtn = document.getElementById("downloadBtn"), downloadLink = document.getElementById("downloadLink");
-let loadedImage = null, originalName = "";
+const fileInput = document.getElementById("fileInput");
+const uploadZone = document.getElementById("uploadZone");
+const editorContainer = document.getElementById("editorContainer");
+const imageToCrop = document.getElementById("imageToCrop");
+const aspectRatioSelect = document.getElementById("aspectRatioSelect");
+const cropBtn = document.getElementById("cropBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const downloadLink = document.getElementById("downloadLink");
+
+let cropper = null;
+let originalName = "";
+
 fileInput.addEventListener("change", (e) => {
-  const file = e.target.files[0]; if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
   originalName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+
   const reader = new FileReader();
   reader.onload = (event) => {
-    const img = new Image();
-    img.onload = () => { loadedImage = img; imagePreview.src = event.target.result; previewContainer.style.display = "block"; processBtn.disabled = false; };
-    img.src = event.target.result;
+    imageToCrop.src = event.target.result;
+    uploadZone.style.display = "none";
+    editorContainer.style.display = "block";
+    downloadBtn.style.display = "none";
+
+    if (cropper) {
+      cropper.destroy();
+    }
+
+    cropper = new Cropper(imageToCrop, {
+      aspectRatio: NaN,
+      viewMode: 1,
+      autoCropArea: 0.9,
+      responsive: true,
+      guides: true,
+      center: true,
+      highlight: false,
+      cropBoxMovable: true,
+      cropBoxResizable: true,
+      toggleDragModeOnDblclick: false,
+    });
   };
   reader.readAsDataURL(file);
+  fileInput.value = "";
 });
-processBtn.addEventListener("click", () => {
-  if (!loadedImage) return;
-  const canvas = document.createElement("canvas");
-  const size = Math.min(loadedImage.width, loadedImage.height);
-  canvas.width = size; canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  const offsetX = (loadedImage.width - size) / 2;
-  const offsetY = (loadedImage.height - size) / 2;
-  ctx.drawImage(loadedImage, offsetX, offsetY, size, size, 0, 0, size, size);
+
+aspectRatioSelect.addEventListener("change", (e) => {
+  if (!cropper) return;
+  const val = e.target.value;
+  if (val === "free") {
+    cropper.setAspectRatio(NaN);
+  } else {
+    cropper.setAspectRatio(parseFloat(val));
+  }
+});
+
+cropBtn.addEventListener("click", () => {
+  if (!cropper) return;
+
+  const canvas = cropper.getCroppedCanvas({
+    imageSmoothingEnabled: true,
+    imageSmoothingQuality: 'high',
+  });
+
+  if (!canvas) {
+    alert("Could not crop image.");
+    return;
+  }
+
   canvas.toBlob((blob) => {
-    downloadLink.href = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
     downloadLink.download = `${originalName}-cropped.jpg`;
     downloadBtn.style.display = "block";
-    downloadBtn.textContent = "📥 Download Cropped Image";
+    downloadBtn.textContent = `📥 Download Cropped Image (${Math.round(blob.size / 1024)} KB)`;
+    
+    // Scroll smoothly to download button
+    downloadBtn.scrollIntoView({ behavior: 'smooth' });
   }, "image/jpeg", 0.95);
 });
 </script>
