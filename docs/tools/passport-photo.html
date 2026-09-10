@@ -2,837 +2,347 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<title>Passport Photo Maker Online Free</title>
-<meta name="description" content="Create passport size photos online for free. Make passport photos quickly with this easy mobile-friendly tool.">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/passport-photo.html">
-<meta property="og:title" content="Passport Photo Maker Online Free">
-<meta property="og:description" content="Create passport size photos online for free. Make passport photos quickly with this easy mobile-friendly tool.">
-<meta property="og:url" content="https://amanshaikh77.github.io/formready-india/tools/passport-photo.html">
-<meta property="og:type" content="website">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Passport Photo Maker",
-  "url": "https://amanshaikh77.github.io/formready-india/tools/passport-photo.html",
-  "description": "Create passport size photos online for free. Make passport photos quickly with this easy mobile-friendly tool.",
-  "applicationCategory": "UtilityApplication",
-  "operatingSystem": "Any"
-}
-</script>
-
-<script src="../token-system.js"></script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Passport Photo + Sign Card - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
-:root{
-  --bg:#151210;
-  --panel:#1e1a17;
-  --panel-2:#262019;
-  --line:#39322b;
-  --amber:#d99a3f;
-  --amber-bright:#f0b158;
-  --amber-dim:#8a6329;
-  --teal:#5fada0;
-  --paper:#f2ece2;
-  --muted:#a89a89;
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+  --card-bg: #14110f;
 }
-
-*{ box-sizing:border-box; }
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--paper);
-  font-family:'Inter',sans-serif;
-  min-height:100vh;
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
-
-h1,h2,h3,.brand,.upload-title{
-  font-family:'Space Grotesk',sans-serif;
-  font-weight:600;
+.wrapper { width: 100%; max-width: 520px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 12px;
 }
-
-/* Topbar */
-header.topbar{
-  position:sticky;
-  top:0;
-  z-index:10;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:14px 20px;
-  background:rgba(21,18,16,.92);
-  backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--line);
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 16px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 14px;
 }
+h2 { color: var(--amber); margin: 0 0 4px 0; font-size: 20px; text-align: center; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
 
-.brand{
-  font-size:19px;
-  color:var(--paper);
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 6px;
+  display: block;
 }
-.brand span{ color:var(--amber); }
-
-header.topbar a{
-  color:var(--muted);
-  text-decoration:none;
-  font-size:14px;
-  font-weight:500;
+.upload-box {
+  border: 2px dashed var(--line);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: border-color 0.2s;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
-header.topbar a:hover{ color:var(--amber-bright); }
-
-.breadcrumb{
-  display:block;
-  width:min(600px,92%);
-  margin:16px auto 0;
-  color:var(--muted);
-  text-decoration:none;
-  font-size:14px;
+.upload-box:hover { border-color: var(--amber); }
+.upload-text { color: var(--amber); font-weight: 600; font-size: 13px; }
+.upload-sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
+.thumb-preview {
+  display: none;
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 6px;
+  border: 1px solid var(--amber);
+  margin-bottom: 6px;
+  object-fit: contain;
+  background: #000;
 }
-.breadcrumb:hover{ color:var(--amber-bright); }
-
-/* Container */
-.container{
-  width:min(600px,92%);
-  margin:16px auto 40px;
+.change-badge {
+  display: none;
+  font-size: 11px;
+  color: var(--amber);
+  font-weight: 600;
 }
-
-.card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:26px 22px;
-  margin-bottom:16px;
+.output-card {
+  display: none;
+  background: var(--card-bg);
+  border: 1px solid var(--amber);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 6px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
-
-.icon-badge{
-  width:46px;
-  height:46px;
-  border-radius:12px;
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-bottom:14px;
+.output-title {
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
 }
-
-.card-head h1{
-  margin:0 0 6px;
-  font-size:24px;
-  color:var(--paper);
+.preview-stage {
+  background: #0a0807;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
 }
-
-.card-head p{
-  margin:0 0 4px;
-  color:var(--muted);
-  font-size:14.5px;
+.preview-stage img {
+  max-width: 230px;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
 }
-
-/* How it works */
-.steps{
-  margin-top:18px;
-  padding:14px 16px;
-  background:var(--panel-2);
-  border:1px solid var(--line);
-  border-radius:14px;
+.btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
-
-.steps-title{
-  font-size:13px;
-  font-weight:600;
-  color:var(--amber-bright);
-  margin-bottom:8px;
-  letter-spacing:.3px;
-  text-transform:uppercase;
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
 }
-
-.step-row{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  margin-bottom:8px;
-  font-size:13.5px;
-  color:var(--paper);
-}
-.step-row:last-child{ margin-bottom:0; }
-
-.step-num{
-  flex-shrink:0;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:var(--amber-dim);
-  color:var(--paper);
-  font-size:11.5px;
-  font-weight:700;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* Upload box */
-.upload-box{
-  margin-top:18px;
-  border:2px dashed var(--line);
-  border-radius:14px;
-  padding:26px 16px;
-  text-align:center;
-  background:var(--panel-2);
-}
-
-.upload-box svg{
-  width:30px;
-  height:30px;
-  margin-bottom:8px;
-}
-
-.upload-title{
-  margin:0 0 4px;
-  font-size:16px;
-  color:var(--paper);
-}
-
-.upload-hint{
-  margin:0 0 16px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.upload-btn-row{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-.btn-choose{
-  display:inline-block;
-  padding:11px 20px;
-  border-radius:10px;
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  color:#1a1410;
-  font-weight:600;
-  font-size:14.5px;
-  cursor:pointer;
-}
-
-.btn-choose-alt{
-  display:inline-block;
-  padding:11px 20px;
-  border-radius:10px;
-  background:transparent;
-  border:1px solid var(--line);
-  color:var(--paper);
-  font-weight:600;
-  font-size:14.5px;
-  cursor:pointer;
-}
-
-#photo, #cameraInput{ display:none; }
-
-#work{ display:none; margin-top:6px; }
-
-/* Settings */
-.settings{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:18px;
-}
-
-.field label{
-  display:block;
-  font-size:13px;
-  font-weight:600;
-  color:var(--muted);
-  margin-bottom:7px;
-}
-
-select{
-  width:100%;
-  padding:12px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:var(--panel-2);
-  color:var(--paper);
-  font-size:15px;
-  font-family:'Inter',sans-serif;
-}
-select:focus{
-  outline:none;
-  border-color:var(--amber);
-}
-
-.size-hint{
-  grid-column:1 / -1;
-  margin-top:2px;
-  font-size:12.5px;
-  color:var(--muted);
-  line-height:1.5;
-}
-.size-hint b{ color:var(--amber-bright); font-weight:600; }
-
-/* Preview */
-.preview{
-  margin-top:18px;
-  padding:20px;
-  background:var(--panel-2);
-  border:1px solid var(--line);
-  border-radius:15px;
-  text-align:center;
-}
-
-#canvas{
-  max-width:100%;
-  border-radius:6px;
-  box-shadow:0 4px 18px rgba(0,0,0,.35);
-}
-
-.badge-auto{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin-top:12px;
-  padding:6px 12px;
-  border-radius:20px;
-  background:#132420;
-  border:1px solid #2e5045;
-  color:var(--teal);
-  font-size:12.5px;
-  font-weight:600;
-}
-
-/* Buttons */
-.buttons{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:20px;
-}
-
-button{
-  border:0;
-  border-radius:11px;
-  padding:13px 18px;
-  font-weight:600;
-  font-size:14.5px;
-  font-family:'Inter',sans-serif;
-  cursor:pointer;
-}
-
-.primary{
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  color:#1a1410;
-  flex:1 1 100%;
-}
-
-.secondary{
-  background:transparent;
-  color:var(--paper);
-  border:1px solid var(--line);
-  flex:1;
-}
-
-.info{
-  margin-top:16px;
-  padding:13px 14px;
-  border-radius:12px;
-  background:var(--panel-2);
-  border:1px solid var(--line);
-  font-size:13.5px;
-  color:var(--muted);
-  line-height:1.5;
-}
-
-/* Ad slot */
-.ad-slot{ margin:16px 0; }
-
-.ad-box{
-  min-height:100px;
-  border:1.5px dashed var(--line);
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* Footer */
-footer.credit{
-  text-align:center;
-  color:var(--muted);
-  font-size:12.5px;
-  padding:20px 0 30px;
-}
-
-@media(max-width:600px){
-  .settings{ grid-template-columns:1fr; }
-}
+.btn:hover { opacity: 0.9; }
 </style>
 </head>
-
 <body>
-
-<header class="topbar">
-  <div class="brand">FormReady <span>India</span></div>
-  <a href="/formready-india/index.html#tools">Home</a>
-</header>
-
-<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
-
-<div class="container">
-
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+  
   <div class="card">
-    <div class="card-head">
-      <div class="icon-badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <circle cx="8.5" cy="11" r="2"/>
-          <path d="M4 18c0-2 2-3.5 4.5-3.5S13 16 13 18"/>
-          <line x1="15" y1="9" x2="19" y2="9"/>
-          <line x1="15" y1="13" x2="19" y2="13"/>
-        </svg>
+    <h2>Passport Photo + Sign Card</h2>
+    <div class="subtitle">Combine identity photograph and signature into a single upload-ready frame</div>
+
+    <input type="file" id="photo-input" accept="image/*" style="display:none">
+    <span class="section-label">1. Upload Passport Photo:</span>
+    <div class="upload-box" id="photo-box">
+      <img id="photo-thumb" class="thumb-preview" alt="Photo Preview">
+      <div id="photo-placeholder">
+        <span class="upload-text">📷 Tap to select Photo</span>
+        <div class="upload-sub">JPG, PNG supported</div>
       </div>
-      <h1>Passport Photo Maker</h1>
-      <p>Turn any photo into a ready-to-print passport size photo — fully automatic.</p>
+      <span class="change-badge" id="photo-badge">Tap to Change Photo</span>
     </div>
 
-    <div class="steps">
-      <div class="steps-title">How this works</div>
-      <div class="step-row">
-        <div class="step-num">1</div>
-        <div>Take a new photo with your camera, or choose one from your gallery.</div>
+    <input type="file" id="sign-input" accept="image/*" style="display:none">
+    <span class="section-label">2. Upload Signature:</span>
+    <div class="upload-box" id="sign-box">
+      <img id="sign-thumb" class="thumb-preview" alt="Signature Preview">
+      <div id="sign-placeholder">
+        <span class="upload-text">✍️ Tap to select Signature</span>
+        <div class="upload-sub">JPG, PNG supported</div>
       </div>
-      <div class="step-row">
-        <div class="step-num">2</div>
-        <div>It's <strong style="color:var(--paper)">automatically cropped and centered</strong> to your chosen passport size — no manual editing needed.</div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">3</div>
-        <div>The <strong style="color:var(--paper)">Download</strong> button appears right away with your finished photo.</div>
-      </div>
+      <span class="change-badge" id="sign-badge">Tap to Change Signature</span>
     </div>
-
-    <div class="upload-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-        <circle cx="12" cy="13" r="4"/>
-      </svg>
-      <p class="upload-title">Add Your Photo</p>
-      <p class="upload-hint">JPG · PNG · WEBP</p>
-
-      <div class="upload-btn-row">
-        <label class="btn-choose" for="cameraInput">Take Photo</label>
-        <label class="btn-choose-alt" for="photo">Browse Files</label>
-      </div>
-
-      <input id="cameraInput" type="file" accept="image/*" capture="user">
-      <input id="photo" type="file" accept="image/*">
-    </div>
-
-    <div id="work">
-
-      <div class="settings">
-        <div class="field">
-          <label>Photo Size</label>
-          <select id="size">
-            <option value="2x2" selected>2 × 2 inch (Recommended for Passport)</option>
-            <option value="35x45">35 × 45 mm</option>
-            <option value="25x35">25 × 35 mm</option>
-            <option value="40x50">40 × 50 mm</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Background</label>
-          <select id="background">
-            <option value="white">White</option>
-            <option value="lightblue">Light Blue</option>
-            <option value="gray">Light Gray</option>
-          </select>
-        </div>
-
-        <div class="size-hint">
-          💡 <b>2 × 2 inch (51 × 51 mm)</b> with a white background is the standard size accepted for Indian passport applications.
-        </div>
-      </div>
-
-      <div class="preview">
-        <canvas id="canvas" width="600" height="600"></canvas>
-        <div class="badge-auto" id="autoBadge" style="display:none">✓ Auto-cropped &amp; ready</div>
-      </div>
-
-      <div class="buttons">
-        <button class="primary" id="downloadBtn">Download Photo</button>
-        <button class="secondary" id="resetBtn">Reset</button>
-      </div>
-
-      <div class="info" id="info">Choose a photo to begin.</div>
-
-    </div>
-
   </div>
 
-  <div class="ad-slot">
-    <div class="ad-box">Advertisement</div>
+  <div class="output-card" id="output-card">
+    <div class="output-title">🎉 Combined Card Output:</div>
+    <div class="preview-stage">
+      <img id="combined-img" alt="Final Output">
+    </div>
+    <div class="btn-grid">
+      <button class="btn" id="dl-jpg-btn">Download JPG</button>
+      <button class="btn" id="dl-pdf-btn">Download PDF</button>
+    </div>
   </div>
-
-  <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
-
 </div>
 
+<canvas id="render-canvas" style="display:none"></canvas>
 
 <script>
-
-const photo =
-document.getElementById("photo");
-
-const cameraInput =
-document.getElementById("cameraInput");
-
-const work =
-document.getElementById("work");
-
-const canvas =
-document.getElementById("canvas");
-
-const ctx =
-canvas.getContext("2d");
-
-const size =
-document.getElementById("size");
-
-const background =
-document.getElementById("background");
-
-const downloadBtn =
-document.getElementById("downloadBtn");
-
-const resetBtn =
-document.getElementById("resetBtn");
-
-const info =
-document.getElementById("info");
-
-const autoBadge =
-document.getElementById("autoBadge");
-
-
-let image =
-new Image();
-
-let imageLoaded =
-false;
-
-
-/* Shared handler — works for both camera capture and gallery browse */
-
-function handleFileSelected(file){
-
-if(!file)
-return;
-
-info.textContent =
-"Processing your photo...";
-
-const url =
-URL.createObjectURL(file);
-
-image.onload =
-function(){
-
-imageLoaded =
-true;
-
-work.style.display =
-"block";
-
-drawPhoto();
-
-autoBadge.style.display =
-"inline-flex";
-
-info.textContent =
-"Done! Your passport photo was created automatically. Change size or background anytime — it updates instantly.";
-
-URL.revokeObjectURL(url);
-
-};
-
-image.onerror =
-function(){
-
-alert(
-"Could not load this image. Please try another photo."
-);
-
-info.textContent =
-"Choose a photo to begin.";
-
-};
-
-image.src =
-url;
-
-}
-
-
-/* Take Photo (camera) */
-
-cameraInput.addEventListener(
-"change",
-function(){
-
-handleFileSelected(this.files[0]);
-
-}
-);
-
-
-/* Browse Files (gallery) */
-
-photo.addEventListener(
-"change",
-function(){
-
-handleFileSelected(this.files[0]);
-
-}
-);
-
-
-/* Settings — auto redraw on change, no extra click needed */
-
-size.addEventListener(
-"change",
-drawPhoto
-);
-
-background.addEventListener(
-"change",
-drawPhoto
-);
-
-
-/* Draw (auto crop + center, contain-fit so background shows) */
-
-function drawPhoto(){
-
-if(!imageLoaded)
-return;
-
-
-/* Canvas dimensions */
-
-let width =
-600;
-
-let height =
-600;
-
-if(size.value==="35x45"){
-
-width =
-413;
-
-height =
-531;
-
-}
-
-if(size.value==="25x35"){
-
-width =
-295;
-
-height =
-413;
-
-}
-
-if(size.value==="40x50"){
-
-width =
-472;
-
-height =
-590;
-
-}
-
-
-canvas.width =
-width;
-
-canvas.height =
-height;
-
-/* Background */
-
-let bg =
-"#ffffff";
-
-if(background.value==="lightblue"){
-bg="#eaf4ff";
-}
-
-if(background.value==="gray"){
-bg="#eeeeee";
-}
-
-ctx.fillStyle =
-bg;
-
-ctx.fillRect(
-0,
-0,
-width,
-height
-);
-
-
-/* Auto fit + center (contain mode, so background is visible) */
-
-const scale =
-Math.min(
-width / image.width,
-height / image.height
-);
-
-const drawWidth =
-image.width * scale;
-
-const drawHeight =
-image.height * scale;
-
-const x =
-(width - drawWidth) / 2;
-
-const y =
-(height - drawHeight) / 2;
-
-
-ctx.drawImage(
-image,
-x,
-y,
-drawWidth,
-drawHeight
-);
-
-}
-
-
-/* Download */
-
-downloadBtn.addEventListener(
-"click",
-function(){
-
-if(!imageLoaded){
-
-alert(
-"Please choose a photo first."
-);
-
-return;
-
-}
-
-const link =
-document.createElement("a");
-
-link.href =
-canvas.toDataURL(
-"image/jpeg",
-0.95
-);
-
-link.download =
-"formready-passport-photo.jpg";
-
-document.body.appendChild(link);
-
-link.click();
-
-link.remove();
-
-}
-);
-
-
-/* Reset */
-
-resetBtn.addEventListener(
-"click",
-function(){
-
-photo.value =
-"";
-
-cameraInput.value =
-"";
-
-imageLoaded =
-false;
-
-work.style.display =
-"none";
-
-autoBadge.style.display =
-"none";
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-info.textContent =
-"Choose a photo to begin.";
-
-}
-);
-
-</script>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const rewardKey = "formready_reward_passport-photo_" + new Date().toISOString().slice(0,10);
-
-  function rewardUser() {
-    if (localStorage.getItem(rewardKey)) return;
-    if (window.FormReadyTokens) {
-      window.FormReadyTokens.addTokens("passport-photo");
-    }
-  }
-
-  document.querySelectorAll(
-    '#download, #downloadBtn, #downloadButton, button[id*="download" i], a[id*="download" i]'
-  ).forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      setTimeout(rewardUser, 1000);
-    });
+  const photoInput = document.getElementById('photo-input');
+  const signInput = document.getElementById('sign-input');
+  const photoBox = document.getElementById('photo-box');
+  const signBox = document.getElementById('sign-box');
+
+  const photoThumb = document.getElementById('photo-thumb');
+  const photoPlaceholder = document.getElementById('photo-placeholder');
+  const photoBadge = document.getElementById('photo-badge');
+
+  const signThumb = document.getElementById('sign-thumb');
+  const signPlaceholder = document.getElementById('sign-placeholder');
+  const signBadge = document.getElementById('sign-badge');
+
+  const outputCard = document.getElementById('output-card');
+  const combinedImg = document.getElementById('combined-img');
+  const dlJpgBtn = document.getElementById('dl-jpg-btn');
+  const dlPdfBtn = document.getElementById('dl-pdf-btn');
+
+  let photoImg = null;
+  let signImg = null;
+
+  photoBox.addEventListener('click', () => photoInput.click());
+  signBox.addEventListener('click', () => signInput.click());
+
+  photoInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      photoThumb.src = evt.target.result;
+      photoThumb.style.display = 'block';
+      photoPlaceholder.style.display = 'none';
+      photoBadge.style.display = 'block';
+
+      photoImg = new Image();
+      photoImg.onload = checkAndCombine;
+      photoImg.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
   });
 
-  const originalAlert = window.alert;
-  window.alert = function(msg) {
-    if (msg && /download|success|created|converted|compressed|generated|saved/i.test(String(msg))) {
-      setTimeout(rewardUser, 500);
-    }
-    originalAlert.apply(window, arguments);
-  };
-});
-</script>
+  signInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      signThumb.src = evt.target.result;
+      signThumb.style.display = 'block';
+      signPlaceholder.style.display = 'none';
+      signBadge.style.display = 'block';
 
+      signImg = new Image();
+      signImg.onload = checkAndCombine;
+      signImg.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  function checkAndCombine() {
+    if (!photoImg || !signImg) return;
+
+    const cardWidth = 420;
+    const cardHeight = 620;
+    const padding = 16;
+
+    const canvas = document.getElementById('render-canvas');
+    canvas.width = cardWidth;
+    canvas.height = cardHeight;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, cardWidth, cardHeight);
+
+    ctx.strokeStyle = '#dddddd';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(6, 6, cardWidth - 12, cardHeight - 12);
+
+    const photoBoxW = cardWidth - (padding * 2);
+    const photoBoxH = 430;
+    const photoRatio = photoImg.width / photoImg.height;
+    const targetPhotoRatio = photoBoxW / photoBoxH;
+    let pw, ph, px, py;
+
+    if (photoRatio > targetPhotoRatio) {
+      pw = photoBoxW;
+      ph = photoBoxW / photoRatio;
+      px = padding;
+      py = padding + (photoBoxH - ph) / 2;
+    } else {
+      ph = photoBoxH;
+      pw = photoBoxH * photoRatio;
+      px = padding + (photoBoxW - pw) / 2;
+      py = padding;
+    }
+    ctx.drawImage(photoImg, px, py, pw, ph);
+
+    ctx.strokeStyle = '#e5e5e5';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padding, padding + photoBoxH + 8);
+    ctx.lineTo(cardWidth - padding, padding + photoBoxH + 8);
+    ctx.stroke();
+
+    const signBoxW = cardWidth - (padding * 2);
+    const signBoxH = 120;
+    const signRatio = signImg.width / signImg.height;
+    const targetSignRatio = signBoxW / signBoxH;
+    let sw, sh, sx, sy;
+
+    if (signRatio > targetSignRatio) {
+      sw = signBoxW;
+      sh = signBoxW / signRatio;
+      sx = padding;
+      sy = padding + photoBoxH + 16 + (signBoxH - sh) / 2;
+    } else {
+      sh = signBoxH;
+      sw = signBoxH * signRatio;
+      sx = padding + (signBoxW - sw) / 2;
+      sy = padding + photoBoxH + 16;
+    }
+    ctx.drawImage(signImg, sx, sy, sw, sh);
+
+    combinedImg.src = canvas.toDataURL('image/jpeg', 0.95);
+    outputCard.style.display = 'block';
+    outputCard.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  dlJpgBtn.addEventListener('click', () => {
+    const canvas = document.getElementById('render-canvas');
+    canvas.toBlob((blob) => {
+      const link = document.createElement('a');
+      link.download = 'passport_photo_sign_card.jpg';
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    }, 'image/jpeg', 0.95);
+  });
+
+  dlPdfBtn.addEventListener('click', async () => {
+    const canvas = document.getElementById('render-canvas');
+    const { PDFDocument } = PDFLib;
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([canvas.width, canvas.height]);
+
+    const jpgBytes = await fetch(canvas.toDataURL('image/jpeg', 0.95)).then(r => r.arrayBuffer());
+    const embeddedImg = await pdfDoc.embedJpg(jpgBytes);
+
+    page.drawImage(embeddedImg, { x: 0, y: 0, width: canvas.width, height: canvas.height });
+
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.download = 'passport_photo_sign_card.pdf';
+    link.href = URL.createObjectURL(blob);
+    link.click();
+  });
+</script>
 </body>
 </html>

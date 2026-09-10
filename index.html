@@ -1,857 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>FormReady India | Free Online Tools</title>
-
-<meta name="description" content="FormReady India - Free and easy online tools for photos, PDFs and documents.">
-
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  font-family:Inter,Arial,sans-serif;
-  background:#f5f7fb;
-  color:#111827;
-}
-
-header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(17,24,39,.95);
-  backdrop-filter:blur(12px);
-  color:white;
-  padding:15px 6%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.logo{
-  font-size:23px;
-  font-weight:900;
-  letter-spacing:-.5px;
-}
-
-.logo span{
-  color:#60a5fa;
-}
-
-nav{
-  display:flex;
-  gap:22px;
-}
-
-nav a{
-  color:#d1d5db;
-  text-decoration:none;
-  font-size:14px;
-  font-weight:600;
-}
-
-nav a:hover{
-  color:white;
-}
-
-.hero{
-  min-height:500px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:70px 6%;
-  color:white;
-  background:
-    radial-gradient(circle at 20% 20%,#2563eb55,transparent 35%),
-    radial-gradient(circle at 80% 70%,#7c3aed55,transparent 35%),
-    linear-gradient(135deg,#0f172a,#172554);
-}
-
-.hero-content{
-  max-width:800px;
-}
-
-.hero-badge{
-  display:inline-block;
-  padding:8px 14px;
-  border-radius:30px;
-  background:#ffffff15;
-  border:1px solid #ffffff22;
-  color:#bfdbfe;
-  font-size:13px;
-  font-weight:700;
-  margin-bottom:20px;
-}
-
-.hero h1{
-  font-size:clamp(38px,8vw,70px);
-  line-height:1;
-  letter-spacing:-2px;
-  margin-bottom:20px;
-}
-
-.hero h1 span{
-  color:#60a5fa;
-}
-
-.hero p{
-  max-width:650px;
-  margin:auto;
-  color:#cbd5e1;
-  font-size:18px;
-  line-height:1.7;
-}
-
-.hero-buttons{
-  margin-top:30px;
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
-.btn{
-  display:inline-block;
-  padding:14px 23px;
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:800;
-  font-size:15px;
-}
-
-.btn-primary{
-  background:white;
-  color:#111827;
-}
-
-.btn-secondary{
-  border:1px solid #ffffff33;
-  color:white;
-  background:#ffffff0d;
-}
-
-.container{
-  width:min(1180px,92%);
-  margin:auto;
-}
-
-.section{
-  padding:70px 0;
-}
-
-.section-head{
-  text-align:center;
-  margin-bottom:35px;
-}
-
-.section-head h2{
-  font-size:34px;
-  margin-bottom:10px;
-}
-
-.section-head p{
-  color:#6b7280;
-}
-
-.search{
-  width:100%;
-  max-width:550px;
-  display:block;
-  margin:0 auto 30px;
-  padding:15px 18px;
-  border:1px solid #dbe1ea;
-  border-radius:14px;
-  outline:none;
-  background:white;
-  font-size:15px;
-  box-shadow:0 5px 20px #00000008;
-}
-
-.search:focus{
-  border-color:#60a5fa;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:18px;
-}
-
-.tool{
-  display:block;
-  background:white;
-  border:1px solid #e5e7eb;
-  border-radius:20px;
-  padding:24px;
-  text-decoration:none;
-  color:#111827;
-  box-shadow:0 7px 25px #00000008;
-  transition:.2s;
-}
-
-.tool:hover{
-  transform:translateY(-5px);
-  box-shadow:0 15px 35px #00000012;
-}
-
-.tool-icon{
-  width:55px;
-  height:55px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:15px;
-  background:#eff6ff;
-  font-size:27px;
-  margin-bottom:18px;
-}
-
-.tool h3{
-  font-size:18px;
-  margin-bottom:8px;
-}
-
-.tool p{
-  color:#6b7280;
-  font-size:14px;
-  line-height:1.5;
-}
-
-.tag{
-  display:inline-block;
-  margin-top:16px;
-  padding:6px 10px;
-  border-radius:20px;
-  background:#f1f5f9;
-  color:#475569;
-  font-size:11px;
-  font-weight:800;
-}
-
-.about{
-  background:white;
-  border-radius:25px;
-  padding:40px;
-  border:1px solid #e5e7eb;
-}
-
-.about h2{
-  margin-bottom:12px;
-}
-
-.about p{
-  color:#6b7280;
-  line-height:1.8;
-}
-
-.features{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
-  margin-top:25px;
-}
-
-.feature{
-  padding:18px;
-  background:#f8fafc;
-  border-radius:15px;
-}
-
-.feature b{
-  display:block;
-  margin-bottom:5px;
-}
-
-.feature span{
-  color:#64748b;
-  font-size:13px;
-}
-
-footer{
-  background:#111827;
-  color:#9ca3af;
-  text-align:center;
-  padding:35px 20px;
-}
-
-footer strong{
-  color:white;
-}
-
-@media(max-width:650px){
-
-  header{
-    padding:14px 5%;
-  }
-
-  nav{
-    gap:12px;
-  }
-
-  nav a{
-    font-size:12px;
-  }
-
-  .hero{
-    min-height:450px;
-  }
-
-  .hero h1{
-    letter-spacing:-1px;
-  }
-
-  .about{
-    padding:25px;
-  }
-}
-
-/* ===== WALLET UI ===== */
-.wallet-bar{
-  margin:18px auto 0;
-  max-width:1100px;
-  padding:0 18px;
-}
-.wallet-card{
-  background:linear-gradient(135deg,#111827,#1e293b);
-  border:1px solid rgba(96,165,250,.35);
-  border-radius:20px;
-  padding:18px 20px;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,.18);
-}
-.wallet-left{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-.wallet-icon{
-  width:50px;
-  height:50px;
-  border-radius:15px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#facc15,#f59e0b);
-  font-size:25px;
-}
-.wallet-title{
-  font-size:13px;
-  color:#94a3b8;
-  margin-bottom:3px;
-}
-.wallet-balance{
-  font-size:25px;
-  font-weight:900;
-}
-.wallet-button{
-  border:0;
-  border-radius:12px;
-  padding:12px 17px;
-  background:#60a5fa;
-  color:#07111f;
-  font-weight:900;
-  cursor:pointer;
-  text-decoration:none;
-  white-space:nowrap;
-}
-.wallet-button:active{
-  transform:scale(.97);
-}
-@media(max-width:600px){
-  .wallet-card{
-    padding:15px;
-  }
-  .wallet-balance{
-    font-size:21px;
-  }
-  .wallet-button{
-    padding:10px 12px;
-    font-size:13px;
-  }
-  .wallet-icon{
-    width:44px;
-    height:44px;
-    font-size:22px;
-  }
-}
-
-
-/* ===== WALLET REDESIGN ===== */
-.wallet-bar{
-  max-width:1100px;
-  margin:14px auto;
-  padding:0 18px;
-}
-.wallet-card{
-  background:linear-gradient(135deg,#111827,#18233b);
-  border:1px solid rgba(96,165,250,.22);
-  border-radius:16px;
-  padding:14px 16px;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  box-shadow:0 6px 20px rgba(0,0,0,.12);
-}
-.wallet-left{
-  display:flex;
-  align-items:center;
-  gap:11px;
-}
-.wallet-icon{
-  width:42px;
-  height:42px;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#facc15,#f59e0b);
-  font-size:21px;
-  flex-shrink:0;
-}
-.wallet-title{
-  font-size:11px;
-  color:#aebbd0;
-  margin-bottom:2px;
-  letter-spacing:.3px;
-}
-.wallet-balance{
-  font-size:20px;
-  font-weight:800;
-  line-height:1.1;
-}
-.wallet-button{
-  border:0;
-  border-radius:10px;
-  padding:9px 13px;
-  background:#60a5fa;
-  color:#07111f;
-  font-size:12px;
-  font-weight:800;
-  cursor:pointer;
-  text-decoration:none;
-  white-space:nowrap;
-}
-.wallet-button:active{
-  transform:scale(.97);
-}
-@media(max-width:600px){
-  .wallet-bar{
-    margin:10px auto;
-    padding:0 12px;
-  }
-  .wallet-card{
-    padding:11px 12px;
-    border-radius:13px;
-  }
-  .wallet-icon{
-    width:38px;
-    height:38px;
-    border-radius:10px;
-    font-size:19px;
-  }
-  .wallet-title{
-    font-size:10px;
-  }
-  .wallet-balance{
-    font-size:18px;
-  }
-  .wallet-button{
-    padding:8px 10px;
-    font-size:11px;
-  }
-}
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FormReady India - Fast, Simple & Private Toolbox</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1e293b;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+    .logo {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+    .nav-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.9rem;
+    }
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    .search-box {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      display: block;
+      padding: 0.75rem 1rem;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      color: white;
+      font-size: 1rem;
+    }
+    .section-title {
+      font-size: 1.1rem;
+      color: #38bdf8;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 0.5rem;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .tool-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .tool-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+    }
+    .tool-title {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: #f1f5f9;
+    }
+    .tool-desc {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+    }
+    .badge {
+      display: inline-block;
+      background: #065f46;
+      color: #34d399;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+  </style>
 </head>
-
 <body>
-
-<header>
-
-  <div class="logo">
-    FormReady <span>India</span>
-  </div>
-
-  <nav>
-    <a href="#tools">Tools</a>
-    <a href="#about">About</a>
-  </nav>
-
-</header>
-
-
-
-
-
-<section class="hero">
-
-  <div class="hero-content">
-
-    <div class="hero-badge">
-      ⚡ Fast • Simple • Mobile Friendly
+  <header>
+    <div class="logo">FormReady India</div>
+    <div class="nav-links">
+      <a href="#">Tools</a>
+      <a href="#">About</a>
     </div>
+  </header>
 
-    <h1>
-      Everything You Need,
-      <span>Ready Online.</span>
-    </h1>
+  <div class="main-container">
+    <input type="text" class="search-box" placeholder="🔍 Search any tool (e.g. Signature, PDF)...">
 
-    <p>
-      Free and easy-to-use tools for photos, PDFs and documents.
-      No complicated software required.
-    </p>
-
-    <div class="hero-buttons">
-      <a class="btn btn-primary" href="#tools">
-        Explore Tools
-      </a>
-
-      <a class="btn btn-secondary" href="#about">
-        Learn More
+    <div class="section-title">⚡ Image & Photo Utilities</div>
+    <div class="tools-grid">
+      <a href="signature.html" class="tool-card">
+        <div class="tool-title">✍️ Signature Maker</div>
+        <div class="tool-desc">Draw, smooth, and export transparent digital signatures to JPG & PDF.</div>
+        <span class="badge">ACTIVE TOOL</span>
       </a>
     </div>
 
-  </div>
-
-</section>
-
-
-<section class="section" id="tools">
-
-<div class="container">
-
-  <div class="section-head">
-
-    <h2>Our Tools</h2>
-
-    <p>
-      Choose a tool and get your work done quickly.
-    </p>
-
-  </div>
-
-
-  <input
-    id="search"
-    class="search"
-    type="search"
-    placeholder="🔎 Search a tool..."
-  >
-
-
-  <div class="grid" id="toolGrid">
-
-
-    <a class="tool" href="./tools/crop/">
-
-      <div class="tool-icon">✂️</div>
-
-      <h3>Photo Cropper</h3>
-
-      <p>
-        Crop photos easily with touch-friendly controls.
-      </p>
-
-      <span class="tag">PHOTO</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/photo-resizer.html">
-
-      <div class="tool-icon">📐</div>
-
-      <h3>Photo Resizer</h3>
-
-      <p>
-        Resize photos to your required dimensions.
-      </p>
-
-      <span class="tag">PHOTO</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/photo-compressor.html">
-
-      <div class="tool-icon">🗜️</div>
-
-      <h3>Photo Compressor</h3>
-
-      <p>
-        Reduce image file size while keeping quality.
-      </p>
-
-      <span class="tag">PHOTO</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/jpg-to-pdf.html">
-
-      <div class="tool-icon">🖼️</div>
-
-      <h3>JPG to PDF</h3>
-
-      <p>
-        Convert your images into PDF documents.
-      </p>
-
-      <span class="tag">PDF</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/pdf-to-jpg.html">
-
-      <div class="tool-icon">📄</div>
-
-      <h3>PDF to JPG</h3>
-
-      <p>
-        Convert PDF pages into image files.
-      </p>
-
-      <span class="tag">PDF</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/merge-pdf.html">
-
-      <div class="tool-icon">📚</div>
-
-      <h3>Merge PDF</h3>
-
-      <p>
-        Combine multiple PDF files into one.
-      </p>
-
-      <span class="tag">PDF</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/split-pdf.html">
-
-      <div class="tool-icon">✂️</div>
-
-      <h3>Split PDF</h3>
-
-      <p>
-        Split PDF documents into separate pages.
-      </p>
-
-      <span class="tag">PDF</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/passport-photo.html">
-
-      <div class="tool-icon">🪪</div>
-
-      <h3>Passport Photo</h3>
-
-      <p>
-        Create passport-size photos easily.
-      </p>
-
-      <span class="tag">PHOTO</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/photo-sheet.html">
-
-      <div class="tool-icon">🗂️</div>
-
-      <h3>Photo Sheet</h3>
-
-      <p>
-        Create printable sheets with multiple photos.
-      </p>
-
-      <span class="tag">PHOTO</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/signature-maker.html">
-
-      <div class="tool-icon">✍️</div>
-
-      <h3>Signature Maker" onclick="window.location.href='signature.html'</h3>
-
-      <p>
-        Create and download your digital signature.
-      </p>
-
-      <span class="tag">UTILITY</span>
-
-    </a>
-
-
-    <a class="tool" href="./tools/background-remover.html">
-
-      <div class="tool-icon">🪄</div>
-
-      <h3>Background Remover</h3>
-
-      <p>
-        Remove photo background and choose a new colour.
-      </p>
-
-      <span class="tag">PHOTO</span>
-
-    </a>
-
-
-  </div>
-
-</div>
-
-</section>
-
-
-<section class="section" id="about">
-
-<div class="container">
-
-  <div class="about">
-
-    <h2>About FormReady India</h2>
-
-    <p>
-      FormReady India is designed to make everyday photo,
-      document and PDF tasks simple. Our tools are made
-      with mobile users in mind, so you can complete your
-      work directly from your phone.
-    </p>
-
-
-    <div class="features">
-
-      <div class="feature">
-        <b>📱 Mobile Friendly</b>
-        <span>Works comfortably on phones.</span>
-      </div>
-
-      <div class="feature">
-        <b>⚡ Fast</b>
-        <span>Simple and lightweight tools.</span>
-      </div>
-
-      <div class="feature">
-        <b>🔒 Private</b>
-        <span>Tools can process files locally.</span>
-      </div>
-
-      <div class="feature">
-        <b>💻 Easy</b>
-        <span>No complicated software required.</span>
-      </div>
-
+    <div class="section-title">📄 PDF Tools & Editors</div>
+    <div class="tools-grid">
+      <a href="pdf-editor.html" class="tool-card">
+        <div class="tool-title">📑 PDF Text Inspector & Editor</div>
+        <div class="tool-desc">Edit text, handle anti-overlap layout reflow, and export edited PDFs.</div>
+        <span class="badge">ACTIVE TOOL</span>
+      </a>
     </div>
-
   </div>
-
-</div>
-
-</section>
-
-
-<footer>
-
-  <strong>FormReady India</strong>
-
-  <br><br>
-
-  © 2026 FormReady India. All rights reserved.
-
-</footer>
-
-
-<script>
-
-const search = document.getElementById("search");
-const tools = document.querySelectorAll(".tool");
-
-search.addEventListener("input", function(){
-
-  const value = this.value.toLowerCase().trim();
-
-  tools.forEach(tool => {
-
-    const text = tool.innerText.toLowerCase();
-
-    tool.style.display =
-      text.includes(value) ? "block" : "none";
-
-  });
-
-});
-
-</script>
-
-
-<script>
-async function loadWalletBalance(){
-  try{
-    const r = await fetch("/api/token/balance");
-    const data = await r.json();
-
-    if(data.success){
-      const el = document.getElementById("walletTokens");
-      if(el){
-        el.textContent = Number(data.tokens || 0).toLocaleString("en-IN");
-      }
-    }
-  }catch(e){
-    console.log("Wallet balance unavailable");
-  }
-}
-
-document.addEventListener("DOMContentLoaded", loadWalletBalance);
-</script>
-
-
-<script>
-async function updateWalletPage(){
-  try{
-    const r = await fetch("/api/token/balance");
-    const data = await r.json();
-
-    if(data.success){
-      const tokens = Number(data.tokens || 0);
-      const t = document.getElementById("walletPageTokens");
-      const v = document.getElementById("walletPageValue");
-
-      if(t) t.textContent = tokens.toLocaleString("en-IN");
-      if(v) v.textContent = (tokens / 100).toFixed(2);
-    }
-  }catch(e){}
-}
-
-document.addEventListener("DOMContentLoaded", updateWalletPage);
-</script>
-
 </body>
 </html>
