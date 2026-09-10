@@ -6,12 +6,14 @@
 <title>Split PDF - FormReady India</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root {
   --bg: #151210;
   --panel: #1e1a17;
   --line: #39322b;
   --amber: #d99a3f;
+  --amber-hover: #c48733;
   --paper: #f2ece2;
   --muted: #a89a89;
   --card-bg: #14110f;
@@ -23,38 +25,67 @@ body {
   color: var(--paper);
   font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 14px;
+  padding: 14px 10px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   touch-action: pan-y;
 }
-.wrapper { width: 100%; max-width: 540px; }
-@media (min-width: 768px) { .wrapper { max-width: 740px; } }
+.wrapper { width: 100%; max-width: 580px; }
+@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+
 .back-link {
   color: var(--amber);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
-  padding: 18px;
+  padding: 18px 16px;
   border-radius: 12px;
   width: 100%;
   margin-bottom: 14px;
 }
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; }
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
 .subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+
+/* How to Use Box */
+.how-to-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* Upload Box */
 .upload-box {
   border: 2px dashed var(--amber);
-  background: rgba(217, 154, 63, 0.05);
+  background: rgba(217, 154, 63, 0.04);
   border-radius: 10px;
-  padding: 22px 14px;
+  padding: 24px 14px;
   text-align: center;
   cursor: pointer;
   margin-bottom: 16px;
@@ -62,46 +93,65 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  transition: background 0.2s;
 }
-.upload-box span { color: var(--amber); font-weight: 600; font-size: 14px; }
+.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
 .upload-box small { color: var(--muted); font-size: 11px; }
-.item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-.item-row {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px 12px;
+
+.summary-pill {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  background: #14110f;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 14px;
 }
-.item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 65%; }
-.row-actions { display: flex; gap: 6px; }
 .mini-btn {
   background: #2a2420;
   color: var(--paper);
   border: 1px solid var(--line);
-  padding: 4px 8px;
+  padding: 5px 8px;
   border-radius: 4px;
   font-size: 11px;
   cursor: pointer;
 }
 .mini-btn:hover { background: var(--amber); color: var(--bg); }
-.mini-btn.del:hover { background: var(--danger); color: #fff; }
-.btn {
-  background: var(--amber);
-  color: var(--bg);
-  border: none;
-  padding: 12px;
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.mode-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 10px 8px;
   border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
-  font-size: 14px;
   cursor: pointer;
   text-align: center;
-  width: 100%;
 }
-.btn:hover { opacity: 0.9; }
+.mode-btn.active {
+  border-color: var(--amber);
+  background: rgba(217, 154, 63, 0.15);
+  color: var(--amber);
+}
+
+.input-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+}
 .input-text {
   width: 100%;
   background: var(--card-bg);
@@ -110,75 +160,335 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
   padding: 10px 12px;
   border-radius: 8px;
   font-size: 13px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   outline: none;
 }
 .input-text:focus { border-color: var(--amber); }
-.grid-thumbs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
-  margin-top: 16px;
+
+.badge-tag {
+  display: block;
+  background: #2a2420;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  line-height: 1.4;
 }
-.thumb-card {
+.badge-tag strong { color: var(--amber); }
+
+.btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+.btn-sec {
+  background: #2a2420;
+  color: var(--paper);
+  border: 1px solid var(--line);
+}
+.btn-sec:hover { background: #38302b; }
+
+#status-message {
+  font-size: 12px;
+  color: var(--amber);
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+}
+
+.ad-card {
   background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 8px;
+  padding: 14px 10px;
+  text-align: center;
+  margin-top: 14px;
+}
+.ad-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  display: block;
+}
+.ad-content {
+  font-size: 11px;
+  color: var(--muted);
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 6px;
 }
-.thumb-card img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 4px; }
 </style>
 </head>
 <body>
 <div class="wrapper">
   <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
   <div class="card">
     <h2>Split PDF</h2>
-    <div class="subtitle">Extract specific page numbers or ranges into a separate PDF</div>
-    <input type="file" id="split-input" accept="application/pdf" style="display:none">
-    <div class="upload-box" onclick="document.getElementById('split-input').click()">
-      <span>📑 Tap to Select PDF File</span>
-      <small>Single PDF to extract pages from</small>
+    <div class="subtitle">Extract custom page ranges or split into fixed page chunks</div>
+
+    <div class="how-to-box">
+      <div class="how-to-title">📄 How to Use Split PDF</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload PDF:</span> Tap the upload area to select the PDF file.</li>
+        <li>2. <span>Split by Pages:</span> Choose pages per PDF (e.g. 2 pages per file).</li>
+        <li>3. <span>Remaining Pages:</span> Remaining odd pages are saved as the final numbered PDF.</li>
+        <li>4. <span>Download:</span> Download all parts cleanly numbered (Part_01, Part_02...).</li>
+      </ol>
     </div>
-    <div id="split-controls" style="display:none">
-      <div id="file-info" style="font-size:13px; color:var(--amber); margin-bottom:12px; text-align:center;"></div>
-      <label style="font-size:12px; color:var(--muted); display:block; margin-bottom:6px;">
-        Page Range to Extract (e.g. 1-2, 4):
-      </label>
-      <input type="text" id="range-input" class="input-text" placeholder="e.g. 1-2, 4">
-      <button class="btn" id="extract-btn">✂️ Extract Pages & Download</button>
+
+    <input type="file" id="pdf-input" accept="application/pdf" style="display:none">
+    <div class="upload-box" id="upload-zone" onclick="document.getElementById('pdf-input').click()">
+      <span>📁 Tap here to upload PDF or drag here</span>
+      <small>Supports all standard PDF documents</small>
+    </div>
+
+    <div id="split-stage" style="display:none">
+      <div class="summary-pill">
+        <span id="file-details">Document: - | Pages: 0</span>
+        <button type="button" class="mini-btn" onclick="document.getElementById('pdf-input').click()" style="color:var(--amber); border-color:var(--amber)">Change File</button>
+      </div>
+
+      <span class="input-label">Choose Split Mode:</span>
+      <div class="mode-grid">
+        <button type="button" class="mode-btn active" id="mode-chunks-btn">📑 Split by Page Count</button>
+        <button type="button" class="mode-btn" id="mode-range-btn">🎯 Custom Range</button>
+      </div>
+
+      <div id="chunks-box">
+        <label class="input-label" for="chunk-size-input">Number of Pages per PDF:</label>
+        <input type="number" id="chunk-size-input" class="input-text" min="1" value="1">
+        <div class="badge-tag" id="chunk-preview-text">
+          Preview: Splitting 5 pages by <strong>1</strong> page produces <strong>5 PDFs</strong>.
+        </div>
+      </div>
+
+      <div id="range-box" style="display:none">
+        <label class="input-label" for="range-input">Page Range to Extract:</label>
+        <input type="text" id="range-input" class="input-text" placeholder="e.g. 1-2, 4">
+        <div class="badge-tag">
+          Format: Comma-separated or hyphenated (e.g. <strong>1-3, 5</strong>).
+        </div>
+      </div>
+
+      <label class="input-label" for="output-name">Document Label (Suffix):</label>
+      <input type="text" id="output-name" class="input-text" value="doc">
+
+      <div class="btn-grid" id="btn-group-chunks">
+        <button class="btn" id="dl-zip-btn">📦 Download All (ZIP)</button>
+        <button class="btn btn-sec" id="dl-separate-btn">⚡ Download PDFs</button>
+      </div>
+
+      <button class="btn" id="dl-range-btn" style="display:none">✂️ Extract Range & Download</button>
+      <div id="status-message"></div>
+    </div>
+
+    <div class="ad-card">
+      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
     </div>
   </div>
 </div>
-<script>
-  let pdfBytes = null;
-  let totalPages = 0;
-  const input = document.getElementById('split-input');
-  const controls = document.getElementById('split-controls');
-  const fileInfo = document.getElementById('file-info');
-  const rangeInput = document.getElementById('range-input');
-  const extractBtn = document.getElementById('extract-btn');
 
-  input.addEventListener('change', async (e) => {
+<script>
+  let pdfBuffer = null;
+  let totalPages = 0;
+  let currentBaseTag = 'doc';
+
+  const fileInput = document.getElementById('pdf-input');
+  const splitStage = document.getElementById('split-stage');
+  const fileDetails = document.getElementById('file-details');
+  const modeChunksBtn = document.getElementById('mode-chunks-btn');
+  const modeRangeBtn = document.getElementById('mode-range-btn');
+  const chunksBox = document.getElementById('chunks-box');
+  const rangeBox = document.getElementById('range-box');
+  const chunkSizeInput = document.getElementById('chunk-size-input');
+  const chunkPreviewText = document.getElementById('chunk-preview-text');
+  const rangeInput = document.getElementById('range-input');
+  const outputName = document.getElementById('output-name');
+  const btnGroupChunks = document.getElementById('btn-group-chunks');
+  const dlZipBtn = document.getElementById('dl-zip-btn');
+  const dlSeparateBtn = document.getElementById('dl-separate-btn');
+  const dlRangeBtn = document.getElementById('dl-range-btn');
+  const statusMsg = document.getElementById('status-message');
+
+  fileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    pdfBytes = await file.arrayBuffer();
-    const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-    totalPages = pdfDoc.getPageCount();
-    fileInfo.textContent = `${file.name} (Total Pages: ${totalPages})`;
-    rangeInput.value = `1-${Math.min(totalPages, 2)}`;
-    controls.style.display = 'block';
+
+    try {
+      // Clean clean short tag from original file name
+      currentBaseTag = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_").substring(0, 14);
+      pdfBuffer = await file.arrayBuffer();
+      const doc = await PDFLib.PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
+      totalPages = doc.getPageCount();
+
+      const sizeKb = (file.size / 1024).toFixed(1);
+      const sizeStr = sizeKb > 1024 ? (sizeKb / 1024).toFixed(2) + ' MB' : sizeKb + ' KB';
+
+      fileDetails.textContent = `${file.name.substring(0, 16)}... | ${totalPages} Pgs (${sizeStr})`;
+      chunkSizeInput.max = totalPages;
+      chunkSizeInput.value = 1;
+      rangeInput.value = totalPages > 1 ? `1-${Math.min(totalPages, 2)}` : '1';
+      outputName.value = currentBaseTag || 'split';
+
+      updateChunkPreview();
+      splitStage.style.display = 'block';
+      splitStage.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      alert('Could not read PDF. Ensure it is not password locked.');
+    }
   });
 
-  extractBtn.addEventListener('click', async () => {
-    const raw = rangeInput.value.trim();
-    if (!raw) return alert('Please enter page numbers or range.');
+  function updateChunkPreview() {
+    let n = parseInt(chunkSizeInput.value, 10);
+    if (isNaN(n) || n < 1) n = 1;
+    if (n > totalPages) n = totalPages;
 
-    const pagesToExtract = new Set();
+    const fullChunks = Math.floor(totalPages / n);
+    const remainder = totalPages % n;
+    const totalFiles = remainder > 0 ? fullChunks + 1 : fullChunks;
+
+    let parts = [];
+    let pIdx = 1;
+    for (let i = 0; i < totalPages; i += n) {
+      const start = i + 1;
+      const end = Math.min(i + n, totalPages);
+      const pad = String(pIdx).padStart(2, '0');
+      parts.push(`Part_${pad} (Pg ${start === end ? start : start + '-' + end})`);
+      pIdx++;
+    }
+    chunkPreviewText.innerHTML = `Splitting produces <strong>${totalFiles} files</strong>: ` + parts.slice(0, 3).join(', ') + (parts.length > 3 ? ', ...' : '');
+  }
+
+  chunkSizeInput.addEventListener('input', updateChunkPreview);
+
+  modeChunksBtn.addEventListener('click', () => {
+    modeChunksBtn.classList.add('active');
+    modeRangeBtn.classList.remove('active');
+    chunksBox.style.display = 'block';
+    rangeBox.style.display = 'none';
+    btnGroupChunks.style.display = 'grid';
+    dlRangeBtn.style.display = 'none';
+  });
+
+  modeRangeBtn.addEventListener('click', () => {
+    modeRangeBtn.classList.add('active');
+    modeChunksBtn.classList.remove('active');
+    chunksBox.style.display = 'none';
+    rangeBox.style.display = 'block';
+    btnGroupChunks.style.display = 'none';
+    dlRangeBtn.style.display = 'block';
+  });
+
+  function getBaseTag() {
+    let base = outputName.value.trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+    return base || 'doc';
+  }
+
+  async function generateChunks() {
+    let n = parseInt(chunkSizeInput.value, 10);
+    if (isNaN(n) || n < 1) n = 1;
+
+    const srcDoc = await PDFLib.PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
+    const generatedPdfs = [];
+    let partNum = 1;
+
+    for (let i = 0; i < totalPages; i += n) {
+      const end = Math.min(i + n, totalPages);
+      const indices = [];
+      for (let p = i; p < end; p++) indices.push(p);
+
+      const chunkDoc = await PDFLib.PDFDocument.create();
+      const pages = await chunkDoc.copyPages(srcDoc, indices);
+      pages.forEach(pg => chunkDoc.addPage(pg));
+
+      const bytes = await chunkDoc.save();
+      const pad = String(partNum).padStart(2, '0');
+      const pageTag = indices.length === 1 ? `pg_${i + 1}` : `pg_${i + 1}_to_${end}`;
+
+      // Clean naming starting with Part number
+      const filename = `Part_${pad}_(${pageTag})_${getBaseTag()}.pdf`;
+
+      generatedPdfs.push({ filename, bytes });
+      partNum++;
+    }
+    return generatedPdfs;
+  }
+
+  // ZIP Download
+  dlZipBtn.addEventListener('click', async () => {
+    if (!pdfBuffer) return;
+    statusMsg.style.display = 'block';
+    statusMsg.textContent = 'Generating PDF parts and packing ZIP archive...';
+    dlZipBtn.disabled = true;
+
+    try {
+      const files = await generateChunks();
+      const zip = new JSZip();
+      files.forEach(f => zip.file(f.filename, f.bytes));
+
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(zipBlob);
+      link.download = `All_Parts_${getBaseTag()}.zip`;
+      link.click();
+
+      statusMsg.textContent = `Downloaded 1 ZIP containing ${files.length} numbered PDF files.`;
+    } catch (err) {
+      alert('Error creating ZIP: ' + err.message);
+      statusMsg.style.display = 'none';
+    }
+    dlZipBtn.disabled = false;
+  });
+
+  // Sequential File Download
+  dlSeparateBtn.addEventListener('click', async () => {
+    if (!pdfBuffer) return;
+    statusMsg.style.display = 'block';
+    dlSeparateBtn.disabled = true;
+
+    try {
+      const files = await generateChunks();
+      for (let i = 0; i < files.length; i++) {
+        statusMsg.textContent = `Downloading ${files[i].filename} (${i + 1}/${files.length})...`;
+        const blob = new Blob([files[i].bytes], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = files[i].filename;
+        link.click();
+        await new Promise(res => setTimeout(res, 450));
+      }
+      statusMsg.textContent = `Downloaded all ${files.length} numbered PDF files.`;
+    } catch (err) {
+      alert('Error during download: ' + err.message);
+    }
+    dlSeparateBtn.disabled = false;
+  });
+
+  // Custom Range Download
+  function parsePageRange(raw, maxPages) {
+    const pages = new Set();
     const parts = raw.split(',');
     for (const part of parts) {
       const match = part.trim().match(/^(\d+)(?:-(\d+))?$/);
@@ -186,34 +496,41 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
         const start = parseInt(match[1], 10);
         const end = match[2] ? parseInt(match[2], 10) : start;
         for (let i = start; i <= end; i++) {
-          if (i >= 1 && i <= totalPages) pagesToExtract.add(i - 1);
+          if (i >= 1 && i <= maxPages) pages.add(i - 1);
         }
       }
     }
+    return Array.from(pages).sort((a, b) => a - b);
+  }
 
-    if (pagesToExtract.size === 0) return alert('Invalid range or pages out of bounds.');
+  dlRangeBtn.addEventListener('click', async () => {
+    if (!pdfBuffer) return;
+    const selectedIndices = parsePageRange(rangeInput.value, totalPages);
+    if (selectedIndices.length === 0) {
+      alert(`Invalid range. Please enter page numbers between 1 and ${totalPages}.`);
+      return;
+    }
 
-    extractBtn.textContent = 'Extracting...';
-    extractBtn.disabled = true;
+    dlRangeBtn.disabled = true;
+    dlRangeBtn.textContent = 'Extracting Range...';
 
     try {
-      const srcDoc = await PDFLib.PDFDocument.load(pdfBytes);
+      const srcDoc = await PDFLib.PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
       const newDoc = await PDFLib.PDFDocument.create();
-      const pageIndices = Array.from(pagesToExtract).sort((a, b) => a - b);
-      const copied = await newDoc.copyPages(srcDoc, pageIndices);
-      copied.forEach((p) => newDoc.addPage(p));
+      const pages = await newDoc.copyPages(srcDoc, selectedIndices);
+      pages.forEach(p => newDoc.addPage(p));
 
-      const outBytes = await newDoc.save();
-      const blob = new Blob([outBytes], { type: 'application/pdf' });
+      const newBytes = await newDoc.save();
+      const blob = new Blob([newBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = 'extracted_pages.pdf';
+      link.download = `Custom_Range_${getBaseTag()}.pdf`;
       link.click();
     } catch (err) {
       alert('Error extracting: ' + err.message);
     }
-    extractBtn.textContent = '✂️ Extract Pages & Download';
-    extractBtn.disabled = false;
+    dlRangeBtn.disabled = false;
+    dlRangeBtn.textContent = '✂️ Extract Range & Download';
   });
 </script>
 </body>
