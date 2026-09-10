@@ -2,916 +2,226 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-<title>JPG to PDF Converter Online Free</title>
-<meta name="description" content="Convert JPG images to PDF online for free. Fast, simple and mobile-friendly JPG to PDF converter.">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/jpg-to-pdf.html">
-<meta property="og:title" content="JPG to PDF Converter Online Free">
-<meta property="og:description" content="Convert JPG images to PDF online for free. Fast, simple and mobile-friendly JPG to PDF converter.">
-<meta property="og:url" content="https://amanshaikh77.github.io/formready-india/tools/jpg-to-pdf.html">
-<meta property="og:type" content="website">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "JPG to PDF Converter",
-  "url": "https://amanshaikh77.github.io/formready-india/tools/jpg-to-pdf.html",
-  "description": "Convert JPG images to PDF online for free. Fast, simple and mobile-friendly JPG to PDF converter.",
-  "applicationCategory": "UtilityApplication",
-  "operatingSystem": "Any"
-}
-</script>
-
-<script src="../token-system.js"></script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JPG to PDF - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
-:root{
-  --bg:#151210;
-  --panel:#1e1a17;
-  --panel-2:#262019;
-  --line:#39322b;
-  --amber:#d99a3f;
-  --amber-bright:#f0b158;
-  --amber-dim:#8a6329;
-  --teal:#5fada0;
-  --paper:#f2ece2;
-  --muted:#a89a89;
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+  --card-bg: #14110f;
+  --danger: #ef4444;
 }
-
-*{ box-sizing:border-box; }
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--paper);
-  font-family:'Inter',sans-serif;
-  min-height:100vh;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  touch-action: pan-y;
 }
-
-h1,h2,h3,.brand,.upload-title{
-  font-family:'Space Grotesk',sans-serif;
-  font-weight:600;
+.wrapper { width: 100%; max-width: 540px; }
+@media (min-width: 768px) { .wrapper { max-width: 740px; } }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 12px;
 }
-
-/* Topbar */
-header.topbar{
-  position:sticky;
-  top:0;
-  z-index:10;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:14px 20px;
-  background:rgba(21,18,16,.92);
-  backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--line);
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 18px;
+  border-radius: 12px;
+  width: 100%;
+  margin-bottom: 14px;
 }
-
-.brand{
-  font-size:19px;
-  color:var(--paper);
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+.upload-box {
+  border: 2px dashed var(--amber);
+  background: rgba(217, 154, 63, 0.05);
+  border-radius: 10px;
+  padding: 22px 14px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
-.brand span{ color:var(--amber); }
-
-header.topbar a{
-  color:var(--muted);
-  text-decoration:none;
-  font-size:14px;
-  font-weight:500;
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 14px; }
+.upload-box small { color: var(--muted); font-size: 11px; }
+.item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.item-row {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
 }
-header.topbar a:hover{ color:var(--amber-bright); }
-
-.breadcrumb{
-  display:block;
-  width:min(600px,92%);
-  margin:16px auto 0;
-  color:var(--muted);
-  text-decoration:none;
-  font-size:14px;
+.item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 65%; }
+.row-actions { display: flex; gap: 6px; }
+.mini-btn {
+  background: #2a2420;
+  color: var(--paper);
+  border: 1px solid var(--line);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
 }
-.breadcrumb:hover{ color:var(--amber-bright); }
-
-/* Container */
-.container{
-  width:min(600px,92%);
-  margin:16px auto 40px;
+.mini-btn:hover { background: var(--amber); color: var(--bg); }
+.mini-btn.del:hover { background: var(--danger); color: #fff; }
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
 }
-
-.card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:26px 22px;
-  margin-bottom:16px;
+.btn:hover { opacity: 0.9; }
+.input-text {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  outline: none;
 }
-
-.icon-badge{
-  width:46px;
-  height:46px;
-  border-radius:12px;
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-bottom:14px;
+.input-text:focus { border-color: var(--amber); }
+.grid-thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
 }
-
-.card-head h1{
-  margin:0 0 6px;
-  font-size:24px;
-  color:var(--paper);
+.thumb-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
-
-.card-head p{
-  margin:0 0 18px;
-  color:var(--muted);
-  font-size:14.5px;
-}
-
-/* Upload box */
-.upload-box{
-  border:2px dashed var(--line);
-  border-radius:14px;
-  padding:26px 16px;
-  text-align:center;
-  background:var(--panel-2);
-}
-
-.upload-box svg{
-  width:30px;
-  height:30px;
-  margin-bottom:8px;
-}
-
-.upload-title{
-  margin:0 0 4px;
-  font-size:16px;
-  color:var(--paper);
-}
-
-.upload-hint{
-  margin:0 0 16px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.btn-choose{
-  display:inline-block;
-  padding:11px 22px;
-  border-radius:10px;
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  color:#1a1410;
-  font-weight:600;
-  font-size:14.5px;
-  cursor:pointer;
-}
-
-/* Options */
-.options{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-.field label{
-  display:block;
-  font-weight:600;
-  font-size:13.5px;
-  color:var(--muted);
-  margin-bottom:7px;
-}
-
-select{
-  width:100%;
-  padding:12px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:var(--panel-2);
-  color:var(--paper);
-  font-size:15px;
-  font-family:'Inter',sans-serif;
-}
-select:focus{
-  outline:none;
-  border-color:var(--amber);
-}
-
-/* Preview */
-.preview{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  margin-top:16px;
-}
-
-.preview-item{
-  background:var(--panel-2);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:8px;
-  text-align:center;
-}
-
-.preview-item img{
-  display:block;
-  width:100%;
-  height:160px;
-  object-fit:contain;
-  background:#0f0d0b;
-  border-radius:8px;
-}
-
-.preview-item div{
-  font-size:12.5px;
-  color:var(--muted);
-  margin-top:6px;
-  word-break:break-all;
-}
-
-.status{
-  text-align:center;
-  margin-top:14px;
-  color:var(--muted);
-  font-size:13.5px;
-}
-
-/* Buttons */
-.buttons{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-button{
-  width:100%;
-  border:0;
-  border-radius:12px;
-  padding:15px;
-  font-size:16px;
-  font-weight:600;
-  font-family:'Inter',sans-serif;
-  cursor:pointer;
-}
-
-.primary{
-  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
-  color:#1a1410;
-}
-
-.secondary{
-  background:transparent;
-  color:var(--paper);
-  border:1px solid var(--line);
-}
-
-/* Ad slot */
-.ad-slot{ margin:16px 0; }
-
-.ad-box{
-  min-height:100px;
-  border:1.5px dashed var(--line);
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* Footer */
-footer.credit{
-  text-align:center;
-  color:var(--muted);
-  font-size:12.5px;
-  padding:20px 0 30px;
-}
-
-@media(max-width:600px){
-  .options{ grid-template-columns:1fr; }
-  .preview-item img{ height:130px; }
-}
+.thumb-card img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 4px; }
 </style>
 </head>
-
 <body>
-
-<header class="topbar">
-  <div class="brand">FormReady <span>India</span></div>
-  <a href="/formready-india/index.html#tools">Home</a>
-</header>
-
-<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
-
-<div class="container">
-
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
   <div class="card">
-    <div class="card-head">
-      <div class="icon-badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="9" y1="13" x2="15" y2="13"/>
-          <line x1="9" y1="17" x2="15" y2="17"/>
-        </svg>
-      </div>
-      <h1>JPG to PDF</h1>
-      <p>Convert your JPG images into a PDF easily</p>
+    <h2>JPG to PDF Converter</h2>
+    <div class="subtitle">Convert images (JPG, PNG) into a single high-quality PDF</div>
+    <input type="file" id="img-input" accept="image/*" multiple style="display:none">
+    <div class="upload-box" onclick="document.getElementById('img-input').click()">
+      <span>🖼️ Tap to Select Images</span>
+      <small>JPG or PNG files</small>
     </div>
-
-    <div class="upload-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-        <circle cx="12" cy="13" r="4"/>
-      </svg>
-      <p class="upload-title">Choose JPG Images</p>
-      <p class="upload-hint">Select one or multiple images</p>
-      <label class="btn-choose" for="fileInput">Browse Files</label>
-      <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" multiple hidden>
-    </div>
+    <div class="item-list" id="img-list"></div>
+    <button class="btn" id="conv-btn" style="display:none">📄 Convert to PDF & Download</button>
   </div>
-
-  <div class="card">
-    <div class="options">
-      <div class="field">
-        <label for="pageSize">PDF Page Size</label>
-        <select id="pageSize">
-          <option value="a4">A4</option>
-          <option value="a5">A5</option>
-          <option value="letter">Letter</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="orientation">Orientation</label>
-        <select id="orientation">
-          <option value="portrait">Portrait</option>
-          <option value="landscape">Landscape</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="margin">Margin</label>
-        <select id="margin">
-          <option value="5">5 mm</option>
-          <option value="10" selected>10 mm</option>
-          <option value="15">15 mm</option>
-          <option value="20">20 mm</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="fit">Image Fit</label>
-        <select id="fit">
-          <option value="contain">Fit to Page</option>
-          <option value="cover">Fill Page</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <div class="card" id="previewCard" style="display:none">
-    <h3 style="margin:0 0 4px;font-size:16px;">Selected Images</h3>
-    <div class="preview" id="preview"></div>
-    <div class="status" id="status"></div>
-  </div>
-
-  <div class="card">
-    <div class="buttons">
-      <button class="primary" id="convertBtn">Convert to PDF</button>
-      <button class="secondary" id="clearBtn">Reset</button>
-    </div>
-  </div>
-
-  <div class="ad-slot">
-    <div class="ad-box">Advertisement</div>
-  </div>
-
-  <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
-
 </div>
-
 <script>
+  let images = [];
+  const input = document.getElementById('img-input');
+  const listEl = document.getElementById('img-list');
+  const convBtn = document.getElementById('conv-btn');
 
-const {
-  jsPDF
-} = window.jspdf;
-
-const fileInput =
-  document.getElementById("fileInput");
-
-const previewCard =
-  document.getElementById("previewCard");
-
-const preview =
-  document.getElementById("preview");
-
-const status =
-  document.getElementById("status");
-
-const convertBtn =
-  document.getElementById("convertBtn");
-
-const clearBtn =
-  document.getElementById("clearBtn");
-
-const pageSize =
-  document.getElementById("pageSize");
-
-const orientation =
-  document.getElementById("orientation");
-
-const margin =
-  document.getElementById("margin");
-
-const fit =
-  document.getElementById("fit");
-
-let files = [];
-
-
-/* =========================
-   IMAGE LOADER
-========================= */
-
-function loadImage(file){
-
-  return new Promise((resolve,reject)=>{
-
-    const reader =
-      new FileReader();
-
-    reader.onload = function(e){
-
-      const img = new Image();
-
-      img.onload = function(){
-
-        resolve(img);
-
-      };
-
-      img.onerror = function(){
-
-        reject(
-          new Error("Image could not be loaded")
-        );
-
-      };
-
-      img.src = e.target.result;
-
-    };
-
-    reader.onerror = function(){
-
-      reject(
-        new Error("File could not be read")
-      );
-
-    };
-
-    reader.readAsDataURL(file);
-
+  input.addEventListener('change', async (e) => {
+    for (const file of e.target.files) {
+      const buffer = await file.arrayBuffer();
+      images.push({ name: file.name, type: file.type, buffer });
+    }
+    input.value = '';
+    render();
   });
 
-}
-
-
-/* =========================
-   FILE SELECT
-========================= */
-
-fileInput.addEventListener(
-  "change",
-  function(){
-
-    files =
-      Array.from(this.files);
-
-    preview.innerHTML = "";
-
-    if(files.length === 0){
-
-      previewCard.style.display =
-        "none";
-
-      return;
-
-    }
-
-    previewCard.style.display =
-      "block";
-
-    status.textContent =
-      files.length +
-      " image" +
-      (files.length > 1 ? "s" : "") +
-      " selected";
-
-    files.forEach(function(file,index){
-
-      const item =
-        document.createElement("div");
-
-      item.className =
-        "preview-item";
-
-      const img =
-        document.createElement("img");
-
-      const name =
-        document.createElement("div");
-
-      name.textContent =
-        (index + 1) +
-        ". " +
-        file.name;
-
-      const reader =
-        new FileReader();
-
-      reader.onload =
-        function(e){
-
-          img.src =
-            e.target.result;
-
-        };
-
-      reader.readAsDataURL(file);
-
-      item.appendChild(img);
-      item.appendChild(name);
-
-      preview.appendChild(item);
+  function render() {
+    listEl.innerHTML = '';
+    images.forEach((img, idx) => {
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML = `
+        <span class="item-name">${idx + 1}. ${img.name}</span>
+        <div class="row-actions">
+          <button class="mini-btn" onclick="shiftImg(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>▲</button>
+          <button class="mini-btn" onclick="shiftImg(${idx}, 1)" ${idx === images.length - 1 ? 'disabled' : ''}>▼</button>
+          <button class="mini-btn del" onclick="removeImg(${idx})">✕</button>
+        </div>
+      `;
+      listEl.appendChild(row);
     });
-
-  }
-);
-
-
-/* =========================
-   PAGE SIZE
-========================= */
-
-function getPageDimensions(){
-
-  let size =
-    pageSize.value;
-
-  let width;
-  let height;
-
-  if(size === "a5"){
-
-    width = 148;
-    height = 210;
-
-  }else if(size === "letter"){
-
-    width = 215.9;
-    height = 279.4;
-
-  }else{
-
-    width = 210;
-    height = 297;
-
+    convBtn.style.display = images.length > 0 ? 'block' : 'none';
   }
 
-  if(
-    orientation.value ===
-    "landscape"
-  ){
-
-    const temp = width;
-
-    width = height;
-    height = temp;
-
-  }
-
-  return {
-    width,
-    height
+  window.shiftImg = (idx, dir) => {
+    const target = idx + dir;
+    if (target < 0 || target >= images.length) return;
+    const temp = images[idx];
+    images[idx] = images[target];
+    images[target] = temp;
+    render();
   };
 
-}
+  window.removeImg = (idx) => {
+    images.splice(idx, 1);
+    render();
+  };
 
-
-/* =========================
-   ADD IMAGE TO PDF
-========================= */
-
-function addImageToPDF(
-  pdf,
-  img,
-  pageWidth,
-  pageHeight,
-  marginMM
-){
-
-  const availableWidth =
-    pageWidth -
-    marginMM * 2;
-
-  const availableHeight =
-    pageHeight -
-    marginMM * 2;
-
-  const imageWidth =
-    img.naturalWidth ||
-    img.width;
-
-  const imageHeight =
-    img.naturalHeight ||
-    img.height;
-
-  if(!imageWidth || !imageHeight){
-
-    throw new Error(
-      "Invalid image dimensions"
-    );
-
-  }
-
-  const imageRatio =
-    imageWidth /
-    imageHeight;
-
-  const pageRatio =
-    availableWidth /
-    availableHeight;
-
-  let drawWidth;
-  let drawHeight;
-
-  if(fit.value === "cover"){
-
-    if(imageRatio > pageRatio){
-
-      drawHeight =
-        availableHeight;
-
-      drawWidth =
-        drawHeight *
-        imageRatio;
-
-    }else{
-
-      drawWidth =
-        availableWidth;
-
-      drawHeight =
-        drawWidth /
-        imageRatio;
-
-    }
-
-  }else{
-
-    if(imageRatio > pageRatio){
-
-      drawWidth =
-        availableWidth;
-
-      drawHeight =
-        drawWidth /
-        imageRatio;
-
-    }else{
-
-      drawHeight =
-        availableHeight;
-
-      drawWidth =
-        drawHeight *
-        imageRatio;
-
-    }
-
-  }
-
-  let x =
-    (pageWidth -
-     drawWidth) / 2;
-
-  let y =
-    (pageHeight -
-     drawHeight) / 2;
-
-  pdf.addImage(
-    img,
-    "JPEG",
-    x,
-    y,
-    drawWidth,
-    drawHeight,
-    undefined,
-    "FAST"
-  );
-
-}
-
-
-/* =========================
-   CONVERT
-========================= */
-
-convertBtn.addEventListener(
-  "click",
-  async function(){
-
-    if(files.length === 0){
-
-      alert(
-        "Please choose at least one JPG image."
-      );
-
-      return;
-
-    }
-
-    convertBtn.disabled = true;
-
-    convertBtn.textContent =
-      "Creating PDF...";
-
-    try{
-
-      const dimensions =
-        getPageDimensions();
-
-      const marginMM =
-        Number(margin.value);
-
-      const pdf =
-        new jsPDF({
-
-          orientation:
-            orientation.value,
-
-          unit:"mm",
-
-          format:[
-            dimensions.width,
-            dimensions.height
-          ],
-
-          compress:true
-
-        });
-
-
-      for(
-        let i=0;
-        i<files.length;
-        i++
-      ){
-
-        status.textContent =
-          "Processing image " +
-          (i+1) +
-          " of " +
-          files.length +
-          "...";
-
-        const img =
-          await loadImage(
-            files[i]
-          );
-
-
-        if(i > 0){
-
-          pdf.addPage(
-            [
-              dimensions.width,
-              dimensions.height
-            ],
-            orientation.value
-          );
-
+  convBtn.addEventListener('click', async () => {
+    convBtn.textContent = 'Generating PDF...';
+    convBtn.disabled = true;
+    try {
+      const pdfDoc = await PDFLib.PDFDocument.create();
+      for (const img of images) {
+        let embedded;
+        if (img.type === 'image/png') {
+          embedded = await pdfDoc.embedPng(img.buffer);
+        } else {
+          embedded = await pdfDoc.embedJpg(img.buffer);
         }
-
-        pdf.setFillColor(
-          255,
-          255,
-          255
-        );
-
-        pdf.rect(
-          0,
-          0,
-          dimensions.width,
-          dimensions.height,
-          "F"
-        );
-
-        addImageToPDF(
-          pdf,
-          img,
-          dimensions.width,
-          dimensions.height,
-          marginMM
-        );
-
+        const page = pdfDoc.addPage([embedded.width, embedded.height]);
+        page.drawImage(embedded, { x: 0, y: 0, width: embedded.width, height: embedded.height });
       }
-
-
-      status.textContent =
-        "PDF created successfully!";
-
-
-      pdf.save(
-        "converted-images.pdf"
-      );
-
-
-    }catch(error){
-
-      console.error(error);
-
-      alert(
-        "PDF creation failed. Please try another JPG image."
-      );
-
-      status.textContent =
-        "PDF creation failed.";
-
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'converted_images.pdf';
+      link.click();
+    } catch (err) {
+      alert('Error creating PDF: ' + err.message);
     }
-
-
-    convertBtn.disabled = false;
-
-    convertBtn.textContent =
-      "Convert to PDF";
-
-  }
-);
-
-
-/* =========================
-   RESET
-========================= */
-
-clearBtn.addEventListener(
-  "click",
-  function(){
-
-    files = [];
-
-    fileInput.value = "";
-
-    preview.innerHTML = "";
-
-    previewCard.style.display =
-      "none";
-
-    status.textContent = "";
-
-  }
-);
-
-</script>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const rewardKey = "formready_reward_jpg-to-pdf_" + new Date().toISOString().slice(0,10);
-
-  function rewardUser() {
-    if (localStorage.getItem(rewardKey)) return;
-    if (window.FormReadyTokens) {
-      window.FormReadyTokens.addTokens("jpg-to-pdf");
-    }
-  }
-
-  document.querySelectorAll(
-    '#download, #downloadBtn, #downloadButton, button[id*="download" i], a[id*="download" i]'
-  ).forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      setTimeout(rewardUser, 1000);
-    });
+    convBtn.textContent = '📄 Convert to PDF & Download';
+    convBtn.disabled = false;
   });
-
-  const originalAlert = window.alert;
-  window.alert = function(msg) {
-    if (msg && /download|success|created|converted|compressed|generated|saved/i.test(String(msg))) {
-      setTimeout(rewardUser, 500);
-    }
-    originalAlert.apply(window, arguments);
-  };
-});
 </script>
-
 </body>
 </html>

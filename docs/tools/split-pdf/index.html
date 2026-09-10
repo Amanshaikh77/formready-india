@@ -2,23 +2,219 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tool - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Split PDF - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
-:root { --bg: #151210; --panel: #1e1a17; --line: #39322b; --amber: #d99a3f; --paper: #f2ece2; --muted: #a89a89; }
-body { background: var(--bg); color: var(--paper); font-family: 'Inter', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; }
-.card { background: var(--panel); border: 1px solid var(--line); padding: 30px; border-radius: 12px; max-width: 400px; width: 100%; }
-h2 { color: var(--amber); margin-bottom: 10px; font-size: 20px; }
-p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
-.back-btn { background: var(--amber); color: #151210; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block; }
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+  --card-bg: #14110f;
+  --danger: #ef4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  touch-action: pan-y;
+}
+.wrapper { width: 100%; max-width: 540px; }
+@media (min-width: 768px) { .wrapper { max-width: 740px; } }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 18px;
+  border-radius: 12px;
+  width: 100%;
+  margin-bottom: 14px;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+.upload-box {
+  border: 2px dashed var(--amber);
+  background: rgba(217, 154, 63, 0.05);
+  border-radius: 10px;
+  padding: 22px 14px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 14px; }
+.upload-box small { color: var(--muted); font-size: 11px; }
+.item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.item-row {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+.item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 65%; }
+.row-actions { display: flex; gap: 6px; }
+.mini-btn {
+  background: #2a2420;
+  color: var(--paper);
+  border: 1px solid var(--line);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.mini-btn:hover { background: var(--amber); color: var(--bg); }
+.mini-btn.del:hover { background: var(--danger); color: #fff; }
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+}
+.btn:hover { opacity: 0.9; }
+.input-text {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  outline: none;
+}
+.input-text:focus { border-color: var(--amber); }
+.grid-thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.thumb-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.thumb-card img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 4px; }
 </style>
 </head>
 <body>
-<div class="card">
-  <h2>Tool Ready & Loading</h2>
-  <p>This tool is linked correctly and its interface is being connected to your dashboard.</p>
-  <a href="../../" class="back-btn">← Back to Dashboard</a>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+  <div class="card">
+    <h2>Split PDF</h2>
+    <div class="subtitle">Extract specific page numbers or ranges into a separate PDF</div>
+    <input type="file" id="split-input" accept="application/pdf" style="display:none">
+    <div class="upload-box" onclick="document.getElementById('split-input').click()">
+      <span>📑 Tap to Select PDF File</span>
+      <small>Single PDF to extract pages from</small>
+    </div>
+    <div id="split-controls" style="display:none">
+      <div id="file-info" style="font-size:13px; color:var(--amber); margin-bottom:12px; text-align:center;"></div>
+      <label style="font-size:12px; color:var(--muted); display:block; margin-bottom:6px;">
+        Page Range to Extract (e.g. 1-2, 4):
+      </label>
+      <input type="text" id="range-input" class="input-text" placeholder="e.g. 1-2, 4">
+      <button class="btn" id="extract-btn">✂️ Extract Pages & Download</button>
+    </div>
+  </div>
 </div>
+<script>
+  let pdfBytes = null;
+  let totalPages = 0;
+  const input = document.getElementById('split-input');
+  const controls = document.getElementById('split-controls');
+  const fileInfo = document.getElementById('file-info');
+  const rangeInput = document.getElementById('range-input');
+  const extractBtn = document.getElementById('extract-btn');
+
+  input.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    pdfBytes = await file.arrayBuffer();
+    const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+    totalPages = pdfDoc.getPageCount();
+    fileInfo.textContent = `${file.name} (Total Pages: ${totalPages})`;
+    rangeInput.value = `1-${Math.min(totalPages, 2)}`;
+    controls.style.display = 'block';
+  });
+
+  extractBtn.addEventListener('click', async () => {
+    const raw = rangeInput.value.trim();
+    if (!raw) return alert('Please enter page numbers or range.');
+
+    const pagesToExtract = new Set();
+    const parts = raw.split(',');
+    for (const part of parts) {
+      const match = part.trim().match(/^(\d+)(?:-(\d+))?$/);
+      if (match) {
+        const start = parseInt(match[1], 10);
+        const end = match[2] ? parseInt(match[2], 10) : start;
+        for (let i = start; i <= end; i++) {
+          if (i >= 1 && i <= totalPages) pagesToExtract.add(i - 1);
+        }
+      }
+    }
+
+    if (pagesToExtract.size === 0) return alert('Invalid range or pages out of bounds.');
+
+    extractBtn.textContent = 'Extracting...';
+    extractBtn.disabled = true;
+
+    try {
+      const srcDoc = await PDFLib.PDFDocument.load(pdfBytes);
+      const newDoc = await PDFLib.PDFDocument.create();
+      const pageIndices = Array.from(pagesToExtract).sort((a, b) => a - b);
+      const copied = await newDoc.copyPages(srcDoc, pageIndices);
+      copied.forEach((p) => newDoc.addPage(p));
+
+      const outBytes = await newDoc.save();
+      const blob = new Blob([outBytes], { type: 'application/pdf' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'extracted_pages.pdf';
+      link.click();
+    } catch (err) {
+      alert('Error extracting: ' + err.message);
+    }
+    extractBtn.textContent = '✂️ Extract Pages & Download';
+    extractBtn.disabled = false;
+  });
+</script>
 </body>
 </html>
