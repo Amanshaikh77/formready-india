@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signature Maker - FormReady India</title>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 1rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+    .container { width: 100%; max-width: 600px; background: #1e293b; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); box-sizing: border-box; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .back-btn { background: #334155; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; text-decoration: none; font-size: 0.85rem; }
+    .back-btn:hover { background: #475569; }
+    h2 { margin: 0; color: #38bdf8; font-size: 1.25rem; }
+    .canvas-box { position: relative; width: 100%; height: 250px; background: #ffffff; border-radius: 0.5rem; overflow: hidden; margin-bottom: 1rem; touch-action: none; border: 2px dashed #475569; }
+    canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+    .controls { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem; align-items: center; justify-content: space-between; }
+    .control-group { display: flex; gap: 0.5rem; align-items: center; }
+    label { font-size: 0.85rem; color: #94a3b8; }
+    input[type="color"] { border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; background: none; }
+    select, input[type="range"] { background: #334155; color: #fff; border: 1px solid #475569; padding: 0.4rem; border-radius: 0.375rem; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .btn { padding: 0.75rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; text-align: center; font-size: 0.95rem; }
+    .btn-clear { background: #ef4444; color: white; grid-column: span 2; }
+    .btn-jpg { background: #3b82f6; color: white; }
+    .btn-pdf { background: #10b981; color: white; }
+    .btn:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>✍️ Signature Maker</h2>
+      <a href="index.html" class="back-btn">← Dashboard</a>
+    </div>
+    <div class="canvas-box" id="canvas-container"><canvas id="sig-canvas"></canvas></div>
+    <div class="controls">
+      <div class="control-group"><label>Pen Color:</label><input type="color" id="pen-color" value="#000000"></div>
+      <div class="control-group"><label>Thickness:</label><input type="range" id="pen-width" min="1" max="10" value="3"></div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-jpg" id="download-jpg">Download JPG</button>
+      <button class="btn btn-pdf" id="download-pdf">Download PDF</button>
+      <button class="btn btn-clear" id="clear-btn">Clear Canvas</button>
+    </div>
+  </div>
+  <script>
+    const canvas = document.getElementById('sig-canvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('canvas-container');
+    function resizeCanvas() {
+      const rect = container.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, rect.width, rect.height);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    let isDrawing = false, lastX = 0, lastY = 0;
+    function getCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      let clientX = e.clientX, clientY = e.clientY;
+      if (e.touches && e.touches.length > 0) { clientX = e.touches[0].clientX; clientY = e.touches[0].clientY; }
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+    function startDraw(e) { isDrawing = true; const coords = getCoords(e); lastX = coords.x; lastY = coords.y; }
+    function draw(e) {
+      ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(coords.x, coords.y);
+      ctx.strokeStyle = document.getElementById('pen-color').value;
+      ctx.lineWidth = document.getElementById('pen-width').value;
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
+      lastX = coords.x; lastY = coords.y;
+    }
+    function stopDraw() { isDrawing = false; }
+    canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', stopDraw); canvas.addEventListener('mouseleave', stopDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false }); canvas.addEventListener('touchmove', draw, { passive: false }); canvas.addEventListener('touchend', stopDraw);
+    document.getElementById('clear-btn').addEventListener('click', () => { const rect = container.getBoundingClientRect(); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, rect.width, rect.height); });
+    document.getElementById('download-jpg').addEventListener('click', () => { const link = document.createElement('a'); link.download = 'signature.jpg'; link.href = canvas.toDataURL('image/jpeg', 1.0); link.click(); });
+    document.getElementById('download-pdf').addEventListener('click', async () => {
+      const { PDFDocument } = PDFLib; const pdfDoc = await PDFDocument.create();
+      const rect = container.getBoundingClientRect(); const page = pdfDoc.addPage([rect.width, rect.height]);
+      const jpgImageBytes = await fetch(canvas.toDataURL('image/jpeg', 1.0)).then(res => res.arrayBuffer());
+      const jpgImage = await pdfDoc.embedJpg(jpgImageBytes);
+      page.drawImage(jpgImage, { x: 0, y: 0, width: rect.width, height: rect.height });
+      const pdfBytes = await pdfDoc.save(); const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'signature.pdf'; link.click();
+    });
+  </script>
+</body>
+</html>
