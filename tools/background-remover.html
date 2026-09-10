@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Background Remover Online Free</title>
+
+<meta name="description" content="Remove photo background online for free, right in your browser. Choose white, blue, red, green or transparent background.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/background-remover.html">
+<meta property="og:title" content="Background Remover Online Free">
+<meta property="og:description" content="Remove photo background online for free, right in your browser. Choose white, blue, red, green or transparent background.">
+<meta property="og:url" content="https://amanshaikh77.github.io/formready-india/tools/background-remover.html">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Background Remover",
+  "url": "https://amanshaikh77.github.io/formready-india/tools/background-remover.html",
+  "description": "Remove photo background online for free, right in your browser. Choose white, blue, red, green or transparent background.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+
+<script src="../token-system.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#151210;
+    --panel:#1e1a17;
+    --panel-2:#262019;
+    --line:#39322b;
+    --amber:#d99a3f;
+    --amber-bright:#f0b158;
+    --amber-dim:#8a6329;
+    --teal:#5fada0;
+    --paper:#f2ece2;
+    --muted:#a89a89;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'Inter',Arial,sans-serif;
+  }
+
+  h1,.section-title,.brand{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+  }
+
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 18px;
+    background:rgba(21,18,16,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+
+  .brand{font-size:18px;color:var(--paper);}
+  .brand span{color:var(--amber-bright);}
+
+  .topbar a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+  }
+
+  .topbar a:hover{color:var(--amber-bright);}
+
+  .breadcrumb{
+    display:block;
+    padding:12px 18px 0;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:13px;
+  }
+
+  .breadcrumb:hover{color:var(--amber-bright);}
+
+  .container{
+    width:100%;
+    max-width:600px;
+    margin:auto;
+    padding:16px;
+  }
+
+  h1{
+    text-align:center;
+    font-size:26px;
+    margin:14px 0 4px;
+    color:var(--paper);
+  }
+
+  .subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:20px;
+    font-size:15px;
+  }
+
+  .icon-badge{
+    width:46px;
+    height:46px;
+    margin:0 auto 10px;
+    border-radius:14px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .icon-badge svg{
+    width:24px;
+    height:24px;
+    stroke:#1a1410;
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+  }
+
+  .upload-box{
+    display:block;
+    text-align:center;
+    border:2px dashed var(--amber-dim);
+    border-radius:14px;
+    padding:22px 14px;
+    cursor:pointer;
+    color:var(--muted);
+    font-size:14px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+
+  .upload-box:hover{
+    border-color:var(--amber);
+    background:rgba(217,154,63,.05);
+  }
+
+  .upload-box input{display:none;}
+
+  .upload-btn{
+    display:inline-block;
+    margin-bottom:10px;
+    padding:10px 22px;
+    border-radius:10px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;
+    font-weight:600;
+    font-size:14px;
+  }
+
+  .upload-name{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  .section-title{
+    font-size:16px;
+    color:var(--paper);
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  /* ---- crop / preview frame ---- */
+  .crop-frame{
+    position:relative;
+    width:100%;
+    aspect-ratio:3/4;
+    min-height:220px;
+    border-radius:14px;
+    background:#0e0c0b;
+    border:1px solid var(--line);
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    touch-action:none;
+    cursor:grab;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+
+  .crop-frame.dragging{cursor:grabbing;}
+  .crop-frame.no-drag{cursor:default;}
+
+  .crop-frame.checker{
+    background-image:repeating-conic-gradient(#3a352f 0% 25%, #201c19 0% 50%);
+    background-size:20px 20px;
+  }
+
+  .crop-frame .cutout-layer{
+    position:absolute;
+    top:0;
+    left:0;
+    pointer-events:none;
+    -webkit-user-drag:none;
+  }
+
+  .placeholder-text{
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+    padding:0 20px;
+  }
+
+  .drag-hint{
+    display:none;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    margin:8px 0 0;
+    line-height:1.5;
+  }
+
+  /* ---- custom aspect-ratio dropdown ---- */
+  .custom-select{
+    position:relative;
+    margin-bottom:2px;
+  }
+
+  .select-trigger{
+    width:100%;
+    height:48px;
+    padding:0 14px;
+    border-radius:12px;
+    background:var(--panel-2);
+    border:1.5px solid var(--line);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    cursor:pointer;
+    transition:border-color .15s ease;
+  }
+
+  .select-trigger:hover,
+  .custom-select.open .select-trigger{border-color:var(--amber-dim);}
+
+  .chevron{
+    stroke:var(--muted);
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition:transform .15s ease;
+    flex-shrink:0;
+  }
+
+  .custom-select.open .chevron{transform:rotate(180deg);}
+
+  .select-menu{
+    position:absolute;
+    left:0;right:0;
+    top:calc(100% + 6px);
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:6px;
+    z-index:15;
+    box-shadow:0 10px 30px rgba(0,0,0,.45);
+    display:none;
+  }
+
+  .custom-select.open .select-menu{display:block;}
+
+  .select-option{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:11px 12px;
+    border-radius:9px;
+    font-size:14.5px;
+    color:var(--paper);
+    cursor:pointer;
+  }
+
+  .select-option:hover{background:rgba(217,154,63,.1);}
+
+  .select-option.active{
+    background:rgba(217,154,63,.15);
+    color:var(--amber-bright);
+  }
+
+  .tag-recommended{
+    font-size:10.5px;
+    font-weight:600;
+    color:#1a1410;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    padding:2px 8px;
+    border-radius:20px;
+    letter-spacing:.3px;
+    flex-shrink:0;
+  }
+
+  button{
+    width:100%;
+    height:50px;
+    border:0;
+    border-radius:12px;
+    font-size:15.5px;
+    font-weight:600;
+    margin-top:10px;
+    cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;
+    transition:opacity .15s ease;
+  }
+
+  button:active{opacity:.85;}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+
+  .btn-primary{
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;
+  }
+
+  .btn-secondary{
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--paper);
+  }
+
+  .btn-secondary:hover{border-color:var(--amber-dim);}
+
+  .status{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin:12px 0 0;
+    line-height:1.5;
+  }
+
+  .swatch-label{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--muted);
+    margin:16px 0 10px;
+    text-align:center;
+  }
+
+  .swatch-row{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:16px;
+  }
+
+  .swatch{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    cursor:pointer;
+    padding:0;
+    margin:0;
+  }
+
+  .swatch.active{
+    border-color:var(--amber-bright);
+    box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--amber-bright);
+  }
+
+  .swatch[data-color="transparent"]{
+    background-image:repeating-conic-gradient(#8a8378 0% 25%, #fff 0% 50%);
+    background-size:10px 10px;
+  }
+
+  .swatch-custom{
+    width:38px;
+    height:38px;
+    padding:0;
+    border:2px solid var(--line);
+    border-radius:50%;
+    overflow:hidden;
+    cursor:pointer;
+    background:var(--panel-2);
+  }
+
+  .hint{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin:14px 0 0;
+    line-height:1.5;
+  }
+
+  .ad-slot{
+    max-width:600px;
+    margin:0 auto 20px;
+    padding:0 16px;
+  }
+
+  .ad-box{
+    min-height:100px;
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  footer.credit{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    padding:10px 16px 30px;
+  }
+
+  @media(max-width:500px){
+    h1{font-size:22px;}
+    .card{padding:15px;border-radius:16px;}
+  }
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
+</header>
+
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
+
+<div class="container">
+
+  <div class="icon-badge">
+    <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+  </div>
+
+  <h1>Background Remover</h1>
+  <div class="subtitle">Remove photo background instantly, right in your browser</div>
+
+  <!-- UPLOAD -->
+  <div class="card">
+    <label class="upload-box">
+      <span class="upload-btn">📁 Choose Photo</span>
+      <span class="upload-name" id="fileName">No photo selected yet</span>
+      <input type="file" id="photo" accept="image/*">
+    </label>
+
+    <button id="removeBtn" class="btn-primary" disabled>🪄 Remove Background</button>
+    <div class="status" id="status">Choose a photo to get started.</div>
+  </div>
+
+  <!-- PREVIEW + COLOR + CROP -->
+  <div class="card">
+    <div class="section-title">👀 Preview</div>
+
+    <div class="crop-frame checker" id="cropFrame">
+      <div class="placeholder-text" id="placeholderText">Your result will appear here</div>
+    </div>
+    <div class="drag-hint" id="dragHint">↔ Drag to move · pinch with two fingers to zoom — only what's inside the frame gets downloaded</div>
+
+    <div class="swatch-label">Choose background colour</div>
+    <div class="swatch-row">
+      <button class="swatch active" data-color="transparent" title="Transparent"></button>
+      <button class="swatch" data-color="#ffffff" style="background:#ffffff" title="White"></button>
+      <button class="swatch" data-color="#4a90d9" style="background:#4a90d9" title="Blue"></button>
+      <button class="swatch" data-color="#e74c3c" style="background:#e74c3c" title="Red"></button>
+      <button class="swatch" data-color="#2ecc71" style="background:#2ecc71" title="Green"></button>
+      <label class="swatch-custom" title="Custom colour">
+        <input type="color" id="customColor" style="width:100%;height:100%;border:0;padding:0;cursor:pointer;">
+      </label>
+    </div>
+   <div class="swatch-label">Choose photo shape</div>
+    <div class="custom-select" id="aspectSelect">
+      <button type="button" class="select-trigger" id="aspectTrigger">
+        <span id="aspectValueLabel">3:4 (Portrait)</span>
+        <svg class="chevron" viewBox="0 0 24 24" width="16" height="16"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="select-menu" id="aspectMenu" role="listbox">
+        <div class="select-option active" data-value="3:4" role="option" aria-selected="true">
+          <span>3:4 (Portrait)</span><span class="tag-recommended">Recommended</span>
+        </div>
+        <div class="select-option" data-value="1:1" role="option" aria-selected="false">
+          <span>1:1 (Square)</span>
+        </div>
+        <div class="select-option" data-value="4:5" role="option" aria-selected="false">
+          <span>4:5 (Instagram)</span>
+        </div>
+        <div class="select-option" data-value="original" role="option" aria-selected="false">
+          <span>Original (no crop)</span>
+        </div>
+      </div>
+    </div>
+
+    <button id="download" class="btn-primary" disabled>⬇️ Download PNG</button>
+    <button id="reset" class="btn-secondary">↻ Reset</button>
+
+    <div class="hint">Everything happens on your device — your photo is never uploaded anywhere. First use may take longer while the tool loads.</div>
+  </div>
+
+</div>
+
+<div class="ad-slot">
+  <div class="ad-box">Advertisement</div>
+</div>
+
+<footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
+
+<script type="module">
+import * as bgLib from "https://esm.sh/@imgly/background-removal@1.6.0?bundle";
+const removeBackground = bgLib.removeBackground || bgLib.default;
+
+const photoInput = document.getElementById("photo");
+const fileNameLabel = document.getElementById("fileName");
+const removeBtn = document.getElementById("removeBtn");
+const statusText = document.getElementById("status");
+const cropFrame = document.getElementById("cropFrame");
+const placeholderText = document.getElementById("placeholderText");
+const dragHint = document.getElementById("dragHint");
+const downloadBtn = document.getElementById("download");
+const resetBtn = document.getElementById("reset");
+const swatches = document.querySelectorAll(".swatch");
+const customColor = document.getElementById("customColor");
+
+const aspectSelectWrap = document.getElementById("aspectSelect");
+const aspectTrigger = document.getElementById("aspectTrigger");
+const aspectOptions = document.querySelectorAll(".select-option");
+const aspectValueLabel = document.getElementById("aspectValueLabel");
+
+let originalFile = null;
+let cutoutImage = null;
+let currentColor = "transparent";
+let currentAspect = "3:4";
+
+let panX = 0, panY = 0;
+let imgDispW = 0, imgDispH = 0;
+let coverScale = 1;
+let zoom = 1;
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 4;
+
+let isDragging = false;
+let dragStartX = 0, dragStartY = 0;
+let panStartX = 0, panStartY = 0;
+
+const activePointers = new Map();
+let pinchStartDist = 0;
+let pinchStartZoom = 1;
+let pinchStartPanX = 0, pinchStartPanY = 0;
+let pinchMidX = 0, pinchMidY = 0;
+
+function erodeAlpha(imageData, iterations){
+  const width = imageData.width;
+  const height = imageData.height;
+  const data = imageData.data;
+
+  let alpha = new Uint8ClampedArray(width * height);
+  for(let i = 0; i < width * height; i++){
+    alpha[i] = data[i * 4 + 3];
+  }
+
+  for(let it = 0; it < iterations; it++){
+    const next = new Uint8ClampedArray(width * height);
+
+    for(let y = 0; y < height; y++){
+      for(let x = 0; x < width; x++){
+        let minA = 255;
+
+        for(let dy = -1; dy <= 1; dy++){
+          for(let dx = -1; dx <= 1; dx++){
+            const nx = x + dx;
+            const ny = y + dy;
+
+            if(nx >= 0 && nx < width && ny >= 0 && ny < height){
+              const a = alpha[ny * width + nx];
+              if(a < minA) minA = a;
+            }
+          }
+        }
+
+        next[y * width + x] = minA;
+      }
+    }
+
+    alpha = next;
+  }
+
+  for(let i = 0; i < width * height; i++){
+    data[i * 4 + 3] = alpha[i];
+  }
+}
+
+photoInput.addEventListener("change", function(){
+  const file = this.files[0];
+  if(!file) return;
+
+  originalFile = file;
+  fileNameLabel.textContent = file.name;
+  removeBtn.disabled = false;
+  cutoutImage = null;
+  downloadBtn.disabled = true;
+  clearFrame();
+  placeholderText.style.display = "block";
+  dragHint.style.display = "none";
+  statusText.textContent = "Photo selected — tap Remove Background to continue.";
+});
+
+removeBtn.addEventListener("click", async function(){
+  if(!originalFile) return;
+
+  removeBtn.disabled = true;
+  statusText.textContent = "Removing background… first time may take 10-20 seconds while the tool loads.";
+
+  try{
+    const blob = await removeBackground(originalFile);
+
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+
+    img.onload = function(){
+      statusText.textContent = "Cleaning up edges…";
+
+      const off = document.createElement("canvas");
+      off.width = img.width;
+      off.height = img.height;
+      const octx = off.getContext("2d");
+      octx.drawImage(img, 0, 0);
+      const imgData = octx.getImageData(0, 0, off.width, off.height);
+      erodeAlpha(imgData, 2);
+      octx.putImageData(imgData, 0, 0);
+
+      cutoutImage = off;
+      placeholderText.style.display = "none";
+      mountImageInFrame();
+      downloadBtn.disabled = false;
+      statusText.textContent = "Done! Drag to move, pinch to zoom, pick a background colour, then download.";
+      removeBtn.disabled = false;
+    };
+
+    img.src = url;
+  }catch(err){
+    console.error("Background removal error:", err);
+    statusText.textContent = "Error: " + (err && err.message ? err.message : String(err));
+    removeBtn.disabled = false;
+  }
+});
+
+function getAspectWH(){
+  if(currentAspect === "1:1") return [1, 1];
+  if(currentAspect === "4:5") return [4, 5];
+  if(currentAspect === "original") return null;
+  return [3, 4];
+}
+
+function clearFrame(){
+  const old = cropFrame.querySelector(".cutout-layer");
+  if(old) old.remove();
+  cropFrame.classList.add("checker");
+  cropFrame.classList.remove("no-drag");
+  cropFrame.style.backgroundColor = "";
+  cropFrame.style.aspectRatio = "3/4";
+}
+
+function applyFrameBackground(){
+  if(currentColor === "transparent"){
+    cropFrame.classList.add("checker");
+    cropFrame.style.backgroundColor = "";
+  } else {
+    cropFrame.classList.remove("checker");
+    cropFrame.style.backgroundColor = currentColor;
+  }
+}
+
+function updateDragHint(){
+  dragHint.style.display = (cutoutImage && currentAspect !== "original") ? "block" : "none";
+}
+
+function mountImageInFrame(){
+  if(!cutoutImage) return;
+
+  const old = cropFrame.querySelector(".cutout-layer");
+  if(old) old.remove();
+
+  cutoutImage.classList.add("cutout-layer");
+  cropFrame.appendChild(cutoutImage);
+
+  applyFrameBackground();
+  layoutFrame();
+  updateDragHint();
+}
+
+function applyTransform(){
+  if(!cutoutImage) return;
+  cutoutImage.style.width = imgDispW + "px";
+  cutoutImage.style.height = imgDispH + "px";
+  cutoutImage.style.transform = "translate(" + panX + "px," + panY + "px)";
+}
+
+function layoutFrame(){
+  if(!cutoutImage) return;
+
+  const wh = getAspectWH();
+  const srcW = cutoutImage.width;
+  const srcH = cutoutImage.height;
+
+  zoom = 1;
+
+  if(wh === null){
+    cropFrame.style.aspectRatio = srcW + " / " + srcH;
+    cropFrame.classList.add("no-drag");
+
+    requestAnimationFrame(function(){
+      const frameW = cropFrame.clientWidth;
+      const frameH = cropFrame.clientHeight;
+      coverScale = frameW / srcW;
+      imgDispW = frameW;
+      imgDispH = frameH;
+      panX = 0;
+      panY = 0;
+      applyTransform();
+    });
+    return;
+  }
+
+  cropFrame.classList.remove("no-drag");
+  cropFrame.style.aspectRatio = wh[0] + " / " + wh[1];
+
+  requestAnimationFrame(function(){
+    const frameW = cropFrame.clientWidth;
+    const frameH = cropFrame.clientHeight;
+
+    coverScale = Math.max(frameW / srcW, frameH / srcH);
+    imgDispW = srcW * coverScale * zoom;
+    imgDispH = srcH * coverScale * zoom;
+
+    panX = (frameW - imgDispW) / 2;
+    panY = (frameH - imgDispH) / 2;
+
+    applyTransform();
+  });
+}
+
+function clampPan(){
+  const frameW = cropFrame.clientWidth;
+  const frameH = cropFrame.clientHeight;
+
+  const minX = Math.min(0, frameW - imgDispW);
+  const minY = Math.min(0, frameH - imgDispH);
+
+  panX = Math.max(minX, Math.min(0, panX));
+  panY = Math.max(minY, Math.min(0, panY));
+}
+
+function startPan(pointer){
+  isDragging = true;
+  cropFrame.classList.add("dragging");
+  dragStartX = pointer.x;
+  dragStartY = pointer.y;
+  panStartX = panX;
+  panStartY = panY;
+}
+
+function startPinch(){
+  isDragging = false;
+  cropFrame.classList.remove("dragging");
+
+  const pts = Array.from(activePointers.values());
+  pinchStartDist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+  pinchStartZoom = zoom;
+  pinchStartPanX = panX;
+  pinchStartPanY = panY;
+
+  const rect = cropFrame.getBoundingClientRect();
+  pinchMidX = (pts[0].x + pts[1].x) / 2 - rect.left;
+  pinchMidY = (pts[0].y + pts[1].y) / 2 - rect.top;
+}
+
+cropFrame.addEventListener("pointerdown", function(e){
+  if(!cutoutImage || currentAspect === "original") return;
+
+  cropFrame.setPointerCapture(e.pointerId);
+  activePointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+
+  if(activePointers.size === 1){
+    startPan({x:e.clientX, y:e.clientY});
+  } else if(activePointers.size === 2){
+    startPinch();
+  }
+});
+
+cropFrame.addEventListener("pointermove", function(e){
+  if(!activePointers.has(e.pointerId)) return;
+  activePointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
+
+  if(activePointers.size === 1 && isDragging){
+    panX = panStartX + (e.clientX - dragStartX);
+    panY = panStartY + (e.clientY - dragStartY);
+    clampPan();
+    applyTransform();
+  } else if(activePointers.size === 2 && pinchStartDist > 0){
+    const pts = Array.from(activePointers.values());
+    const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+
+    let newZoom = pinchStartZoom * (dist / pinchStartDist);
+    newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom));
+
+    const factor = newZoom / pinchStartZoom;
+    panX = pinchMidX - (pinchMidX - pinchStartPanX) * factor;
+    panY = pinchMidY - (pinchMidY - pinchStartPanY) * factor;
+
+    zoom = newZoom;
+    imgDispW = cutoutImage.width * coverScale * zoom;
+    imgDispH = cutoutImage.height * coverScale * zoom;
+
+    clampPan();
+    applyTransform();
+  }
+});
+
+function endPointer(e){
+  activePointers.delete(e.pointerId);
+
+  if(activePointers.size === 0){
+    isDragging = false;
+    cropFrame.classList.remove("dragging");
+  } else if(activePointers.size === 1){
+    const remaining = Array.from(activePointers.values())[0];
+    startPan(remaining);
+  }
+}
+cropFrame.addEventListener("pointerup", endPointer);
+cropFrame.addEventListener("pointercancel", endPointer);
+
+window.addEventListener("resize", function(){
+  if(cutoutImage) layoutFrame();
+});
+
+swatches.forEach(function(btn){
+  btn.addEventListener("click", function(){
+    swatches.forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    currentColor = btn.dataset.color;
+    applyFrameBackground();
+  });
+});
+
+customColor.addEventListener("input", function(){
+  swatches.forEach(function(b){ b.classList.remove("active"); });
+  currentColor = customColor.value;
+  applyFrameBackground();
+});
+
+aspectTrigger.addEventListener("click", function(){
+  aspectSelectWrap.classList.toggle("open");
+});
+
+document.addEventListener("click", function(e){
+  if(!aspectSelectWrap.contains(e.target)){
+    aspectSelectWrap.classList.remove("open");
+  }
+});
+
+aspectOptions.forEach(function(opt){
+  opt.addEventListener("click", function(){
+    aspectOptions.forEach(function(o){
+      o.classList.remove("active");
+      o.setAttribute("aria-selected", "false");
+    });
+    opt.classList.add("active");
+    opt.setAttribute("aria-selected", "true");
+
+    currentAspect = opt.dataset.value;
+    aspectValueLabel.textContent = opt.querySelector("span").textContent;
+    aspectSelectWrap.classList.remove("open");
+
+    if(cutoutImage) layoutFrame();
+    updateDragHint();
+  });
+});
+
+downloadBtn.addEventListener("click", function(){
+  if(!cutoutImage) return;
+
+  const srcW = cutoutImage.width;
+  const srcH = cutoutImage.height;
+  const out = document.createElement("canvas");
+  const octx = out.getContext("2d");
+
+  if(currentAspect === "original"){
+    out.width = srcW;
+    out.height = srcH;
+
+    if(currentColor !== "transparent"){
+      octx.fillStyle = currentColor;
+      octx.fillRect(0, 0, out.width, out.height);
+    }
+    octx.drawImage(cutoutImage, 0, 0);
+  } else {
+    const effScale = coverScale * zoom;
+
+    let sx = -panX / effScale;
+    let sy = -panY / effScale;
+    let sw = cropFrame.clientWidth / effScale;
+    let sh = cropFrame.clientHeight / effScale;
+
+    sx = Math.max(0, sx);
+    sy = Math.max(0, sy);
+    sw = Math.min(sw, srcW - sx);
+    sh = Math.min(sh, srcH - sy);
+
+    out.width = Math.round(sw);
+    out.height = Math.round(sh);
+
+    if(currentColor !== "transparent"){
+      octx.fillStyle = currentColor;
+      octx.fillRect(0, 0, out.width, out.height);
+    }
+    octx.drawImage(cutoutImage, sx, sy, sw, sh, 0, 0, out.width, out.height);
+  }
+
+  const link = document.createElement("a");
+  link.download = "background-removed.png";
+  link.href = out.toDataURL("image/png");
+  link.click();
+});
+
+resetBtn.addEventListener("click", function(){
+  photoInput.value = "";
+  originalFile = null;
+  cutoutImage = null;
+  fileNameLabel.textContent = "No photo selected yet";
+  removeBtn.disabled = true;
+  downloadBtn.disabled = true;
+  zoom = 1;
+  clearFrame();
+  placeholderText.style.display = "block";
+  dragHint.style.display = "none";
+  statusText.textContent = "Choose a photo to get started.";
+
+  swatches.forEach(function(b){ b.classList.remove("active"); });
+  document.querySelector('[data-color="transparent"]').classList.add("active");
+  currentColor = "transparent";
+
+  aspectOptions.forEach(function(o){
+    o.classList.remove("active");
+    o.setAttribute("aria-selected", "false");
+  });
+  document.querySelector('.select-option[data-value="3:4"]').classList.add("active");
+  document.querySelector('.select-option[data-value="3:4"]').setAttribute("aria-selected", "true");
+  currentAspect = "3:4";
+  aspectValueLabel.textContent = "3:4 (Portrait)";
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const rewardKey = "formready_reward_background-remover_" + new Date().toISOString().slice(0,10);
+
+  function rewardUser() {
+    if (localStorage.getItem(rewardKey)) return;
+    if (window.FormReadyTokens) {
+      window.FormReadyTokens.addTokens("background-remover");
+    }
+  }
+
+  document.querySelectorAll(
+    '#download, #downloadBtn, #downloadButton, button[id*="download" i], a[id*="download" i]'
+  ).forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      setTimeout(rewardUser, 1000);
+    });
+  });
+
+  const originalAlert = window.alert;
+  window.alert = function(msg) {
+    if (msg && /download|success|created|converted|compressed|generated|saved/i.test(String(msg))) {
+      setTimeout(rewardUser, 500);
+    }
+    originalAlert.apply(window, arguments);
+  };
+});
+</script>
+
+</body>
+</html>

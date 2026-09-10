@@ -3,1026 +3,374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Photo Cropper | FormReady India</title>
-
+<title>Photo Crop Tool - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f7fb;
-color:#111827
-}
-
-header{
-background:#111827;
-color:white;
-padding:16px 6%;
-display:flex;
-justify-content:space-between;
-align-items:center
-}
-
-.logo{
-font-size:22px;
-font-weight:800
-}
-
-.logo span{
-color:#60a5fa
-}
-
-header a{
-color:white;
-text-decoration:none
-}
-
-.container{
-max-width:850px;
-margin:auto;
-padding:25px 15px
-}
-
-.back{
-display:inline-block;
-margin-bottom:18px;
-color:#2563eb;
-text-decoration:none;
-font-weight:600
-}
-
-.card{
-background:white;
-padding:25px;
-border-radius:22px;
-box-shadow:0 10px 35px rgba(0,0,0,.08)
-}
-
-h1{
-text-align:center;
-margin:5px 0 8px
-}
-
-.subtitle{
-text-align:center;
-color:#6b7280;
-margin-bottom:25px
-}
-
-.upload{
-border:2px dashed #93c5fd;
-background:#eff6ff;
-border-radius:18px;
-padding:35px 15px;
-text-align:center
-}
-
-.upload input{
-display:none
-}
-
-.choose{
-display:inline-block;
-background:#2563eb;
-color:white;
-padding:14px 24px;
-border-radius:12px;
-font-weight:700;
-cursor:pointer
-}
-
-#workspace{
-display:none;
-margin-top:25px
-}
-
-.canvas-wrap{
-width:100%;
-background:#111827;
-border-radius:15px;
-padding:8px;
-overflow:hidden
-}
-
-canvas{
-display:block;
-width:100%;
-height:auto;
-max-height:600px;
-margin:auto;
-touch-action:none;
-border-radius:10px
-}
-
-.controls{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-margin-top:18px
-}
-
-.control label{
-display:block;
-font-size:13px;
-font-weight:700;
-margin-bottom:6px
-}
-
-.control input{
-width:100%;
-padding:12px;
-border:1px solid #d1d5db;
-border-radius:10px;
-font-size:15px
-}
-
-.buttons{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:18px
-}
-
-button{
-border:0;
-border-radius:11px;
-padding:13px 18px;
-font-weight:700;
-font-size:14px;
-cursor:pointer
-}
-
-.primary{
-background:#2563eb;
-color:white
-}
-
-.success{
-background:#16a34a;
-color:white
-}
-
-.secondary{
-background:#e5e7eb;
-color:#111827
-}
-
-.info{
-margin-top:15px;
-padding:12px;
-border-radius:10px;
-background:#f1f5f9;
-color:#475569;
-font-size:13px;
-text-align:center
-}
-
-.result{
-margin-top:25px;
-display:none
-}
-
-.result h3{
-margin-bottom:12px
-}
-
-#resultCanvas{
-width:100%;
-height:auto;
-background:#f1f5f9;
-border-radius:12px
-}
-
-@media(max-width:600px){
-.controls{
-grid-template-columns:1fr
-}
-
-.card{
-padding:18px
-}
-}
+  :root{
+    --bg:#151210;
+    --panel:#1e1a17;
+    --panel-2:#262019;
+    --line:#39322b;
+    --amber:#d99a3f;
+    --amber-bright:#f0b158;
+    --amber-dim:#8a6329;
+    --teal:#5fada0;
+    --paper:#f2ece2;
+    --muted:#a89a89;
+    --danger:#c76a5e;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(217,154,63,0.08), transparent),
+      var(--bg);
+    color:var(--paper);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    padding:0 0 70px;
+    min-height:100vh;
+  }
+  header.topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 18px;border-bottom:1px solid var(--line);
+    background:rgba(20,17,15,0.7);
+    backdrop-filter:blur(6px);
+    position:sticky;top:0;z-index:5;
+  }
+  .brand{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:16px;letter-spacing:0.01em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .brand-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);}
+  .home-link{color:var(--muted);font-size:13.5px;text-decoration:none;}
+  .home-link:hover{color:var(--paper);}
+  .crumb{max-width:600px;margin:16px auto 0;padding:0 18px;}
+  .crumb a{color:var(--amber);font-size:13.5px;text-decoration:none;font-weight:500;}
+  .crumb a:hover{color:var(--amber-bright);}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    max-width:600px;
+    margin:18px auto 0;
+    padding:30px 26px 26px;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.6);
+  }
+  .head{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+  .icon-badge{
+    width:46px;height:46px;flex:0 0 auto;border-radius:12px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber-dim));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 16px -4px rgba(217,154,63,0.5);
+  }
+  .icon-badge svg{width:24px;height:24px;}
+  .head-text h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:20px;font-weight:600;margin:0 0 3px;letter-spacing:0.01em;
+  }
+  .head-text p{margin:0;color:var(--muted);font-size:13.5px;}
+  .choose-box{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    border:1.5px dashed var(--amber-dim);
+    border-radius:12px;
+    background:rgba(217,154,63,0.05);
+    padding:18px;
+    font-weight:600;font-size:14.5px;
+    color:var(--paper);
+    cursor:pointer;
+    margin-bottom:8px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .choose-box:hover{border-color:var(--amber);background:rgba(217,154,63,0.09);}
+  .choose-box input{display:none;}
+  .choose-box svg{width:18px;height:18px;flex:0 0 auto;stroke:var(--amber-bright);}
+  .filename{
+    text-align:center;color:var(--muted);font-size:12.5px;margin:0 0 18px;
+    word-break:break-all;min-height:16px;
+  }
+  .preview-wrap{
+    background:#0a0908;
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    margin-bottom:20px;
+    display:none;
+    position:relative;
+    touch-action:none;
+    user-select:none;
+    line-height:0;
+  }
+  .preview-wrap img{
+    display:block;width:100%;height:auto;max-height:58vh;
+    object-fit:contain;margin:0 auto;
+    pointer-events:none;-webkit-user-drag:none;
+  }
+  #cropBox{
+    position:absolute;
+    border:1.5px solid var(--amber-bright);
+    box-shadow:0 0 0 2000px rgba(10,9,8,0.62);
+    cursor:move;touch-action:none;
+  }
+  .grid-line{position:absolute;background:rgba(240,177,88,0.35);pointer-events:none;}
+  .grid-line.v{width:1px;top:0;bottom:0;}
+  .grid-line.h{height:1px;left:0;right:0;}
+  .handle{
+    position:absolute;width:20px;height:20px;margin:-10px;
+    background:var(--amber-bright);
+    border:2px solid #0a0908;
+    border-radius:50%;touch-action:none;
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+  }
+  .handle.nw{top:0;left:0;cursor:nwse-resize;}
+  .handle.ne{top:0;left:100%;cursor:nesw-resize;}
+  .handle.sw{top:100%;left:0;cursor:nesw-resize;}
+  .handle.se{top:100%;left:100%;cursor:nwse-resize;}
+  .actions{display:flex;gap:12px;}
+  .btn{
+    flex:1;border:none;border-radius:10px;padding:13px;
+    font-size:14.5px;font-weight:600;cursor:pointer;
+    font-family:'Inter',sans-serif;
+    transition:transform .08s ease, opacity .15s ease, background .15s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;
+  }
+  .btn-primary:hover{filter:brightness(1.06);}
+  .btn-secondary{background:transparent;border:1px solid var(--line);color:var(--paper);}
+  .btn-secondary:hover{border-color:var(--muted);}
+  .btn:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+  .hint{text-align:center;color:var(--muted);font-size:12px;margin-top:14px;line-height:1.5;}
+  .credit{text-align:center;color:var(--muted);font-size:11.5px;margin-top:22px;opacity:0.7;}
+  .credit span{color:var(--teal);}
 </style>
 </head>
-
 <body>
 
-<header>
-
-<div class="logo">
-FormReady <span>India</span>
-</div>
-
-<a href="../">Home</a>
-
+<header class="topbar">
+  <div class="brand"><span class="brand-dot"></span>FormReady India</div>
+  <a class="home-link" href="../../index.html#tools">Home</a>
 </header>
 
-
-<div class="container">
-
-<a class="back" href="../">← Back to Tools</a>
-
+<div class="crumb"><a href="../../index.html#tools">‹ Back to Tools</a></div>
 
 <div class="card">
+  <div class="head">
+    <div class="icon-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1a1410" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+    </div>
+    <div class="head-text">
+      <h1>Photo Crop Tool</h1>
+      <p>Precise manual cropping — built for phone and desktop</p>
+    </div>
+  </div>
 
-<h1>✂️ Photo Cropper</h1>
+  <label class="choose-box" for="fileInput">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Choose Photo
+    <input type="file" id="fileInput" accept="image/*">
+  </label>
+  <div class="filename" id="fileName"></div>
 
-<p class="subtitle">
-Crop your photo easily on your phone.
-</p>
+  <div class="preview-wrap" id="previewWrap">
+    <img id="previewImg" src="" alt="preview" draggable="false">
+    <div id="cropBox">
+      <div class="grid-line v" style="left:33.33%"></div>
+      <div class="grid-line v" style="left:66.66%"></div>
+      <div class="grid-line h" style="top:33.33%"></div>
+      <div class="grid-line h" style="top:66.66%"></div>
+      <div class="handle nw" data-h="nw"></div>
+      <div class="handle ne" data-h="ne"></div>
+      <div class="handle sw" data-h="sw"></div>
+      <div class="handle se" data-h="se"></div>
+    </div>
+  </div>
 
-
-<div class="upload">
-
-<label class="choose" for="file">
-📷 Choose Photo
-</label>
-
-<input
-id="file"
-type="file"
-accept="image/*"
->
-
-<p>
-JPG • PNG • WEBP
-</p>
-
+  <div class="actions">
+    <button class="btn btn-secondary" id="resetBtn">Reset</button>
+    <button class="btn btn-primary" id="downloadBtn" disabled>Crop &amp; Download JPG</button>
+  </div>
+  <div class="hint">Drag inside the box to move it. Drag a corner handle to resize. Works with touch or mouse.</div>
 </div>
 
+<div class="credit">Built with <span>Termux</span> · hosted on <span>GitHub Pages</span></div>
 
-<div id="workspace">
-
-<div class="canvas-wrap">
-
-<canvas id="canvas"></canvas>
-
-</div>
-
-
-<div class="controls">
-
-<div class="control">
-
-<label>
-Output Width (px)
-</label>
-
-<input
-id="outWidth"
-type="number"
-value="300"
-min="20"
->
-
-</div>
-
-
-<div class="control">
-
-<label>
-Output Height (px)
-</label>
-
-<input
-id="outHeight"
-type="number"
-value="300"
-min="20"
->
-
-</div>
-
-</div>
-
-
-<div class="buttons">
-
-<button
-class="primary"
-id="applySize"
->
-Apply Size
-</button>
-
-<button
-class="secondary"
-id="reset"
->
-Reset
-</button>
-
-<button
-class="success"
-id="cropDownload"
->
-✂️ Crop & Download
-</button>
-
-</div>
-
-
-<div class="info" id="info">
-Drag on the photo to select the crop area.
-</div>
-
-
-<div class="result" id="result">
-
-<h3>
-Preview
-</h3>
-
-<canvas id="resultCanvas"></canvas>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+<canvas id="workCanvas" style="display:none;"></canvas>
 
 <script>
+const fileInput = document.getElementById('fileInput');
+const fileName = document.getElementById('fileName');
+const previewWrap = document.getElementById('previewWrap');
+const previewImg = document.getElementById('previewImg');
+const cropBox = document.getElementById('cropBox');
+const resetBtn = document.getElementById('resetBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const workCanvas = document.getElementById('workCanvas');
 
-const file =
-document.getElementById("file");
+let img = new Image();
+let naturalW = 0, naturalH = 0;
+let box = { x: 20, y: 20, w: 150, h: 150 };
+const MIN_SIZE = 30;
 
-const canvas =
-document.getElementById("canvas");
+function drawBox() {
+  cropBox.style.left = box.x + 'px';
+  cropBox.style.top = box.y + 'px';
+  cropBox.style.width = box.w + 'px';
+  cropBox.style.height = box.h + 'px';
+}
 
-const ctx =
-canvas.getContext("2d");
+function resetBox() {
+  const rect = previewImg.getBoundingClientRect();
+  const size = Math.min(rect.width, rect.height) * 0.7;
+  box = { x: (rect.width - size) / 2, y: (rect.height - size) / 2, w: size, h: size };
+  drawBox();
+}
 
-const resultCanvas =
-document.getElementById("resultCanvas");
-
-const resultCtx =
-resultCanvas.getContext("2d");
-
-const workspace =
-document.getElementById("workspace");
-
-const info =
-document.getElementById("info");
-
-const outWidth =
-document.getElementById("outWidth");
-
-const outHeight =
-document.getElementById("outHeight");
-
-
-let image =
-new Image();
-
-let loaded =
-false;
-
-let dragging =
-false;
-
-let startX =
-0;
-
-let startY =
-0;
-
-let crop = {
-x:0,
-y:0,
-w:100,
-h:100
-};
-
-let displayWidth =
-0;
-
-let displayHeight =
-0;
-
-
-/* Choose photo */
-
-file.addEventListener("change", function(){
-
-const selected =
-this.files[0];
-
-if(!selected)
-return;
-
-const url =
-URL.createObjectURL(selected);
-
-image.onload = function(){
-
-loaded = true;
-
-const maxWidth =
-900;
-
-const scale =
-Math.min(
-1,
-maxWidth / image.width
-);
-
-displayWidth =
-Math.round(
-image.width * scale
-);
-
-displayHeight =
-Math.round(
-image.height * scale
-);
-
-canvas.width =
-displayWidth;
-
-canvas.height =
-displayHeight;
-
-
-/* Initial crop */
-
-crop = {
-
-x:displayWidth * .1,
-
-y:displayHeight * .1,
-
-w:displayWidth * .8,
-
-h:displayHeight * .8
-
-};
-
-workspace.style.display =
-"block";
-
-draw();
-
-URL.revokeObjectURL(url);
-
-};
-
-image.src =
-url;
-
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  fileName.textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    img = new Image();
+    img.onload = () => {
+      naturalW = img.naturalWidth;
+      naturalH = img.naturalHeight;
+      previewImg.src = ev.target.result;
+      previewWrap.style.display = 'block';
+      downloadBtn.disabled = false;
+      requestAnimationFrame(() => setTimeout(resetBox, 30));
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
 });
 
-
-/* Draw */
-
-function draw(){
-
-if(!loaded)
-return;
-
-
-/* Photo */
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-ctx.drawImage(
-image,
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-/* Dark overlay */
-
-ctx.fillStyle =
-"rgba(0,0,0,.50)";
-
-ctx.fillRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-/* Selected area */
-
-ctx.clearRect(
-crop.x,
-crop.y,
-crop.w,
-crop.h
-);
-
-ctx.drawImage(
-image,
-
-crop.x /
-displayWidth *
-image.width,
-
-crop.y /
-displayHeight *
-image.height,
-
-crop.w /
-displayWidth *
-image.width,
-
-crop.h /
-displayHeight *
-image.height,
-
-crop.x,
-crop.y,
-crop.w,
-crop.h
-);
-
-
-/* Border */
-
-ctx.strokeStyle =
-"white";
-
-ctx.lineWidth =
-3;
-
-ctx.strokeRect(
-crop.x,
-crop.y,
-crop.w,
-crop.h
-);
-
-
-/* Corners */
-
-const s =
-12;
-
-ctx.fillStyle =
-"white";
-
-ctx.fillRect(
-crop.x,
-crop.y,
-s,
-3
-);
-
-ctx.fillRect(
-crop.x,
-crop.y,
-3,
-s
-);
-
-ctx.fillRect(
-crop.x + crop.w - s,
-crop.y,
-s,
-3
-);
-
-ctx.fillRect(
-crop.x + crop.w - 3,
-crop.y,
-3,
-s
-);
-
-ctx.fillRect(
-crop.x,
-crop.y + crop.h - 3,
-s,
-3
-);
-
-ctx.fillRect(
-crop.x,
-crop.y + crop.h - s,
-3,
-s
-);
-
-ctx.fillRect(
-crop.x + crop.w - s,
-crop.y + crop.h - 3,
-s,
-3
-);
-
-ctx.fillRect(
-crop.x + crop.w - 3,
-crop.y + crop.h - s,
-3,
-s
-);
-
-info.textContent =
-"Selected: " +
-Math.round(crop.w) +
-" × " +
-Math.round(crop.h);
-
+function clampBox() {
+  const rect = previewImg.getBoundingClientRect();
+  if (box.w > rect.width) box.w = rect.width;
+  if (box.h > rect.height) box.h = rect.height;
+  if (box.x < 0) box.x = 0;
+  if (box.y < 0) box.y = 0;
+  if (box.x + box.w > rect.width) box.x = rect.width - box.w;
+  if (box.y + box.h > rect.height) box.y = rect.height - box.h;
 }
 
-
-/* Convert screen position to canvas position */
-
-function pointerPosition(e){
-
-const rect =
-canvas.getBoundingClientRect();
-
-return {
-
-x:
-(e.clientX - rect.left)
-*
-(canvas.width / rect.width),
-
-y:
-(e.clientY - rect.top)
-*
-(canvas.height / rect.height)
-
-};
-
+function getPoint(e) {
+  if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  return { x: e.clientX, y: e.clientY };
 }
 
-
-/* Start drag */
-
-canvas.addEventListener(
-"pointerdown",
-function(e){
-
-if(!loaded)
-return;
-
-e.preventDefault();
-
-const p =
-pointerPosition(e);
-
-dragging =
-true;
-
-startX =
-Math.max(
-0,
-Math.min(
-canvas.width,
-p.x
-)
-);
-
-startY =
-Math.max(
-0,
-Math.min(
-canvas.height,
-p.y
-)
-);
-
-crop.x =
-startX;
-
-crop.y =
-startY;
-
-crop.w =
-1;
-
-crop.h =
-1;
-
-try{
-canvas.setPointerCapture(
-e.pointerId
-);
-}catch(err){}
-
-draw();
-
-}
-);
-
-
-/* Drag */
-
-canvas.addEventListener(
-"pointermove",
-function(e){
-
-if(!dragging)
-return;
-
-e.preventDefault();
-
-const p =
-pointerPosition(e);
-
-let endX =
-Math.max(
-0,
-Math.min(
-canvas.width,
-p.x
-)
-);
-
-let endY =
-Math.max(
-0,
-Math.min(
-canvas.height,
-p.y
-)
-);
-
-crop.x =
-Math.min(
-startX,
-endX
-);
-
-crop.y =
-Math.min(
-startY,
-endY
-);
-
-crop.w =
-Math.abs(
-endX - startX
-);
-
-crop.h =
-Math.abs(
-endY - startY
-);
-
-draw();
-
-}
-);
-
-
-/* End drag */
-
-function stopDrag(e){
-
-dragging =
-false;
-
-try{
-
-if(e &&
-e.pointerId !== undefined){
-
-canvas.releasePointerCapture(
-e.pointerId
-);
-
-}
-
-}catch(err){}
-
-}
-
-canvas.addEventListener(
-"pointerup",
-stopDrag
-);
-
-canvas.addEventListener(
-"pointercancel",
-stopDrag
-);
-
-
-/* Reset */
-
-document.getElementById(
-"reset"
-).addEventListener(
-"click",
-function(){
-
-if(!loaded)
-return;
-
-crop = {
-
-x:displayWidth * .1,
-
-y:displayHeight * .1,
-
-w:displayWidth * .8,
-
-h:displayHeight * .8
-
-};
-
-draw();
-
-}
-);
-
-
-/* Apply output size */
-
-document.getElementById(
-"applySize"
-).addEventListener(
-"click",
-function(){
-
-if(!loaded)
-return;
-
-let w =
-parseInt(
-outWidth.value
-);
-
-let h =
-parseInt(
-outHeight.value
-);
-
-if(!w || !h || w < 20 || h < 20){
-
-alert(
-"Please enter valid width and height."
-);
-
-return;
-
-}
-
-const ratio =
-w / h;
-
-let newW =
-displayWidth * .8;
-
-let newH =
-newW / ratio;
-
-if(newH > displayHeight * .8){
-
-newH =
-displayHeight * .8;
-
-newW =
-newH * ratio;
-
-}
-
-crop.w =
-newW;
-
-crop.h =
-newH;
-
-crop.x =
-(displayWidth - newW) / 2;
-
-crop.y =
-(displayHeight - newH) / 2;
-
-draw();
-
-}
-);
-
-
-/* Crop + Download */
-
-document.getElementById(
-"cropDownload"
-).addEventListener(
-"click",
-function(){
-
-if(!loaded)
-return;
-
-if(crop.w < 5 || crop.h < 5){
-
-alert(
-"Please select a larger crop area."
-);
-
-return;
-
-}
-
-let w =
-parseInt(
-outWidth.value
-);
-
-let h =
-parseInt(
-outHeight.value
-);
-
-if(!w || w < 20)
-w =
-Math.round(
-crop.w *
-image.width /
-displayWidth
-);
-
-if(!h || h < 20)
-h =
-Math.round(
-crop.h *
-image.height /
-displayHeight
-);
-
-resultCanvas.width =
-w;
-
-resultCanvas.height =
-h;
-
-resultCtx.clearRect(
-0,
-0,
-w,
-h
-);
-
-resultCtx.drawImage(
-
-image,
-
-crop.x /
-displayWidth *
-image.width,
-
-crop.y /
-displayHeight *
-image.height,
-
-crop.w /
-displayWidth *
-image.width,
-
-crop.h /
-displayHeight *
-image.height,
-
-0,
-0,
-w,
-h
-
-);
-
-document.getElementById(
-"result"
-).style.display =
-"block";
-
-
-/* Download */
-
-const link =
-document.createElement("a");
-
-link.download =
-"formready-cropped-photo.jpg";
-
-link.href =
-resultCanvas.toDataURL(
-"image/jpeg",
-.95
-);
-
-link.click();
-
+let mode = null;
+let start = { x: 0, y: 0, box: null };
+
+cropBox.addEventListener('mousedown', (e) => beginAction(e, 'move'));
+cropBox.addEventListener('touchstart', (e) => beginAction(e, 'move'), { passive: false });
+
+document.querySelectorAll('.handle').forEach(h => {
+  h.addEventListener('mousedown', (e) => { e.stopPropagation(); beginAction(e, h.dataset.h); });
+  h.addEventListener('touchstart', (e) => { e.stopPropagation(); beginAction(e, h.dataset.h); }, { passive: false });
 });
 
+function beginAction(e, m) {
+  e.preventDefault();
+  mode = m;
+  const p = getPoint(e);
+  start = { x: p.x, y: p.y, box: { ...box } };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove, { passive: false });
+  window.addEventListener('mouseup', endAction);
+  window.addEventListener('touchend', endAction);
+}
+
+function onMove(e) {
+  e.preventDefault();
+  const p = getPoint(e);
+  const dx = p.x - start.x;
+  const dy = p.y - start.y;
+  const s = start.box;
+  const rect = previewImg.getBoundingClientRect();
+
+  if (mode === 'move') {
+    box.x = s.x + dx;
+    box.y = s.y + dy;
+  } else if (mode === 'se') {
+    box.w = Math.max(MIN_SIZE, s.w + dx);
+    box.h = Math.max(MIN_SIZE, s.h + dy);
+  } else if (mode === 'ne') {
+    const newW = Math.max(MIN_SIZE, s.w + dx);
+    const newH = Math.max(MIN_SIZE, s.h - dy);
+    box.y = s.y + (s.h - newH);
+    box.w = newW; box.h = newH;
+  } else if (mode === 'sw') {
+    const newW = Math.max(MIN_SIZE, s.w - dx);
+    const newH = Math.max(MIN_SIZE, s.h + dy);
+    box.x = s.x + (s.w - newW);
+    box.w = newW; box.h = newH;
+  } else if (mode === 'nw') {
+    const newW = Math.max(MIN_SIZE, s.w - dx);
+    const newH = Math.max(MIN_SIZE, s.h - dy);
+    box.x = s.x + (s.w - newW);
+    box.y = s.y + (s.h - newH);
+    box.w = newW; box.h = newH;
+  }
+
+  if (box.x < 0) { if (mode === 'move') box.x = 0; else { box.w += box.x; box.x = 0; } }
+  if (box.y < 0) { if (mode === 'move') box.y = 0; else { box.h += box.y; box.y = 0; } }
+  if (box.x + box.w > rect.width) { if (mode === 'move') box.x = rect.width - box.w; else box.w = rect.width - box.x; }
+  if (box.y + box.h > rect.height) { if (mode === 'move') box.y = rect.height - box.h; else box.h = rect.height - box.y; }
+  box.w = Math.max(MIN_SIZE, box.w);
+  box.h = Math.max(MIN_SIZE, box.h);
+
+  drawBox();
+}
+
+function endAction() {
+  mode = null;
+  window.removeEventListener('mousemove', onMove);
+  window.removeEventListener('touchmove', onMove);
+  window.removeEventListener('mouseup', endAction);
+  window.removeEventListener('touchend', endAction);
+}
+
+resetBtn.addEventListener('click', resetBox);
+
+downloadBtn.addEventListener('click', () => {
+  if (!naturalW) return;
+  const rect = previewImg.getBoundingClientRect();
+  const scaleX = naturalW / rect.width;
+  const scaleY = naturalH / rect.height;
+
+  const srcX = box.x * scaleX;
+  const srcY = box.y * scaleY;
+  const srcW = box.w * scaleX;
+  const srcH = box.h * scaleY;
+
+  workCanvas.width = Math.round(srcW);
+  workCanvas.height = Math.round(srcH);
+  const ctx = workCanvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, workCanvas.width, workCanvas.height);
+  ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, workCanvas.width, workCanvas.height);
+
+  workCanvas.toBlob((blob) => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'cropped-photo.jpg';
+    link.click();
+  }, 'image/jpeg', 0.92);
+});
+
+window.addEventListener('resize', () => {
+  if (previewWrap.style.display === 'block') { clampBox(); drawBox(); }
+});
 </script>
 
 </body>

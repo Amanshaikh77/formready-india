@@ -2,768 +2,649 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Photo Sheet Maker | FormReady India</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photo Sheet Maker Online Free</title>
+
+<meta name="description" content="Create a photo sheet online for free. Arrange multiple photos on one sheet quickly from your phone.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/photo-sheet.html">
+<meta property="og:title" content="Photo Sheet Maker Online Free">
+<meta property="og:description" content="Create a photo sheet online for free. Arrange multiple photos on one sheet quickly from your phone.">
+<meta property="og:url" content="https://amanshaikh77.github.io/formready-india/tools/photo-sheet.html">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Photo Sheet Maker",
+  "url": "https://amanshaikh77.github.io/formready-india/tools/photo-sheet.html",
+  "description": "Create a photo sheet online for free. Arrange multiple photos on one sheet quickly from your phone.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+
+<script src="../token-system.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box}
+  :root{
+    --bg:#151210;
+    --panel:#1e1a17;
+    --panel-2:#262019;
+    --line:#39322b;
+    --amber:#d99a3f;
+    --amber-bright:#f0b158;
+    --amber-dim:#8a6329;
+    --teal:#5fada0;
+    --paper:#f2ece2;
+    --muted:#a89a89;
+  }
 
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f7fb;
-color:#111827;
-}
+  *{box-sizing:border-box;}
 
-header{
-background:#111827;
-color:white;
-padding:16px 6%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'Inter',Arial,sans-serif;
+  }
 
-.logo{
-font-size:22px;
-font-weight:800;
-}
+  h1,h2,.section-title,.preview-title,.brand{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+  }
 
-.logo span{
-color:#60a5fa;
-}
+  /* TOPBAR */
 
-header a{
-color:white;
-text-decoration:none;
-}
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 18px;
+    background:rgba(21,18,16,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
 
-.container{
-max-width:850px;
-margin:auto;
-padding:25px 15px;
-}
+  .brand{
+    font-size:18px;
+    color:var(--paper);
+  }
 
-.back{
-color:#2563eb;
-text-decoration:none;
-font-weight:600;
-}
+  .brand span{color:var(--amber-bright);}
 
-.card{
-background:white;
-margin-top:18px;
-padding:25px;
-border-radius:22px;
-box-shadow:0 10px 35px #0000000d;
-}
+  .topbar a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+  }
 
-h1{
-text-align:center;
-margin:5px 0;
-}
+  .topbar a:hover{color:var(--amber-bright);}
 
-.sub{
-text-align:center;
-color:#6b7280;
-line-height:1.5;
-}
+  .breadcrumb{
+    display:block;
+    padding:12px 18px 0;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:13px;
+  }
 
-.upload{
-margin-top:25px;
-border:2px dashed #93c5fd;
-background:#eff6ff;
-border-radius:18px;
-padding:30px 15px;
-text-align:center;
-}
+  .breadcrumb:hover{color:var(--amber-bright);}
 
-.upload input{
-display:none;
-}
+  .container{
+    width:100%;
+    max-width:600px;
+    margin:auto;
+    padding:16px;
+  }
 
-.choose{
-display:inline-block;
-background:#2563eb;
-color:white;
-padding:14px 24px;
-border-radius:12px;
-font-weight:700;
-cursor:pointer;
-}
+  h1{
+    text-align:center;
+    font-size:26px;
+    margin:14px 0 4px;
+    color:var(--paper);
+  }
 
-#work{
-display:none;
-margin-top:25px;
-}
+  .subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin-bottom:20px;
+    font-size:15px;
+  }
 
-.settings{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
+  .icon-badge{
+    width:46px;
+    height:46px;
+    margin:0 auto 10px;
+    border-radius:14px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
-.field label{
-display:block;
-font-size:13px;
-font-weight:700;
-margin-bottom:7px;
-}
+  .icon-badge svg{
+    width:24px;
+    height:24px;
+    stroke:#1a1410;
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
 
-select{
-width:100%;
-padding:13px;
-border:1px solid #d1d5db;
-border-radius:10px;
-font-size:15px;
-background:white;
-}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:16px;
+  }
 
-.preview{
-margin-top:20px;
-padding:20px;
-background:#f1f5f9;
-border-radius:15px;
-text-align:center;
-overflow:auto;
-}
+  .upload-box{
+    display:block;
+    text-align:center;
+    border:2px dashed var(--amber-dim);
+    border-radius:14px;
+    padding:22px 14px;
+    cursor:pointer;
+    color:var(--muted);
+    font-size:14px;
+    transition:border-color .15s ease, background .15s ease;
+  }
 
-#canvas{
-max-width:100%;
-height:auto;
-background:white;
-box-shadow:0 4px 15px #0002;
-}
+  .upload-box:hover{
+    border-color:var(--amber);
+    background:rgba(217,154,63,.05);
+  }
 
-.buttons{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:20px;
-}
+  .upload-box input{display:none;}
 
-button{
-border:0;
-padding:13px 18px;
-border-radius:11px;
-font-weight:700;
-cursor:pointer;
-}
+  .upload-btn{
+    display:inline-block;
+    margin-bottom:10px;
+    padding:10px 22px;
+    border-radius:10px;
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;
+    font-weight:600;
+    font-size:14px;
+  }
 
-.primary{
-background:#2563eb;
-color:white;
-}
+  .upload-name{
+    display:block;
+    font-size:13px;
+    color:var(--muted);
+  }
 
-.success{
-background:#16a34a;
-color:white;
-}
+  .section-title{
+    font-size:16px;
+    color:var(--paper);
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
 
-.secondary{
-background:#e5e7eb;
-color:#111827;
-}
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
 
-.info{
-margin-top:18px;
-padding:14px;
-background:#f1f5f9;
-border-radius:12px;
-font-size:13px;
-color:#475569;
-line-height:1.6;
-}
+  label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    margin-bottom:6px;
+    color:var(--muted);
+  }
 
-#downloadBtn{
-display:none;
-}
+  input,select{
+    width:100%;
+    height:44px;
+    padding:0 12px;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    background:var(--panel-2);
+    color:var(--paper);
+    font-size:15px;
+    outline:none;
+    font-family:'Inter',sans-serif;
+  }
 
-@media(max-width:600px){
-.settings{
-grid-template-columns:1fr;
-}
+  input:focus,select:focus{
+    border-color:var(--amber);
+  }
 
-.card{
-padding:18px;
-}
-}
+  select{
+    -webkit-appearance:none;
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a89a89' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    padding-right:34px;
+  }
+
+  details{
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+
+  summary{
+    color:var(--amber-bright);
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    list-style:none;
+  }
+
+  summary::-webkit-details-marker{display:none;}
+
+  .advanced{margin-top:14px;}
+
+  .hint{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin:12px 0;
+    line-height:1.5;
+  }
+
+  .preview-stage{
+    width:100%;
+    height:360px;
+    border-radius:14px;
+    background:#0e0c0b;
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    padding:14px;
+  }
+
+  #canvas{
+    display:block;
+    background:#fff;
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);
+  }
+
+  button{
+    width:100%;
+    height:50px;
+    border:0;
+    border-radius:12px;
+    font-size:15.5px;
+    font-weight:600;
+    margin-top:10px;
+    cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;
+    transition:opacity .15s ease;
+  }
+
+  button:active{opacity:.85;}
+
+  .btn-primary{
+    background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+    color:#1a1410;
+  }
+
+  .btn-secondary{
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--paper);
+  }
+
+  .btn-secondary:hover{border-color:var(--amber-dim);}
+
+  .ad-slot{
+    max-width:600px;
+    margin:0 auto 20px;
+    padding:0 16px;
+  }
+
+  .ad-box{
+    min-height:100px;
+    border:1.5px dashed var(--line);
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  footer.credit{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    padding:10px 16px 30px;
+  }
+
+  @media(max-width:500px){
+    h1{font-size:22px;}
+    .card{padding:15px;border-radius:16px;}
+    .preview-stage{height:320px;padding:10px;}
+    input,select{height:42px;font-size:14px;}
+  }
 </style>
 </head>
 
 <body>
 
-<header>
-
-<div class="logo">
-FormReady <span>India</span>
-</div>
-
-<a href="../">Home</a>
-
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
 </header>
 
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
 
 <div class="container">
 
-<a class="back" href="../">← Back to Tools</a>
+  <div class="icon-badge">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+  </div>
 
-<div class="card">
+  <h1>Photo Sheet Maker</h1>
+  <div class="subtitle">Arrange multiple copies of one photo on a single printable sheet</div>
 
-<h1>🖼️ Photo Sheet Maker</h1>
+  <!-- UPLOAD -->
+  <div class="card">
+    <label class="upload-box">
+      <span class="upload-btn">📁 Choose Photo</span>
+      <span class="upload-name" id="fileName">No photo selected yet</span>
+      <input type="file" id="photo" accept="image/*">
+    </label>
+  </div>
 
-<p class="sub">
-Create multiple passport-size photos on one printable sheet.
-</p>
+  <!-- SETTINGS -->
+  <div class="card">
+    <div class="section-title">📐 Photo Settings</div>
 
+    <div class="grid">
+      <div>
+        <label>Photo Width (mm)</label>
+        <input id="photoW" type="number" value="35" min="1" step="0.1">
+      </div>
+      <div>
+        <label>Photo Height (mm)</label>
+        <input id="photoH" type="number" value="45" min="1" step="0.1">
+      </div>
+      <div>
+        <label>Number of Photos</label>
+        <input id="count" type="number" value="8" min="1" max="100">
+      </div>
+      <div>
+        <label>Paper Size</label>
+        <select id="paper">
+          <option value="A4">A4</option>
+          <option value="LETTER">Letter</option>
+        </select>
+      </div>
+    </div>
 
-<div class="upload">
+    <details>
+      <summary>⚙️ Advanced Settings</summary>
+      <div class="advanced grid">
+        <div>
+          <label>DPI (print quality)</label>
+          <input id="dpi" type="number" value="300" min="72" max="1200">
+        </div>
+        <div>
+          <label>Horizontal Gap (mm)</label>
+          <input id="gapX" type="number" value="3" min="0" step="0.5">
+        </div>
+        <div>
+          <label>Vertical Gap (mm)</label>
+          <input id="gapY" type="number" value="3" min="0" step="0.5">
+        </div>
+        <div>
+          <label>Top Margin (mm)</label>
+          <input id="marginTop" type="number" value="10" min="0" step="0.5">
+        </div>
+        <div>
+          <label>Left Margin (mm)</label>
+          <input id="marginLeft" type="number" value="10" min="0" step="0.5">
+        </div>
+      </div>
+    </details>
+  </div>
 
-<label class="choose" for="photo">
-📷 Choose Photo
-</label>
+  <!-- PREVIEW -->
+  <div class="card">
+    <div class="section-title">👀 Sheet Preview</div>
 
-<input
-id="photo"
-type="file"
-accept="image/*"
->
+    <div class="preview-stage">
+      <canvas id="canvas"></canvas>
+    </div>
 
-<p>JPG • PNG • WEBP</p>
+    <div id="info" class="hint">8 photos • 35 × 45 mm • A4 • 300 DPI</div>
 
-</div>
+    <button id="create" class="btn-primary">✨ Create Sheet</button>
+    <button id="download" class="btn-primary">⬇️ Download JPG</button>
+    <button id="reset" class="btn-secondary">↻ Reset</button>
 
-
-<div id="work">
-
-<div class="settings">
-
-<div class="field">
-
-<label>Photo Size</label>
-
-<select id="size">
-
-<option value="35x45">
-35 × 45 mm
-</option>
-
-<option value="25x35">
-25 × 35 mm
-</option>
-
-<option value="2x2">
-2 × 2 inch
-</option>
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>Number of Photos</label>
-
-<select id="count">
-
-<option value="4">4 Photos</option>
-<option value="6">6 Photos</option>
-<option value="8" selected>8 Photos</option>
-<option value="10">10 Photos</option>
-<option value="12">12 Photos</option>
-<option value="16">16 Photos</option>
-<option value="20">20 Photos</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-<div class="preview">
-
-<canvas id="canvas"></canvas>
-
-</div>
-
-
-<div class="buttons">
-
-<button
-class="primary"
-id="createBtn"
->
-✨ Create Sheet
-</button>
-
-<button
-class="success"
-id="downloadBtn"
->
-⬇️ Download Sheet
-</button>
-
-<button
-class="secondary"
-id="resetBtn"
->
-Reset
-</button>
+    <div class="hint">Upload a photo above, adjust size/count if needed — the sheet updates automatically, then download when ready.</div>
+  </div>
 
 </div>
 
-
-<div class="info" id="info">
-Choose a photo to begin.
+<div class="ad-slot">
+  <div class="ad-box">Advertisement</div>
 </div>
 
-</div>
-
-</div>
-
-</div>
-
+<footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
 
 <script>
 
-const photo =
-document.getElementById("photo");
+const photoInput = document.getElementById("photo");
+const fileNameLabel = document.getElementById("fileName");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-const work =
-document.getElementById("work");
+let image = null;
 
-const canvas =
-document.getElementById("canvas");
+const photoW = document.getElementById("photoW");
+const photoH = document.getElementById("photoH");
+const count = document.getElementById("count");
+const dpi = document.getElementById("dpi");
+const paper = document.getElementById("paper");
+const gapX = document.getElementById("gapX");
+const gapY = document.getElementById("gapY");
+const marginTop = document.getElementById("marginTop");
+const marginLeft = document.getElementById("marginLeft");
+const info = document.getElementById("info");
 
-const ctx =
-canvas.getContext("2d");
+function mmToPx(mm,d){
+  return Math.round(mm * d / 25.4);
+}
 
-const size =
-document.getElementById("size");
+function getPaper(){
+  if(paper.value === "LETTER"){
+    return { w:215.9, h:279.4 };
+  }
+  return { w:210, h:297 };
+}
 
-const count =
-document.getElementById("count");
+photoInput.addEventListener("change", function(){
+  const file = this.files[0];
+  if(!file) return;
 
-const createBtn =
-document.getElementById("createBtn");
+  fileNameLabel.textContent = file.name;
 
-const downloadBtn =
-document.getElementById("downloadBtn");
-
-const resetBtn =
-document.getElementById("resetBtn");
-
-const info =
-document.getElementById("info");
-
-
-let image =
-new Image();
-
-let imageLoaded =
-false;
-
-
-/* Select photo */
-
-photo.addEventListener(
-"change",
-function(){
-
-const file =
-this.files[0];
-
-if(!file)
-return;
-
-const url =
-URL.createObjectURL(file);
-
-image.onload =
-function(){
-
-imageLoaded =
-true;
-
-work.style.display =
-"block";
-
-info.textContent =
-"Photo loaded. Choose size and number of copies.";
-
-drawSheet();
-
-URL.revokeObjectURL(url);
-
-};
-
-image.src =
-url;
-
+  const reader = new FileReader();
+  reader.onload = function(e){
+    image = new Image();
+    image.onload = function(){
+      createSheet();
+    };
+    image.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 });
 
+function createSheet(){
+  const d = Math.max(72, parseInt(dpi.value) || 300);
+  const pw = Math.max(1, parseFloat(photoW.value) || 35);
+  const ph = Math.max(1, parseFloat(photoH.value) || 45);
+  const total = Math.max(1, parseInt(count.value) || 8);
+  const gx = Math.max(0, parseFloat(gapX.value) || 0);
+  const gy = Math.max(0, parseFloat(gapY.value) || 0);
+  const mt = Math.max(0, parseFloat(marginTop.value) || 0);
+  const ml = Math.max(0, parseFloat(marginLeft.value) || 0);
 
-/* Redraw */
+  const p = getPaper();
 
-size.addEventListener(
-"change",
-drawSheet
-);
+  const canvasW = mmToPx(p.w,d);
+  const canvasH = mmToPx(p.h,d);
 
-count.addEventListener(
-"change",
-drawSheet
-);
+  canvas.width = canvasW;
+  canvas.height = canvasH;
 
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0,0,canvasW,canvasH);
 
-/* Create sheet */
+  const w = mmToPx(pw,d);
+  const h = mmToPx(ph,d);
+  const gxPx = mmToPx(gx,d);
+  const gyPx = mmToPx(gy,d);
+  const left = mmToPx(ml,d);
+  const top = mmToPx(mt,d);
 
-function drawSheet(){
+  const availableW = canvasW - left;
+  const columns = Math.max(1, Math.floor((availableW + gxPx) / (w + gxPx)));
 
-if(!imageLoaded)
-return;
+  if(image){
+    for(let i=0; i<total; i++){
+      const row = Math.floor(i / columns);
+      const col = i % columns;
+      const x = left + col * (w + gxPx);
+      const y = top + row * (h + gyPx);
 
+      if(y + h > canvasH){
+        break;
+      }
 
-let photoW;
-let photoH;
+      drawPhoto(image, x, y, w, h);
+    }
+  }
 
-
-/* Approximate 300 DPI sizes */
-
-if(size.value==="35x45"){
-
-photoW=413;
-photoH=531;
-
+  info.textContent = `${total} photos • ${pw} × ${ph} mm • ${paper.value} • ${d} DPI`;
 }
 
-else if(size.value==="25x35"){
+function drawPhoto(img,x,y,w,h){
+  const scale = Math.max(w / img.width, h / img.height);
+  const sw = w / scale;
+  const sh = h / scale;
+  const sx = (img.width - sw) / 2;
+  const sy = (img.height - sh) / 2;
 
-photoW=295;
-photoH=413;
-
+  ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
 }
 
-else{
-
-photoW=600;
-photoH=600;
-
-}
-
-
-/* Sheet A4 at 150 DPI */
-
-const sheetW =
-1240;
-
-const sheetH =
-1754;
-
-const margin =
-55;
-
-const gap =
-20;
-
-const availableW =
-sheetW -
-margin*2;
-
-const cols =
-Math.max(
-1,
-Math.floor(
-(availableW + gap) /
-(photoW + gap)
-)
-);
-
-const n =
-parseInt(count.value);
-
-const rows =
-Math.ceil(n / cols);
-
-
-/* Scale if photos don't fit */
-
-let scale=1;
-
-if(
-cols * photoW +
-(cols-1)*gap
->
-availableW
-){
-
-scale =
-availableW /
-(
-cols*photoW +
-(cols-1)*gap
-);
-
-}
-
-photoW =
-Math.floor(photoW*scale);
-
-photoH =
-Math.floor(photoH*scale);
-
-
-/* Recalculate columns */
-
-const actualCols =
-Math.max(
-1,
-Math.floor(
-(availableW+gap)/
-(photoW+gap)
-)
-);
-
-const actualRows =
-Math.ceil(n/actualCols);
-
-
-canvas.width =
-sheetW;
-
-canvas.height =
-Math.min(
-sheetH,
-margin*2 +
-actualRows*photoH +
-(actualRows-1)*gap
-);
-
-
-/* White sheet */
-
-ctx.fillStyle =
-"#ffffff";
-
-ctx.fillRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-/* Draw photos */
-
-for(
-let i=0;
-i<n;
-i++
-){
-
-const col =
-i % actualCols;
-
-const row =
-Math.floor(i/actualCols);
-
-const x =
-margin +
-col*(photoW+gap);
-
-const y =
-margin +
-row*(photoH+gap);
-
-
-/* Crop image to fill */
-
-const scaleImage =
-Math.max(
-photoW/image.width,
-photoH/image.height
-);
-
-const drawW =
-image.width*scaleImage;
-
-const drawH =
-image.height*scaleImage;
-
-const dx =
-x +
-(photoW-drawW)/2;
-
-const dy =
-y +
-(photoH-drawH)/2;
-
-
-/* Clip each photo */
-
-ctx.save();
-
-ctx.beginPath();
-
-ctx.rect(
-x,
-y,
-photoW,
-photoH
-);
-
-ctx.clip();
-
-ctx.drawImage(
-image,
-dx,
-dy,
-drawW,
-drawH
-);
-
-ctx.restore();
-
-}
-
-
-/* Border */
-
-ctx.strokeStyle =
-"#d1d5db";
-
-ctx.lineWidth =
-2;
-
-for(
-let i=0;
-i<n;
-i++
-){
-
-const col =
-i % actualCols;
-
-const row =
-Math.floor(i/actualCols);
-
-const x =
-margin +
-col*(photoW+gap);
-
-const y =
-margin +
-row*(photoH+gap);
-
-ctx.strokeRect(
-x,
-y,
-photoW,
-photoH
-);
-
-}
-
-
-info.textContent =
-"Sheet ready — "
-+
-n
-+
-" photos arranged automatically.";
-
-}
-
-
-/* Create */
-
-createBtn.addEventListener(
-"click",
-function(){
-
-if(!imageLoaded){
-
-alert(
-"Please choose a photo first."
-);
-
-return;
-
-}
-
-drawSheet();
-
-downloadBtn.style.display =
-"inline-block";
-
-info.textContent =
-"✅ Photo sheet created successfully.";
-
+document.getElementById("create").addEventListener("click", function(){
+  if(!image){
+    alert("Please choose a photo first.");
+    return;
+  }
+  createSheet();
 });
 
+document.getElementById("download").addEventListener("click", function(){
+  if(!image){
+    alert("Please choose a photo first.");
+    return;
+  }
 
-/* Download */
+  createSheet();
 
-downloadBtn.addEventListener(
-"click",
-function(){
-
-if(!imageLoaded)
-return;
-
-const link =
-document.createElement("a");
-
-link.href =
-canvas.toDataURL(
-"image/jpeg",
-0.95
-);
-
-link.download =
-"formready-photo-sheet.jpg";
-
-document.body.appendChild(link);
-
-link.click();
-
-link.remove();
-
+  const link = document.createElement("a");
+  link.download = "photo-sheet.jpg";
+  link.href = canvas.toDataURL("image/jpeg", 0.98);
+  link.click();
 });
 
+document.getElementById("reset").addEventListener("click", function(){
+  photoInput.value = "";
+  image = null;
+  fileNameLabel.textContent = "No photo selected yet";
 
-/* Reset */
+  photoW.value = 35;
+  photoH.value = 45;
+  count.value = 8;
+  dpi.value = 300;
+  paper.value = "A4";
+  gapX.value = 3;
+  gapY.value = 3;
+  marginTop.value = 10;
+  marginLeft.value = 10;
 
-resetBtn.addEventListener(
-"click",
-function(){
+  drawEmpty();
 
-photo.value =
-"";
-
-imageLoaded =
-false;
-
-work.style.display =
-"none";
-
-downloadBtn.style.display =
-"none";
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-info.textContent =
-"Choose a photo to begin.";
-
+  info.textContent = "8 photos • 35 × 45 mm • A4 • 300 DPI";
 });
 
+[photoW, photoH, count, dpi, paper, gapX, gapY, marginTop, marginLeft].forEach(function(el){
+  el.addEventListener("input", function(){
+    if(image){
+      createSheet();
+    }
+  });
+});
+
+function drawEmpty(){
+  canvas.width = mmToPx(210,300);
+  canvas.height = mmToPx(297,300);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+}
+
+drawEmpty();
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const rewardKey = "formready_reward_photo-sheet_" + new Date().toISOString().slice(0,10);
+
+  function rewardUser() {
+    if (localStorage.getItem(rewardKey)) return;
+    if (window.FormReadyTokens) {
+      window.FormReadyTokens.addTokens("photo-sheet");
+    }
+  }
+
+  document.querySelectorAll(
+    '#download, #downloadBtn, #downloadButton, button[id*="download" i], a[id*="download" i]'
+  ).forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      setTimeout(rewardUser, 1000);
+    });
+  });
+
+  const originalAlert = window.alert;
+  window.alert = function(msg) {
+    if (msg && /download|success|created|converted|compressed|generated|saved/i.test(String(msg))) {
+      setTimeout(rewardUser, 500);
+    }
+    originalAlert.apply(window, arguments);
+  };
+});
 </script>
 
 </body>

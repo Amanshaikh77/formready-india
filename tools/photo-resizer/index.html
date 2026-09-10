@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Photo Resizer - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+  --green: #2ea043;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar { max-width: 700px; margin: 0 auto 20px; width: 100%; }
+.back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
+.header p { font-size: 13px; color: var(--muted); }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 700px;
+  margin: 0 auto 24px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.instructions-box {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.instructions-box h3 {
+  font-size: 13.5px;
+  color: var(--amber);
+  font-family: 'Space Grotesk', sans-serif;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.instructions-box ol { padding-left: 18px; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.instructions-box li { margin-bottom: 3px; }
+.upload-zone {
+  border: 2px dashed var(--line);
+  padding: 28px 16px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--panel-2);
+  transition: border-color 0.2s;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+}
+.upload-zone:hover { border-color: var(--amber); }
+#fileInput { display: none; }
+.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; pointer-events: none; }
+.upload-text b { color: var(--amber); }
+.controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media(max-width: 500px) { .controls-grid { grid-template-columns: 1fr; } }
+.options-group { margin-bottom: 16px; }
+.options-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+.input-field, .input-select, .range-input {
+  width: 100%; padding: 12px 14px; background: var(--panel-2); border: 1px solid var(--line); color: var(--paper); border-radius: 8px; font-size: 14px; outline: none;
+}
+.range-input { padding: 4px 0; accent-color: var(--amber); cursor: pointer; }
+.checkbox-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--paper); cursor: pointer; margin-top: 6px; }
+.checkbox-wrap input { accent-color: var(--amber); width: 16px; height: 16px; cursor: pointer; }
+.action-row { display: flex; gap: 10px; margin-bottom: 24px; }
+.btn { background: var(--amber); color: #151210; border: none; flex: 1; padding: 14px; border-radius: 9px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+.btn:hover { background: var(--amber-bright); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-secondary { background: var(--panel-2); color: var(--paper); border: 1px solid var(--line); }
+.btn-secondary:hover { border-color: var(--amber); }
+.btn-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.file-list-header { font-size: 14px; color: var(--paper); font-weight: 600; margin-bottom: 10px; }
+.file-list { max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.file-item { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.file-thumb { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; border: 1px solid var(--line); background: #fff; flex-shrink: 0; }
+.file-info { flex: 1; min-width: 140px; }
+.file-name { font-size: 13px; color: var(--paper); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.file-meta { font-size: 11px; color: var(--muted); line-height: 1.4; }
+.file-status { font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
+.status-ready { color: var(--muted); background: var(--line); }
+.status-resizing { color: var(--amber); background: rgba(217, 154, 63, 0.15); }
+.status-done { color: #3fb950; background: rgba(46, 160, 67, 0.15); }
+.btn-item-download { background: var(--green); color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; display: none; text-align: center; width: 100%; margin-top: 6px; }
+.btn-item-download:hover { background: #3fb950; }
+.ad-container { margin-top: 24px; background: var(--panel-2); border: 1px dashed var(--line); border-radius: 10px; padding: 16px; text-align: center; }
+.ad-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+.ad-banner { font-size: 12.5px; color: var(--muted); padding: 10px; }
+footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: auto; }
+</style>
+</head>
+<body>
+<div class="nav-bar"><a href="../../" class="back-btn">← Back to Dashboard</a></div>
+<div class="header"><h1>Photo Resizer</h1><p>Resize dimensions, reduce KB size, and scale images in bulk</p></div>
+<div class="card">
+  <div class="instructions-box">
+    <h3>📖 How to Use Photo Resizer</h3>
+    <ol>
+      <li>Upload one or multiple image files (JPG, PNG, WebP).</li>
+      <li>Choose resize mode: Custom Dimensions, Percentage Scaling, or Portal Presets.</li>
+      <li>Set aspect ratio lock, output format, or optional target file size in KB.</li>
+      <li>Tap <b>Resize Images</b> and download each resized file directly.</li>
+    </ol>
+  </div>
+  <label class="upload-zone">
+    <input type="file" id="fileInput" accept="image/*" multiple>
+    <div class="upload-text">📁 Tap here to upload images or drag here<br><b>Supports multiple files</b></div>
+  </label>
+  <div class="options-group">
+    <label>Resize Mode:</label>
+    <select id="resizeMode" class="input-select">
+      <option value="custom">Custom Width &amp; Height (Pixels)</option>
+      <option value="percent">Percentage Scaling (%)</option>
+      <option value="preset">Standard Portal Presets</option>
+    </select>
+  </div>
+  <div id="customModeGroup" class="controls-grid">
+    <div class="options-group"><label>Width (px):</label><input type="number" id="widthInput" class="input-field" value="800" min="10"></div>
+    <div class="options-group"><label>Height (px):</label><input type="number" id="heightInput" class="input-field" value="600" min="10"></div>
+  </div>
+  <div id="percentModeGroup" class="options-group" style="display:none;">
+    <label>Scale Percentage:</label>
+    <select id="percentSelect" class="input-select">
+      <option value="25">25% (Quarter Size)</option>
+      <option value="50" selected>50% (Half Size)</option>
+      <option value="75">75% (Three-Fourth)</option>
+      <option value="100">100% (Original)</option>
+      <option value="200">200% (Double Size)</option>
+    </select>
+  </div>
+  <div id="presetModeGroup" class="options-group" style="display:none;">
+    <label>Select Preset:</label>
+    <select id="presetSelect" class="input-select">
+      <option value="200,230">PAN Card Photo (200 x 230 px)</option>
+      <option value="100,120">SSC Exam Photo (100 x 120 px)</option>
+      <option value="140,60">Digital Signature (140 x 60 px)</option>
+      <option value="800,600">Standard Web Photo (800 x 600 px)</option>
+      <option value="1200,1200">Social Media Square (1200 x 1200 px)</option>
+    </select>
+  </div>
+  <div class="options-group"><label class="checkbox-wrap"><input type="checkbox" id="lockAspect" checked> Lock Aspect Ratio (Maintain Proportions)</label></div>
+  <div class="controls-grid">
+    <div class="options-group">
+      <label>Output Format:</label>
+      <select id="targetFormat" class="input-select">
+        <option value="image/jpeg">JPEG (.jpg)</option>
+        <option value="image/png">PNG (.png)</option>
+        <option value="image/webp">WebP (.webp)</option>
+      </select>
+    </div>
+    <div class="options-group" id="qualityGroup">
+      <label>Quality (<span id="qualityVal">90</span>%):</label>
+      <input type="range" id="qualitySlider" class="range-input" min="10" max="100" value="90">
+    </div>
+  </div>
+  <div class="options-group"><label>Target File Size Limit (Optional KB):</label><input type="number" id="targetKbInput" class="input-field" placeholder="e.g. 50 KB (leave blank for standard quality)"></div>
+  <div class="action-row">
+    <button class="btn" id="resizeBtn" disabled>Resize Images</button>
+    <button class="btn btn-secondary btn-danger" id="clearBtn" style="display:none;">Clear All</button>
+  </div>
+  <div id="queueSection" style="display:none;">
+    <div class="file-list-header"><span>File Queue (<span id="fileCount">0</span>)</span></div>
+    <div class="file-list" id="fileList"></div>
+  </div>
+  <div class="ad-container"><div class="ad-label">Sponsored Advertisement</div><div class="ad-banner">📢 Advertisement Space (Google AdSense / Banner Placeholder)</div></div>
+</div>
+<footer>&copy; 2026 FormReady India. 100% Secure Client-Side Processing.</footer>
+<script>
+const fileInput = document.getElementById("fileInput");
+const resizeMode = document.getElementById("resizeMode");
+const customModeGroup = document.getElementById("customModeGroup");
+const percentModeGroup = document.getElementById("percentModeGroup");
+const presetModeGroup = document.getElementById("presetModeGroup");
+const widthInput = document.getElementById("widthInput");
+const heightInput = document.getElementById("heightInput");
+const percentSelect = document.getElementById("percentSelect");
+const presetSelect = document.getElementById("presetSelect");
+const lockAspect = document.getElementById("lockAspect");
+const targetFormat = document.getElementById("targetFormat");
+const qualitySlider = document.getElementById("qualitySlider");
+const qualityVal = document.getElementById("qualityVal");
+const qualityGroup = document.getElementById("qualityGroup");
+const targetKbInput = document.getElementById("targetKbInput");
+const resizeBtn = document.getElementById("resizeBtn");
+const clearBtn = document.getElementById("clearBtn");
+const queueSection = document.getElementById("queueSection");
+const fileList = document.getElementById("fileList");
+const fileCount = document.getElementById("fileCount");
+
+let fileQueue = [];
+let activeAspectRatio = 1;
+
+resizeMode.addEventListener("change", (e) => {
+  const mode = e.target.value;
+  customModeGroup.style.display = mode === "custom" ? "grid" : "none";
+  percentModeGroup.style.display = mode === "percent" ? "block" : "none";
+  presetModeGroup.style.display = mode === "preset" ? "block" : "none";
+});
+
+qualitySlider.addEventListener("input", (e) => { qualityVal.textContent = e.target.value; });
+
+targetFormat.addEventListener("change", (e) => {
+  if (e.target.value === "image/png") {
+    qualityGroup.style.opacity = "0.4";
+    qualitySlider.disabled = true;
+  } else {
+    qualityGroup.style.opacity = "1";
+    qualitySlider.disabled = false;
+  }
+});
+
+fileInput.addEventListener("change", (e) => {
+  const files = Array.from(e.target.files);
+  if (files.length === 0) return;
+
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        if (fileQueue.length === 0) {
+          widthInput.value = img.width;
+          heightInput.value = img.height;
+          activeAspectRatio = img.width / img.height;
+        }
+        fileQueue.push({
+          id: Math.random().toString(36).substring(2),
+          file: file,
+          name: file.name.substring(0, file.name.lastIndexOf('.')) || file.name,
+          img: img,
+          originalWidth: img.width,
+          originalHeight: img.height,
+          originalSize: file.size,
+          status: "ready",
+          resizedBlob: null,
+          resizedSize: 0,
+          finalW: img.width,
+          finalH: img.height,
+          downloadUrl: null
+        });
+        updateQueueUI();
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  fileInput.value = "";
+});
+
+widthInput.addEventListener("input", () => {
+  if (lockAspect.checked && activeAspectRatio) {
+    const w = parseInt(widthInput.value, 10);
+    if (w > 0) heightInput.value = Math.round(w / activeAspectRatio);
+  }
+});
+
+heightInput.addEventListener("input", () => {
+  if (lockAspect.checked && activeAspectRatio) {
+    const h = parseInt(heightInput.value, 10);
+    if (h > 0) widthInput.value = Math.round(h * activeAspectRatio);
+  }
+});
+
+function updateQueueUI() {
+  if (fileQueue.length > 0) {
+    queueSection.style.display = "block";
+    clearBtn.style.display = "block";
+    resizeBtn.disabled = false;
+  } else {
+    queueSection.style.display = "none";
+    clearBtn.style.display = "none";
+    resizeBtn.disabled = true;
+  }
+
+  fileCount.textContent = fileQueue.length;
+  fileList.innerHTML = fileQueue.map(item => `
+    <div class="file-item">
+      <img src="${item.img.src}" class="file-thumb" alt="Thumb">
+      <div class="file-info">
+        <div class="file-name" title="${item.file.name}">${item.file.name}</div>
+        <div class="file-meta">
+          Original: ${item.originalWidth}x${item.originalHeight}px (${Math.round(item.originalSize / 1024)} KB)<br>
+          ${item.status === 'done' ? `Resized: ${item.finalW}x${item.finalH}px (${Math.round(item.resizedSize / 1024)} KB)` : ''}
+        </div>
+      </div>
+      <span class="file-status ${item.status === 'done' ? 'status-done' : (item.status === 'resizing' ? 'status-resizing' : 'status-ready')}">
+        ${item.status === 'done' ? 'Done' : (item.status === 'resizing' ? 'Resizing...' : 'Ready')}
+      </span>
+      ${item.status === 'done' ? `<a href="${item.downloadUrl}" download="${item.name}-resized.${getExtension()}" class="btn-item-download" style="display:block;">📥 Download Resized Image</a>` : ''}
+    </div>
+  `).join("");
+}
+
+function getExtension() {
+  const mime = targetFormat.value;
+  if (mime === "image/jpeg") return "jpg";
+  if (mime === "image/png") return "png";
+  if (mime === "image/webp") return "webp";
+  return "jpg";
+}
+
+resizeBtn.addEventListener("click", async () => {
+  resizeBtn.disabled = true;
+  clearBtn.disabled = true;
+
+  const mode = resizeMode.value;
+  const mime = targetFormat.value;
+  let baseQuality = mime === "image/png" ? 1.0 : parseInt(qualitySlider.value, 10) / 100;
+  const targetBytes = targetKbInput.value ? parseInt(targetKbInput.value, 10) * 1024 : null;
+  const ext = getExtension();
+
+  for (let item of fileQueue) {
+    item.status = "resizing";
+    updateQueueUI();
+
+    let targetW = item.originalWidth;
+    let targetH = item.originalHeight;
+
+    if (mode === "custom") {
+      targetW = parseInt(widthInput.value, 10) || item.originalWidth;
+      targetH = parseInt(heightInput.value, 10) || item.originalHeight;
+    } else if (mode === "percent") {
+      const pct = parseInt(percentSelect.value, 10) / 100;
+      targetW = Math.round(item.originalWidth * pct);
+      targetH = Math.round(item.originalHeight * pct);
+    } else if (mode === "preset") {
+      const parts = presetSelect.value.split(",");
+      targetW = parseInt(parts[0], 10);
+      targetH = parseInt(parts[1], 10);
+    }
+
+    item.finalW = targetW;
+    item.finalH = targetH;
+
+    await new Promise((resolve) => {
+      setTimeout(async () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = targetW;
+        canvas.height = targetH;
+        const ctx = canvas.getContext("2d");
+
+        if (mime === "image/jpeg") {
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(0, 0, targetW, targetH);
+        }
+
+        ctx.drawImage(item.img, 0, 0, targetW, targetH);
+
+        let currentQuality = baseQuality;
+        let blob = await new Promise(res => canvas.toBlob(res, mime, currentQuality));
+
+        if (targetBytes && mime !== "image/png") {
+          let scaleStep = 1.0;
+          while (blob.size > targetBytes && currentQuality > 0.1) {
+            currentQuality -= 0.15;
+            blob = await new Promise(res => canvas.toBlob(res, mime, Math.max(currentQuality, 0.1)));
+            if (currentQuality <= 0.2 && blob.size > targetBytes && scaleStep > 0.4) {
+              scaleStep -= 0.2;
+              let tempW = Math.round(targetW * scaleStep);
+              let tempH = Math.round(targetH * scaleStep);
+              canvas.width = tempW;
+              canvas.height = tempH;
+              if (mime === "image/jpeg") { ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, tempW, tempH); }
+              ctx.drawImage(item.img, 0, 0, tempW, tempH);
+              item.finalW = tempW;
+              item.finalH = tempH;
+              blob = await new Promise(res => canvas.toBlob(res, mime, 0.5));
+            }
+          }
+        }
+
+        item.resizedBlob = blob;
+        item.resizedSize = blob.size;
+        if (item.downloadUrl) URL.revokeObjectURL(item.downloadUrl);
+        item.downloadUrl = URL.createObjectURL(blob);
+        item.status = "done";
+        resolve();
+      }, 50);
+    });
+    updateQueueUI();
+  }
+
+  resizeBtn.disabled = false;
+  clearBtn.disabled = false;
+});
+
+clearBtn.addEventListener("click", () => {
+  fileQueue.forEach(i => { if (i.downloadUrl) URL.revokeObjectURL(i.downloadUrl); });
+  fileQueue = [];
+  updateQueueUI();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<title>PDF to JPG Converter Online Free</title>
+<meta name="description" content="Convert PDF pages to JPG images online for free. Fast, simple and mobile-friendly PDF to JPG converter.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/pdf-to-jpg.html">
+<meta property="og:title" content="PDF to JPG Converter Online Free">
+<meta property="og:description" content="Convert PDF pages to JPG images online for free. Fast, simple and mobile-friendly PDF to JPG converter.">
+<meta property="og:url" content="https://amanshaikh77.github.io/formready-india/tools/pdf-to-jpg.html">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PDF to JPG Converter",
+  "url": "https://amanshaikh77.github.io/formready-india/tools/pdf-to-jpg.html",
+  "description": "Convert PDF pages to JPG images online for free. Fast, simple and mobile-friendly PDF to JPG converter.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+
+<script src="../token-system.js"></script>
+
+<style>
+:root{
+  --bg:#151210;
+  --panel:#1e1a17;
+  --panel-2:#262019;
+  --line:#39322b;
+  --amber:#d99a3f;
+  --amber-bright:#f0b158;
+  --amber-dim:#8a6329;
+  --teal:#5fada0;
+  --paper:#f2ece2;
+  --muted:#a89a89;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--paper);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+}
+
+h1,h2,h3,.brand,.upload-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:600;
+}
+
+/* Topbar */
+header.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  background:rgba(21,18,16,.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+
+.brand{
+  font-size:19px;
+  color:var(--paper);
+}
+.brand span{ color:var(--amber); }
+
+header.topbar a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+}
+header.topbar a:hover{ color:var(--amber-bright); }
+
+.breadcrumb{
+  display:block;
+  width:min(600px,92%);
+  margin:16px auto 0;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+}
+.breadcrumb:hover{ color:var(--amber-bright); }
+
+/* Container */
+.container{
+  width:min(600px,92%);
+  margin:16px auto 40px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:26px 22px;
+  margin-bottom:16px;
+}
+
+.icon-badge{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:14px;
+}
+
+.card-head h1{
+  margin:0 0 6px;
+  font-size:24px;
+  color:var(--paper);
+}
+
+.card-head p{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:14.5px;
+}
+
+/* Upload box */
+.upload-box{
+  border:2px dashed var(--line);
+  border-radius:14px;
+  padding:26px 16px;
+  text-align:center;
+  background:var(--panel-2);
+}
+
+.upload-box svg{
+  width:30px;
+  height:30px;
+  margin-bottom:8px;
+}
+
+.upload-title{
+  margin:0 0 4px;
+  font-size:16px;
+  color:var(--paper);
+}
+
+.upload-hint{
+  margin:0 0 16px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.btn-choose{
+  display:inline-block;
+  padding:11px 22px;
+  border-radius:10px;
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  color:#1a1410;
+  font-weight:600;
+  font-size:14.5px;
+  cursor:pointer;
+}
+
+#pdfFile{ display:none; }
+
+.file-name{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:13px;
+  word-break:break-all;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:15px;
+  font-size:16px;
+  font-weight:600;
+  font-family:'Inter',sans-serif;
+  cursor:pointer;
+}
+
+.primary{
+  background:linear-gradient(155deg,var(--amber-bright),var(--amber));
+  color:#1a1410;
+}
+
+.primary:disabled{
+  background:var(--amber-dim);
+  color:#3a2e1a;
+  cursor:not-allowed;
+}
+
+.secondary{
+  background:transparent;
+  color:var(--paper);
+  border:1px solid var(--line);
+}
+
+/* Status */
+#status{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:10px;
+  background:var(--panel-2);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13.5px;
+  display:none;
+}
+
+#status.error{
+  background:#2b1614;
+  border-color:#5a2a24;
+  color:#e08a7d;
+}
+
+/* Results */
+#results{ margin-top:6px; }
+
+.page{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  margin-top:14px;
+  background:var(--panel-2);
+}
+
+.page h3{
+  margin:0 0 10px;
+  font-size:15px;
+  color:var(--paper);
+}
+
+.page canvas{
+  width:100%;
+  max-width:100%;
+  border:1px solid var(--line);
+  border-radius:8px;
+  display:block;
+  margin-bottom:12px;
+}
+
+.page .download{
+  background:linear-gradient(155deg,var(--teal),#3f8377);
+  color:#0d1a17;
+}
+
+/* Ad slot */
+.ad-slot{ margin:16px 0; }
+
+.ad-box{
+  min-height:100px;
+  border:1.5px dashed var(--line);
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* Footer */
+footer.credit{
+  text-align:center;
+  color:var(--muted);
+  font-size:12.5px;
+  padding:20px 0 30px;
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
+</header>
+
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
+
+<div class="container">
+
+  <div class="card">
+    <div class="card-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <circle cx="10" cy="15" r="1.5"/>
+          <path d="M9 19l2.5-3 2 2.2L16 15l2 4"/>
+        </svg>
+      </div>
+      <h1>PDF to JPG Converter</h1>
+      <p>Convert every page of a PDF file into a JPG image directly in your browser.</p>
+    </div>
+
+    <div class="upload-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      <p class="upload-title">Choose PDF File</p>
+      <p class="upload-hint">Select a PDF to convert into JPG images</p>
+      <label class="btn-choose" for="pdfFile">Browse Files</label>
+      <input type="file" id="pdfFile" accept="application/pdf">
+      <div class="file-name" id="fileName"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="buttons">
+      <button class="primary" id="convertBtn" onclick="convertPDF()" disabled>
+        Convert PDF to JPG
+      </button>
+    </div>
+
+    <div id="status"></div>
+
+    <div id="results"></div>
+  </div>
+
+  <div class="ad-slot">
+    <div class="ad-box">Advertisement</div>
+  </div>
+
+  <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
+
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const fileInput = document.getElementById("pdfFile");
+const convertBtn = document.getElementById("convertBtn");
+const statusBox = document.getElementById("status");
+const results = document.getElementById("results");
+const fileNameLabel = document.getElementById("fileName");
+
+fileInput.addEventListener("change", function(){
+  results.innerHTML = "";
+  statusBox.style.display = "none";
+
+  if(this.files.length > 0){
+    convertBtn.disabled = false;
+    fileNameLabel.textContent = this.files[0].name;
+  }else{
+    convertBtn.disabled = true;
+    fileNameLabel.textContent = "";
+  }
+});
+
+function showStatus(message, error=false){
+  statusBox.textContent = message;
+  statusBox.style.display = "block";
+
+  if(error){
+    statusBox.classList.add("error");
+  }else{
+    statusBox.classList.remove("error");
+  }
+}
+
+async function convertPDF(){
+
+  const file = fileInput.files[0];
+
+  if(!file){
+    showStatus("Please select a PDF file.", true);
+    return;
+  }
+
+  if(file.type !== "application/pdf"){
+    showStatus("Please select a valid PDF file.", true);
+    return;
+  }
+
+  convertBtn.disabled = true;
+  results.innerHTML = "";
+
+  try{
+
+    showStatus("Reading PDF...");
+
+    const arrayBuffer = await file.arrayBuffer();
+
+    const pdf = await pdfjsLib.getDocument({
+      data: arrayBuffer
+    }).promise;
+
+    showStatus("Converting " + pdf.numPages + " page(s)...");
+
+    for(let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++){
+
+      const page = await pdf.getPage(pageNumber);
+
+      const viewport = page.getViewport({
+        scale: 2
+      });
+
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      await page.render({
+        canvasContext: context,
+        viewport: viewport
+      }).promise;
+
+      const pageBox = document.createElement("div");
+      pageBox.className = "page";
+
+      const title = document.createElement("h3");
+      title.textContent = "Page " + pageNumber;
+
+      const downloadButton = document.createElement("button");
+      downloadButton.className = "download";
+      downloadButton.textContent = "Download JPG";
+
+      downloadButton.onclick = function(){
+
+        canvas.toBlob(function(blob){
+
+          if(!blob){
+            showStatus("Could not create JPG.", true);
+            return;
+          }
+
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "page-" + pageNumber + ".jpg";
+
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          setTimeout(function(){
+            URL.revokeObjectURL(url);
+          },1000);
+
+        },"image/jpeg",0.92);
+
+      };
+
+      pageBox.appendChild(title);
+      pageBox.appendChild(canvas);
+      pageBox.appendChild(downloadButton);
+
+      results.appendChild(pageBox);
+    }
+
+    showStatus(
+      "Done! " + pdf.numPages + " page(s) converted successfully."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      "Could not convert this PDF. Please try another PDF file.",
+      true
+    );
+
+  }finally{
+
+    convertBtn.disabled = false;
+
+  }
+}
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const rewardKey = "formready_reward_pdf-to-jpg_" + new Date().toISOString().slice(0,10);
+
+  function rewardUser() {
+    if (localStorage.getItem(rewardKey)) return;
+    if (window.FormReadyTokens) {
+      window.FormReadyTokens.addTokens("pdf-to-jpg");
+    }
+  }
+
+  document.querySelectorAll(
+    '#download, #downloadBtn, #downloadButton, button[id*="download" i], a[id*="download" i]'
+  ).forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      setTimeout(rewardUser, 1000);
+    });
+  });
+
+  const originalAlert = window.alert;
+  window.alert = function(msg) {
+    if (msg && /download|success|created|converted|compressed|generated|saved/i.test(String(msg))) {
+      setTimeout(rewardUser, 500);
+    }
+    originalAlert.apply(window, arguments);
+  };
+});
+</script>
+
+</body>
+</html>

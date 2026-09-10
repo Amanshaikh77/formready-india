@@ -2,646 +2,280 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Split PDF | FormReady India</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Split PDF Online Free</title>
+<meta name="description" content="Split PDF files into separate pages or smaller PDF files online for free with this simple PDF splitter.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://amanshaikh77.github.io/formready-india/tools/split-pdf.html">
+<meta property="og:title" content="Split PDF Online Free">
+<meta property="og:description" content="Split PDF files into separate pages or smaller PDF files online for free with this simple PDF splitter.">
+<meta property="og:url" content="https://amanshaikh77.github.io/formready-india/tools/split-pdf.html">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Split PDF",
+  "url": "https://amanshaikh77.github.io/formready-india/tools/split-pdf.html",
+  "description": "Split PDF files into separate pages or smaller PDF files online for free with this simple PDF splitter.",
+  "applicationCategory": "UtilityApplication",
+  "operatingSystem": "Any"
+}
+</script>
+<script src="../token-system.js"></script>
 <style>
-*{box-sizing:border-box}
-
+:root{
+  --bg:#151210;
+  --panel:#1e1a17;
+  --panel-2:#262019;
+  --line:#39322b;
+  --amber:#d99a3f;
+  --amber-bright:#f0b158;
+  --amber-dim:#8a6329;
+  --teal:#5fada0;
+  --paper:#f2ece2;
+  --muted:#a89a89;
+}
+*{ box-sizing:border-box; }
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f4f7fb;
-color:#111827;
+  margin:0;
+  background:var(--bg);
+  color:var(--paper);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
 }
-
-header{
-background:#111827;
-color:white;
-padding:16px 6%;
-display:flex;
-justify-content:space-between;
-align-items:center;
+h1,h2,h3,.brand,.upload-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:600;
 }
-
-.logo{
-font-size:22px;
-font-weight:800;
+header.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  background:rgba(21,18,16,.92);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
 }
-
-.logo span{color:#60a5fa}
-
-header a{
-color:white;
-text-decoration:none;
-}
-
-.container{
-max-width:800px;
-margin:auto;
-padding:25px 15px;
-}
-
-.back{
-color:#2563eb;
-text-decoration:none;
-font-weight:600;
-}
-
-.card{
-background:white;
-margin-top:18px;
-padding:25px;
-border-radius:22px;
-box-shadow:0 10px 35px #0000000d;
-}
-
-h1{
-text-align:center;
-margin:5px 0;
-}
-
-.sub{
-text-align:center;
-color:#6b7280;
-line-height:1.5;
-}
-
-.upload{
-margin-top:25px;
-border:2px dashed #93c5fd;
-background:#eff6ff;
-border-radius:18px;
-padding:35px 15px;
-text-align:center;
-}
-
-.upload input{display:none}
-
-.choose{
-display:inline-block;
-background:#2563eb;
-color:white;
-padding:14px 24px;
-border-radius:12px;
-font-weight:700;
-cursor:pointer;
-}
-
-#work{
-display:none;
-margin-top:25px;
-}
-
-.file-info{
-padding:15px;
-background:#f8fafc;
-border:1px solid #e5e7eb;
-border-radius:12px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-margin-top:18px;
-}
-
-.field label{
-display:block;
-font-size:13px;
-font-weight:700;
-margin-bottom:7px;
-}
-
-.field input{
-width:100%;
-padding:13px;
-border:1px solid #d1d5db;
-border-radius:10px;
-font-size:16px;
-}
-
-.range{
-margin-top:18px;
-}
-
-.range input{
-width:100%;
-}
-
-.buttons{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:20px;
-}
-
-button{
-border:0;
-padding:13px 18px;
-border-radius:11px;
-font-weight:700;
-cursor:pointer;
-}
-
-.primary{
-background:#2563eb;
-color:white;
-}
-
-.secondary{
-background:#e5e7eb;
-color:#111827;
-}
-
-.info{
-margin-top:18px;
-padding:14px;
-background:#f1f5f9;
-border-radius:12px;
-font-size:13px;
-color:#475569;
-line-height:1.6;
-}
-
-.status{
-margin-top:15px;
-font-weight:600;
-}
-
-@media(max-width:600px){
-.grid{grid-template-columns:1fr}
-.card{padding:18px}
-}
+.brand{ font-size:19px; color:var(--paper); }
+.brand span{ color:var(--amber); }
+header.topbar a{ color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; }
+header.topbar a:hover{ color:var(--amber-bright); }
+.breadcrumb{ display:block; width:min(600px,92%); margin:16px auto 0; color:var(--muted); text-decoration:none; font-size:14px; }
+.breadcrumb:hover{ color:var(--amber-bright); }
+.container{ width:min(600px,92%); margin:16px auto 40px; }
+.card{ background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:26px 22px; margin-bottom:16px; }
+.icon-badge{ width:46px; height:46px; border-radius:12px; background:linear-gradient(155deg,var(--amber-bright),var(--amber)); display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+.card-head h1{ margin:0 0 6px; font-size:24px; color:var(--paper); }
+.card-head p{ margin:0 0 4px; color:var(--muted); font-size:14.5px; }
+.steps{ margin-top:18px; padding:14px 16px; background:var(--panel-2); border:1px solid var(--line); border-radius:14px; }
+.steps-title{ font-size:13px; font-weight:600; color:var(--amber-bright); margin-bottom:8px; letter-spacing:.3px; text-transform:uppercase; }
+.step-row{ display:flex; gap:10px; align-items:flex-start; margin-bottom:8px; font-size:13.5px; color:var(--paper); }
+.step-row:last-child{ margin-bottom:0; }
+.step-num{ flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--amber-dim); color:var(--paper); font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.upload-box{ margin-top:18px; border:2px dashed var(--line); border-radius:14px; padding:26px 16px; text-align:center; background:var(--panel-2); }
+.upload-box svg{ width:30px; height:30px; margin-bottom:8px; }
+.upload-title{ margin:0 0 4px; font-size:16px; color:var(--paper); }
+.upload-hint{ margin:0 0 16px; color:var(--muted); font-size:13px; }
+.btn-choose{ display:inline-block; padding:10px 22px; background:var(--amber); color:#151210; border-radius:10px; font-weight:600; font-size:14px; cursor:pointer; }
+.btn-choose:hover{ background:var(--amber-bright); }
+#pdfFile{ display:none; }
+#work{ display:none; margin-top:20px; }
+.file-info{ background:var(--panel-2); border:1px solid var(--line); padding:12px 14px; border-radius:10px; font-size:13.5px; color:var(--paper); margin-bottom:16px; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.field label{ display:block; font-size:12px; color:var(--muted); margin-bottom:6px; font-weight:500; }
+.field input{ width:100%; background:var(--panel-2); border:1px solid var(--line); color:var(--paper); padding:10px 12px; border-radius:8px; font-size:14px; outline:none; }
+.field input:focus{ border-color:var(--amber); }
+.range-wrap{ margin-bottom:18px; }
+.range-wrap label{ display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
+.range-wrap input{ width:100%; accent-color:var(--amber); }
+.buttons{ display:flex; gap:10px; margin-bottom:14px; }
+button.primary{ background:linear-gradient(155deg,var(--amber-bright),var(--amber)); border:none; color:#151210; font-weight:600; padding:12px 20px; border-radius:10px; cursor:pointer; flex:1; }
+button.secondary{ background:transparent; border:1px solid var(--line); color:var(--paper); font-weight:500; padding:12px 16px; border-radius:10px; cursor:pointer; }
+button:disabled{ opacity:0.5; cursor:not-allowed; }
+.status{ display:none; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:14px; }
+.status.show{ display:block; }
+.status.error{ background:#2b1614; border:1px solid #5a2a24; color:#e08a7d; }
+.status.success{ background:#192b1d; border:1px solid #2b5a34; color:#8ae09e; }
+.info{ margin-top:16px; padding:14px 15px; background:var(--panel-2); border:1px solid var(--line); border-radius:12px; font-size:13px; color:var(--muted); line-height:1.6; }
+.info b{ color:var(--paper); }
+footer.credit{ text-align:center; color:var(--muted); font-size:12.5px; padding:20px 0 30px; }
 </style>
 </head>
-
 <body>
-
-<header>
-<div class="logo">
-FormReady <span>India</span>
-</div>
-<a href="../">Home</a>
+<header class="topbar">
+  <div class="brand">FormReady <span>India</span></div>
+  <a href="/formready-india/index.html#tools">Home</a>
 </header>
-
+<a class="breadcrumb" href="/formready-india/index.html#tools">‹ Back to Tools</a>
 <div class="container">
-
-<a class="back" href="../">← Back to Tools</a>
-
-<div class="card">
-
-<h1>📄 Split PDF</h1>
-
-<p class="sub">
-Extract selected pages from a PDF and download them as a new PDF.
-</p>
-
-<div class="upload">
-
-<label class="choose" for="pdfFile">
-📄 Choose PDF
-</label>
-
-<input
-id="pdfFile"
-type="file"
-accept="application/pdf,.pdf"
->
-
-<p>Select your PDF file</p>
-
+  <div class="card">
+    <div class="card-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="4" y1="13" x2="20" y2="13" stroke-dasharray="2 2"/>
+        </svg>
+      </div>
+      <h1>Split PDF</h1>
+      <p>Extract selected pages from a PDF and download them as a new PDF.</p>
+    </div>
+    <div class="steps">
+      <div class="steps-title">How this works</div>
+      <div class="step-row"><div class="step-num">1</div><div>Choose your PDF file — its total page count will show up automatically.</div></div>
+      <div class="step-row"><div class="step-num">2</div><div>Set the <strong style="color:var(--paper)">From Page</strong> and <strong style="color:var(--paper)">To Page</strong> you want — or drag the slider.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div>Tap <strong style="color:var(--paper)">Split PDF</strong> — a new PDF with just those pages downloads automatically.</div></div>
+    </div>
+    <div class="upload-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      <p class="upload-title">Choose PDF</p>
+      <p class="upload-hint">Select your PDF file</p>
+      <label class="btn-choose" for="pdfFile">Browse Files</label>
+      <input id="pdfFile" type="file" accept="application/pdf,.pdf">
+    </div>
+    <div id="work">
+      <div class="file-info" id="fileInfo"></div>
+      <div class="grid">
+        <div class="field">
+          <label>From Page</label>
+          <input id="fromPage" type="number" min="1" value="1">
+        </div>
+        <div class="field">
+          <label>To Page</label>
+          <input id="toPage" type="number" min="1" value="1">
+        </div>
+      </div>
+      <div class="range-wrap">
+        <label>Drag to set "To Page"</label>
+        <input id="pageRange" type="range" min="1" max="1" value="1">
+      </div>
+      <div class="buttons">
+        <button class="primary" id="splitBtn">Split PDF</button>
+        <button class="secondary" id="resetBtn">Reset</button>
+      </div>
+      <div class="status" id="status"></div>
+      <div class="info">
+        <b>Example:</b> If your PDF has 10 pages and you enter From Page <b>3</b> and To Page <b>7</b>, the downloaded PDF will contain pages 3–7 (5 pages total).
+      </div>
+    </div>
+  </div>
+  <footer class="credit">Built with Termux · hosted on GitHub Pages</footer>
 </div>
 
-<div id="work">
-
-<div class="file-info" id="fileInfo"></div>
-
-<div class="grid">
-
-<div class="field">
-<label>From Page</label>
-<input id="fromPage" type="number" min="1" value="1">
-</div>
-
-<div class="field">
-<label>To Page</label>
-<input id="toPage" type="number" min="1" value="1">
-</div>
-
-</div>
-
-<div class="range">
-
-<label>
-Page range
-</label>
-
-<input
-id="pageRange"
-type="range"
-min="1"
-max="1"
-value="1"
->
-
-</div>
-
-<div class="buttons">
-
-<button class="primary" id="splitBtn">
-✂️ Split PDF
-</button>
-
-<button class="secondary" id="resetBtn">
-Reset
-</button>
-
-</div>
-
-<div class="status" id="status"></div>
-
-<div class="info">
-<b>Example:</b> If your PDF has 10 pages and you enter
-From Page <b>3</b> and To Page <b>7</b>, the downloaded PDF will contain pages 3–7.
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script src="/js/pdf-lib.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script>
-
-const pdfFile =
-document.getElementById("pdfFile");
-
-const work =
-document.getElementById("work");
-
-const fileInfo =
-document.getElementById("fileInfo");
-
-const fromPage =
-document.getElementById("fromPage");
-
-const toPage =
-document.getElementById("toPage");
-
-const pageRange =
-document.getElementById("pageRange");
-
-const splitBtn =
-document.getElementById("splitBtn");
-
-const resetBtn =
-document.getElementById("resetBtn");
-
-const status =
-document.getElementById("status");
+const pdfFile = document.getElementById("pdfFile");
+const work = document.getElementById("work");
+const fileInfo = document.getElementById("fileInfo");
+const fromPage = document.getElementById("fromPage");
+const toPage = document.getElementById("toPage");
+const pageRange = document.getElementById("pageRange");
+const splitBtn = document.getElementById("splitBtn");
+const resetBtn = document.getElementById("resetBtn");
+const status = document.getElementById("status");
 
 let selectedFile = null;
 let totalPages = 0;
+let pdfDocInstance = null;
 
-
-/* Select PDF */
+function setStatus(message, type){
+  status.textContent = message;
+  status.className = "status show " + (type || "");
+}
 
 pdfFile.addEventListener("change", async function(){
+  selectedFile = this.files[0];
+  if(!selectedFile) return;
 
-selectedFile = this.files[0];
+  try{
+    const bytes = await selectedFile.arrayBuffer();
+    pdfDocInstance = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
+    totalPages = pdfDocInstance.getPageCount();
 
-if(!selectedFile){
-return;
-}
+    fileInfo.innerHTML = `<strong>Selected:</strong> ${selectedFile.name} (${totalPages} pages)`;
+    fromPage.max = totalPages;
+    toPage.max = totalPages;
+    toPage.value = totalPages;
+    fromPage.value = 1;
+    pageRange.max = totalPages;
+    pageRange.value = totalPages;
 
-try{
-
-const bytes =
-await selectedFile.arrayBuffer();
-
-const pdf =
-await PDFLib.PDFDocument.load(bytes);
-
-totalPages =
-pdf.getPageCount();
-
-fromPage.max =
-totalPages;
-
-toPage.max =
-totalPages;
-
-pageRange.max =
-totalPages;
-
-fromPage.value =
-1;
-
-toPage.value =
-totalPages;
-
-pageRange.value =
-totalPages;
-
-fileInfo.innerHTML =
-"<b>File:</b> "
-+
-escapeHtml(selectedFile.name)
-+
-"<br>"
-+
-"<b>Pages:</b> "
-+
-totalPages
-+
-"<br>"
-+
-"<b>Size:</b> "
-+
-formatBytes(selectedFile.size);
-
-work.style.display =
-"block";
-
-status.textContent =
-"PDF loaded successfully.";
-
-}catch(error){
-
-alert(
-"Could not read this PDF. It may be damaged or password protected."
-);
-
-}
-
+    work.style.display = "block";
+    setStatus(`Loaded successfully! Select page range to split.`, "success");
+  } catch(err){
+    console.error(err);
+    alert("Could not read this PDF. It may be damaged or password protected.");
+  }
 });
 
-
-/* Range control */
-
-pageRange.addEventListener(
-"input",
-function(){
-
-toPage.value =
-this.value;
-
-}
-);
-
-
-/* To page */
-
-toPage.addEventListener(
-"input",
-function(){
-
-let value =
-parseInt(this.value);
-
-if(
-isNaN(value)
-)value=1;
-
-if(value>totalPages)
-value=totalPages;
-
-if(value<1)
-value=1;
-
-this.value=value;
-
-pageRange.value=value;
-
-}
-);
-
-
-/* Split */
-
-splitBtn.addEventListener(
-"click",
-async function(){
-
-if(!selectedFile){
-
-alert("Please choose a PDF first.");
-
-return;
-
-}
-
-let start =
-parseInt(fromPage.value);
-
-let end =
-parseInt(toPage.value);
-
-if(
-start<1 ||
-end>totalPages ||
-start>end
-){
-
-alert("Please enter a valid page range.");
-
-return;
-
-}
-
-try{
-
-splitBtn.disabled =
-true;
-
-splitBtn.textContent =
-"⏳ Creating PDF...";
-
-status.textContent =
-"Processing pages...";
-
-
-const bytes =
-await selectedFile.arrayBuffer();
-
-const source =
-await PDFLib.PDFDocument.load(bytes);
-
-const output =
-await PDFLib.PDFDocument.create();
-
-
-const indexes=[];
-
-for(
-let i=start-1;
-i<end;
-i++
-){
-
-indexes.push(i);
-
-}
-
-
-const pages =
-await output.copyPages(
-source,
-indexes
-);
-
-
-pages.forEach(
-page=>{
-output.addPage(page);
-}
-);
-
-
-const pdfBytes =
-await output.save();
-
-
-const blob =
-new Blob(
-[pdfBytes],
-{
-type:"application/pdf"
-}
-);
-
-
-const url =
-URL.createObjectURL(blob);
-
-
-const link =
-document.createElement("a");
-
-link.href =
-url;
-
-link.download =
-"formready-split-pages-" +
-start +
-"-" +
-end +
-".pdf";
-
-document.body.appendChild(link);
-
-link.click();
-
-link.remove();
-
-
-setTimeout(
-()=>{
-URL.revokeObjectURL(url);
-},
-2000
-);
-
-
-status.textContent =
-"✅ Split PDF created successfully. Download started.";
-
-}catch(error){
-
-console.error(error);
-
-status.textContent =
-"❌ Something went wrong.";
-
-alert(
-"Could not create the split PDF."
-);
-
-}
-
-
-splitBtn.disabled =
-false;
-
-splitBtn.textContent =
-"✂️ Split PDF";
-
+pageRange.addEventListener("input", function(){
+  toPage.value = this.value;
 });
 
+toPage.addEventListener("input", function(){
+  pageRange.value = this.value;
+});
 
-/* Reset */
+splitBtn.addEventListener("click", async function(){
+  const start = parseInt(fromPage.value, 10);
+  const end = parseInt(toPage.value, 10);
 
-resetBtn.addEventListener(
-"click",
-function(){
+  if(isNaN(start) || isNaN(end) || start < 1 || end > totalPages || start > end){
+    alert(`Please select a valid page range between 1 and ${totalPages}.`);
+    return;
+  }
 
-pdfFile.value =
-"";
+  splitBtn.disabled = true;
+  setStatus("Splitting PDF, please wait...", "");
 
-selectedFile =
-null;
+  try{
+    const newPdf = await PDFLib.PDFDocument.create();
+    const pageIndices = [];
+    for(let i = start - 1; i < end; i++){
+      pageIndices.push(i);
+    }
 
-totalPages =
-0;
+    const copiedPages = await newPdf.copyPages(pdfDocInstance, pageIndices);
+    copiedPages.forEach(p => newPdf.addPage(p));
 
-work.style.display =
-"none";
+    const newPdfBytes = await newPdf.save();
+    const blob = new Blob([newPdfBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `split_${start}-${end}_${selectedFile.name}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 
-status.textContent =
-"";
+    setStatus(`Success! Pages ${start} to ${end} downloaded.`, "success");
+  } catch(e){
+    console.error(e);
+    alert("An error occurred while splitting the PDF: " + e.message);
+    setStatus("Error splitting PDF.", "error");
+  } finally {
+    splitBtn.disabled = false;
+  }
+});
 
-}
-);
-
-
-/* Helpers */
-
-function formatBytes(bytes){
-
-if(bytes===0)
-return "0 Bytes";
-
-const units=[
-"Bytes",
-"KB",
-"MB",
-"GB"
-];
-
-const i =
-Math.floor(
-Math.log(bytes) /
-Math.log(1024)
-);
-
-return (
-bytes/
-Math.pow(1024,i)
-).toFixed(2)
-+
-" "
-+
-units[i];
-
-}
-
-
-function escapeHtml(text){
-
-return text
-.replaceAll("&","&amp;")
-.replaceAll("<","&lt;")
-.replaceAll(">","&gt;")
-.replaceAll('"',"&quot;")
-.replaceAll("'","&#039;");
-
-}
-
+resetBtn.addEventListener("click", function(){
+  selectedFile = null;
+  pdfDocInstance = null;
+  pdfFile.value = "";
+  work.style.display = "none";
+  status.className = "status";
+});
 </script>
-
 </body>
 </html>

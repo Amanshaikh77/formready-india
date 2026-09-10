@@ -1,133 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FormReady India - Fast, Simple & Private Toolbox</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    body {
-      background-color: #0f172a;
-      color: #f8fafc;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #1e293b;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #334155;
-    }
-    .logo {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: #38bdf8;
-    }
-    .nav-links a {
-      color: #94a3b8;
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.9rem;
-    }
-    .main-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-    .search-box {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto 2rem auto;
-      display: block;
-      padding: 0.75rem 1rem;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 0.5rem;
-      color: white;
-      font-size: 1rem;
-    }
-    .section-title {
-      font-size: 1.1rem;
-      color: #38bdf8;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid #334155;
-      padding-bottom: 0.5rem;
-    }
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .tool-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 0.75rem;
-      padding: 1.25rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    .tool-card:hover {
-      border-color: #38bdf8;
-      transform: translateY(-2px);
-    }
-    .tool-title {
-      font-weight: bold;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-      color: #f1f5f9;
-    }
-    .tool-desc {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      margin-bottom: 1rem;
-    }
-    .badge {
-      display: inline-block;
-      background: #065f46;
-      color: #34d399;
-      padding: 0.2rem 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.75rem;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FormReady India - All-in-One Offline Document &amp; Photo Toolbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  text-align: center;
+  max-width: 800px;
+  margin: 30px auto 20px;
+}
+header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  color: var(--amber);
+  margin-bottom: 8px;
+}
+header p {
+  font-size: 14px;
+  color: var(--muted);
+}
+.search-container {
+  max-width: 600px;
+  margin: 0 auto 20px;
+  padding: 0 16px;
+  width: 100%;
+}
+.search-input {
+  width: 100%;
+  padding: 12px 18px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 14.5px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-input:focus { border-color: var(--amber); }
+.category-wrapper {
+  max-width: 1100px;
+  margin: 0 auto 24px;
+  padding: 0 16px;
+  width: 100%;
+}
+.category-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+}
+.category-tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  background: var(--panel);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab-btn:hover { border-color: var(--amber); color: #fff; }
+.tab-btn.active {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #151210;
+}
+.category-section {
+  max-width: 1100px;
+  margin: 0 auto 36px;
+  padding: 0 16px;
+  width: 100%;
+}
+.category-header {
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+}
+.category-title { font-size: 18px; color: var(--paper); font-family: 'Space Grotesk', sans-serif; }
+.category-desc { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.tool-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.tool-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--amber);
+}
+.tool-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.tool-icon {
+  font-size: 20px;
+  background: var(--panel-2);
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.tool-info h3 { font-size: 15px; color: var(--paper); margin-bottom: 4px; }
+.tool-info p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.tool-badge {
+  align-self: flex-start;
+  margin-top: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.badge-ready { background: rgba(46, 160, 67, 0.2); color: #3fb950; border: 1px solid rgba(46, 160, 67, 0.4); }
+.badge-upcoming { background: rgba(217, 154, 63, 0.15); color: var(--amber); border: 1px solid rgba(217, 154, 63, 0.3); }
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  margin-top: auto;
+}
+</style>
 </head>
 <body>
-  <header>
-    <div class="logo">FormReady India</div>
-    <div class="nav-links">
-      <a href="#">Tools</a>
-      <a href="#">About</a>
-    </div>
-  </header>
-
-  <div class="main-container">
-    <input type="text" class="search-box" placeholder="🔍 Search any tool (e.g. Signature, PDF)...">
-
-    <div class="section-title">⚡ Image & Photo Utilities</div>
-    <div class="tools-grid">
-      <a href="signature.html" class="tool-card">
-        <div class="tool-title">✍️ Signature Maker</div>
-        <div class="tool-desc">Draw, smooth, and export transparent digital signatures to JPG & PDF.</div>
-        <span class="badge">ACTIVE TOOL</span>
-      </a>
-    </div>
-
-    <div class="section-title">📄 PDF Tools & Editors</div>
-    <div class="tools-grid">
-      <a href="pdf-editor.html" class="tool-card">
-        <div class="tool-title">📑 PDF Text Inspector & Editor</div>
-        <div class="tool-desc">Edit text, handle anti-overlap layout reflow, and export edited PDFs.</div>
-        <span class="badge">ACTIVE TOOL</span>
-      </a>
-    </div>
+<header>
+  <h1>FormReady India</h1>
+  <p>Fast, Simple, Mobile-Friendly &amp; 100% Private Client-Side Toolbox</p>
+</header>
+<div class="search-container">
+  <input type="search" id="searchInput" class="search-input" placeholder="🔍 Search any tool...">
+</div>
+<div class="category-wrapper">
+  <div class="category-tabs" id="categoryTabs">
+    <button class="tab-btn active" data-filter="all">🌟 All Tools</button>
+    <button class="tab-btn" data-filter="photo">📸 Image &amp; Photo</button>
+    <button class="tab-btn" data-filter="govt">🪪 Govt Form &amp; ID</button>
+    <button class="tab-btn" data-filter="pdf">📄 PDF Tools</button>
+    <button class="tab-btn" data-filter="text">📝 Text Utilities</button>
+    <button class="tab-btn" data-filter="calculators">🧮 Calculators</button>
   </div>
+</div>
+<div id="catalogContainer"></div>
+<footer>
+  &copy; 2026 FormReady India. Zero Server Uploads — 100% Secure Local Processing.
+</footer>
+<script>
+const activeToolsList = [
+  "Image Format Converter", "Photo Cropper", "Photo Resizer", "Photo Compressor", 
+  "Passport Photo Maker", "Photo Sheet Maker", "Background Remover", "Signature Maker", "Image to Text (OCR)",
+  "Aadhaar / PAN Photo Resizer", "Signature Resizer & Enhancer", "Passport Photo + Sign Card", 
+  "Document Scanner", "Govt Form PDF Helper",
+  "PDF Text Inspector & Editor", "Merge PDF", "Split PDF", "JPG to PDF", "PDF to JPG", "Compress PDF", "Rotate PDF"
+];
+
+const toolsCatalog = [
+  {
+    category: "photo",
+    categoryTitle: "📸 Image & Photo Utilities",
+    categoryDesc: "High-resolution photo editing, precision cropping, and background tools",
+    tools: [
+      { name: "Image Format Converter", desc: "Instant format swap: JPG, PNG, and WebP", icon: "🔄", link: "tools/image-converter/" },
+      { name: "Photo Cropper", desc: "Touch-friendly precision aspect-ratio cropper", icon: "✂️", link: "tools/photo-cropper/" },
+      { name: "Photo Resizer", desc: "Resize dimensions in pixels, cm, or mm directly", icon: "📐", link: "tools/photo-resizer/" },
+      { name: "Photo Compressor", desc: "Shrink photo KB/MB size while maintaining resolution", icon: "🗜️", link: "tools/photo-compressor/" },
+      { name: "Passport Photo Maker", desc: "Govt standard passport photos with clean backgrounds", icon: "👤", link: "tools/passport-photo/" },
+      { name: "Photo Sheet Maker", desc: "Printable A4 grid sheets with multiple photo copies", icon: "🖨️", link: "tools/photo-sheet/" },
+      { name: "Background Remover", desc: "Client-side transparent background cutter", icon: "🪄", link: "tools/background-remover/" },
+      { name: "Signature Maker", desc: "Draw, smooth, and export transparent digital signatures", icon: "✍️", link: "tools/signature-maker/" },
+      { name: "Image to Text (OCR)", desc: "Copy text directly from any picture or screenshot", icon: "👁️", link: "tools/image-to-text/" }
+    ]
+  },
+  {
+    category: "govt",
+    categoryTitle: "🪪 Indian Govt Form & ID Utilities",
+    categoryDesc: "Official Indian exam & recruitment portal formats (SSC, UPSC, State IDs)",
+    tools: [
+      { name: "Aadhaar / PAN Photo Resizer", desc: "Strict 200x230 px & size limit crop/resizer", icon: "🪪", link: "tools/pan-photo-resizer/" },
+      { name: "Signature Resizer & Enhancer", desc: "Strict size limit with contrast booster for portal upload", icon: "✍️", link: "tools/signature-resizer/" },
+      { name: "Passport Photo + Sign Card", desc: "Merge identity photo and signature onto one frame", icon: "👥", link: "tools/photo-sign-card/" },
+      { name: "Document Scanner", desc: "Camera scan with high-contrast B&W clean doc filter", icon: "📄", link: "tools/document-scanner/" },
+      { name: "Govt Form PDF Helper", desc: "Compress and fit PDF strictly under required portal limits", icon: "📋", link: "tools/govt-pdf-helper/" }
+    ]
+  },
+  {
+    category: "pdf",
+    categoryTitle: "📄 PDF Tools & Editors",
+    categoryDesc: "Client-side private PDF manipulation, inspection, and redaction",
+    tools: [
+      { name: "PDF Text Inspector & Editor", desc: "Edit text, redactions, auto-font detect on digital & scanned PDFs", icon: "📝", link: "tools/pdf-editor/" },
+      { name: "Merge PDF", desc: "Combine multiple PDF documents into one ordered file", icon: "📑", link: "tools/merge-pdf/" },
+      { name: "Split PDF", desc: "Extract pages or custom page ranges into a new PDF", icon: "✂️", link: "tools/split-pdf/" },
+      { name: "JPG to PDF", desc: "Convert photo image files into multi-page PDFs", icon: "🖼️", link: "tools/jpg-to-pdf/" },
+      { name: "PDF to JPG", desc: "Extract high-resolution JPG images from PDF pages", icon: "📸", link: "tools/pdf-to-jpg/" },
+      { name: "Compress PDF", desc: "Client-side file size compressor keeping clarity intact", icon: "🗜️", link: "tools/compress-pdf/" },
+      { name: "Rotate PDF", desc: "Fix orientation of 90°, 180°, or inverted pages", icon: "🔄", link: "tools/rotate-pdf/" },
+      { name: "PDF Page Organizer", desc: "Drag to reorder pages or delete unwanted sheets", icon: "📑", link: "tools/pdf-page-organizer/" },
+      { name: "Add Watermark", desc: "Stamp confidential or custom text/logo over PDF", icon: "💧", link: "tools/add-watermark/" }
+    ]
+  },
+  {
+    category: "text",
+    categoryTitle: "📝 Text, Code & Content Tools",
+    categoryDesc: "Quick string formatters, counters, and offline code utilities",
+    tools: [
+      { name: "Word & Character Counter", desc: "Real-time count of words, characters, and reading time", icon: "🔢", link: "tools/word-counter/" },
+      { name: "Case Converter", desc: "Toggle UPPERCASE, lowercase, Title Case & camelCase", icon: "🔤", link: "tools/case-converter/" },
+      { name: "Text Cleaner", desc: "Strip accidental double spaces, tabs, and blank lines", icon: "🧹", link: "tools/text-cleaner/" },
+      { name: "QR Code Generator", desc: "Create QR codes for links, UPI payments, and Wi-Fi", icon: "🏁", link: "tools/qr-generator/" },
+      { name: "Barcode Generator", desc: "Generate standard barcodes easily", icon: "|||", link: "tools/barcode-generator/" },
+      { name: "Text to PDF / Image", desc: "Convert plain text notes into a printable document", icon: "📄", link: "tools/text-to-pdf/" },
+      { name: "Lorem Ipsum Generator", desc: "Generate placeholder text for layouts and forms", icon: "📜", link: "tools/lorem-generator/" }
+    ]
+  },
+  {
+    category: "calculators",
+    categoryTitle: "🧮 Daily & Finance Calculators",
+    categoryDesc: "Instant eligibility calculations, loan EMI, GST, and daily math tools",
+    tools: [
+      { name: "Govt Form Age Calculator", desc: "Calculate exact age as on notification date (Y/M/D)", icon: "🎂", link: "tools/age-calculator/" },
+      { name: "GST Calculator", desc: "Breakdown CGST, SGST & total amount addition or removal", icon: "📊", link: "tools/gst-calculator/" },
+      { name: "EMI Calculator", desc: "Calculate monthly installments and total loan interest", icon: "💳", link: "tools/emi-calculator/" },
+      { name: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins", icon: "🏷️", link: "tools/percentage-calculator/" },
+      { name: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators", icon: "⚖️", link: "tools/bmi-calculator/" },
+      { name: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates", icon: "📅", link: "tools/date-gap-calculator/" },
+      { name: "Unit Converter", desc: "Convert Land, Weight, Length & Units", icon: "📐", link: "tools/unit-converter/" },
+      { name: "Currency Converter", desc: "Quick currency rate estimations and conversions", icon: "💱", link: "tools/currency-converter/" }
+    ]
+  }
+];
+
+function renderCatalog(filter = "all", query = "") {
+  const container = document.getElementById("catalogContainer");
+  container.innerHTML = "";
+  const q = query.trim().toLowerCase();
+
+  toolsCatalog.forEach(cat => {
+    if (filter !== "all" && cat.category !== filter) return;
+    const matchedTools = cat.tools.filter(t => 
+      t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)
+    );
+    if (matchedTools.length === 0) return;
+
+    const section = document.createElement("section");
+    section.className = "category-section";
+    section.innerHTML = `
+      <div class="category-header">
+        <h2 class="category-title">${cat.categoryTitle}</h2>
+        <p class="category-desc">${cat.categoryDesc}</p>
+      </div>
+      <div class="tools-grid">
+        ${matchedTools.map(t => {
+          const isActive = activeToolsList.includes(t.name);
+          return `
+            <a href="${isActive ? t.link : '#'}" class="tool-card" ${!isActive ? 'onclick="event.preventDefault(); alert(\'' + t.name + ' is Coming Soon!\');"' : ''}>
+              <div class="tool-card-head">
+                <span class="tool-icon">${t.icon}</span>
+                <div class="tool-info">
+                  <h3>${t.name}</h3>
+                  <p>${t.desc}</p>
+                </div>
+              </div>
+              <span class="tool-badge ${isActive ? 'badge-ready' : 'badge-upcoming'}">${isActive ? 'Active Tool' : 'Coming Soon'}</span>
+            </a>
+          `;
+        }).join("")}
+      </div>
+    `;
+    container.appendChild(section);
+  });
+}
+
+let activeFilter = "all";
+const searchInput = document.getElementById("searchInput");
+
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeFilter = btn.dataset.filter;
+    renderCatalog(activeFilter, searchInput.value);
+  });
+});
+
+searchInput.addEventListener("input", (e) => {
+  renderCatalog(activeFilter, e.target.value);
+});
+
+renderCatalog();
+</script>
 </body>
 </html>

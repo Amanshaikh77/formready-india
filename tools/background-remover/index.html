@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Background Remover - FormReady India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --panel-2: #262019;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-bright: #f0b158;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+  --green: #2ea043;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.nav-bar { max-width: 700px; margin: 0 auto 20px; width: 100%; }
+.back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
+.header p { font-size: 13px; color: var(--muted); }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 700px;
+  margin: 0 auto 24px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.instructions-box {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--amber);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.instructions-box h3 {
+  font-size: 13.5px;
+  color: var(--amber);
+  font-family: 'Space Grotesk', sans-serif;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.instructions-box ol { padding-left: 18px; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.instructions-box li { margin-bottom: 3px; }
+.upload-zone {
+  border: 2px dashed var(--line);
+  padding: 28px 16px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--panel-2);
+  transition: border-color 0.2s;
+  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+}
+.upload-zone:hover { border-color: var(--amber); }
+#fileInput { display: none; }
+.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; pointer-events: none; }
+.upload-text b { color: var(--amber); }
+
+.options-group { margin-bottom: 16px; }
+.options-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+.input-select, .color-picker, .range-input {
+  width: 100%; padding: 12px 14px; background: var(--panel-2); border: 1px solid var(--line); color: var(--paper); border-radius: 8px; font-size: 14px; outline: none;
+}
+.color-picker { height: 45px; padding: 4px; cursor: pointer; }
+.range-input { padding: 4px 0; accent-color: var(--amber); cursor: pointer; }
+
+.action-row { display: flex; gap: 10px; margin-bottom: 20px; }
+.btn { background: var(--amber); color: #151210; border: none; width: 100%; padding: 14px; border-radius: 9px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+.btn:hover { background: var(--amber-bright); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-download { background: var(--green); color: #fff; text-align: center; text-decoration: none; display: none; width: 100%; margin-top: 12px; }
+.btn-download:hover { background: #3fb950; }
+
+.result-container {
+  display: none;
+  margin-top: 20px;
+  text-align: center;
+}
+.canvas-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background-image: linear-gradient(45deg, #262019 25%, transparent 25%), linear-gradient(-45deg, #262019 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #262019 75%), linear-gradient(-45deg, transparent 75%, #262019 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  background-color: #1e1a17;
+  margin-bottom: 12px;
+}
+#resultCanvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  cursor: crosshair;
+  touch-action: none;
+}
+.eraser-tools {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  background: var(--panel-2);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.eraser-tools label { font-size: 12px; color: var(--muted); margin: 0; }
+.btn-undo {
+  background: var(--panel);
+  color: var(--amber);
+  border: 1px solid var(--amber);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-undo:hover { background: var(--amber); color: #151210; }
+.status-msg { font-size: 13px; color: var(--amber); margin-bottom: 12px; font-weight: 500; }
+
+.ad-container { margin-top: 24px; background: var(--panel-2); border: 1px dashed var(--line); border-radius: 10px; padding: 16px; text-align: center; }
+.ad-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+.ad-banner { font-size: 12.5px; color: var(--muted); padding: 10px; }
+footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: auto; }
+</style>
+</head>
+<body>
+<div class="nav-bar"><a href="../../" class="back-btn">← Back to Dashboard</a></div>
+<div class="header"><h1>Background Remover</h1><p>Remove background automatically + Manual Eraser Brush with Undo support</p></div>
+<div class="card">
+  <div class="instructions-box">
+    <h3>📖 How to Use Background Remover</h3>
+    <ol>
+      <li>Upload a portrait or object image.</li>
+      <li>Tap <b>Remove Background</b> for AI processing.</li>
+      <li>Use the <b>Eraser Brush</b> to remove any leftover spots around the collar or shoulders. If you make a mistake, tap <b>↩️ Undo</b>.</li>
+      <li>Select background color and download.</li>
+    </ol>
+  </div>
+  <label class="upload-zone">
+    <input type="file" id="fileInput" accept="image/*">
+    <div class="upload-text">📁 Tap here to upload image<br><b>JPG, PNG, WebP supported</b></div>
+  </label>
+
+  <div class="options-group">
+    <label>Background Style:</label>
+    <select id="bgStyleSelect" class="input-select">
+      <option value="transparent">Transparent (PNG)</option>
+      <option value="white">Solid White</option>
+      <option value="black">Solid Black</option>
+      <option value="custom">Custom Color Picker</option>
+    </select>
+  </div>
+
+  <div class="options-group" id="customColorGroup" style="display:none;">
+    <label>Select Custom Background Color:</label>
+    <input type="color" id="customColorPicker" class="color-picker" value="#3b82f6">
+  </div>
+
+  <button class="btn" id="removeBtn" disabled>Remove Background</button>
+
+  <div class="result-container" id="resultContainer">
+    <div class="status-msg" id="statusMsg">Processing image with AI... Please wait.</div>
+    
+    <div class="eraser-tools">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:12.5px; color:var(--paper); font-weight:600;">🧹 Brush Size:</span>
+        <input type="range" id="brushSize" class="range-input" min="5" max="50" value="20" style="width:90px;">
+      </div>
+      <button class="btn-undo" id="undoBtn">↩️ Undo</button>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="resultCanvas"></canvas>
+    </div>
+
+    <a id="downloadLink" style="display:none; text-decoration:none;"><button class="btn btn-download" id="downloadBtn">📥 Download Result Image</button></a>
+  </div>
+
+  <div class="ad-container"><div class="ad-label">Sponsored Advertisement</div><div class="ad-banner">📢 Advertisement Space (Google AdSense / Banner Placeholder)</div></div>
+</div>
+<footer>&copy; 2026 FormReady India. 100% Secure Client-Side Processing.</footer>
+<script type="module">
+import { removeBackground } from 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.3/+esm';
+
+const fileInput = document.getElementById("fileInput");
+const bgStyleSelect = document.getElementById("bgStyleSelect");
+const customColorGroup = document.getElementById("customColorGroup");
+const customColorPicker = document.getElementById("customColorPicker");
+const brushSizeInput = document.getElementById("brushSize");
+const undoBtn = document.getElementById("undoBtn");
+const removeBtn = document.getElementById("removeBtn");
+const resultContainer = document.getElementById("resultContainer");
+const statusMsg = document.getElementById("statusMsg");
+const resultCanvas = document.getElementById("resultCanvas");
+const downloadBtn = document.getElementById("downloadBtn");
+const downloadLink = document.getElementById("downloadLink");
+
+let selectedFile = null;
+let originalName = "";
+let aiProcessedImg = null;
+let historyStack = [];
+let isDrawing = false;
+
+bgStyleSelect.addEventListener("change", () => {
+  customColorGroup.style.display = bgStyleSelect.value === "custom" ? "block" : "none";
+  if (aiProcessedImg) redrawCanvas();
+});
+
+customColorPicker.addEventListener("input", () => {
+  if (aiProcessedImg) redrawCanvas();
+});
+
+fileInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  selectedFile = file;
+  originalName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+  removeBtn.disabled = false;
+  statusMsg.textContent = "Image ready. Tap 'Remove Background' to start.";
+  resultContainer.style.display = "block";
+  downloadLink.style.display = "none";
+  historyStack = [];
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      resultCanvas.width = img.width;
+      resultCanvas.height = img.height;
+      const ctx = resultCanvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+removeBtn.addEventListener("click", async () => {
+  if (!selectedFile) return;
+
+  removeBtn.disabled = true;
+  statusMsg.textContent = "⏳ Loading AI model & removing background (First run may take 10-20s)...";
+  downloadLink.style.display = "none";
+
+  try {
+    const blobWithoutBg = await removeBackground(selectedFile);
+    const url = URL.createObjectURL(blobWithoutBg);
+    const img = new Image();
+    img.onload = () => {
+      aiProcessedImg = img;
+      historyStack = [];
+      saveState(); // Save initial AI state for undo
+      redrawCanvas();
+      statusMsg.textContent = "✅ Background removed! Use eraser brush or undo if needed.";
+      removeBtn.disabled = false;
+    };
+    img.src = url;
+  } catch (err) {
+    console.error(err);
+    statusMsg.textContent = "❌ Error removing background. Please try another image.";
+    removeBtn.disabled = false;
+  }
+});
+
+function saveState() {
+  if (!aiProcessedImg) return;
+  historyStack.push(aiProcessedImg.src);
+  if (historyStack.length > 15) historyStack.shift(); // Keep last 15 states max
+}
+
+undoBtn.addEventListener("click", () => {
+  if (historyStack.length <= 1) {
+    statusMsg.textContent = "ℹ️ Nothing more to undo.";
+    return;
+  }
+  historyStack.pop(); // Remove current state
+  const prevSrc = historyStack[historyStack.length - 1]; // Get previous state
+  const img = new Image();
+  img.onload = () => {
+    aiProcessedImg = img;
+    redrawCanvas();
+    statusMsg.textContent = "↩️ Last erase action undone.";
+  };
+  img.src = prevSrc;
+});
+
+function redrawCanvas() {
+  if (!aiProcessedImg) return;
+  resultCanvas.width = aiProcessedImg.width;
+  resultCanvas.height = aiProcessedImg.height;
+  const ctx = resultCanvas.getContext("2d");
+
+  const style = bgStyleSelect.value;
+  if (style === "white") {
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, resultCanvas.width, resultCanvas.height);
+  } else if (style === "black") {
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, resultCanvas.width, resultCanvas.height);
+  } else if (style === "custom") {
+    ctx.fillStyle = customColorPicker.value;
+    ctx.fillRect(0, 0, resultCanvas.width, resultCanvas.height);
+  }
+
+  ctx.drawImage(aiProcessedImg, 0, 0);
+  updateDownloadLink();
+}
+
+function getMousePos(canvas, evt) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+  const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+  return {
+    x: (clientX - rect.left) * scaleX,
+    y: (clientY - rect.top) * scaleY
+  };
+}
+
+function eraseAt(x, y) {
+  if (!aiProcessedImg) return;
+  const radius = parseInt(brushSizeInput.value, 10) * (resultCanvas.width / resultCanvas.clientWidth);
+
+  const tempCanvas = document.createElement("canvas");
+  tempCanvas.width = aiProcessedImg.width;
+  tempCanvas.height = aiProcessedImg.height;
+  const tCtx = tempCanvas.getContext("2d");
+  tCtx.drawImage(aiProcessedImg, 0, 0);
+
+  tCtx.globalCompositeOperation = "destination-out";
+  tCtx.beginPath();
+  tCtx.arc(x, y, radius, 0, Math.PI * 2);
+  tCtx.fill();
+
+  const newImg = new Image();
+  newImg.onload = () => {
+    aiProcessedImg = newImg;
+    saveState(); // Save state after stroke completes or updates
+    redrawCanvas();
+  };
+  newImg.src = tempCanvas.toDataURL("image/png");
+}
+
+resultCanvas.addEventListener("mousedown", (e) => { isDrawing = true; const pos = getMousePos(resultCanvas, e); eraseAt(pos.x, pos.y); });
+resultCanvas.addEventListener("mousemove", (e) => { if (!isDrawing) return; const pos = getMousePos(resultCanvas, e); eraseAt(pos.x, pos.y); });
+window.addEventListener("mouseup", () => { isDrawing = false; });
+
+resultCanvas.addEventListener("touchstart", (e) => { isDrawing = true; const pos = getMousePos(resultCanvas, e); eraseAt(pos.x, pos.y); e.preventDefault(); });
+resultCanvas.addEventListener("touchmove", (e) => { if (!isDrawing) return; const pos = getMousePos(resultCanvas, e); eraseAt(pos.x, pos.y); e.preventDefault(); });
+window.addEventListener("touchend", () => { isDrawing = false; });
+
+function updateDownloadLink() {
+  const style = bgStyleSelect.value;
+  const outputMime = style === "transparent" ? "image/png" : "image/jpeg";
+  const ext = style === "transparent" ? "png" : "jpg";
+
+  resultCanvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = `${originalName}-cleaned.${ext}`;
+    downloadLink.style.display = "block";
+    downloadBtn.textContent = `📥 Download Result Image (${Math.round(blob.size / 1024)} KB)`;
+  }, outputMime, 0.95);
+}
+</script>
+</body>
+</html>
