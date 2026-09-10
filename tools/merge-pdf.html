@@ -12,6 +12,7 @@
   --panel: #1e1a17;
   --line: #39322b;
   --amber: #d99a3f;
+  --amber-hover: #c48733;
   --paper: #f2ece2;
   --muted: #a89a89;
   --card-bg: #14110f;
@@ -23,38 +24,67 @@ body {
   color: var(--paper);
   font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 14px;
+  padding: 14px 10px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   touch-action: pan-y;
 }
-.wrapper { width: 100%; max-width: 540px; }
-@media (min-width: 768px) { .wrapper { max-width: 740px; } }
+.wrapper { width: 100%; max-width: 580px; }
+@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+
 .back-link {
   color: var(--amber);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
-  padding: 18px;
+  padding: 18px 16px;
   border-radius: 12px;
   width: 100%;
   margin-bottom: 14px;
 }
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; }
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
 .subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+
+/* How to Use Box */
+.how-to-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* Upload Box */
 .upload-box {
   border: 2px dashed var(--amber);
-  background: rgba(217, 154, 63, 0.05);
+  background: rgba(217, 154, 63, 0.04);
   border-radius: 10px;
-  padding: 22px 14px;
+  padding: 24px 14px;
   text-align: center;
   cursor: pointer;
   margin-bottom: 16px;
@@ -62,10 +92,14 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  transition: background 0.2s;
 }
-.upload-box span { color: var(--amber); font-weight: 600; font-size: 14px; }
+.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
 .upload-box small { color: var(--muted); font-size: 11px; }
-.item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+/* File List & Controls */
+.item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
 .item-row {
   background: var(--card-bg);
   border: 1px solid var(--line);
@@ -74,34 +108,44 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  font-size: 12.5px;
 }
-.item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 65%; }
-.row-actions { display: flex; gap: 6px; }
+.item-meta { display: flex; flex-direction: column; gap: 2px; overflow: hidden; max-width: 65%; }
+.item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.item-info { font-size: 10.5px; color: var(--muted); }
+.row-actions { display: flex; gap: 5px; }
 .mini-btn {
   background: #2a2420;
   color: var(--paper);
   border: 1px solid var(--line);
-  padding: 4px 8px;
+  padding: 5px 8px;
   border-radius: 4px;
   font-size: 11px;
   cursor: pointer;
 }
 .mini-btn:hover { background: var(--amber); color: var(--bg); }
 .mini-btn.del:hover { background: var(--danger); color: #fff; }
-.btn {
-  background: var(--amber);
-  color: var(--bg);
-  border: none;
-  padding: 12px;
+
+.summary-pill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #14110f;
+  border: 1px solid var(--line);
   border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--amber);
   font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  text-align: center;
-  width: 100%;
+  margin-bottom: 14px;
 }
-.btn:hover { opacity: 0.9; }
+
+.input-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+}
 .input-text {
   width: 100%;
   background: var(--card-bg);
@@ -114,108 +158,213 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
   outline: none;
 }
 .input-text:focus { border-color: var(--amber); }
-.grid-thumbs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
-  margin-top: 16px;
+
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  transition: opacity 0.2s;
 }
-.thumb-card {
+.btn:hover { opacity: 0.9; }
+
+/* Advertisement Box */
+.ad-card {
   background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 8px;
+  padding: 14px 10px;
+  text-align: center;
+  margin-top: 14px;
+}
+.ad-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  display: block;
+}
+.ad-content {
+  font-size: 11px;
+  color: var(--muted);
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 6px;
 }
-.thumb-card img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 4px; }
 </style>
 </head>
 <body>
 <div class="wrapper">
   <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
   <div class="card">
     <h2>Merge PDF</h2>
-    <div class="subtitle">Combine multiple PDF documents into one single file</div>
-    <input type="file" id="pdf-input" accept="application/pdf" multiple style="display:none">
-    <div class="upload-box" onclick="document.getElementById('pdf-input').click()">
-      <span>📑 Tap to Select PDF Files</span>
-      <small>Select 2 or more PDF files</small>
+    <div class="subtitle">Combine multiple PDF documents into a single organized file</div>
+
+    <!-- How to Use Box -->
+    <div class="how-to-box">
+      <div class="how-to-title">📄 How to Use Merge PDF</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload Files:</span> Tap the box below to select 2 or more PDF documents.</li>
+        <li>2. <span>Reorder Sequence:</span> Use the ▲ and ▼ buttons to set the page order.</li>
+        <li>3. <span>Review Count:</span> Verify total files and combined pages before merging.</li>
+        <li>4. <span>Download:</span> Tap Merge PDFs to save the combined document.</li>
+      </ol>
     </div>
-    <div class="item-list" id="pdf-list"></div>
-    <button class="btn" id="merge-btn" style="display:none">⚡ Merge and Download PDF</button>
+
+    <!-- Upload Box -->
+    <input type="file" id="pdf-input" accept="application/pdf" multiple style="display:none">
+    <div class="upload-box" id="upload-zone" onclick="document.getElementById('pdf-input').click()">
+      <span>📁 Tap here to upload PDFs or drag here</span>
+      <small>Supports multiple files (Batch selection enabled)</small>
+    </div>
+
+    <!-- Dynamic File List Stage -->
+    <div id="file-stage" style="display:none">
+      <div class="summary-pill">
+        <span id="summary-text">Total Files: 0 | Total Pages: 0</span>
+        <button type="button" class="mini-btn" onclick="document.getElementById('pdf-input').click()" style="color:var(--amber); border-color:var(--amber)">+ Add More</button>
+      </div>
+
+      <div class="item-list" id="pdf-list"></div>
+
+      <label class="input-label">Output File Name (Optional):</label>
+      <input type="text" id="output-name" class="input-text" value="merged_document.pdf" placeholder="e.g. final_application.pdf">
+
+      <button class="btn" id="merge-btn">⚡ Merge PDFs & Download</button>
+    </div>
+
+    <!-- Advertisement Placeholder -->
+    <div class="ad-card">
+      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
   </div>
 </div>
 <script>
-  let pdfs = [];
-  const input = document.getElementById('pdf-input');
-  const listEl = document.getElementById('pdf-list');
+  let pdfList = [];
+  const fileInput = document.getElementById('pdf-input');
+  const fileStage = document.getElementById('file-stage');
+  const pdfListEl = document.getElementById('pdf-list');
+  const summaryText = document.getElementById('summary-text');
+  const outputNameInput = document.getElementById('output-name');
   const mergeBtn = document.getElementById('merge-btn');
 
-  input.addEventListener('change', async (e) => {
-    for (const file of e.target.files) {
-      const buffer = await file.arrayBuffer();
-      pdfs.push({ name: file.name, buffer });
+  fileInput.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    for (const file of files) {
+      try {
+        const buffer = await file.arrayBuffer();
+        const doc = await PDFLib.PDFDocument.load(buffer, { ignoreEncryption: true });
+        const pageCount = doc.getPageCount();
+        const sizeKb = (file.size / 1024).toFixed(1);
+
+        pdfList.push({
+          id: Date.now() + Math.random(),
+          name: file.name,
+          buffer: buffer,
+          pages: pageCount,
+          size: sizeKb > 1024 ? (sizeKb / 1024).toFixed(2) + ' MB' : sizeKb + ' KB'
+        });
+      } catch (err) {
+        alert(`Could not load "${file.name}". Make sure it is not password protected.`);
+      }
     }
-    input.value = '';
+    fileInput.value = '';
     render();
   });
 
   function render() {
-    listEl.innerHTML = '';
-    pdfs.forEach((p, idx) => {
+    pdfListEl.innerHTML = '';
+    if (pdfList.length === 0) {
+      fileStage.style.display = 'none';
+      return;
+    }
+
+    fileStage.style.display = 'block';
+    const totalPages = pdfList.reduce((acc, cur) => acc + cur.pages, 0);
+    summaryText.textContent = `Total Files: ${pdfList.length} | Combined Pages: ${totalPages}`;
+
+    pdfList.forEach((item, idx) => {
       const row = document.createElement('div');
       row.className = 'item-row';
       row.innerHTML = `
-        <span class="item-name">${idx + 1}. ${p.name}</span>
+        <div class="item-meta">
+          <span class="item-name">${idx + 1}. ${item.name}</span>
+          <span class="item-info">${item.pages} page${item.pages > 1 ? 's' : ''} • ${item.size}</span>
+        </div>
         <div class="row-actions">
-          <button class="mini-btn" onclick="shift(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>▲</button>
-          <button class="mini-btn" onclick="shift(${idx}, 1)" ${idx === pdfs.length - 1 ? 'disabled' : ''}>▼</button>
-          <button class="mini-btn del" onclick="removePdf(${idx})">✕</button>
+          <button type="button" class="mini-btn" onclick="moveItem(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>▲</button>
+          <button type="button" class="mini-btn" onclick="moveItem(${idx}, 1)" ${idx === pdfList.length - 1 ? 'disabled' : ''}>▼</button>
+          <button type="button" class="mini-btn del" onclick="deleteItem(${idx})">✕</button>
         </div>
       `;
-      listEl.appendChild(row);
+      pdfListEl.appendChild(row);
     });
-    mergeBtn.style.display = pdfs.length >= 2 ? 'block' : 'none';
   }
 
-  window.shift = (idx, dir) => {
+  window.moveItem = (idx, dir) => {
     const target = idx + dir;
-    if (target < 0 || target >= pdfs.length) return;
-    const temp = pdfs[idx];
-    pdfs[idx] = pdfs[target];
-    pdfs[target] = temp;
+    if (target < 0 || target >= pdfList.length) return;
+    const temp = pdfList[idx];
+    pdfList[idx] = pdfList[target];
+    pdfList[target] = temp;
     render();
   };
 
-  window.removePdf = (idx) => {
-    pdfs.splice(idx, 1);
+  window.deleteItem = (idx) => {
+    pdfList.splice(idx, 1);
     render();
   };
 
   mergeBtn.addEventListener('click', async () => {
-    mergeBtn.textContent = 'Merging...';
+    if (pdfList.length < 2) {
+      alert('Please add at least 2 PDF files to merge.');
+      return;
+    }
+
     mergeBtn.disabled = true;
+    mergeBtn.textContent = 'Merging Documents...';
+
     try {
       const mergedPdf = await PDFLib.PDFDocument.create();
-      for (const p of pdfs) {
-        const doc = await PDFLib.PDFDocument.load(p.buffer);
+
+      for (const item of pdfList) {
+        const doc = await PDFLib.PDFDocument.load(item.buffer, { ignoreEncryption: true });
         const copiedPages = await mergedPdf.copyPages(doc, doc.getPageIndices());
         copiedPages.forEach((page) => mergedPdf.addPage(page));
       }
+
       const mergedBytes = await mergedPdf.save();
       const blob = new Blob([mergedBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
+
+      let filename = outputNameInput.value.trim();
+      if (!filename.toLowerCase().endsWith('.pdf')) {
+        filename += '.pdf';
+      }
+
       link.href = URL.createObjectURL(blob);
-      link.download = 'merged_document.pdf';
+      link.download = filename || 'merged_document.pdf';
       link.click();
     } catch (err) {
-      alert('Error merging PDFs: ' + err.message);
+      alert('Failed to merge PDFs: ' + err.message);
     }
-    mergeBtn.textContent = '⚡ Merge and Download PDF';
+
     mergeBtn.disabled = false;
+    mergeBtn.textContent = '⚡ Merge PDFs & Download';
   });
 </script>
 </body>
