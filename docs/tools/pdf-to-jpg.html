@@ -6,16 +6,19 @@
 <title>PDF to JPG - FormReady India</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 :root {
   --bg: #151210;
   --panel: #1e1a17;
   --line: #39322b;
   --amber: #d99a3f;
+  --amber-hover: #c48733;
   --paper: #f2ece2;
   --muted: #a89a89;
   --card-bg: #14110f;
   --danger: #ef4444;
+  --success: #22c55e;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -23,38 +26,67 @@ body {
   color: var(--paper);
   font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 14px;
+  padding: 14px 10px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   touch-action: pan-y;
 }
-.wrapper { width: 100%; max-width: 540px; }
-@media (min-width: 768px) { .wrapper { max-width: 740px; } }
+.wrapper { width: 100%; max-width: 580px; }
+@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+
 .back-link {
   color: var(--amber);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
-  padding: 18px;
+  padding: 18px 16px;
   border-radius: 12px;
   width: 100%;
   margin-bottom: 14px;
 }
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; }
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
 .subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+
+/* How to Use Box */
+.how-to-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* Upload Box */
 .upload-box {
   border: 2px dashed var(--amber);
-  background: rgba(217, 154, 63, 0.05);
+  background: rgba(217, 154, 63, 0.04);
   border-radius: 10px;
-  padding: 22px 14px;
+  padding: 24px 14px;
   text-align: center;
   cursor: pointer;
   margin-bottom: 16px;
@@ -62,63 +94,130 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  transition: background 0.2s;
 }
-.upload-box span { color: var(--amber); font-weight: 600; font-size: 14px; }
+.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
 .upload-box small { color: var(--muted); font-size: 11px; }
-.item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-.item-row {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px 12px;
+
+/* Dynamic Content */
+.summary-pill {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  background: #14110f;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 14px;
 }
-.item-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 65%; }
-.row-actions { display: flex; gap: 6px; }
 .mini-btn {
   background: #2a2420;
   color: var(--paper);
   border: 1px solid var(--line);
-  padding: 4px 8px;
+  padding: 5px 8px;
   border-radius: 4px;
   font-size: 11px;
   cursor: pointer;
 }
 .mini-btn:hover { background: var(--amber); color: var(--bg); }
-.mini-btn.del:hover { background: var(--danger); color: #fff; }
-.btn {
-  background: var(--amber);
-  color: var(--bg);
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  text-align: center;
-  width: 100%;
+
+/* Settings */
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
 }
-.btn:hover { opacity: 0.9; }
-.input-text {
+@media (max-width: 480px) {
+  .settings-grid { grid-template-columns: 1fr; }
+}
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.input-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.select-input, .input-text {
   width: 100%;
   background: var(--card-bg);
   border: 1px solid var(--line);
   color: var(--paper);
-  padding: 10px 12px;
+  padding: 9px 10px;
   border-radius: 8px;
-  font-size: 13px;
-  margin-bottom: 14px;
+  font-size: 12.5px;
   outline: none;
 }
-.input-text:focus { border-color: var(--amber); }
-.grid-thumbs {
+.select-input:focus, .input-text:focus { border-color: var(--amber); }
+
+.badge-tag {
+  display: block;
+  background: #2a2420;
+  color: var(--muted);
+  font-size: 11px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+.btn-sec {
+  background: #2a2420;
+  color: var(--paper);
+  border: 1px solid var(--line);
+}
+.btn-sec:hover { background: #38302b; }
+
+#status-message {
+  font-size: 12px;
+  color: var(--amber);
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+}
+
+/* Thumbs Grid */
+.thumbs-container {
+  margin-top: 18px;
+  display: none;
+}
+.thumbs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.thumbs-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--amber);
+}
+.grid-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
-  margin-top: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
 }
 .thumb-card {
   background: var(--card-bg);
@@ -130,60 +229,320 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
   align-items: center;
   gap: 6px;
 }
-.thumb-card img { width: 100%; height: 160px; object-fit: contain; background: #000; border-radius: 4px; }
+.thumb-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+.thumb-meta {
+  font-size: 11px;
+  color: var(--paper);
+  font-weight: 600;
+  text-align: center;
+}
+.thumb-dim {
+  font-size: 10px;
+  color: var(--muted);
+}
+.btn-dl-single {
+  background: #2a2420;
+  color: var(--amber);
+  border: 1px solid var(--amber);
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+.btn-dl-single:hover {
+  background: var(--amber);
+  color: var(--bg);
+}
+
+/* Advertisement Box */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 10px;
+  text-align: center;
+  margin-top: 14px;
+}
+.ad-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  display: block;
+}
+.ad-content {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
 </style>
 </head>
 <body>
 <div class="wrapper">
   <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
   <div class="card">
     <h2>PDF to JPG Extractor</h2>
-    <div class="subtitle">Extract all PDF pages as high-resolution JPG images</div>
-    <input type="file" id="pdf-to-img-input" accept="application/pdf" style="display:none">
-    <div class="upload-box" onclick="document.getElementById('pdf-to-img-input').click()">
-      <span>📸 Tap to Select PDF</span>
-      <small>Render pages to JPG format</small>
+    <div class="subtitle">Extract all or selected PDF pages into high-resolution JPG / PNG images</div>
+
+    <!-- How to Use Box -->
+    <div class="how-to-box">
+      <div class="how-to-title">📄 How to Use PDF to JPG</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload PDF:</span> Tap the area below to choose your PDF file.</li>
+        <li>2. <span>Quality & Pages:</span> Choose image quality (Standard / High 300 DPI) and select pages.</li>
+        <li>3. <span>Render:</span> Tap <strong>Render Pages</strong> to preview all extracted images.</li>
+        <li>4. <span>Download:</span> Save individual images or tap <strong>Download All (ZIP)</strong> for all pages.</li>
+      </ol>
     </div>
-    <div id="status-text" style="font-size:12px; color:var(--amber); text-align:center; margin-bottom:10px;"></div>
-    <div class="grid-thumbs" id="thumb-grid"></div>
+
+    <!-- Upload Box -->
+    <input type="file" id="pdf-input" accept="application/pdf" style="display:none">
+    <div class="upload-box" onclick="document.getElementById('pdf-input').click()">
+      <span>📁 Tap here to upload PDF or drag here</span>
+      <small>Extracts single or multi-page PDF documents</small>
+    </div>
+
+    <!-- Extractor Settings Stage -->
+    <div id="stage-section" style="display:none">
+      <div class="summary-pill">
+        <span id="file-details">Document: - | Pages: 0</span>
+        <button type="button" class="mini-btn" onclick="document.getElementById('pdf-input').click()" style="color:var(--amber); border-color:var(--amber)">Change File</button>
+      </div>
+
+      <div class="settings-grid">
+        <div class="control-group">
+          <label class="input-label" for="dpi-select">Image Resolution / DPI:</label>
+          <select id="dpi-select" class="select-input">
+            <option value="1.5" selected>Standard (150 DPI - Fast & Clear)</option>
+            <option value="2.0">High (200 DPI - Sharp)</option>
+            <option value="2.8">Print Quality (300 DPI - Ultra HD)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="input-label" for="format-select">Output Format:</label>
+          <select id="format-select" class="select-input">
+            <option value="image/jpeg" selected>JPG (Standard Web / Form)</option>
+            <option value="image/png">PNG (Lossless High Detail)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="input-label" for="range-input">Pages to Extract:</label>
+          <input type="text" id="range-input" class="input-text" value="all" placeholder="e.g. all or 1-3, 5">
+        </div>
+
+        <div class="control-group">
+          <label class="input-label" for="output-prefix">File Name Prefix:</label>
+          <input type="text" id="output-prefix" class="input-text" value="doc">
+        </div>
+      </div>
+
+      <button class="btn" id="render-btn">⚡ Render & Extract Images</button>
+      <div id="status-message"></div>
+
+      <!-- Preview & ZIP Grid -->
+      <div class="thumbs-container" id="thumbs-container">
+        <div class="thumbs-header">
+          <span class="thumbs-title" id="thumbs-count">Extracted Images (0)</span>
+          <button type="button" class="mini-btn" id="zip-all-btn" style="color:var(--amber); border-color:var(--amber); padding:6px 12px; font-weight:700;">📦 Download All (ZIP)</button>
+        </div>
+        <div class="grid-cards" id="cards-grid"></div>
+      </div>
+    </div>
+
+    <!-- Advertisement Placeholder -->
+    <div class="ad-card">
+      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
   </div>
 </div>
+
 <script>
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  const input = document.getElementById('pdf-to-img-input');
-  const grid = document.getElementById('thumb-grid');
-  const status = document.getElementById('status-text');
 
-  input.addEventListener('change', async (e) => {
+  let pdfDocInstance = null;
+  let totalDocPages = 0;
+  let rawPdfBuffer = null;
+  let renderedImages = [];
+
+  const fileInput = document.getElementById('pdf-input');
+  const stageSection = document.getElementById('stage-section');
+  const fileDetails = document.getElementById('file-details');
+  const dpiSelect = document.getElementById('dpi-select');
+  const formatSelect = document.getElementById('format-select');
+  const rangeInput = document.getElementById('range-input');
+  const outputPrefix = document.getElementById('output-prefix');
+  const renderBtn = document.getElementById('render-btn');
+  const statusMsg = document.getElementById('status-message');
+  const thumbsContainer = document.getElementById('thumbs-container');
+  const thumbsCount = document.getElementById('thumbs-count');
+  const cardsGrid = document.getElementById('cards-grid');
+  const zipAllBtn = document.getElementById('zip-all-btn');
+
+  fileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    grid.innerHTML = '';
-    status.textContent = 'Loading and extracting pages...';
 
-    const buffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
-    status.textContent = `Found ${pdf.numPages} pages. Rendering...`;
+    try {
+      const cleanBase = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_").substring(0, 14);
+      rawPdfBuffer = await file.arrayBuffer();
+      pdfDocInstance = await pdfjsLib.getDocument({ data: rawPdfBuffer }).promise;
+      totalDocPages = pdfDocInstance.numPages;
 
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const viewport = page.getViewport({ scale: 1.5 });
+      const sizeKb = (file.size / 1024).toFixed(1);
+      const sizeStr = sizeKb > 1024 ? (sizeKb / 1024).toFixed(2) + ' MB' : sizeKb + ' KB';
+
+      fileDetails.textContent = `${file.name.substring(0, 16)}... | ${totalDocPages} Pgs (${sizeStr})`;
+      outputPrefix.value = cleanBase || 'page';
+      rangeInput.value = 'all';
+
+      thumbsContainer.style.display = 'none';
+      renderedImages = [];
+      stageSection.style.display = 'block';
+      stageSection.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      alert('Could not read PDF. Ensure it is a valid document.');
+    }
+  });
+
+  function parsePageList(raw, max) {
+    if (!raw || raw.trim().toLowerCase() === 'all') {
+      const all = [];
+      for (let i = 1; i <= max; i++) all.push(i);
+      return all;
+    }
+    const pages = new Set();
+    const parts = raw.split(',');
+    for (const p of parts) {
+      const match = p.trim().match(/^(\d+)(?:-(\d+))?$/);
+      if (match) {
+        const start = parseInt(match[1], 10);
+        const end = match[2] ? parseInt(match[2], 10) : start;
+        for (let i = start; i <= end; i++) {
+          if (i >= 1 && i <= max) pages.add(i);
+        }
+      }
+    }
+    return Array.from(pages).sort((a, b) => a - b);
+  }
+
+  renderBtn.addEventListener('click', async () => {
+    if (!pdfDocInstance) return;
+
+    const selectedPages = parsePageList(rangeInput.value, totalDocPages);
+    if (selectedPages.length === 0) {
+      alert(`Invalid page selection. Enter 'all' or pages between 1 and ${totalDocPages}.`);
+      return;
+    }
+
+    renderBtn.disabled = true;
+    renderBtn.textContent = 'Rendering Pages...';
+    statusMsg.style.display = 'block';
+    cardsGrid.innerHTML = '';
+    renderedImages = [];
+
+    const scale = parseFloat(dpiSelect.value) || 1.5;
+    const mime = formatSelect.value;
+    const ext = mime === 'image/png' ? 'png' : 'jpg';
+    const base = outputPrefix.value.trim().replace(/[^a-zA-Z0-9_-]/g, '_') || 'page';
+
+    for (let idx = 0; idx < selectedPages.length; idx++) {
+      const pageNum = selectedPages[idx];
+      statusMsg.textContent = `Rendering page ${idx + 1} of ${selectedPages.length} (Page ${pageNum})...`;
+
+      const page = await pdfDocInstance.getPage(pageNum);
+      const viewport = page.getViewport({ scale: scale });
+
       const canvas = document.createElement('canvas');
       canvas.width = viewport.width;
       canvas.height = viewport.height;
       const ctx = canvas.getContext('2d');
-      await page.render({ canvasContext: ctx, viewport }).promise;
 
-      const imgUrl = canvas.toDataURL('image/jpeg', 0.92);
+      // White background for transparent PDF elements
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+      const dataUrl = canvas.toDataURL(mime, 0.92);
+      const pad = String(pageNum).padStart(2, '0');
+      const filename = `Page_${pad}_${base}.${ext}`;
+
+      renderedImages.push({
+        pageNum,
+        filename,
+        dataUrl,
+        width: Math.round(viewport.width),
+        height: Math.round(viewport.height)
+      });
+
+      // Append Card to Grid
       const card = document.createElement('div');
       card.className = 'thumb-card';
       card.innerHTML = `
-        <img src="${imgUrl}" alt="Page ${i}">
-        <span style="font-size:11px;">Page ${i}</span>
-        <a href="${imgUrl}" download="page_${i}.jpg" class="mini-btn" style="text-decoration:none;">Download JPG</a>
+        <img src="${dataUrl}" alt="Page ${pageNum}">
+        <span class="thumb-meta">Page ${pageNum}</span>
+        <span class="thumb-dim">${Math.round(viewport.width)} × ${Math.round(viewport.height)} px</span>
+        <a href="${dataUrl}" download="${filename}" class="btn-dl-single">⬇ Download</a>
       `;
-      grid.appendChild(card);
+      cardsGrid.appendChild(card);
     }
-    status.textContent = `Completed extraction for ${pdf.numPages} pages.`;
+
+    thumbsCount.textContent = `Extracted Images (${renderedImages.length})`;
+    thumbsContainer.style.display = 'block';
+    statusMsg.textContent = `Extracted ${renderedImages.length} page(s) successfully.`;
+    renderBtn.disabled = false;
+    renderBtn.textContent = '⚡ Re-Render Images';
+    thumbsContainer.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Download All as ZIP
+  zipAllBtn.addEventListener('click', async () => {
+    if (!renderedImages.length) return;
+
+    zipAllBtn.disabled = true;
+    const oldText = zipAllBtn.textContent;
+    zipAllBtn.textContent = 'Packing ZIP...';
+
+    try {
+      const zip = new JSZip();
+      for (const img of renderedImages) {
+        const base64Data = img.dataUrl.split(',')[1];
+        zip.file(img.filename, base64Data, { base64: true });
+      }
+
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(zipBlob);
+      const base = outputPrefix.value.trim() || 'all_pages';
+      link.download = `All_Pages_${base}.zip`;
+      link.click();
+    } catch (err) {
+      alert('Error creating ZIP: ' + err.message);
+    }
+
+    zipAllBtn.disabled = false;
+    zipAllBtn.textContent = oldText;
   });
 </script>
 </body>
