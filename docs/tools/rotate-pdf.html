@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Rotate PDF - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+  --card-bg: #14110f;
+  --danger: #ef4444;
+  --success: #22c55e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 14px 10px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  touch-action: pan-y;
+}
+.wrapper { width: 100%; max-width: 580px; }
+@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 18px 16px;
+  border-radius: 12px;
+  width: 100%;
+  margin-bottom: 14px;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+
+/* How to Use Box */
+.how-to-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* Upload Box */
+.upload-box {
+  border: 2px dashed var(--amber);
+  background: rgba(217, 154, 63, 0.04);
+  border-radius: 10px;
+  padding: 24px 14px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s;
+}
+.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
+.upload-box small { color: var(--muted); font-size: 11px; }
+
+/* Summary Pill */
+.summary-pill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #14110f;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.mini-btn {
+  background: #2a2420;
+  color: var(--paper);
+  border: 1px solid var(--line);
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.mini-btn:hover { background: var(--amber); color: var(--bg); }
+
+/* Global Controls */
+.global-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.action-btn {
+  flex: 1;
+  min-width: 120px;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 9px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.action-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+/* Grid of Pages */
+.pages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.page-item {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.page-thumb-wrapper {
+  width: 100%;
+  height: 145px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+  border-radius: 4px;
+}
+.page-thumb-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+  background: #ffffff;
+}
+.page-meta {
+  font-size: 11px;
+  color: var(--paper);
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 4px;
+}
+.deg-label {
+  color: var(--amber);
+  font-size: 10px;
+}
+.page-actions {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+.rot-btn {
+  flex: 1;
+  background: #2a2420;
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: center;
+}
+.rot-btn:hover { background: var(--amber); color: var(--bg); }
+
+.input-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+.input-text {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  outline: none;
+}
+.input-text:focus { border-color: var(--amber); }
+
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+#status-message {
+  font-size: 12px;
+  color: var(--amber);
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+}
+
+/* Advertisement Box */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 10px;
+  text-align: center;
+  margin-top: 14px;
+}
+.ad-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  display: block;
+}
+.ad-content {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>Rotate PDF</h2>
+    <div class="subtitle">Rotate individual pages or all pages permanently to fix orientation</div>
+
+    <!-- How to Use Box -->
+    <div class="how-to-box">
+      <div class="how-to-title">📄 How to Use Rotate PDF</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload PDF:</span> Tap below to select your PDF file.</li>
+        <li>2. <span>Rotate Pages:</span> Use <strong>↺ 90° Left</strong> or <strong>↻ 90° Right</strong> on any page.</li>
+        <li>3. <span>Bulk Rotate:</span> Use <strong>Rotate All</strong> buttons to turn every page at once.</li>
+        <li>4. <span>Save:</span> Tap <strong>Apply & Download PDF</strong> to permanently lock the new rotation.</li>
+      </ol>
+    </div>
+
+    <!-- Upload Box -->
+    <input type="file" id="pdf-input" accept="application/pdf" style="display:none">
+    <div class="upload-box" onclick="document.getElementById('pdf-input').click()">
+      <span>📁 Tap here to upload PDF or drag here</span>
+      <small>Supports all multi-page PDF documents</small>
+    </div>
+
+    <!-- Rotate Stage -->
+    <div id="stage-section" style="display:none">
+      <div class="summary-pill">
+        <span id="file-details">Document: - | Pages: 0</span>
+        <button type="button" class="mini-btn" onclick="document.getElementById('pdf-input').click()" style="color:var(--amber); border-color:var(--amber)">Change File</button>
+      </div>
+
+      <!-- Quick Action Bar -->
+      <div class="global-bar">
+        <button type="button" class="action-btn" id="rot-all-left">↺ Rotate All Left</button>
+        <button type="button" class="action-btn" id="rot-all-right">↻ Rotate All Right</button>
+        <button type="button" class="action-btn" id="rot-reset" style="max-width:90px;">Reset</button>
+      </div>
+
+      <!-- Grid of rendered pages -->
+      <div class="pages-grid" id="pages-grid"></div>
+
+      <label class="input-label" for="output-name">Output File Name:</label>
+      <input type="text" id="output-name" class="input-text" value="rotated_document.pdf">
+
+      <button class="btn" id="save-pdf-btn">⚡ Apply & Download PDF</button>
+      <div id="status-message"></div>
+    </div>
+
+    <!-- Advertisement Placeholder -->
+    <div class="ad-card">
+      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  let rawBuffer = null;
+  let totalDocPages = 0;
+  let pageRotations = []; // stores additional angle (0, 90, 180, 270) for each page
+
+  const fileInput = document.getElementById('pdf-input');
+  const stageSection = document.getElementById('stage-section');
+  const fileDetails = document.getElementById('file-details');
+  const pagesGrid = document.getElementById('pages-grid');
+  const rotAllLeft = document.getElementById('rot-all-left');
+  const rotAllRight = document.getElementById('rot-all-right');
+  const rotReset = document.getElementById('rot-reset');
+  const outputName = document.getElementById('output-name');
+  const savePdfBtn = document.getElementById('save-pdf-btn');
+  const statusMsg = document.getElementById('status-message');
+
+  fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      rawBuffer = await file.arrayBuffer();
+      const pdfJs = await pdfjsLib.getDocument({ data: rawBuffer }).promise;
+      totalDocPages = pdfJs.numPages;
+      pageRotations = new Array(totalDocPages).fill(0);
+
+      const sizeKb = (file.size / 1024).toFixed(1);
+      const sizeStr = sizeKb > 1024 ? (sizeKb / 1024).toFixed(2) + ' MB' : sizeKb + ' KB';
+
+      fileDetails.textContent = `${file.name.substring(0, 16)}... | ${totalDocPages} Pages (${sizeStr})`;
+      outputName.value = `rotated_${file.name}`;
+
+      pagesGrid.innerHTML = '';
+      stageSection.style.display = 'block';
+      statusMsg.style.display = 'block';
+      statusMsg.textContent = 'Rendering page previews...';
+
+      for (let i = 1; i <= totalDocPages; i++) {
+        const page = await pdfJs.getPage(i);
+        const viewport = page.getViewport({ scale: 0.6 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        const pageIdx = i - 1;
+
+        const card = document.createElement('div');
+        card.className = 'page-item';
+        card.id = `page-card-${pageIdx}`;
+        card.innerHTML = `
+          <div class="page-thumb-wrapper">
+            <img src="${dataUrl}" id="thumb-${pageIdx}" alt="Page ${i}">
+          </div>
+          <div class="page-meta">
+            <span>Page ${i}</span>
+            <span class="deg-label" id="deg-${pageIdx}">0°</span>
+          </div>
+          <div class="page-actions">
+            <button type="button" class="rot-btn" onclick="rotateSingle(${pageIdx}, -90)">↺ -90°</button>
+            <button type="button" class="rot-btn" onclick="rotateSingle(${pageIdx}, 90)">↻ +90°</button>
+          </div>
+        `;
+        pagesGrid.appendChild(card);
+      }
+
+      statusMsg.textContent = `All ${totalDocPages} pages loaded. You can rotate individual pages or use Rotate All.`;
+      stageSection.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      alert('Could not read PDF: ' + err.message);
+    }
+  });
+
+  window.rotateSingle = (idx, degChange) => {
+    let current = (pageRotations[idx] + degChange) % 360;
+    if (current < 0) current += 360;
+    pageRotations[idx] = current;
+    updateThumbUI(idx);
+  };
+
+  function updateThumbUI(idx) {
+    const img = document.getElementById(`thumb-${idx}`);
+    const lbl = document.getElementById(`deg-${idx}`);
+    if (img) img.style.transform = `rotate(${pageRotations[idx]}deg)`;
+    if (lbl) lbl.textContent = `${pageRotations[idx]}°`;
+  }
+
+  rotAllLeft.addEventListener('click', () => {
+    for (let i = 0; i < totalDocPages; i++) {
+      rotateSingle(i, -90);
+    }
+  });
+
+  rotAllRight.addEventListener('click', () => {
+    for (let i = 0; i < totalDocPages; i++) {
+      rotateSingle(i, 90);
+    }
+  });
+
+  rotReset.addEventListener('click', () => {
+    for (let i = 0; i < totalDocPages; i++) {
+      pageRotations[i] = 0;
+      updateThumbUI(i);
+    }
+  });
+
+  savePdfBtn.addEventListener('click', async () => {
+    if (!rawBuffer) return;
+
+    savePdfBtn.disabled = true;
+    savePdfBtn.textContent = 'Saving Rotations...';
+    statusMsg.style.display = 'block';
+    statusMsg.textContent = 'Applying permanent rotations into PDF...';
+
+    try {
+      const pdfDoc = await PDFLib.PDFDocument.load(rawBuffer, { ignoreEncryption: true });
+      const pages = pdfDoc.getPages();
+
+      pages.forEach((page, idx) => {
+        const addedDeg = pageRotations[idx] || 0;
+        if (addedDeg !== 0) {
+          const currentRotation = page.getRotation().angle;
+          page.setRotation(PDFLib.degrees((currentRotation + addedDeg) % 360));
+        }
+      });
+
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const link = document.createElement('a');
+
+      let filename = outputName.value.trim();
+      if (!filename.toLowerCase().endsWith('.pdf')) filename += '.pdf';
+
+      link.href = URL.createObjectURL(blob);
+      link.download = filename || 'rotated_document.pdf';
+      link.click();
+
+      statusMsg.textContent = 'Successfully downloaded rotated PDF!';
+    } catch (err) {
+      alert('Error saving rotated PDF: ' + err.message);
+    }
+
+    savePdfBtn.disabled = false;
+    savePdfBtn.textContent = '⚡ Apply & Download PDF';
+  });
+</script>
+</body>
+</html>

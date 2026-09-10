@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Add Watermark to PDF - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<style>
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+  --card-bg: #14110f;
+  --danger: #ef4444;
+  --success: #22c55e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 14px 10px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  touch-action: pan-y;
+}
+.wrapper { width: 100%; max-width: 580px; }
+@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 18px 16px;
+  border-radius: 12px;
+  width: 100%;
+  margin-bottom: 14px;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+
+/* How to Use Box */
+.how-to-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* Upload Box */
+.upload-box {
+  border: 2px dashed var(--amber);
+  background: rgba(217, 154, 63, 0.04);
+  border-radius: 10px;
+  padding: 24px 14px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s;
+}
+.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
+.upload-box small { color: var(--muted); font-size: 11px; }
+
+/* Summary Pill */
+.summary-pill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #14110f;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: var(--amber);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.mini-btn {
+  background: #2a2420;
+  color: var(--paper);
+  border: 1px solid var(--line);
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.mini-btn:hover { background: var(--amber); color: var(--bg); }
+
+/* Mode Switch Tabs */
+.type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.type-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 10px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+.type-btn.active {
+  border-color: var(--amber);
+  background: rgba(217, 154, 63, 0.15);
+  color: var(--amber);
+}
+
+/* Form Settings */
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+@media (max-width: 480px) {
+  .settings-grid { grid-template-columns: 1fr; }
+}
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.input-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.select-input, .input-text {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  outline: none;
+}
+.select-input:focus, .input-text:focus { border-color: var(--amber); }
+
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.range-slider {
+  flex: 1;
+  accent-color: var(--amber);
+}
+
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  margin-top: 10px;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+#status-message {
+  font-size: 12px;
+  color: var(--amber);
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+}
+
+/* Advertisement Box */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 10px;
+  text-align: center;
+  margin-top: 14px;
+}
+.ad-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+  display: block;
+}
+.ad-content {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>Add Watermark to PDF</h2>
+    <div class="subtitle">Protect documents with custom text stamps or official logo watermarks</div>
+
+    <!-- How to Use Box -->
+    <div class="how-to-box">
+      <div class="how-to-title">📄 How to Use Add Watermark</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload PDF:</span> Tap the upload area to choose your document.</li>
+        <li>2. <span>Watermark Type:</span> Choose <strong>Text Stamp</strong> (e.g. CONFIDENTIAL) or <strong>Image Logo</strong>.</li>
+        <li>3. <span>Adjust Style:</span> Customize opacity (transparency), rotation angle, size, and color.</li>
+        <li>4. <span>Download:</span> Tap <strong>Apply Watermark & Download</strong> to lock the stamp permanently.</li>
+      </ol>
+    </div>
+
+    <!-- Upload Box -->
+    <input type="file" id="pdf-input" accept="application/pdf" style="display:none">
+    <div class="upload-box" onclick="document.getElementById('pdf-input').click()">
+      <span>📁 Tap here to upload PDF document</span>
+      <small>Supports all multi-page PDF documents</small>
+    </div>
+
+    <!-- Controls Stage -->
+    <div id="stage-section" style="display:none">
+      <div class="summary-pill">
+        <span id="file-details">Document: - | Pages: 0</span>
+        <button type="button" class="mini-btn" onclick="document.getElementById('pdf-input').click()" style="color:var(--amber); border-color:var(--amber)">Change File</button>
+      </div>
+
+      <span class="input-label" style="margin-bottom:6px; display:block;">Watermark Type:</span>
+      <div class="type-grid">
+        <button type="button" class="type-btn active" id="type-text-btn">✍️ Text Stamp</button>
+        <button type="button" class="type-btn" id="type-img-btn">🖼️ Image / Logo</button>
+      </div>
+
+      <!-- Text Inputs -->
+      <div id="text-options">
+        <div class="control-group" style="margin-bottom:12px;">
+          <label class="input-label" for="watermark-text">Watermark Text:</label>
+          <input type="text" id="watermark-text" class="input-text" value="CONFIDENTIAL" placeholder="e.g. COPY, DRAFT, FOR SSC ONLY">
+        </div>
+      </div>
+
+      <!-- Image Logo Inputs -->
+      <div id="img-options" style="display:none; margin-bottom:12px;">
+        <label class="input-label">Select Watermark Logo / Image (PNG / JPG):</label>
+        <input type="file" id="logo-input" accept="image/png,image/jpeg" class="input-text">
+      </div>
+
+      <div class="settings-grid">
+        <div class="control-group">
+          <label class="input-label" for="angle-select">Orientation / Angle:</label>
+          <select id="angle-select" class="select-input">
+            <option value="45" selected>Diagonal (45° Upwards)</option>
+            <option value="0">Horizontal (0° Center)</option>
+            <option value="-45">Diagonal (-45° Downwards)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="input-label" for="color-select">Stamp Color:</label>
+          <select id="color-select" class="select-input">
+            <option value="gray" selected>Subtle Gray (0.5, 0.5, 0.5)</option>
+            <option value="red">Warning Red (0.8, 0.1, 0.1)</option>
+            <option value="amber">Darkroom Amber (0.85, 0.6, 0.25)</option>
+            <option value="black">Solid Black (0.1, 0.1, 0.1)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="input-label">Opacity / Transparency: <span id="opacity-val" style="color:var(--amber)">25%</span></label>
+          <div class="range-row">
+            <input type="range" id="opacity-range" class="range-slider" min="5" max="90" value="25">
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="input-label" for="font-size-select">Watermark Size:</label>
+          <select id="font-size-select" class="select-input">
+            <option value="40">Small (40 pt)</option>
+            <option value="55" selected>Standard (55 pt)</option>
+            <option value="75">Large (75 pt)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="input-label" for="output-name">Output File Name:</label>
+          <input type="text" id="output-name" class="input-text" value="watermarked_doc.pdf">
+        </div>
+
+        <div class="control-group">
+          <label class="input-label" for="page-range-input">Apply on Pages:</label>
+          <input type="text" id="page-range-input" class="input-text" value="all" placeholder="e.g. all or 1-3, 5">
+        </div>
+      </div>
+
+      <button class="btn" id="apply-btn">💧 Apply Watermark & Download</button>
+      <div id="status-message"></div>
+    </div>
+
+    <!-- Advertisement Placeholder -->
+    <div class="ad-card">
+      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let rawPdfBuffer = null;
+  let totalDocPages = 0;
+  let logoBuffer = null;
+  let logoType = '';
+  let activeMode = 'text';
+
+  const fileInput = document.getElementById('pdf-input');
+  const stageSection = document.getElementById('stage-section');
+  const fileDetails = document.getElementById('file-details');
+  const typeTextBtn = document.getElementById('type-text-btn');
+  const typeImgBtn = document.getElementById('type-img-btn');
+  const textOptions = document.getElementById('text-options');
+  const imgOptions = document.getElementById('img-options');
+  const logoInput = document.getElementById('logo-input');
+
+  const watermarkTextInput = document.getElementById('watermark-text');
+  const angleSelect = document.getElementById('angle-select');
+  const colorSelect = document.getElementById('color-select');
+  const opacityRange = document.getElementById('opacity-range');
+  const opacityVal = document.getElementById('opacity-val');
+  const fontSizeSelect = document.getElementById('font-size-select');
+  const outputNameInput = document.getElementById('output-name');
+  const pageRangeInput = document.getElementById('page-range-input');
+
+  const applyBtn = document.getElementById('apply-btn');
+  const statusMsg = document.getElementById('status-message');
+
+  opacityRange.addEventListener('input', () => {
+    opacityVal.textContent = `${opacityRange.value}%`;
+  });
+
+  fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      rawPdfBuffer = await file.arrayBuffer();
+      const doc = await PDFLib.PDFDocument.load(rawPdfBuffer, { ignoreEncryption: true });
+      totalDocPages = doc.getPageCount();
+
+      const sizeKb = (file.size / 1024).toFixed(1);
+      const sizeStr = sizeKb > 1024 ? (sizeKb / 1024).toFixed(2) + ' MB' : sizeKb + ' KB';
+
+      fileDetails.textContent = `${file.name.substring(0, 16)}... | ${totalDocPages} pgs (${sizeStr})`;
+      outputNameInput.value = `watermarked_${file.name}`;
+
+      stageSection.style.display = 'block';
+      stageSection.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      alert('Could not read PDF: ' + err.message);
+    }
+  });
+
+  typeTextBtn.addEventListener('click', () => {
+    activeMode = 'text';
+    typeTextBtn.classList.add('active');
+    typeImgBtn.classList.remove('active');
+    textOptions.style.display = 'block';
+    imgOptions.style.display = 'none';
+  });
+
+  typeImgBtn.addEventListener('click', () => {
+    activeMode = 'image';
+    typeImgBtn.classList.add('active');
+    typeTextBtn.classList.remove('active');
+    textOptions.style.display = 'none';
+    imgOptions.style.display = 'block';
+  });
+
+  logoInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      logoBuffer = await file.arrayBuffer();
+      logoType = file.type;
+    }
+  });
+
+  function parsePageIndices(raw, max) {
+    if (!raw || raw.trim().toLowerCase() === 'all') {
+      const all = [];
+      for (let i = 0; i < max; i++) all.push(i);
+      return all;
+    }
+    const pages = new Set();
+    const parts = raw.split(',');
+    for (const p of parts) {
+      const m = p.trim().match(/^(\d+)(?:-(\d+))?$/);
+      if (m) {
+        const start = parseInt(m[1], 10);
+        const end = m[2] ? parseInt(m[2], 10) : start;
+        for (let i = start; i <= end; i++) {
+          if (i >= 1 && i <= max) pages.add(i - 1);
+        }
+      }
+    }
+    return Array.from(pages);
+  }
+
+  applyBtn.addEventListener('click', async () => {
+    if (!rawPdfBuffer) return;
+
+    if (activeMode === 'image' && !logoBuffer) {
+      alert('Please select a logo image first.');
+      return;
+    }
+
+    applyBtn.disabled = true;
+    applyBtn.textContent = 'Applying Watermark...';
+    statusMsg.style.display = 'block';
+    statusMsg.textContent = 'Embedding watermark stamps across selected pages...';
+
+    try {
+      const pdfDoc = await PDFLib.PDFDocument.load(rawPdfBuffer, { ignoreEncryption: true });
+      const pages = pdfDoc.getPages();
+      const targetIndices = parsePageIndices(pageRangeInput.value, pages.length);
+
+      const opacity = parseFloat(opacityRange.value) / 100;
+      const angleDeg = parseFloat(angleSelect.value);
+
+      // Color mapping
+      const c = colorSelect.value;
+      let fontColor = PDFLib.rgb(0.5, 0.5, 0.5);
+      if (c === 'red') fontColor = PDFLib.rgb(0.85, 0.15, 0.15);
+      if (c === 'amber') fontColor = PDFLib.rgb(0.85, 0.60, 0.25);
+      if (c === 'black') fontColor = PDFLib.rgb(0.1, 0.1, 0.1);
+
+      let embeddedImg = null;
+      if (activeMode === 'image') {
+        if (logoType === 'image/png') {
+          embeddedImg = await pdfDoc.embedPng(logoBuffer);
+        } else {
+          embeddedImg = await pdfDoc.embedJpg(logoBuffer);
+        }
+      }
+
+      const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+      const textVal = watermarkTextInput.value.trim() || 'CONFIDENTIAL';
+      const fontSize = parseFloat(fontSizeSelect.value) || 55;
+
+      targetIndices.forEach(idx => {
+        const page = pages[idx];
+        const { width, height } = page.getSize();
+
+        if (activeMode === 'text') {
+          const textWidth = font.widthOfTextAtSize(textVal, fontSize);
+          const textHeight = font.heightAtSize(fontSize);
+
+          // Center positioning with rotation origin
+          const centerX = width / 2;
+          const centerY = height / 2;
+
+          page.drawText(textVal, {
+            x: centerX - (textWidth / 2) * Math.cos(angleDeg * Math.PI / 180),
+            y: centerY - (textWidth / 2) * Math.sin(angleDeg * Math.PI / 180),
+            size: fontSize,
+            font: font,
+            color: fontColor,
+            opacity: opacity,
+            rotate: PDFLib.degrees(angleDeg)
+          });
+        } else if (activeMode === 'image' && embeddedImg) {
+          const scale = Math.min((width * 0.5) / embeddedImg.width, (height * 0.5) / embeddedImg.height);
+          const imgW = embeddedImg.width * scale;
+          const imgH = embeddedImg.height * scale;
+
+          page.drawImage(embeddedImg, {
+            x: (width - imgW) / 2,
+            y: (height - imgH) / 2,
+            width: imgW,
+            height: imgH,
+            opacity: opacity,
+            rotate: PDFLib.degrees(angleDeg)
+          });
+        }
+      });
+
+      const outBytes = await pdfDoc.save();
+      const blob = new Blob([outBytes], { type: 'application/pdf' });
+      const link = document.createElement('a');
+
+      let outName = outputNameInput.value.trim();
+      if (!outName.toLowerCase().endsWith('.pdf')) outName += '.pdf';
+
+      link.href = URL.createObjectURL(blob);
+      link.download = outName || 'watermarked_document.pdf';
+      link.click();
+
+      statusMsg.textContent = `Watermark applied to ${targetIndices.length} page(s) successfully!`;
+    } catch (err) {
+      alert('Error applying watermark: ' + err.message);
+      statusMsg.style.display = 'none';
+    }
+
+    applyBtn.disabled = false;
+    applyBtn.textContent = '💧 Apply Watermark & Download';
+  });
+</script>
+</body>
+</html>
