@@ -2,23 +2,352 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tool - FormReady India</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Signature Maker - FormReady India</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
-:root { --bg: #151210; --panel: #1e1a17; --line: #39322b; --amber: #d99a3f; --paper: #f2ece2; --muted: #a89a89; }
-body { background: var(--bg); color: var(--paper); font-family: 'Inter', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; }
-.card { background: var(--panel); border: 1px solid var(--line); padding: 30px; border-radius: 12px; max-width: 400px; width: 100%; }
-h2 { color: var(--amber); margin-bottom: 10px; font-size: 20px; }
-p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
-.back-btn { background: var(--amber); color: #151210; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; display: inline-block; }
+:root {
+  --bg: #151210;
+  --panel: #1e1a17;
+  --line: #39322b;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f2ece2;
+  --muted: #a89a89;
+}
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.wrapper {
+  width: 100%;
+  max-width: 560px;
+}
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 16px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  width: 100%;
+}
+h2 {
+  color: var(--amber);
+  margin: 0 0 4px 0;
+  font-size: 20px;
+}
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.canvas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.canvas-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+.canvas-container {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 14px;
+  border: 2px dashed var(--line);
+  touch-action: none;
+}
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  cursor: crosshair;
+}
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+input[type="color"] {
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+}
+input[type="range"] {
+  accent-color: var(--amber);
+  width: 120px;
+}
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.btn-undo {
+  background: #23201d;
+  color: var(--paper);
+  border: 1px solid var(--line);
+  padding: 11px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-undo:hover {
+  background: #2f2a25;
+}
+.btn-clear {
+  background: #2a1b1b;
+  color: #fca5a5;
+  border: 1px solid #7f1d1d;
+  padding: 11px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-clear:hover {
+  background: #451a1a;
+}
+.btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.btn {
+  background: var(--amber);
+  color: var(--bg);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.2s;
+}
+.btn:hover {
+  opacity: 0.9;
+}
 </style>
 </head>
 <body>
-<div class="card">
-  <h2>Tool Ready & Loading</h2>
-  <p>This tool is linked correctly and its interface is being connected to your dashboard.</p>
-  <a href="../../" class="back-btn">← Back to Dashboard</a>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+  <div class="card">
+    <h2>Signature Maker</h2>
+    <div class="subtitle">Draw, smooth, and export transparent digital signatures.</div>
+
+    <div class="canvas-header">
+      <span class="canvas-label">Sign inside the white area:</span>
+    </div>
+
+    <div class="canvas-container" id="canvas-container">
+      <canvas id="sig-canvas"></canvas>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <label>Color:</label>
+        <input type="color" id="pen-color" value="#000000">
+      </div>
+      <div class="control-group">
+        <label>Thickness:</label>
+        <input type="range" id="pen-width" min="1" max="12" value="3">
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-undo" id="undo-btn">&#8617; Undo</button>
+      <button class="btn-clear" id="clear-btn">Clear</button>
+    </div>
+
+    <div class="btn-grid">
+      <button class="btn" id="download-jpg">Download JPG</button>
+      <button class="btn" id="download-pdf">Download PDF</button>
+    </div>
+  </div>
 </div>
+
+<script>
+  const canvas = document.getElementById('sig-canvas');
+  const ctx = canvas.getContext('2d');
+  const container = document.getElementById('canvas-container');
+  const penColor = document.getElementById('pen-color');
+  const penWidth = document.getElementById('pen-width');
+
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let historyStack = [];
+
+  function saveState() {
+    if (historyStack.length >= 25) {
+      historyStack.shift();
+    }
+    historyStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+  }
+
+  function initCanvas() {
+    const rect = container.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    let prevData = null;
+    if (canvas.width > 0 && canvas.height > 0) {
+      prevData = canvas.toDataURL();
+    }
+
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, rect.width, rect.height);
+
+    if (prevData) {
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      img.src = prevData;
+    }
+  }
+
+  let lastWidth = window.innerWidth;
+  window.addEventListener('resize', () => {
+    if (Math.abs(window.innerWidth - lastWidth) > 50) {
+      lastWidth = window.innerWidth;
+      initCanvas();
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', initCanvas);
+  setTimeout(initCanvas, 100);
+
+  function getCoords(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  canvas.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    canvas.setPointerCapture(e.pointerId);
+    saveState();
+    isDrawing = true;
+    const pt = getCoords(e);
+    lastX = pt.x;
+    lastY = pt.y;
+
+    ctx.beginPath();
+    ctx.arc(lastX, lastY, penWidth.value / 2, 0, Math.PI * 2);
+    ctx.fillStyle = penColor.value;
+    ctx.fill();
+  });
+
+  canvas.addEventListener('pointermove', (e) => {
+    e.preventDefault();
+    const pt = getCoords(e);
+
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(pt.x, pt.y);
+    ctx.strokeStyle = penColor.value;
+    ctx.lineWidth = penWidth.value;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+
+    lastX = pt.x;
+    lastY = pt.y;
+  });
+
+  const stopDrawing = (e) => {
+    isDrawing = false;
+    try { canvas.releasePointerCapture(e.pointerId); } catch(err) {}
+  };
+
+  canvas.addEventListener('pointerup', stopDrawing);
+  canvas.addEventListener('pointercancel', stopDrawing);
+  canvas.addEventListener('pointerleave', stopDrawing);
+
+  document.getElementById('undo-btn').addEventListener('click', () => {
+    if (historyStack.length > 0) {
+      const previousState = historyStack.pop();
+      ctx.putImageData(previousState, 0, 0);
+    }
+  });
+
+  document.getElementById('clear-btn').addEventListener('click', () => {
+    saveState();
+    const rect = container.getBoundingClientRect();
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, rect.width, rect.height);
+  });
+
+  document.getElementById('download-jpg').addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'signature.jpg';
+    link.href = canvas.toDataURL('image/jpeg', 0.95);
+    link.click();
+  });
+
+  document.getElementById('download-pdf').addEventListener('click', async () => {
+    const { PDFDocument } = PDFLib;
+    const pdfDoc = await PDFDocument.create();
+    const rect = container.getBoundingClientRect();
+    const page = pdfDoc.addPage([rect.width, rect.height]);
+    const jpgBytes = await fetch(canvas.toDataURL('image/jpeg', 0.95)).then(r => r.arrayBuffer());
+    const jpgImage = await pdfDoc.embedJpg(jpgBytes);
+    page.drawImage(jpgImage, { x: 0, y: 0, width: rect.width, height: rect.height });
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'signature.pdf';
+    link.click();
+  });
+</script>
 </body>
 </html>
