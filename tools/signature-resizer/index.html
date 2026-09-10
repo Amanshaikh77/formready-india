@@ -3,11 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Signature Resizer - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<title>Signature Resizer & Enhancer - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #151210;
@@ -17,404 +14,171 @@
   --amber-hover: #c48733;
   --paper: #f2ece2;
   --muted: #a89a89;
+  --card-bg: #14110f;
+  --danger: #ef4444;
+  --success: #22c55e;
 }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   background: var(--bg);
   color: var(--paper);
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 14px;
+  padding: 14px 10px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  box-sizing: border-box;
   touch-action: pan-y;
 }
-.wrapper {
-  width: 100%;
-  max-width: 540px;
-}
+.wrapper { width: 100%; max-width: 580px; }
+@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+
 .back-link {
   color: var(--amber);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
-  padding: 18px;
+  padding: 18px 16px;
   border-radius: 12px;
-  box-sizing: border-box;
   width: 100%;
-}
-h2 {
-  color: var(--amber);
-  margin: 0 0 4px 0;
-  font-size: 20px;
-  text-align: center;
-}
-.subtitle {
-  color: var(--muted);
-  font-size: 12px;
-  margin-bottom: 14px;
-  text-align: center;
-}
-.upload-zone {
-  border: 2px dashed var(--amber);
-  background: rgba(217, 154, 63, 0.05);
-  border-radius: 10px;
-  padding: 22px 14px;
-  text-align: center;
-  cursor: pointer;
   margin-bottom: 14px;
 }
-.upload-zone span {
-  color: var(--amber);
-  font-weight: 600;
-  font-size: 14px;
-  display: block;
-}
-.upload-zone small {
-  color: var(--muted);
-  font-size: 12px;
-}
-.crop-section {
-  display: none;
-  margin-bottom: 14px;
-}
-.crop-box-container {
-  width: 100%;
-  height: 340px;
-  max-height: 50vh;
-  background: #0d0b09;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  touch-action: none;
-}
-.crop-box-container img {
-  max-width: 100%;
-  display: block;
-}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
 
-/* Touch-friendly handles */
-.cropper-view-box {
-  outline: 2.5px solid var(--amber) !important;
-}
-.cropper-line {
-  background-color: rgba(217, 154, 63, 0.7) !important;
-}
-.cropper-point {
-  width: 22px !important;
-  height: 22px !important;
-  background-color: var(--amber) !important;
-  opacity: 1 !important;
-  border-radius: 50% !important;
-  box-shadow: 0 0 6px rgba(0,0,0,0.6) !important;
-}
-.cropper-point::before {
-  content: "";
-  position: absolute;
-  top: -15px;
-  left: -15px;
-  right: -15px;
-  bottom: -15px;
-}
-
-/* Rotation Section */
-.rotate-control {
+/* How to Use Box */
+.how-to-box {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
-  padding: 10px 14px;
+  border-left: 3px solid var(--amber);
   border-radius: 8px;
-  margin-bottom: 12px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
 }
-.rotate-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
   margin-bottom: 6px;
-  font-size: 13px;
-}
-.rotate-left-group {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 11.5px;
   color: var(--muted);
+  line-height: 1.6;
 }
-.rotate-val {
-  color: var(--amber);
-  font-weight: 600;
-}
-.btn-reset-rot {
-  background: #2a2420;
-  color: var(--amber);
-  border: 1px solid var(--line);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* Upload Box */
+.upload-box {
+  border: 2px dashed var(--amber);
+  background: rgba(217, 154, 63, 0.04);
+  border-radius: 10px;
+  padding: 24px 14px;
+  text-align: center;
   cursor: pointer;
+  margin-bottom: 16px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 4px;
   transition: background 0.2s;
 }
-.btn-reset-rot:hover {
-  background: #39322b;
-}
-.rotate-slider {
-  width: 100%;
-  accent-color: var(--amber);
-  cursor: pointer;
-  height: 6px;
-}
+.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
+.upload-box small { color: var(--muted); font-size: 11px; }
 
-/* Form Group */
-.form-group {
-  margin-bottom: 14px;
-}
-label {
-  display: block;
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 4px;
-}
-input[type="number"] {
-  width: 100%;
-  background: #14110f;
-  border: 1px solid var(--line);
-  color: var(--paper);
-  padding: 10px;
-  border-radius: 8px;
-  box-sizing: border-box;
-  font-size: 14px;
-}
-
-/* Buttons */
-.btn-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
 .btn {
   background: var(--amber);
   color: var(--bg);
   border: none;
   padding: 13px;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   cursor: pointer;
   text-align: center;
+  width: 100%;
+  margin-top: 10px;
   transition: opacity 0.2s;
 }
-.btn:hover {
-  opacity: 0.9;
-}
-.btn:disabled {
-  background: #39322b;
-  color: #716659;
-  cursor: not-allowed;
-}
-.status-box {
-  display: none;
-  margin-top: 12px;
-  padding: 10px;
+.btn:hover { opacity: 0.9; }
+
+/* Standard Ad Banner Container */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid #15803d;
-  color: #86efac;
-  font-size: 12px;
+  padding: 16px;
   text-align: center;
+  margin-top: 16px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 </style>
 </head>
 <body>
 <div class="wrapper">
   <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
   <div class="card">
-    <h2>Signature Resizer</h2>
-    <div class="subtitle">Crop accurately, adjust angle with slider, and export to JPG or PDF</div>
+    <h2>Signature Resizer & Enhancer</h2>
+    <div class="subtitle">Crop accurately, adjust contrast, and optimize signature images for portal uploads</div>
 
+    <!-- How to Use Box -->
+    <div class="how-to-box">
+      <div class="how-to-title">📄 How to Use Signature Resizer</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload Image:</span> Select your scanned signature photo or image.</li>
+        <li>2. <span>Enhance & Crop:</span> Adjust contrast or crop unwanted background space.</li>
+        <li>3. <span>Download:</span> Save strictly under required portal file dimensions and KB limit.</li>
+      </ol>
+    </div>
+
+    <!-- Upload Box -->
     <input type="file" id="file-input" accept="image/*" style="display:none">
-    <div class="upload-zone" id="upload-zone">
+    <div class="upload-box" onclick="document.getElementById('file-input').click()">
       <span>📁 Tap here to upload signature photo</span>
-      <small>JPG, PNG, WebP supported</small>
+      <small>Supports JPG, PNG, WebP formats</small>
     </div>
 
-    <div class="crop-section" id="crop-section">
-      <div class="rotate-control">
-        <div class="rotate-header">
-          <div class="rotate-left-group">
-            <span>Rotation:</span>
-            <span class="rotate-val" id="rotate-display">0°</span>
-          </div>
-          <button type="button" class="btn-reset-rot" id="reset-rot-btn">&#8634; Reset</button>
-        </div>
-        <input type="range" id="rotate-slider" class="rotate-slider" min="-180" max="180" value="0" step="1">
-      </div>
-
-      <div class="crop-box-container">
-        <img id="crop-image" alt="Signature preview">
+    <!-- Standard Ad Banner -->
+    <div class="ad-card">
+      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
+      <div class="ad-content">
+        <span>📢</span> Google AdSense / Responsive Banner Space (Optimized for Mobile & Desktop)
       </div>
     </div>
-
-    <div class="form-group">
-      <label>Max File Size Limit (KB):</label>
-      <input type="number" id="max-kb" value="20">
-    </div>
-
-    <div class="btn-grid">
-      <button class="btn" id="download-jpg" disabled>Download JPG</button>
-      <button class="btn" id="download-pdf" disabled>Download PDF</button>
-    </div>
-
-    <div class="status-box" id="status-box"></div>
   </div>
 </div>
-
-<script>
-  const fileInput = document.getElementById("file-input");
-  const uploadZone = document.getElementById("upload-zone");
-  const cropSection = document.getElementById("crop-section");
-  const cropImage = document.getElementById("crop-image");
-  const rotateSlider = document.getElementById("rotate-slider");
-  const rotateDisplay = document.getElementById("rotate-display");
-  const resetRotBtn = document.getElementById("reset-rot-btn");
-  const maxKbInput = document.getElementById("max-kb");
-  const downloadJpgBtn = document.getElementById("download-jpg");
-  const downloadPdfBtn = document.getElementById("download-pdf");
-  const statusBox = document.getElementById("status-box");
-
-  let cropper = null;
-
-  uploadZone.addEventListener("click", () => fileInput.click());
-
-  fileInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      cropImage.src = event.target.result;
-      cropSection.style.display = "block";
-      downloadJpgBtn.disabled = false;
-      downloadPdfBtn.disabled = false;
-      statusBox.style.display = "none";
-      rotateSlider.value = 0;
-      rotateDisplay.textContent = "0°";
-
-      if (cropper) cropper.destroy();
-
-      cropper = new Cropper(cropImage, {
-        viewMode: 1,
-        dragMode: "none",
-        autoCropArea: 0.9,
-        restore: false,
-        guides: true,
-        center: true,
-        highlight: false,
-        cropBoxMovable: true,
-        cropBoxResizable: true,
-        toggleDragModeOnDblclick: false,
-        minCropBoxWidth: 30,
-        minCropBoxHeight: 30
-      });
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // Rotation slider change
-  rotateSlider.addEventListener("input", (e) => {
-    const deg = parseInt(e.target.value) || 0;
-    rotateDisplay.textContent = deg + "°";
-    if (cropper) {
-      cropper.rotateTo(deg);
-    }
-  });
-
-  // Reset rotation to 0
-  resetRotBtn.addEventListener("click", () => {
-    rotateSlider.value = 0;
-    rotateDisplay.textContent = "0°";
-    if (cropper) {
-      cropper.rotateTo(0);
-    }
-  });
-
-  async function generateCroppedJpgBlob() {
-    if (!cropper) return null;
-    const croppedCanvas = cropper.getCroppedCanvas({
-      fillColor: "#ffffff",
-      imageSmoothingEnabled: true,
-      imageSmoothingQuality: "high"
-    });
-    if (!croppedCanvas) return null;
-
-    const maxKB = parseFloat(maxKbInput.value) || 20;
-    let quality = 0.92;
-    const getBlob = (q) => new Promise(res => croppedCanvas.toBlob(res, "image/jpeg", q));
-
-    let blob = await getBlob(quality);
-    while (blob.size > maxKB * 1024 && quality > 0.08) {
-      quality -= 0.08;
-      blob = await getBlob(quality);
-    }
-    return { blob, canvas: croppedCanvas };
-  }
-
-  // Download JPG
-  downloadJpgBtn.addEventListener("click", async () => {
-    const res = await generateCroppedJpgBlob();
-    if (!res) return;
-
-    const { blob, canvas } = res;
-    const finalSizeKB = (blob.size / 1024).toFixed(1);
-    const link = document.createElement("a");
-    link.download = "signature.jpg";
-    link.href = URL.createObjectURL(blob);
-    link.click();
-
-    statusBox.style.display = "block";
-    statusBox.innerHTML = `&#10004; JPG Downloaded! Size: <b>${finalSizeKB} KB</b> (${canvas.width}x${canvas.height}px)`;
-  });
-
-  // Download PDF
-  downloadPdfBtn.addEventListener("click", async () => {
-    const res = await generateCroppedJpgBlob();
-    if (!res) return;
-
-    const { blob, canvas } = res;
-    const { PDFDocument } = PDFLib;
-    const pdfDoc = await PDFDocument.create();
-
-    const page = pdfDoc.addPage([canvas.width, canvas.height]);
-    const jpgBytes = await blob.arrayBuffer();
-    const embeddedImg = await pdfDoc.embedJpg(jpgBytes);
-
-    page.drawImage(embeddedImg, {
-      x: 0,
-      y: 0,
-      width: canvas.width,
-      height: canvas.height
-    });
-
-    const pdfBytes = await pdfDoc.save();
-    const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
-    const link = document.createElement("a");
-    link.download = "signature.pdf";
-    link.href = URL.createObjectURL(pdfBlob);
-    link.click();
-
-    const finalSizeKB = (pdfBlob.size / 1024).toFixed(1);
-    statusBox.style.display = "block";
-    statusBox.innerHTML = `&#10004; PDF Downloaded! Size: <b>${finalSizeKB} KB</b>`;
-  });
-</script>
 </body>
 </html>

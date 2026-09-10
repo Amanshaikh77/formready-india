@@ -3,708 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Aadhaar & PAN Card Cutter - FormReady India</title>
+<title>ID Utility - FormReady India</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
 :root {
   --bg: #151210;
   --panel: #1e1a17;
   --line: #39322b;
   --amber: #d99a3f;
+  --amber-hover: #c48733;
   --paper: #f2ece2;
   --muted: #a89a89;
-  --danger: #ef4444;
   --card-bg: #14110f;
+  --danger: #ef4444;
   --success: #22c55e;
 }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   background: var(--bg);
   color: var(--paper);
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 12px;
+  padding: 14px 10px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  box-sizing: border-box;
   touch-action: pan-y;
 }
-.wrapper { width: 100%; max-width: 560px; }
+.wrapper { width: 100%; max-width: 580px; }
+@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+
 .back-link {
   color: var(--amber);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   display: inline-block;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
-  padding: 16px;
+  padding: 18px 16px;
   border-radius: 12px;
-  box-sizing: border-box;
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
-h2 { color: var(--amber); margin: 0 0 4px 0; font-size: 20px; text-align: center; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 14px; text-align: center; }
-.upload-zone {
-  border: 2px dashed var(--amber);
-  background: rgba(217, 154, 63, 0.05);
-  border-radius: 10px;
-  padding: 22px 14px;
-  text-align: center;
-  cursor: pointer;
-  margin-bottom: 12px;
-}
-.upload-zone span { color: var(--amber); font-weight: 600; font-size: 14px; display: block; }
-.upload-zone small { color: var(--muted); font-size: 12px; }
-.step-banner {
-  display: none;
-  background: rgba(217, 154, 63, 0.1);
-  border: 1px solid var(--amber);
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--amber);
-  text-align: center;
-}
-.page-nav {
-  display: none;
-  justify-content: space-between;
-  align-items: center;
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+
+/* How to Use Box */
+.how-to-box {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--line);
-  padding: 6px 12px;
+  border-left: 3px solid var(--amber);
   border-radius: 8px;
-  margin-bottom: 12px;
-  font-size: 12px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
 }
-.nav-btn {
-  background: #2a2420;
-  color: var(--paper);
-  border: 1px solid var(--line);
-  padding: 4px 10px;
-  border-radius: 6px;
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* Upload Box */
+.upload-box {
+  border: 2px dashed var(--amber);
+  background: rgba(217, 154, 63, 0.04);
+  border-radius: 10px;
+  padding: 24px 14px;
+  text-align: center;
   cursor: pointer;
-  font-size: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s;
 }
-.crop-section { display: none; margin-bottom: 14px; }
-.crop-box-container {
-  width: 100%;
-  height: 350px;
-  max-height: 50vh;
-  background: #0d0b09;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  touch-action: none;
-}
-.crop-box-container img { max-width: 100%; display: block; }
-.cropper-view-box { outline: 2.5px solid var(--amber) !important; }
-.cropper-line { background-color: rgba(217, 154, 63, 0.7) !important; }
-.cropper-point {
-  width: 22px !important;
-  height: 22px !important;
-  background-color: var(--amber) !important;
-  opacity: 1 !important;
-  border-radius: 50% !important;
-  box-shadow: 0 0 6px rgba(0,0,0,0.6) !important;
-}
-.cropper-point::before {
-  content: "";
-  position: absolute;
-  top: -15px; left: -15px; right: -15px; bottom: -15px;
-}
+.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
+.upload-box small { color: var(--muted); font-size: 11px; }
+
 .btn {
   background: var(--amber);
   color: var(--bg);
   border: none;
-  padding: 12px;
+  padding: 13px;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   cursor: pointer;
   text-align: center;
   width: 100%;
-  box-sizing: border-box;
+  margin-top: 10px;
+  transition: opacity 0.2s;
 }
 .btn:hover { opacity: 0.9; }
-.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.preview-card {
-  display: none;
+
+/* Standard Ad Banner Container */
+.ad-card {
   background: var(--card-bg);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px;
-  margin-top: 14px;
-}
-.preview-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--amber);
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.btn-recrop {
-  background: #2a2420;
-  color: var(--amber);
-  border: 1px solid var(--line);
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.preview-img-box {
-  width: 100%;
-  background: #000;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  overflow: hidden;
-  margin-bottom: 10px;
+  border-radius: 8px;
+  padding: 16px;
   text-align: center;
-  padding: 6px 0;
-}
-.preview-img-box img {
-  max-width: 100%;
-  height: auto;
-  max-height: 220px;
-  display: inline-block;
-  vertical-align: middle;
-}
-.merged-section {
-  display: none;
-  background: rgba(34, 197, 94, 0.05);
-  border: 1px solid #15803d;
-  border-radius: 10px;
-  padding: 14px;
   margin-top: 16px;
-}
-.merged-title {
-  color: #86efac;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  text-align: center;
-}
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 9999;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
-  backdrop-filter: blur(4px);
+  gap: 6px;
 }
-.modal-card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 20px;
-  width: 100%;
-  max-width: 380px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  box-sizing: border-box;
-}
-.modal-card h3 { color: var(--amber); margin: 0 0 6px 0; font-size: 18px; }
-.modal-card p { color: var(--muted); font-size: 12px; margin: 0 0 12px 0; line-height: 1.4; }
-.pwd-input-group { position: relative; width: 100%; margin-bottom: 8px; }
-.pwd-input {
-  width: 100%;
-  background: #14110f;
-  border: 1px solid var(--line);
-  color: var(--paper);
-  padding: 12px 42px 12px 12px;
-  border-radius: 8px;
-  box-sizing: border-box;
-  font-size: 15px;
-}
-.eye-btn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
+.ad-tag {
+  font-size: 9px;
+  font-weight: 700;
   color: var(--muted);
-  font-size: 18px;
-  cursor: pointer;
+  letter-spacing: 0.8px;
+  display: block;
 }
-.pwd-error {
-  display: none;
-  color: var(--danger);
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-.modal-actions { display: flex; gap: 10px; }
-.btn-unlock {
-  background: var(--amber);
-  color: var(--bg);
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: 600;
-  flex: 1;
-  cursor: pointer;
-}
-.btn-cancel {
-  background: #2a2420;
-  color: var(--paper);
-  border: 1px solid var(--line);
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 </style>
 </head>
 <body>
 <div class="wrapper">
   <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
   <div class="card">
-    <h2>Aadhaar & PAN Card Cutter</h2>
-    <div class="subtitle">Cut Front & Back sides, download separately or side-by-side</div>
+    <h2>ID Tool Utility</h2>
+    <div class="subtitle">Secure offline processing for official document alignment</div>
 
-    <input type="file" id="file-input" accept="application/pdf,image/*" style="display:none">
-    <div class="upload-zone" id="upload-zone">
-      <span>📄 Tap here to upload Aadhaar / PAN</span>
-      <small>PDF (Password Supported) or JPG / PNG</small>
+    <!-- How to Use Box -->
+    <div class="how-to-box">
+      <div class="how-to-title">📄 How to Use ID Tool</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload Document:</span> Tap the upload box to select your file.</li>
+        <li>2. <span>Process:</span> Adjust alignment or dimensions securely in your browser.</li>
+        <li>3. <span>Download:</span> Save your final document instantly.</li>
+      </ol>
     </div>
 
-    <div class="step-banner" id="step-banner">STEP 1: Crop FRONT SIDE of Card</div>
-
-    <div class="page-nav" id="page-nav">
-      <button type="button" class="nav-btn" id="prev-page">&larr; Prev Page</button>
-      <span id="page-info" style="color:var(--muted)">Page 1 of 1</span>
-      <button type="button" class="nav-btn" id="next-page">Next Page &rarr;</button>
+    <!-- Upload Box -->
+    <input type="file" id="file-input" accept="image/*,application/pdf" style="display:none">
+    <div class="upload-box" onclick="document.getElementById('file-input').click()">
+      <span>📁 Tap here to upload document</span>
+      <small>Supports PDF, JPG, PNG formats</small>
     </div>
 
-    <div class="crop-section" id="crop-section">
-      <div class="crop-box-container">
-        <img id="crop-image" alt="Card Preview">
-      </div>
-      <div style="margin-top: 12px;">
-        <button class="btn" id="save-crop-btn">✂️ Save & Crop Front Side</button>
-      </div>
-    </div>
-
-    <div class="preview-card" id="front-preview-card">
-      <div class="preview-title">
-        <span>✅ Front Side Cropped</span>
-        <button type="button" class="btn-recrop" id="recrop-front-btn">Re-crop</button>
-      </div>
-      <div class="preview-img-box">
-        <img id="front-preview-img" alt="Front Preview">
-      </div>
-      <div class="btn-grid">
-        <button class="btn" id="dl-front-jpg">Download JPG</button>
-        <button class="btn" id="dl-front-pdf">Download PDF</button>
-      </div>
-    </div>
-
-    <div class="preview-card" id="back-preview-card">
-      <div class="preview-title">
-        <span>✅ Back Side Cropped</span>
-        <button type="button" class="btn-recrop" id="recrop-back-btn">Re-crop</button>
-      </div>
-      <div class="preview-img-box">
-        <img id="back-preview-img" alt="Back Preview">
-      </div>
-      <div class="btn-grid">
-        <button class="btn" id="dl-back-jpg">Download JPG</button>
-        <button class="btn" id="dl-back-pdf">Download PDF</button>
-      </div>
-    </div>
-
-    <div class="merged-section" id="merged-section">
-      <div class="merged-title">🎉 Side-by-Side (Left: Front | Right: Back):</div>
-      <div class="preview-img-box">
-        <img id="merged-preview-img" alt="Side by Side Preview">
-      </div>
-      <div class="btn-grid">
-        <button class="btn" id="dl-merged-jpg">Download Combined (JPG)</button>
-        <button class="btn" id="dl-merged-pdf">Download Combined (PDF)</button>
+    <!-- Standard Ad Banner -->
+    <div class="ad-card">
+      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
+      <div class="ad-content">
+        <span>📢</span> Google AdSense / Responsive Banner Space (Optimized for Mobile & Desktop)
       </div>
     </div>
   </div>
 </div>
-
-<div class="modal-overlay" id="password-modal">
-  <div class="modal-card">
-    <h3>🔒 Password Protected PDF</h3>
-    <p>Enter PDF password (e.g. First 4 letters of Name in CAPITAL + Birth Year):</p>
-    <div class="pwd-input-group">
-      <input type="password" id="pwd-input" class="pwd-input" placeholder="Enter password">
-      <button type="button" class="eye-btn" id="toggle-pwd-btn">👁️</button>
-    </div>
-    <div class="pwd-error" id="pwd-error">Incorrect password! Please try again.</div>
-    <div class="modal-actions">
-      <button type="button" class="btn-cancel" id="pwd-cancel">Cancel</button>
-      <button type="button" class="btn-unlock" id="pwd-submit">Unlock & Open</button>
-    </div>
-  </div>
-</div>
-<script>
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
-
-  const fileInput = document.getElementById("file-input");
-  const uploadZone = document.getElementById("upload-zone");
-  const stepBanner = document.getElementById("step-banner");
-  const cropSection = document.getElementById("crop-section");
-  const cropImage = document.getElementById("crop-image");
-  const saveCropBtn = document.getElementById("save-crop-btn");
-
-  const frontPreviewCard = document.getElementById("front-preview-card");
-  const frontPreviewImg = document.getElementById("front-preview-img");
-  const backPreviewCard = document.getElementById("back-preview-card");
-  const backPreviewImg = document.getElementById("back-preview-img");
-  const mergedSection = document.getElementById("merged-section");
-  const mergedPreviewImg = document.getElementById("merged-preview-img");
-
-  const dlFrontJpg = document.getElementById("dl-front-jpg");
-  const dlFrontPdf = document.getElementById("dl-front-pdf");
-  const dlBackJpg = document.getElementById("dl-back-jpg");
-  const dlBackPdf = document.getElementById("dl-back-pdf");
-  const dlMergedJpg = document.getElementById("dl-merged-jpg");
-  const dlMergedPdf = document.getElementById("dl-merged-pdf");
-
-  const recropFrontBtn = document.getElementById("recrop-front-btn");
-  const recropBackBtn = document.getElementById("recrop-back-btn");
-
-  const passwordModal = document.getElementById("password-modal");
-  const pwdInput = document.getElementById("pwd-input");
-  const togglePwdBtn = document.getElementById("toggle-pwd-btn");
-  const pwdError = document.getElementById("pwd-error");
-  const pwdSubmit = document.getElementById("pwd-submit");
-  const pwdCancel = document.getElementById("pwd-cancel");
-
-  const pageNav = document.getElementById("page-nav");
-  const prevPageBtn = document.getElementById("prev-page");
-  const nextPageBtn = document.getElementById("next-page");
-  const pageInfo = document.getElementById("page-info");
-
-  let cropper = null;
-  let currentPdfDoc = null;
-  let currentPageNum = 1;
-  let passwordCallback = null;
-  let originalImageSrc = null;
-
-  let frontCanvas = null;
-  let backCanvas = null;
-  let currentCropStep = "front";
-
-  uploadZone.addEventListener("click", () => fileInput.click());
-
-  togglePwdBtn.addEventListener("click", () => {
-    if (pwdInput.type === "password") {
-      pwdInput.type = "text";
-      togglePwdBtn.textContent = "🔒";
-    } else {
-      pwdInput.type = "password";
-      togglePwdBtn.textContent = "👁️";
-    }
-  });
-
-  fileInput.addEventListener("change", async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    frontCanvas = null;
-    backCanvas = null;
-    frontPreviewCard.style.display = "none";
-    backPreviewCard.style.display = "none";
-    mergedSection.style.display = "none";
-    currentCropStep = "front";
-
-    if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
-      const fileData = await file.arrayBuffer();
-      loadPdf(fileData);
-    } else {
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        pageNav.style.display = "none";
-        originalImageSrc = evt.target.result;
-        setupCropper(originalImageSrc);
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  function showPasswordModal(isIncorrect) {
-    pwdInput.value = "";
-    pwdInput.type = "password";
-    togglePwdBtn.textContent = "👁️";
-    pwdError.style.display = isIncorrect ? "block" : "none";
-    passwordModal.style.display = "flex";
-    pwdInput.focus();
-  }
-
-  pwdSubmit.addEventListener("click", () => {
-    const entered = pwdInput.value.trim();
-    if (!entered) return;
-    passwordModal.style.display = "none";
-    if (passwordCallback) passwordCallback(entered);
-  });
-
-  pwdInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") pwdSubmit.click();
-  });
-
-  pwdCancel.addEventListener("click", () => {
-    passwordModal.style.display = "none";
-    fileInput.value = "";
-  });
-
-  function loadPdf(arrayBuffer) {
-    const typedArray = new Uint8Array(arrayBuffer);
-    const loadingTask = pdfjsLib.getDocument({
-      data: typedArray,
-      cMapUrl: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/cmaps/",
-      cMapPacked: true
-    });
-
-    loadingTask.onPassword = function(callback, reason) {
-      passwordCallback = callback;
-      if (reason === pdfjsLib.PasswordResponses.NEED_PASSWORD) {
-        showPasswordModal(false);
-      } else if (reason === pdfjsLib.PasswordResponses.INCORRECT_PASSWORD) {
-        showPasswordModal(true);
-      }
-    };
-
-    loadingTask.promise.then((pdfDoc) => {
-      currentPdfDoc = pdfDoc;
-      currentPageNum = 1;
-      if (pdfDoc.numPages > 1) {
-        pageNav.style.display = "flex";
-        pageInfo.textContent = "Page 1 of " + pdfDoc.numPages;
-      } else {
-        pageNav.style.display = "none";
-      }
-      renderPdfPage(currentPageNum);
-    }).catch((err) => {
-      console.error(err);
-      alert("PDF load error: " + (err.message || err));
-    });
-  }
-
-  async function renderPdfPage(num) {
-    if (!currentPdfDoc) return;
-    const page = await currentPdfDoc.getPage(num);
-    const viewport = page.getViewport({ scale: 2.2 });
-
-    const canvas = document.createElement("canvas");
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    const ctx = canvas.getContext("2d");
-
-    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-
-    canvas.toBlob((blob) => {
-      if (blob) {
-        originalImageSrc = URL.createObjectURL(blob);
-        setupCropper(originalImageSrc);
-      }
-    }, "image/jpeg", 0.95);
-  }
-
-  prevPageBtn.addEventListener("click", () => {
-    if (currentPdfDoc && currentPageNum > 1) {
-      currentPageNum--;
-      pageInfo.textContent = `Page ${currentPageNum} of ${currentPdfDoc.numPages}`;
-      renderPdfPage(currentPageNum);
-    }
-  });
-
-  nextPageBtn.addEventListener("click", () => {
-    if (currentPdfDoc && currentPageNum < currentPdfDoc.numPages) {
-      currentPageNum++;
-      pageInfo.textContent = `Page ${currentPageNum} of ${currentPdfDoc.numPages}`;
-      renderPdfPage(currentPageNum);
-    }
-  });
-
-  function setupCropper(src) {
-    cropImage.src = src;
-    cropSection.style.display = "block";
-    stepBanner.style.display = "block";
-    updateStepUI();
-
-    if (cropper) cropper.destroy();
-
-    cropper = new Cropper(cropImage, {
-      viewMode: 1,
-      dragMode: "none",
-      autoCropArea: 0.85,
-      restore: false,
-      guides: true,
-      center: true,
-      highlight: false,
-      cropBoxMovable: true,
-      cropBoxResizable: true,
-      toggleDragModeOnDblclick: false,
-      minCropBoxWidth: 50,
-      minCropBoxHeight: 50
-    });
-  }
-
-  function updateStepUI() {
-    if (currentCropStep === "front") {
-      stepBanner.textContent = "STEP 1: Crop FRONT SIDE of Card";
-      stepBanner.style.borderColor = "var(--amber)";
-      stepBanner.style.color = "var(--amber)";
-      saveCropBtn.textContent = "✂️ Save & Crop Front Side";
-    } else {
-      stepBanner.textContent = "STEP 2: Crop BACK SIDE of Card";
-      stepBanner.style.borderColor = "var(--success)";
-      stepBanner.style.color = "var(--success)";
-      saveCropBtn.textContent = "✂️ Save & Crop Back Side";
-    }
-  }
-
-  saveCropBtn.addEventListener("click", () => {
-    if (!cropper) return;
-    const canvas = cropper.getCroppedCanvas({
-      fillColor: "#ffffff",
-      imageSmoothingQuality: "high"
-    });
-    if (!canvas) return;
-
-    if (currentCropStep === "front") {
-      frontCanvas = canvas;
-      frontPreviewImg.src = canvas.toDataURL("image/jpeg", 0.95);
-      frontPreviewCard.style.display = "block";
-
-      currentCropStep = "back";
-      updateStepUI();
-      cropSection.scrollIntoView({ behavior: "smooth" });
-    } else {
-      backCanvas = canvas;
-      backPreviewImg.src = canvas.toDataURL("image/jpeg", 0.95);
-      backPreviewCard.style.display = "block";
-
-      const merged = createMergedCanvas();
-      if (merged) {
-        mergedPreviewImg.src = merged.toDataURL("image/jpeg", 0.95);
-      }
-      mergedSection.style.display = "block";
-      mergedSection.scrollIntoView({ behavior: "smooth" });
-    }
-  });
-
-  recropFrontBtn.addEventListener("click", () => {
-    currentCropStep = "front";
-    updateStepUI();
-    cropSection.scrollIntoView({ behavior: "smooth" });
-  });
-
-  recropBackBtn.addEventListener("click", () => {
-    currentCropStep = "back";
-    updateStepUI();
-    cropSection.scrollIntoView({ behavior: "smooth" });
-  });
-
-  function downloadCanvasJpg(c, filename) {
-    c.toBlob((blob) => {
-      const link = document.createElement("a");
-      link.download = filename;
-      link.href = URL.createObjectURL(blob);
-      link.click();
-    }, "image/jpeg", 0.95);
-  }
-
-  async function downloadCanvasPdf(c, filename) {
-    const { PDFDocument } = PDFLib;
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([c.width, c.height]);
-
-    const jpgDataUrl = c.toDataURL("image/jpeg", 0.95);
-    const jpgBytes = await fetch(jpgDataUrl).then(r => r.arrayBuffer());
-    const embeddedImg = await pdfDoc.embedJpg(jpgBytes);
-
-    page.drawImage(embeddedImg, {
-      x: 0, y: 0, width: c.width, height: c.height
-    });
-
-    const pdfBytes = await pdfDoc.save();
-    const pdfBlob = new Blob([pdfBytes], { type: "application/pdf" });
-    const link = document.createElement("a");
-    link.download = filename;
-    link.href = URL.createObjectURL(pdfBlob);
-    link.click();
-  }
-
-  dlFrontJpg.addEventListener("click", () => {
-    if (frontCanvas) downloadCanvasJpg(frontCanvas, "card_front.jpg");
-  });
-  dlFrontPdf.addEventListener("click", () => {
-    if (frontCanvas) downloadCanvasPdf(frontCanvas, "card_front.pdf");
-  });
-  dlBackJpg.addEventListener("click", () => {
-    if (backCanvas) downloadCanvasJpg(backCanvas, "card_back.jpg");
-  });
-  dlBackPdf.addEventListener("click", () => {
-    if (backCanvas) downloadCanvasPdf(backCanvas, "card_back.pdf");
-  });
-
-  // SIDE-BY-SIDE (Left: Front, Right: Back)
-  function createMergedCanvas() {
-    if (!frontCanvas || !backCanvas) return null;
-
-    // Normalize both to equal height so they align horizontally
-    const targetHeight = Math.max(frontCanvas.height, backCanvas.height);
-    const scaleFront = targetHeight / frontCanvas.height;
-    const scaleBack = targetHeight / backCanvas.height;
-
-    const frontW = Math.round(frontCanvas.width * scaleFront);
-    const backW = Math.round(backCanvas.width * scaleBack);
-
-    const gap = 30;     // Space between front & back
-    const pad = 24;    // Outer border padding
-
-    const totalWidth = frontW + backW + gap + (pad * 2);
-    const totalHeight = targetHeight + (pad * 2);
-
-    const merged = document.createElement("canvas");
-    merged.width = totalWidth;
-    merged.height = totalHeight;
-    const ctx = merged.getContext("2d");
-
-    // Pure white clean background
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, totalWidth, totalHeight);
-
-    // Draw Left: Front Side
-    ctx.drawImage(frontCanvas, pad, pad, frontW, targetHeight);
-
-    // Draw Right: Back Side
-    ctx.drawImage(backCanvas, pad + frontW + gap, pad, backW, targetHeight);
-
-    return merged;
-  }
-
-  dlMergedJpg.addEventListener("click", () => {
-    const merged = createMergedCanvas();
-    if (merged) downloadCanvasJpg(merged, "card_combined.jpg");
-  });
-
-  dlMergedPdf.addEventListener("click", () => {
-    const merged = createMergedCanvas();
-    if (merged) downloadCanvasPdf(merged, "card_combined.pdf");
-  });
-</script>
 </body>
 </html>
