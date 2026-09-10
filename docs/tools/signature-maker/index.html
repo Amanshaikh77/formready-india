@@ -131,11 +131,8 @@ input[type="range"] {
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.2s;
 }
-.btn-undo:hover {
-  background: #2f2a25;
-}
+.btn-undo:hover { background: #2f2a25; }
 .btn-clear {
   background: #2a1b1b;
   color: #fca5a5;
@@ -145,11 +142,8 @@ input[type="range"] {
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: background 0.2s;
 }
-.btn-clear:hover {
-  background: #451a1a;
-}
+.btn-clear:hover { background: #451a1a; }
 .btn-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -165,11 +159,8 @@ input[type="range"] {
   font-size: 14px;
   cursor: pointer;
   text-align: center;
-  transition: opacity 0.2s;
 }
-.btn:hover {
-  opacity: 0.9;
-}
+.btn:hover { opacity: 0.9; }
 </style>
 </head>
 <body>
@@ -218,14 +209,11 @@ input[type="range"] {
   const penWidth = document.getElementById('pen-width');
 
   let isDrawing = false;
-  let lastX = 0;
-  let lastY = 0;
+  let lastX = 0, lastY = 0;
   let historyStack = [];
 
   function saveState() {
-    if (historyStack.length >= 25) {
-      historyStack.shift();
-    }
+    if (historyStack.length >= 25) historyStack.shift();
     historyStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
   }
 
@@ -233,15 +221,12 @@ input[type="range"] {
     const rect = container.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
     let prevData = null;
-    if (canvas.width > 0 && canvas.height > 0) {
-      prevData = canvas.toDataURL();
-    }
+    if (canvas.width > 0 && canvas.height > 0) prevData = canvas.toDataURL();
 
     canvas.width = rect.width * dpr;
     canvas.height = rect.height * dpr;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
-
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, rect.width, rect.height);
 
@@ -265,10 +250,7 @@ input[type="range"] {
 
   function getCoords(e) {
     const rect = canvas.getBoundingClientRect();
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    };
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   }
 
   canvas.addEventListener('pointerdown', (e) => {
