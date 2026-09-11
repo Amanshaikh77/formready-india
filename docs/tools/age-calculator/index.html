@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Govt Form Age Calculator - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+  --danger: #ef4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper { width: 100%; max-width: 540px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+
+/* HOW TO USE GUIDE */
+.how-to-box {
+  background: rgba(217, 154, 63, 0.05);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* FORM ELEMENTS */
+.form-group { margin-bottom: 16px; }
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+input[type="date"] {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+input[type="date"]:focus { border-color: var(--amber); }
+
+.btn {
+  background: var(--amber);
+  color: #13100e;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+/* RESULT BOX */
+.result-card {
+  display: none;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 14px;
+  margin-top: 20px;
+  text-align: center;
+}
+.result-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.result-val {
+  color: var(--amber);
+  font-size: 22px;
+  font-weight: 800;
+  margin: 6px 0 10px;
+}
+.result-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.result-stats span {
+  display: block;
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* ADVERTISEMENT BANNER CONTAINER */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>Govt Form Age Calculator</h2>
+    <div class="subtitle">Calculate exact eligibility age on exam cutoff dates</div>
+
+    <!-- HOW TO USE -->
+    <div class="how-to-box">
+      <div class="how-to-title">📘 How to Use Age Calculator</div>
+      <ol class="how-to-list">
+        <li>1. <span>Date of Birth:</span> Select your accurate birth date.</li>
+        <li>2. <span>Cut-off Date:</span> Enter the cutoff date mentioned in the recruitment notification.</li>
+        <li>3. <span>Calculate:</span> Instantly get your exact age in Years, Months, and Days.</li>
+      </ol>
+    </div>
+
+    <!-- INPUTS -->
+    <div class="form-group">
+      <label>1. Select Your Date of Birth (DOB)</label>
+      <input type="date" id="dob">
+    </div>
+
+    <div class="form-group">
+      <label>2. Cut-off Date (Eligibility Date)</label>
+      <input type="date" id="cutoff">
+    </div>
+
+    <button class="btn" onclick="calculateAge()">Calculate Exact Age</button>
+
+    <!-- RESULT OUTPUT -->
+    <div class="result-card" id="resultCard">
+      <div class="result-label">Your Age on Cut-off Date</div>
+      <div class="result-val" id="primaryAge">-</div>
+      <div class="result-stats">
+        <div>Total Months<span id="statMonths">-</span></div>
+        <div>Total Weeks<span id="statWeeks">-</span></div>
+        <div>Total Days<span id="statDays">-</span></div>
+      </div>
+    </div>
+
+    <!-- ADVERTISEMENT CONTAINER -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Set default cutoff date to today
+document.getElementById('cutoff').valueAsDate = new Date();
+
+function calculateAge() {
+  const dobInput = document.getElementById('dob').value;
+  const cutInput = document.getElementById('cutoff').value;
+
+  if (!dobInput || !cutInput) {
+    alert("Please select both Date of Birth and Cut-off Date.");
+    return;
+  }
+
+  const d1 = new Date(dobInput);
+  const d2 = new Date(cutInput);
+
+  if (d1 > d2) {
+    alert("Date of birth cannot be after the cut-off date!");
+    return;
+  }
+
+  let years = d2.getFullYear() - d1.getFullYear();
+  let months = d2.getMonth() - d1.getMonth();
+  let days = d2.getDate() - d1.getDate();
+
+  if (days < 0) {
+    months--;
+    const prevMonthDays = new Date(d2.getFullYear(), d2.getMonth(), 0).getDate();
+    days += prevMonthDays;
+  }
+
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  const diffTime = Math.abs(d2 - d1);
+  const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const totalWeeks = Math.floor(totalDays / 7);
+  const totalMonths = (years * 12) + months;
+
+  document.getElementById('primaryAge').innerText = `${years} Y, ${months} M, ${days} D`;
+  document.getElementById('statMonths').innerText = totalMonths.toLocaleString();
+  document.getElementById('statWeeks').innerText = totalWeeks.toLocaleString();
+  document.getElementById('statDays').innerText = totalDays.toLocaleString();
+  document.getElementById('resultCard').style.display = 'block';
+}
+</script>
+</body>
+</html>
