@@ -321,11 +321,11 @@ const TOOL_CATALOG = [
     items: [
       { title: "Govt Form Age Calculator", desc: "Calculate exact age as on notification date (Y/M/D).", icon: "🎂", slug: "age-calculator", status: "active" },
       { title: "GST Calculator", desc: "Breakdown CGST, SGST & total amount (add/remove).", icon: "📊", slug: "gst-calculator", status: "active" },
-      { title: "EMI Calculator", desc: "Calculate monthly installments and total loan interest.", icon: "💳", slug: "emi-calculator", status: \"active\" },
-      { title: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins.", icon: "🏷️", slug: "discount-calculator", status: \"active\" },
-      { title: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators.", icon: "⚖️", slug: "bmi-calculator", status: \"active\" },
-      { title: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates.", icon: "📅", slug: "date-gap-calculator", status: \"active\" },
-      { title: "Unit Converter", desc: "Convert Land, Weight, Length & Units.", icon: "📐", slug: "unit-converter", status: \"active\" },
+      { title: "EMI Calculator", desc: "Calculate monthly installments and total loan interest.", icon: "💳", slug: "emi-calculator", status: "coming" },
+      { title: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins.", icon: "🏷️", slug: "discount-calculator", status: "coming" },
+      { title: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators.", icon: "⚖️", slug: "bmi-calculator", status: "coming" },
+      { title: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates.", icon: "📅", slug: "date-gap-calculator", status: "coming" },
+      { title: "Unit Converter", desc: "Convert Land, Weight, Length & Units.", icon: "📐", slug: "unit-converter", status: "coming" },
       { title: "Currency Converter", desc: "Quick currency rate estimations and conversions.", icon: "💱", slug: "currency-converter", status: "coming" }
     ]
   }

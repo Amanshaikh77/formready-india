@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Unit Converter - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper { width: 100%; max-width: 540px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+
+/* HOW TO USE GUIDE */
+.how-to-box {
+  background: rgba(217, 154, 63, 0.05);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* CATEGORY TABS */
+.category-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.category-tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 1;
+  min-width: 85px;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 8px 6px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.15s;
+}
+.tab-btn.active {
+  background: var(--amber);
+  color: #13100e;
+  border-color: var(--amber);
+}
+
+/* FORM CONTROLS */
+.form-group { margin-bottom: 14px; }
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+input[type="number"], select {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+input[type="number"]:focus, select:focus { border-color: var(--amber); }
+
+.units-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.swap-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--amber);
+  border-radius: 8px;
+  width: 38px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  transition: 0.15s;
+}
+.swap-btn:hover {
+  background: var(--amber);
+  color: #13100e;
+}
+
+.btn {
+  background: var(--amber);
+  color: #13100e;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+/* RESULT BOX */
+.result-card {
+  display: none;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 14px;
+  margin-top: 20px;
+  text-align: center;
+}
+.result-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.result-val {
+  color: var(--amber);
+  font-size: 24px;
+  font-weight: 800;
+  margin: 6px 0 10px;
+  word-break: break-word;
+}
+.result-formula {
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+/* ADVERTISEMENT BANNER CONTAINER */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>Unit Converter</h2>
+    <div class="subtitle">Fast conversion for Indian land, length, weight, and temperature</div>
+
+    <!-- HOW TO USE -->
+    <div class="how-to-box">
+      <div class="how-to-title">📘 How to Use Unit Converter</div>
+      <ol class="how-to-list">
+        <li>1. <span>Select Category:</span> Pick Land Area, Length, Weight, or Temp.</li>
+        <li>2. <span>Units:</span> Choose standard <b>From</b> and <b>To</b> measurement units.</li>
+        <li>3. <span>Enter Value:</span> Type the quantity to see instantaneous accurate conversions.</li>
+      </ol>
+    </div>
+
+    <!-- CATEGORY TABS -->
+    <div class="category-tabs">
+      <button class="tab-btn active" onclick="setCategory('land', this)">🌾 Land Area</button>
+      <button class="tab-btn" onclick="setCategory('length', this)">📏 Length</button>
+      <button class="tab-btn" onclick="setCategory('weight', this)">⚖️ Weight</button>
+      <button class="tab-btn" onclick="setCategory('temp', this)">🌡️ Temp</button>
+    </div>
+
+    <!-- VALUE INPUT -->
+    <div class="form-group">
+      <label>Enter Value to Convert</label>
+      <input type="number" id="inputValue" placeholder="e.g. 1" step="any" inputmode="decimal">
+    </div>
+
+    <!-- FROM & TO DROPDOWNS -->
+    <div class="units-row">
+      <div class="form-group" style="margin-bottom:0;">
+        <label>From</label>
+        <select id="fromUnit"></select>
+      </div>
+      <button class="swap-btn" onclick="swapUnits()" title="Swap Units">⇄</button>
+      <div class="form-group" style="margin-bottom:0;">
+        <label>To</label>
+        <select id="toUnit"></select>
+      </div>
+    </div>
+
+    <button class="btn" onclick="convert()">Convert Now</button>
+
+    <!-- RESULT OUTPUT -->
+    <div class="result-card" id="resultCard">
+      <div class="result-label">Converted Value</div>
+      <div class="result-val" id="outputValue">-</div>
+      <div class="result-formula" id="formulaValue">-</div>
+    </div>
+
+    <!-- ADVERTISEMENT CONTAINER -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CONVERSIONS = {
+  land: {
+    base: "sqft",
+    units: {
+      "acre": { name: "Acre", factor: 43560 },
+      "bigha": { name: "Bigha (Standard 27,225 sq ft)", factor: 27225 },
+      "guntha": { name: "Guntha (1,089 sq ft)", factor: 1089 },
+      "gaj": { name: "Gaj / Sq Yard (9 sq ft)", factor: 9 },
+      "sqft": { name: "Square Feet (sq ft)", factor: 1 },
+      "sqm": { name: "Square Meter (sq m)", factor: 10.7639 },
+      "hectare": { name: "Hectare", factor: 107639 }
+    },
+    defaultFrom: "acre",
+    defaultTo: "sqft"
+  },
+  length: {
+    base: "m",
+    units: {
+      "km": { name: "Kilometer (km)", factor: 1000 },
+      "m": { name: "Meter (m)", factor: 1 },
+      "cm": { name: "Centimeter (cm)", factor: 0.01 },
+      "mm": { name: "Millimeter (mm)", factor: 0.001 },
+      "ft": { name: "Feet (ft)", factor: 0.3048 },
+      "in": { name: "Inch (in)", factor: 0.0254 },
+      "mile": { name: "Mile", factor: 1609.34 }
+    },
+    defaultFrom: "m",
+    defaultTo: "ft"
+  },
+  weight: {
+    base: "kg",
+    units: {
+      "tonne": { name: "Metric Tonne (1,000 kg)", factor: 1000 },
+      "quintal": { name: "Quintal (100 kg)", factor: 100 },
+      "kg": { name: "Kilogram (kg)", factor: 1 },
+      "g": { name: "Gram (g)", factor: 0.001 },
+      "lb": { name: "Pound (lbs)", factor: 0.453592 },
+      "oz": { name: "Ounce (oz)", factor: 0.0283495 }
+    },
+    defaultFrom: "kg",
+    defaultTo: "lb"
+  },
+  temp: {
+    units: {
+      "c": { name: "Celsius (°C)" },
+      "f": { name: "Fahrenheit (°F)" },
+      "k": { name: "Kelvin (K)" }
+    },
+    defaultFrom: "c",
+    defaultTo: "f"
+  }
+};
+
+let currentCat = 'land';
+
+function populateDropdowns() {
+  const fSelect = document.getElementById('fromUnit');
+  const tSelect = document.getElementById('toUnit');
+  fSelect.innerHTML = '';
+  tSelect.innerHTML = '';
+
+  const catData = CONVERSIONS[currentCat];
+  Object.keys(catData.units).forEach(k => {
+    const opt1 = document.createElement('option');
+    opt1.value = k;
+    opt1.text = catData.units[k].name;
+    fSelect.appendChild(opt1);
+
+    const opt2 = document.createElement('option');
+    opt2.value = k;
+    opt2.text = catData.units[k].name;
+    tSelect.appendChild(opt2);
+  });
+
+  fSelect.value = catData.defaultFrom;
+  tSelect.value = catData.defaultTo;
+}
+
+function setCategory(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  populateDropdowns();
+  document.getElementById('resultCard').style.display = 'none';
+}
+
+function swapUnits() {
+  const f = document.getElementById('fromUnit');
+  const t = document.getElementById('toUnit');
+  const temp = f.value;
+  f.value = t.value;
+  t.value = temp;
+  convert();
+}
+
+function convert() {
+  const val = parseFloat(document.getElementById('inputValue').value);
+  if (isNaN(val)) {
+    alert("Please enter a valid numeric value.");
+    return;
+  }
+
+  const from = document.getElementById('fromUnit').value;
+  const to = document.getElementById('toUnit').value;
+  let result = 0;
+
+  if (currentCat === 'temp') {
+    if (from === to) {
+      result = val;
+    } else if (from === 'c' && to === 'f') {
+      result = (val * 9/5) + 32;
+    } else if (from === 'c' && to === 'k') {
+      result = val + 273.15;
+    } else if (from === 'f' && to === 'c') {
+      result = (val - 32) * 5/9;
+    } else if (from === 'f' && to === 'k') {
+      result = (val - 32) * 5/9 + 273.15;
+    } else if (from === 'k' && to === 'c') {
+      result = val - 273.15;
+    } else if (from === 'k' && to === 'f') {
+      result = (val - 273.15) * 9/5 + 32;
+    }
+  } else {
+    const units = CONVERSIONS[currentCat].units;
+    const baseVal = val * units[from].factor;
+    result = baseVal / units[to].factor;
+  }
+
+  const fromName = CONVERSIONS[currentCat].units[from].name.split(' (')[0];
+  const toName = CONVERSIONS[currentCat].units[to].name.split(' (')[0];
+
+  const formattedResult = Number.isInteger(result) ? result.toLocaleString() : parseFloat(result.toFixed(6)).toString();
+
+  document.getElementById('outputValue').innerText = `${formattedResult} ${toName}`;
+  document.getElementById('formulaValue').innerText = `${val} ${fromName} = ${formattedResult} ${toName}`;
+  document.getElementById('resultCard').style.display = 'block';
+}
+
+// Initial setup
+populateDropdowns();
+</script>
+</body>
+</html>
