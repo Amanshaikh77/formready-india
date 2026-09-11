@@ -5,344 +5,189 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Passport Photo + Sign Card - FormReady India</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <style>
 :root {
   --bg: #151210;
   --panel: #1e1a17;
   --line: #39322b;
   --amber: #d99a3f;
+  --amber-hover: #c48733;
   --paper: #f2ece2;
   --muted: #a89a89;
   --card-bg: #14110f;
+  --danger: #ef4444;
+  --success: #22c55e;
 }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   background: var(--bg);
   color: var(--paper);
   font-family: 'Inter', sans-serif;
   margin: 0;
-  padding: 14px;
+  padding: 14px 10px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  box-sizing: border-box;
+  touch-action: pan-y;
 }
-.wrapper { width: 100%; max-width: 520px; }
+.wrapper { width: 100%; max-width: 580px; }
+@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+
 .back-link {
   color: var(--amber);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .card {
   background: var(--panel);
   border: 1px solid var(--line);
-  padding: 16px;
+  padding: 18px 16px;
   border-radius: 12px;
-  box-sizing: border-box;
   width: 100%;
   margin-bottom: 14px;
 }
-h2 { color: var(--amber); margin: 0 0 4px 0; font-size: 20px; text-align: center; }
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
 .subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
 
-.section-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--paper);
-  margin-bottom: 6px;
-  display: block;
-}
-.upload-box {
-  border: 2px dashed var(--line);
+/* How to Use Box */
+.how-to-box {
   background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* Upload Box */
+.upload-box {
+  border: 2px dashed var(--amber);
+  background: rgba(217, 154, 63, 0.04);
   border-radius: 10px;
-  padding: 14px;
+  padding: 20px 14px;
   text-align: center;
   cursor: pointer;
   margin-bottom: 14px;
-  transition: border-color 0.2s;
-  min-height: 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 4px;
+  transition: background 0.2s;
 }
-.upload-box:hover { border-color: var(--amber); }
-.upload-text { color: var(--amber); font-weight: 600; font-size: 13px; }
-.upload-sub { color: var(--muted); font-size: 11px; margin-top: 2px; }
-.thumb-preview {
-  display: none;
-  max-width: 120px;
-  max-height: 120px;
-  border-radius: 6px;
-  border: 1px solid var(--amber);
-  margin-bottom: 6px;
-  object-fit: contain;
-  background: #000;
-}
-.change-badge {
-  display: none;
-  font-size: 11px;
-  color: var(--amber);
-  font-weight: 600;
-}
-.output-card {
-  display: none;
-  background: var(--card-bg);
-  border: 1px solid var(--amber);
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 6px;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-.output-title {
-  color: var(--amber);
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-.preview-stage {
-  background: #0a0807;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 12px;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 14px;
-}
-.preview-stage img {
-  max-width: 230px;
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-}
-.btn-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
+.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
+.upload-box span { color: var(--amber); font-weight: 600; font-size: 13px; }
+.upload-box small { color: var(--muted); font-size: 11px; }
+
 .btn {
   background: var(--amber);
   color: var(--bg);
   border: none;
-  padding: 12px;
+  padding: 13px;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   cursor: pointer;
   text-align: center;
+  width: 100%;
+  margin-top: 10px;
+  transition: opacity 0.2s;
 }
 .btn:hover { opacity: 0.9; }
+
+/* Standard Responsive Ad Banner Container */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 16px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
 </style>
 </head>
 <body>
 <div class="wrapper">
   <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
-  
+
   <div class="card">
     <h2>Passport Photo + Sign Card</h2>
     <div class="subtitle">Combine identity photograph and signature into a single upload-ready frame</div>
 
+    <!-- How to Use Box -->
+    <div class="how-to-box">
+      <div class="how-to-title">📄 How to Use Passport Photo + Sign Card</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload Photo:</span> Select your standard passport-size photograph.</li>
+        <li>2. <span>Upload Signature:</span> Select your clear scanned signature image.</li>
+        <li>3. <span>Download Combined Card:</span> Save the final merged frame instantly for application portals.</li>
+      </ol>
+    </div>
+
+    <!-- Tool Sections -->
+    <div style="font-size:12px; color:var(--muted); font-weight:600; margin-bottom:6px;">1. Upload Passport Photo:</div>
     <input type="file" id="photo-input" accept="image/*" style="display:none">
-    <span class="section-label">1. Upload Passport Photo:</span>
-    <div class="upload-box" id="photo-box">
-      <img id="photo-thumb" class="thumb-preview" alt="Photo Preview">
-      <div id="photo-placeholder">
-        <span class="upload-text">📷 Tap to select Photo</span>
-        <div class="upload-sub">JPG, PNG supported</div>
-      </div>
-      <span class="change-badge" id="photo-badge">Tap to Change Photo</span>
+    <div class="upload-box" onclick="document.getElementById('photo-input').click()">
+      <span>📁 Tap to select Photo</span>
+      <small>JPG, PNG supported</small>
     </div>
 
+    <div style="font-size:12px; color:var(--muted); font-weight:600; margin-bottom:6px;">2. Upload Signature:</div>
     <input type="file" id="sign-input" accept="image/*" style="display:none">
-    <span class="section-label">2. Upload Signature:</span>
-    <div class="upload-box" id="sign-box">
-      <img id="sign-thumb" class="thumb-preview" alt="Signature Preview">
-      <div id="sign-placeholder">
-        <span class="upload-text">✍️ Tap to select Signature</span>
-        <div class="upload-sub">JPG, PNG supported</div>
-      </div>
-      <span class="change-badge" id="sign-badge">Tap to Change Signature</span>
+    <div class="upload-box" onclick="document.getElementById('sign-input').click()">
+      <span>📁 Tap to select Signature</span>
+      <small>JPG, PNG supported</small>
     </div>
-  </div>
 
-  <div class="output-card" id="output-card">
-    <div class="output-title">🎉 Combined Card Output:</div>
-    <div class="preview-stage">
-      <img id="combined-img" alt="Final Output">
-    </div>
-    <div class="btn-grid">
-      <button class="btn" id="dl-jpg-btn">Download JPG</button>
-      <button class="btn" id="dl-pdf-btn">Download PDF</button>
+    <!-- Standard Ad Banner -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
     </div>
   </div>
 </div>
-
-<canvas id="render-canvas" style="display:none"></canvas>
-
-<script>
-  const photoInput = document.getElementById('photo-input');
-  const signInput = document.getElementById('sign-input');
-  const photoBox = document.getElementById('photo-box');
-  const signBox = document.getElementById('sign-box');
-
-  const photoThumb = document.getElementById('photo-thumb');
-  const photoPlaceholder = document.getElementById('photo-placeholder');
-  const photoBadge = document.getElementById('photo-badge');
-
-  const signThumb = document.getElementById('sign-thumb');
-  const signPlaceholder = document.getElementById('sign-placeholder');
-  const signBadge = document.getElementById('sign-badge');
-
-  const outputCard = document.getElementById('output-card');
-  const combinedImg = document.getElementById('combined-img');
-  const dlJpgBtn = document.getElementById('dl-jpg-btn');
-  const dlPdfBtn = document.getElementById('dl-pdf-btn');
-
-  let photoImg = null;
-  let signImg = null;
-
-  photoBox.addEventListener('click', () => photoInput.click());
-  signBox.addEventListener('click', () => signInput.click());
-
-  photoInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      photoThumb.src = evt.target.result;
-      photoThumb.style.display = 'block';
-      photoPlaceholder.style.display = 'none';
-      photoBadge.style.display = 'block';
-
-      photoImg = new Image();
-      photoImg.onload = checkAndCombine;
-      photoImg.src = evt.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  signInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      signThumb.src = evt.target.result;
-      signThumb.style.display = 'block';
-      signPlaceholder.style.display = 'none';
-      signBadge.style.display = 'block';
-
-      signImg = new Image();
-      signImg.onload = checkAndCombine;
-      signImg.src = evt.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  function checkAndCombine() {
-    if (!photoImg || !signImg) return;
-
-    const cardWidth = 420;
-    const cardHeight = 620;
-    const padding = 16;
-
-    const canvas = document.getElementById('render-canvas');
-    canvas.width = cardWidth;
-    canvas.height = cardHeight;
-    const ctx = canvas.getContext('2d');
-
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, cardWidth, cardHeight);
-
-    ctx.strokeStyle = '#dddddd';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(6, 6, cardWidth - 12, cardHeight - 12);
-
-    const photoBoxW = cardWidth - (padding * 2);
-    const photoBoxH = 430;
-    const photoRatio = photoImg.width / photoImg.height;
-    const targetPhotoRatio = photoBoxW / photoBoxH;
-    let pw, ph, px, py;
-
-    if (photoRatio > targetPhotoRatio) {
-      pw = photoBoxW;
-      ph = photoBoxW / photoRatio;
-      px = padding;
-      py = padding + (photoBoxH - ph) / 2;
-    } else {
-      ph = photoBoxH;
-      pw = photoBoxH * photoRatio;
-      px = padding + (photoBoxW - pw) / 2;
-      py = padding;
-    }
-    ctx.drawImage(photoImg, px, py, pw, ph);
-
-    ctx.strokeStyle = '#e5e5e5';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(padding, padding + photoBoxH + 8);
-    ctx.lineTo(cardWidth - padding, padding + photoBoxH + 8);
-    ctx.stroke();
-
-    const signBoxW = cardWidth - (padding * 2);
-    const signBoxH = 120;
-    const signRatio = signImg.width / signImg.height;
-    const targetSignRatio = signBoxW / signBoxH;
-    let sw, sh, sx, sy;
-
-    if (signRatio > targetSignRatio) {
-      sw = signBoxW;
-      sh = signBoxW / signRatio;
-      sx = padding;
-      sy = padding + photoBoxH + 16 + (signBoxH - sh) / 2;
-    } else {
-      sh = signBoxH;
-      sw = signBoxH * signRatio;
-      sx = padding + (signBoxW - sw) / 2;
-      sy = padding + photoBoxH + 16;
-    }
-    ctx.drawImage(signImg, sx, sy, sw, sh);
-
-    combinedImg.src = canvas.toDataURL('image/jpeg', 0.95);
-    outputCard.style.display = 'block';
-    outputCard.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  dlJpgBtn.addEventListener('click', () => {
-    const canvas = document.getElementById('render-canvas');
-    canvas.toBlob((blob) => {
-      const link = document.createElement('a');
-      link.download = 'passport_photo_sign_card.jpg';
-      link.href = URL.createObjectURL(blob);
-      link.click();
-    }, 'image/jpeg', 0.95);
-  });
-
-  dlPdfBtn.addEventListener('click', async () => {
-    const canvas = document.getElementById('render-canvas');
-    const { PDFDocument } = PDFLib;
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([canvas.width, canvas.height]);
-
-    const jpgBytes = await fetch(canvas.toDataURL('image/jpeg', 0.95)).then(r => r.arrayBuffer());
-    const embeddedImg = await pdfDoc.embedJpg(jpgBytes);
-
-    page.drawImage(embeddedImg, { x: 0, y: 0, width: canvas.width, height: canvas.height });
-
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const link = document.createElement('a');
-    link.download = 'passport_photo_sign_card.pdf';
-    link.href = URL.createObjectURL(blob);
-    link.click();
-  });
-</script>
 </body>
 </html>

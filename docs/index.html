@@ -3,330 +3,390 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FormReady India - All-in-One Offline Document &amp; Photo Toolbox</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>FormReady India - 100% Private Offline Document Toolbox</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #151210;
-  --panel: #1e1a17;
-  --panel-2: #262019;
-  --line: #39322b;
+  --bg: #13100e;
+  --panel: #1c1815;
+  --panel-hover: #26211c;
+  --line: #2e2620;
   --amber: #d99a3f;
-  --amber-bright: #f0b158;
-  --paper: #f2ece2;
-  --muted: #a89a89;
+  --amber-soft: rgba(217, 154, 63, 0.12);
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --active: #34d399;
+  --coming: #fbbf24;
 }
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   background: var(--bg);
   color: var(--paper);
-  font-family: 'Inter', sans-serif;
-  padding: 16px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 60px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
-header {
+.container { width: 100%; max-width: 980px; }
+
+/* HEADER */
+.hero-header {
   text-align: center;
-  max-width: 800px;
-  margin: 30px auto 20px;
+  padding: 24px 14px 18px;
+  margin-bottom: 22px;
+  background: radial-gradient(ellipse at top, rgba(217, 154, 63, 0.16) 0%, transparent 70%);
+  border-bottom: 1px solid var(--line);
 }
-header h1 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 28px;
-  color: var(--amber);
-  margin-bottom: 8px;
+.hero-title {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
 }
-header p {
-  font-size: 14px;
+.hero-title span { color: var(--amber); }
+.hero-tagline {
   color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 12px;
 }
-.search-container {
-  max-width: 600px;
-  margin: 0 auto 20px;
-  padding: 0 16px;
-  width: 100%;
+.author-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--amber-soft);
+  border: 1px solid rgba(217, 154, 63, 0.3);
+  color: var(--amber);
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
 }
+
+/* SEARCH & FILTER */
+.search-box { width: 100%; margin-bottom: 16px; }
 .search-input {
   width: 100%;
-  padding: 12px 18px;
   background: var(--panel);
   border: 1px solid var(--line);
-  color: #fff;
-  border-radius: 12px;
+  color: var(--paper);
   font-size: 14.5px;
+  padding: 13px 16px;
+  border-radius: 12px;
   outline: none;
-  transition: border-color 0.2s;
+  transition: 0.2s border;
 }
 .search-input:focus { border-color: var(--amber); }
-.category-wrapper {
-  max-width: 1100px;
-  margin: 0 auto 24px;
-  padding: 0 16px;
-  width: 100%;
-}
-.category-tabs {
+
+.filters-bar {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   overflow-x: auto;
-  padding-bottom: 6px;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
   scrollbar-width: none;
 }
-.category-tabs::-webkit-scrollbar { display: none; }
-.tab-btn {
+.filters-bar::-webkit-scrollbar { display: none; }
+.filter-chip {
   background: var(--panel);
-  color: var(--muted);
   border: 1px solid var(--line);
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-size: 13.5px;
+  color: var(--muted);
+  font-size: 12.5px;
   font-weight: 600;
-  cursor: pointer;
+  padding: 7px 14px;
+  border-radius: 10px;
   white-space: nowrap;
-  transition: all 0.2s;
+  cursor: pointer;
+  transition: 0.15s;
 }
-.tab-btn:hover { border-color: var(--amber); color: #fff; }
-.tab-btn.active {
+.filter-chip.active, .filter-chip:hover {
   background: var(--amber);
+  color: #13100e;
   border-color: var(--amber);
-  color: #151210;
 }
-.category-section {
-  max-width: 1100px;
-  margin: 0 auto 36px;
-  padding: 0 16px;
-  width: 100%;
+
+/* SECTION TITLES & PROPER BREATHING ROOM */
+.section-wrapper {
+  margin-top: 36px;
 }
-.category-header {
+.section-title {
+  color: var(--amber);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.section-desc {
+  color: var(--muted);
+  font-size: 12.5px;
   margin-bottom: 16px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 8px;
+  line-height: 1.45;
 }
-.category-title { font-size: 18px; color: var(--paper); font-family: 'Space Grotesk', sans-serif; }
-.category-desc { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+
+/* CARDS GRID - PHONE SINGLE COLUMN, DESKTOP 3 COLUMNS */
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
+@media (min-width: 680px) {
+  .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+}
+@media (min-width: 960px) {
+  .tools-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
+
+/* TOUCH-FRIENDLY FULL WIDTH CARDS */
 .tool-card {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  padding: 16px 14px;
   text-decoration: none;
-  transition: transform 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
 }
 .tool-card:hover {
-  transform: translateY(-2px);
+  background: var(--panel-hover);
   border-color: var(--amber);
+  transform: translateY(-2px);
 }
-.tool-card-head {
+.card-left {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  margin-bottom: 10px;
+  flex: 1;
 }
-.tool-icon {
-  font-size: 20px;
-  background: var(--panel-2);
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid var(--line);
+.card-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
 }
-.tool-info h3 { font-size: 15px; color: var(--paper); margin-bottom: 4px; }
-.tool-info p { font-size: 12px; color: var(--muted); line-height: 1.4; }
-.tool-badge {
-  align-self: flex-start;
-  margin-top: 10px;
-  font-size: 10px;
+.card-info {
+  flex: 1;
+}
+.card-title {
+  color: var(--paper);
+  font-size: 15px;
   font-weight: 700;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 6px;
+  margin-bottom: 3px;
+  line-height: 1.3;
 }
-.badge-ready { background: rgba(46, 160, 67, 0.2); color: #3fb950; border: 1px solid rgba(46, 160, 67, 0.4); }
-.badge-upcoming { background: rgba(217, 154, 63, 0.15); color: var(--amber); border: 1px solid rgba(217, 154, 63, 0.3); }
+.card-desc {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.card-right {
+  flex-shrink: 0;
+}
+.status-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 4px 7px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  display: inline-block;
+  white-space: nowrap;
+}
+.badge-active {
+  background: rgba(52, 211, 153, 0.1);
+  color: var(--active);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+.badge-coming {
+  background: rgba(251, 191, 36, 0.1);
+  color: var(--coming);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
 footer {
   text-align: center;
-  padding: 20px;
-  font-size: 12px;
+  margin-top: 48px;
+  font-size: 11.5px;
   color: var(--muted);
   border-top: 1px solid var(--line);
-  margin-top: auto;
+  padding-top: 20px;
+  width: 100%;
 }
 </style>
 </head>
 <body>
-<header>
-  <h1>FormReady India</h1>
-  <p>Fast, Simple, Mobile-Friendly &amp; 100% Private Client-Side Toolbox</p>
-</header>
-<div class="search-container">
-  <input type="search" id="searchInput" class="search-input" placeholder="🔍 Search any tool...">
-</div>
-<div class="category-wrapper">
-  <div class="category-tabs" id="categoryTabs">
-    <button class="tab-btn active" data-filter="all">🌟 All Tools</button>
-    <button class="tab-btn" data-filter="photo">📸 Image &amp; Photo</button>
-    <button class="tab-btn" data-filter="govt">🪪 Govt Form &amp; ID</button>
-    <button class="tab-btn" data-filter="pdf">📄 PDF Tools</button>
-    <button class="tab-btn" data-filter="text">📝 Text Utilities</button>
-    <button class="tab-btn" data-filter="calculators">🧮 Calculators</button>
-  </div>
-</div>
-<div id="catalogContainer"></div>
-<footer>
-  &copy; 2026 FormReady India. Zero Server Uploads — 100% Secure Local Processing.
-</footer>
-<script>
-const activeToolsList = [
-  "Image Format Converter", "Photo Cropper", "Photo Resizer", "Photo Compressor", 
-  "Passport Photo Maker", "Photo Sheet Maker", "Background Remover", "Signature Maker", "Image to Text (OCR)",
-  "Aadhaar / PAN Photo Resizer", "Signature Resizer & Enhancer", "Passport Photo + Sign Card", 
-  "Document Scanner", "Govt Form PDF Helper",
-  "PDF Text Inspector & Editor", "Merge PDF", "Split PDF", "JPG to PDF", "PDF to JPG", "Compress PDF", "Rotate PDF"
-];
+<div class="container">
 
-const toolsCatalog = [
+  <header class="hero-header">
+    <h1 class="hero-title">FormReady <span>India</span></h1>
+    <p class="hero-tagline">Fast, Mobile-Friendly & 100% Private Offline Document Toolbox</p>
+    <div class="author-pill">
+      <span>✨</span> Made by Aman Shaikh
+    </div>
+  </header>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search any tool..." onkeyup="filterTools()">
+  </div>
+
+  <div class="filters-bar" id="categoryChips">
+    <button class="filter-chip active" onclick="selectCategory('all', this)">All Tools</button>
+    <button class="filter-chip" onclick="selectCategory('image', this)">📷 Image & Photo</button>
+    <button class="filter-chip" onclick="selectCategory('govt', this)">🇮🇳 Govt Form & ID</button>
+    <button class="filter-chip" onclick="selectCategory('pdf', this)">📄 PDF Tools</button>
+    <button class="filter-chip" onclick="selectCategory('text', this)">📝 Text Utilities</button>
+    <button class="filter-chip" onclick="selectCategory('calc', this)">🧮 Calculators</button>
+  </div>
+
+  <main id="toolsContainer"></main>
+
+  <footer>
+    &copy; 2026 FormReady India &bull; Zero Server Uploads &bull; 100% Secure Local Processing
+  </footer>
+
+</div>
+
+<script>
+const TOOL_CATALOG = [
   {
-    category: "photo",
-    categoryTitle: "📸 Image & Photo Utilities",
-    categoryDesc: "High-resolution photo editing, precision cropping, and background tools",
-    tools: [
-      { name: "Image Format Converter", desc: "Instant format swap: JPG, PNG, and WebP", icon: "🔄", link: "tools/image-converter/" },
-      { name: "Photo Cropper", desc: "Touch-friendly precision aspect-ratio cropper", icon: "✂️", link: "tools/photo-cropper/" },
-      { name: "Photo Resizer", desc: "Resize dimensions in pixels, cm, or mm directly", icon: "📐", link: "tools/photo-resizer/" },
-      { name: "Photo Compressor", desc: "Shrink photo KB/MB size while maintaining resolution", icon: "🗜️", link: "tools/photo-compressor/" },
-      { name: "Passport Photo Maker", desc: "Govt standard passport photos with clean backgrounds", icon: "👤", link: "tools/passport-photo/" },
-      { name: "Photo Sheet Maker", desc: "Printable A4 grid sheets with multiple photo copies", icon: "🖨️", link: "tools/photo-sheet/" },
-      { name: "Background Remover", desc: "Client-side transparent background cutter", icon: "🪄", link: "tools/background-remover/" },
-      { name: "Signature Maker", desc: "Draw, smooth, and export transparent digital signatures", icon: "✍️", link: "tools/signature-maker/" },
-      { name: "Image to Text (OCR)", desc: "Copy text directly from any picture or screenshot", icon: "👁️", link: "tools/image-to-text/" }
+    category: "image",
+    sectionTitle: "📷 Image & Photo Utilities",
+    sectionDesc: "High-resolution photo editing, precision cropping, and background tools",
+    items: [
+      { title: "Image Format Converter", desc: "Instant format swap: JPG, PNG, and WebP offline.", icon: "🔄", slug: "image-converter", status: "active" },
+      { title: "Photo Cropper", desc: "Touch-friendly precision aspect-ratio cropper for photos.", icon: "✂️", slug: "photo-cropper", status: "active" },
+      { title: "Photo Resizer", desc: "Resize dimensions in pixels, cm, or mm directly.", icon: "📐", slug: "photo-resizer", status: "active" },
+      { title: "Photo Compressor", desc: "Shrink photo KB/MB size while maintaining crisp clarity.", icon: "🗜️", slug: "photo-compressor", status: "active" },
+      { title: "Passport Photo Maker", desc: "Print standard passport photos with clean borders.", icon: "👤", slug: "passport-photo", status: "active" },
+      { title: "Photo Sheet Maker", desc: "Printable A4 grid sheets with multiple photo copies.", icon: "🖨️", slug: "photo-sheet", status: "active" },
+      { title: "Background Remover", desc: "Client-side transparent background cutter for IDs.", icon: "🪄", slug: "background-remover", status: "active" },
+      { title: "Signature Maker", desc: "Sleek, smooth, and export transparent digital signatures.", icon: "✍️", slug: "signature-maker", status: "active" },
+      { title: "Image to Text (OCR)", desc: "Extract text accurately from any photo or scanned receipt.", icon: "👁️", slug: "image-to-text", status: "active" }
     ]
   },
   {
     category: "govt",
-    categoryTitle: "🪪 Indian Govt Form & ID Utilities",
-    categoryDesc: "Official Indian exam & recruitment portal formats (SSC, UPSC, State IDs)",
-    tools: [
-      { name: "Aadhaar / PAN Photo Resizer", desc: "Strict 200x230 px & size limit crop/resizer", icon: "🪪", link: "tools/pan-photo-resizer/" },
-      { name: "Signature Resizer & Enhancer", desc: "Strict size limit with contrast booster for portal upload", icon: "✍️", link: "tools/signature-resizer/" },
-      { name: "Passport Photo + Sign Card", desc: "Merge identity photo and signature onto one frame", icon: "👥", link: "tools/photo-sign-card/" },
-      { name: "Document Scanner", desc: "Camera scan with high-contrast B&W clean doc filter", icon: "📄", link: "tools/document-scanner/" },
-      { name: "Govt Form PDF Helper", desc: "Compress and fit PDF strictly under required portal limits", icon: "📋", link: "tools/govt-pdf-helper/" }
+    sectionTitle: "🇮🇳 Indian Govt Form & ID Utilities",
+    sectionDesc: "Official Indian exam & recruitment portal formats (SSC, UPSC, State IDs)",
+    items: [
+      { title: "Aadhaar / PAN Photo Resizer", desc: "Strict 200x230 px & exact file size limit cropper/resizer.", icon: "🪪", slug: "aadhaar-pan-photo-resizer", status: "active" },
+      { title: "Signature Resizer & Enhancer", desc: "Strict size-limit with contrast boost for exam portal upload.", icon: "🖋️", slug: "signature-resizer", status: "active" },
+      { title: "Passport Photo + Sign Card", desc: "Merge identity photo and signature onto a single unified frame.", icon: "👥", slug: "passport-photo-sign-card", status: "active" },
+      { title: "Document Scanner", desc: "Camera scan with high-contrast B&W clean doc filter.", icon: "📄", slug: "document-scanner", status: "active" },
+      { title: "Govt Form PDF Helper", desc: "Compress & fit PDF strictly under required portal limits.", icon: "📋", slug: "govt-pdf-helper", status: "active" }
     ]
   },
   {
     category: "pdf",
-    categoryTitle: "📄 PDF Tools & Editors",
-    categoryDesc: "Client-side private PDF manipulation, inspection, and redaction",
-    tools: [
-      { name: "PDF Text Inspector & Editor", desc: "Edit text, redactions, auto-font detect on digital & scanned PDFs", icon: "📝", link: "tools/pdf-editor/" },
-      { name: "Merge PDF", desc: "Combine multiple PDF documents into one ordered file", icon: "📑", link: "tools/merge-pdf/" },
-      { name: "Split PDF", desc: "Extract pages or custom page ranges into a new PDF", icon: "✂️", link: "tools/split-pdf/" },
-      { name: "JPG to PDF", desc: "Convert photo image files into multi-page PDFs", icon: "🖼️", link: "tools/jpg-to-pdf/" },
-      { name: "PDF to JPG", desc: "Extract high-resolution JPG images from PDF pages", icon: "📸", link: "tools/pdf-to-jpg/" },
-      { name: "Compress PDF", desc: "Client-side file size compressor keeping clarity intact", icon: "🗜️", link: "tools/compress-pdf/" },
-      { name: "Rotate PDF", desc: "Fix orientation of 90°, 180°, or inverted pages", icon: "🔄", link: "tools/rotate-pdf/" },
-      { name: "PDF Page Organizer", desc: "Drag to reorder pages or delete unwanted sheets", icon: "📑", link: "tools/pdf-page-organizer/" },
-      { name: "Add Watermark", desc: "Stamp confidential or custom text/logo over PDF", icon: "💧", link: "tools/add-watermark/" }
+    sectionTitle: "📄 PDF Tools & Editors",
+    sectionDesc: "Client-side private PDF manipulation, inspection, and redaction",
+    items: [
+      { title: "PDF Text Inspector & Editor", desc: "Inspect text, redactions, and fonts on PDFs securely.", icon: "📑", slug: "pdf-editor", status: "active" },
+      { title: "Merge PDF", desc: "Combine multiple PDF documents into one indexed file.", icon: "🔗", slug: "merge-pdf", status: "active" },
+      { title: "Split PDF", desc: "Extract pages or custom page ranges into a new PDF.", icon: "✂️", slug: "split-pdf", status: "active" },
+      { title: "JPG to PDF", desc: "Convert photos and image files into multi-page PDFs.", icon: "🖼️", slug: "jpg-to-pdf", status: "active" },
+      { title: "PDF to JPG", desc: "Extract high-resolution JPG images from PDF pages.", icon: "📸", slug: "pdf-to-jpg", status: "active" },
+      { title: "Compress PDF", desc: "Client-side file size compressor keeping clarity intact.", icon: "🗜️", slug: "compress-pdf", status: "active" },
+      { title: "Rotate PDF", desc: "Fix orientation of 90°, 180°, or inverted pages.", icon: "🔃", slug: "rotate-pdf", status: "active" },
+      { title: "PDF Page Organizer", desc: "Drag to reorder pages or delete unwanted sheets.", icon: "📑", slug: "pdf-organizer", status: "coming" },
+      { title: "Add Watermark", desc: "Stamp confidential or custom text/logo over PDF pages.", icon: "💧", slug: "add-watermark", status: "active" }
     ]
   },
   {
     category: "text",
-    categoryTitle: "📝 Text, Code & Content Tools",
-    categoryDesc: "Quick string formatters, counters, and offline code utilities",
-    tools: [
-      { name: "Word & Character Counter", desc: "Real-time count of words, characters, and reading time", icon: "🔢", link: "tools/word-counter/" },
-      { name: "Case Converter", desc: "Toggle UPPERCASE, lowercase, Title Case & camelCase", icon: "🔤", link: "tools/case-converter/" },
-      { name: "Text Cleaner", desc: "Strip accidental double spaces, tabs, and blank lines", icon: "🧹", link: "tools/text-cleaner/" },
-      { name: "QR Code Generator", desc: "Create QR codes for links, UPI payments, and Wi-Fi", icon: "🏁", link: "tools/qr-generator/" },
-      { name: "Barcode Generator", desc: "Generate standard barcodes easily", icon: "|||", link: "tools/barcode-generator/" },
-      { name: "Text to PDF / Image", desc: "Convert plain text notes into a printable document", icon: "📄", link: "tools/text-to-pdf/" },
-      { name: "Lorem Ipsum Generator", desc: "Generate placeholder text for layouts and forms", icon: "📜", link: "tools/lorem-generator/" }
+    sectionTitle: "📝 Text, Code & Content Tools",
+    sectionDesc: "Quick string formatters, counters, and offline code utilities",
+    items: [
+      { title: "Word & Character Counter", desc: "Real-time count of words, characters, and reading time.", icon: "🔢", slug: "word-counter", status: "coming" },
+      { title: "Case Converter", desc: "Toggle UPPERCASE, lower case, Title Case & camelCase.", icon: "🔠", slug: "case-converter", status: "coming" },
+      { title: "Text Cleaner", desc: "Strip accidental double spaces, tabs, and blank lines.", icon: "🧹", slug: "text-cleaner", status: "coming" },
+      { title: "QR Code Generator", desc: "Create QR codes for links, UPI payments, and Wi-Fi.", icon: "🏁", slug: "qr-generator", status: "coming" },
+      { title: "Barcode Generator", desc: "Generate standard barcodes easily.", icon: "📊", slug: "barcode-generator", status: "coming" },
+      { title: "Text to PDF / Image", desc: "Convert plain text notes into a printable document.", icon: "📄", slug: "text-to-pdf", status: "coming" },
+      { title: "Lorem Ipsum Generator", desc: "Generate placeholder text for layouts and forms.", icon: "📜", slug: "lorem-ipsum", status: "coming" }
     ]
   },
   {
-    category: "calculators",
-    categoryTitle: "🧮 Daily & Finance Calculators",
-    categoryDesc: "Instant eligibility calculations, loan EMI, GST, and daily math tools",
-    tools: [
-      { name: "Govt Form Age Calculator", desc: "Calculate exact age as on notification date (Y/M/D)", icon: "🎂", link: "tools/age-calculator/" },
-      { name: "GST Calculator", desc: "Breakdown CGST, SGST & total amount addition or removal", icon: "📊", link: "tools/gst-calculator/" },
-      { name: "EMI Calculator", desc: "Calculate monthly installments and total loan interest", icon: "💳", link: "tools/emi-calculator/" },
-      { name: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins", icon: "🏷️", link: "tools/percentage-calculator/" },
-      { name: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators", icon: "⚖️", link: "tools/bmi-calculator/" },
-      { name: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates", icon: "📅", link: "tools/date-gap-calculator/" },
-      { name: "Unit Converter", desc: "Convert Land, Weight, Length & Units", icon: "📐", link: "tools/unit-converter/" },
-      { name: "Currency Converter", desc: "Quick currency rate estimations and conversions", icon: "💱", link: "tools/currency-converter/" }
+    category: "calc",
+    sectionTitle: "🧮 Daily & Finance Calculators",
+    sectionDesc: "Instant eligibility calculations, loan EMI, GST, and daily math tools",
+    items: [
+      { title: "Govt Form Age Calculator", desc: "Calculate exact age as on notification date (Y/M/D).", icon: "🎂", slug: "age-calculator", status: "coming" },
+      { title: "GST Calculator", desc: "Breakdown CGST, SGST & total amount (add/remove).", icon: "📊", slug: "gst-calculator", status: "coming" },
+      { title: "EMI Calculator", desc: "Calculate monthly installments and total loan interest.", icon: "💳", slug: "emi-calculator", status: "coming" },
+      { title: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins.", icon: "🏷️", slug: "discount-calculator", status: "coming" },
+      { title: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators.", icon: "⚖️", slug: "bmi-calculator", status: "coming" },
+      { title: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates.", icon: "📅", slug: "date-gap-calculator", status: "coming" },
+      { title: "Unit Converter", desc: "Convert Land, Weight, Length & Units.", icon: "📐", slug: "unit-converter", status: "coming" },
+      { title: "Currency Converter", desc: "Quick currency rate estimations and conversions.", icon: "💱", slug: "currency-converter", status: "coming" }
     ]
   }
 ];
 
-function renderCatalog(filter = "all", query = "") {
-  const container = document.getElementById("catalogContainer");
-  container.innerHTML = "";
-  const q = query.trim().toLowerCase();
+let activeFilter = 'all';
 
-  toolsCatalog.forEach(cat => {
-    if (filter !== "all" && cat.category !== filter) return;
-    const matchedTools = cat.tools.filter(t => 
-      t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q)
+function renderTools(searchQuery = '') {
+  const container = document.getElementById('toolsContainer');
+  container.innerHTML = '';
+
+  TOOL_CATALOG.forEach(sec => {
+    if (activeFilter !== 'all' && sec.category !== activeFilter) return;
+
+    const filteredItems = sec.items.filter(item => 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      item.desc.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    if (matchedTools.length === 0) return;
 
-    const section = document.createElement("section");
-    section.className = "category-section";
-    section.innerHTML = `
-      <div class="category-header">
-        <h2 class="category-title">${cat.categoryTitle}</h2>
-        <p class="category-desc">${cat.categoryDesc}</p>
-      </div>
+    if (filteredItems.length === 0) return;
+
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'section-wrapper';
+    sectionEl.innerHTML = `
+      <div class="section-title">${sec.sectionTitle}</div>
+      <div class="section-desc">${sec.sectionDesc}</div>
       <div class="tools-grid">
-        ${matchedTools.map(t => {
-          const isActive = activeToolsList.includes(t.name);
-          return `
-            <a href="${isActive ? t.link : '#'}" class="tool-card" ${!isActive ? 'onclick="event.preventDefault(); alert(\'' + t.name + ' is Coming Soon!\');"' : ''}>
-              <div class="tool-card-head">
-                <span class="tool-icon">${t.icon}</span>
-                <div class="tool-info">
-                  <h3>${t.name}</h3>
-                  <p>${t.desc}</p>
-                </div>
+        ${filteredItems.map(item => `
+          <a href="tools/${item.slug}/index.html" class="tool-card">
+            <div class="card-left">
+              <span class="card-icon">${item.icon}</span>
+              <div class="card-info">
+                <div class="card-title">${item.title}</div>
+                <div class="card-desc">${item.desc}</div>
               </div>
-              <span class="tool-badge ${isActive ? 'badge-ready' : 'badge-upcoming'}">${isActive ? 'Active Tool' : 'Coming Soon'}</span>
-            </a>
-          `;
-        }).join("")}
+            </div>
+            <div class="card-right">
+              <span class="status-badge ${item.status === 'active' ? 'badge-active' : 'badge-coming'}">
+                ${item.status === 'active' ? 'ACTIVE' : 'SOON'}
+              </span>
+            </div>
+          </a>
+        `).join('')}
       </div>
     `;
-    container.appendChild(section);
+    container.appendChild(sectionEl);
   });
 }
 
-let activeFilter = "all";
-const searchInput = document.getElementById("searchInput");
+function selectCategory(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderTools(document.getElementById('searchInput').value);
+}
 
-document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeFilter = btn.dataset.filter;
-    renderCatalog(activeFilter, searchInput.value);
-  });
-});
+function filterTools() {
+  renderTools(document.getElementById('searchInput').value);
+}
 
-searchInput.addEventListener("input", (e) => {
-  renderCatalog(activeFilter, e.target.value);
-});
-
-renderCatalog();
+renderTools();
 </script>
 </body>
 </html>
