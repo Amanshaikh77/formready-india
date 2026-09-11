@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GST Calculator - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper { width: 100%; max-width: 540px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+
+/* HOW TO USE GUIDE */
+.how-to-box {
+  background: rgba(217, 154, 63, 0.05);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* FORM ELEMENTS */
+.form-group { margin-bottom: 16px; }
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+input[type="number"], select {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+input[type="number"]:focus, select:focus { border-color: var(--amber); }
+
+/* SLAB CHIPS */
+.rate-chips {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+.rate-chip {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 8px 2px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.15s;
+}
+.rate-chip.active {
+  background: var(--amber);
+  color: #13100e;
+  border-color: var(--amber);
+}
+
+/* CUSTOM RATE INPUT CONTAINER */
+#customRateWrap {
+  margin-top: 10px;
+  display: none;
+}
+
+.btn {
+  background: var(--amber);
+  color: #13100e;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+/* RESULT BOX */
+.result-card {
+  display: none;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 14px;
+  margin-top: 20px;
+  text-align: center;
+}
+.result-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.result-val {
+  color: var(--amber);
+  font-size: 24px;
+  font-weight: 800;
+  margin: 6px 0 12px;
+}
+.result-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.result-stats span {
+  display: block;
+  color: var(--paper);
+  font-weight: 700;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* ADVERTISEMENT BANNER CONTAINER */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>GST Calculator</h2>
+    <div class="subtitle">Quickly calculate Add GST or Remove GST with CGST & SGST breakups</div>
+
+    <!-- HOW TO USE -->
+    <div class="how-to-box">
+      <div class="how-to-title">📘 How to Use GST Calculator</div>
+      <ol class="how-to-list">
+        <li>1. <span>Enter Amount:</span> Type initial base or gross amount in INR.</li>
+        <li>2. <span>Select Slab:</span> Choose GST rate or click <b>Custom</b> to enter your own %.</li>
+        <li>3. <span>Operation:</span> Pick Exclusive (Add GST) or Inclusive (Remove GST).</li>
+      </ol>
+    </div>
+
+    <!-- INPUTS -->
+    <div class="form-group">
+      <label>1. Initial Amount (₹)</label>
+      <input type="number" id="baseAmount" placeholder="e.g. 1000" inputmode="decimal">
+    </div>
+
+    <div class="form-group">
+      <label>2. GST Rate Slab</label>
+      <div class="rate-chips">
+        <div class="rate-chip" onclick="setRate(12, this)">12%</div>
+        <div class="rate-chip active" onclick="setRate(18, this)">18%</div>
+        <div class="rate-chip" onclick="setRate(28, this)">28%</div>
+        <div class="rate-chip" onclick="setRate('custom', this)">Custom</div>
+      </div>
+      <input type="hidden" id="selectedRate" value="18">
+
+      <!-- CUSTOM PERCENTAGE INPUT -->
+      <div id="customRateWrap">
+        <input type="number" id="customRateVal" placeholder="Enter custom GST % (e.g. 3, 0.25)" step="0.01">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>3. Calculation Type</label>
+      <select id="calcType">
+        <option value="add">Add GST (Exclusive)</option>
+        <option value="remove">Remove GST (Inclusive)</option>
+      </select>
+    </div>
+
+    <button class="btn" onclick="calculateGST()">Calculate GST</button>
+
+    <!-- RESULT OUTPUT -->
+    <div class="result-card" id="resultCard">
+      <div class="result-label" id="resTitle">Net Payable Amount</div>
+      <div class="result-val" id="totalAmount">-</div>
+      <div class="result-stats">
+        <div>CGST<span id="cgstVal">-</span></div>
+        <div>SGST<span id="sgstVal">-</span></div>
+        <div>Total GST<span id="totalGstVal">-</span></div>
+      </div>
+    </div>
+
+    <!-- ADVERTISEMENT CONTAINER -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function setRate(rate, el) {
+  document.getElementById('selectedRate').value = rate;
+  document.querySelectorAll('.rate-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+
+  const customWrap = document.getElementById('customRateWrap');
+  if (rate === 'custom') {
+    customWrap.style.display = 'block';
+    document.getElementById('customRateVal').focus();
+  } else {
+    customWrap.style.display = 'none';
+  }
+}
+
+function calculateGST() {
+  const amt = parseFloat(document.getElementById('baseAmount').value);
+  let rateType = document.getElementById('selectedRate').value;
+  let rate = 0;
+
+  if (rateType === 'custom') {
+    rate = parseFloat(document.getElementById('customRateVal').value);
+    if (isNaN(rate) || rate < 0) {
+      alert("Please enter a valid custom GST percentage.");
+      return;
+    }
+  } else {
+    rate = parseFloat(rateType);
+  }
+
+  const type = document.getElementById('calcType').value;
+
+  if (isNaN(amt) || amt <= 0) {
+    alert("Please enter a valid amount greater than 0.");
+    return;
+  }
+
+  let gstAmount = 0;
+  let finalAmount = 0;
+  let netPrice = 0;
+
+  if (type === 'add') {
+    gstAmount = (amt * rate) / 100;
+    finalAmount = amt + gstAmount;
+    netPrice = amt;
+    document.getElementById('resTitle').innerText = "Total Payable (Inclusive of GST)";
+  } else {
+    netPrice = amt / (1 + (rate / 100));
+    gstAmount = amt - netPrice;
+    finalAmount = amt;
+    document.getElementById('resTitle').innerText = "Pre-Tax Base Amount";
+  }
+
+  const halfGst = gstAmount / 2;
+
+  document.getElementById('totalAmount').innerText = (type === 'add' ? finalAmount : netPrice).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  document.getElementById('cgstVal').innerText = halfGst.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  document.getElementById('sgstVal').innerText = halfGst.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+  document.getElementById('totalGstVal').innerText = gstAmount.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+
+  document.getElementById('resultCard').style.display = 'block';
+}
+</script>
+</body>
+</html>
