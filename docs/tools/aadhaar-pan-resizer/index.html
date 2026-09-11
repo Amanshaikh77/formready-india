@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Passport Photo + Sign Card - FormReady India</title>
+<title>Aadhaar / PAN Photo Resizer - FormReady India</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -78,7 +78,7 @@ label {
   color: var(--paper);
   margin-bottom: 6px;
 }
-input[type="file"], input[type="text"] {
+input[type="file"], input[type="range"] {
   width: 100%;
   background: var(--card-bg);
   border: 1px solid var(--line);
@@ -89,8 +89,33 @@ input[type="file"], input[type="text"] {
   outline: none;
   font-family: inherit;
 }
-input[type="text"]:focus { border-color: var(--amber); }
 
+/* PRESET BUTTONS */
+.presets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+}
+.preset-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 10px 6px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.15s;
+}
+.preset-btn.active {
+  background: var(--amber);
+  color: #13100e;
+  border-color: var(--amber);
+}
+
+/* PREVIEW BOX */
 .preview-area {
   display: none;
   background: rgba(0, 0, 0, 0.3);
@@ -102,9 +127,10 @@ input[type="text"]:focus { border-color: var(--amber); }
 }
 .preview-area canvas {
   max-width: 100%;
+  max-height: 260px;
   border-radius: 4px;
   border: 1px solid var(--line);
-  background: #ffffff;
+  background: #fff;
 }
 .meta-row {
   font-size: 12px;
@@ -126,7 +152,7 @@ input[type="text"]:focus { border-color: var(--amber); }
   font-size: 14px;
   cursor: pointer;
   width: 100%;
-  margin-top: 8px;
+  margin-top: 10px;
   transition: opacity 0.2s;
 }
 .btn:hover { opacity: 0.9; }
@@ -168,42 +194,44 @@ input[type="text"]:focus { border-color: var(--amber); }
   <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
   <div class="card">
-    <h2>Passport Photo + Sign Card</h2>
-    <div class="subtitle">Merge identity photo and signature into a unified official slip</div>
+    <h2>Aadhaar / PAN Photo Resizer</h2>
+    <div class="subtitle">Exact 200x230 px & file size optimizer for Govt exam portals</div>
 
     <div class="how-to-box">
-      <div class="how-to-title">📘 How to Use Photo + Sign Merger</div>
+      <div class="how-to-title">📘 How to Use Photo Resizer</div>
       <ol class="how-to-list">
-        <li>1. <span>Upload Photo:</span> Select your clear passport-size photo.</li>
-        <li>2. <span>Upload Signature:</span> Select cropped signature on white background.</li>
-        <li>3. <span>Candidate Name:</span> Optional field to print name below photo.</li>
-        <li>4. <span>Download:</span> Save unified single-frame card for portal uploads.</li>
+        <li>1. <span>Upload Image:</span> Choose your passport picture from gallery or camera.</li>
+        <li>2. <span>Preset Dimension:</span> Pick standard 200x230 px (PAN/Aadhaar) or SSC/UPSC.</li>
+        <li>3. <span>Quality Compression:</span> Adjust slider to meet under 20KB-50KB portal limit.</li>
       </ol>
     </div>
 
     <div class="form-group">
-      <label>1. Upload Passport Photograph</label>
-      <input type="file" id="photoInput" accept="image/*" onchange="loadPhoto(event)">
+      <label>1. Select Identity Photo</label>
+      <input type="file" id="photoFile" accept="image/*" onchange="loadFile(event)">
     </div>
 
     <div class="form-group">
-      <label>2. Upload Signature Image</label>
-      <input type="file" id="signInput" accept="image/*" onchange="loadSign(event)">
-    </div>
-
-    <div class="form-group">
-      <label>3. Candidate Name (Optional)</label>
-      <input type="text" id="candidateName" placeholder="e.g. Aman Shaikh" oninput="renderCard()">
-    </div>
-
-    <button class="btn" onclick="renderCard()">Generate Unified Card</button>
-
-    <div class="preview-area" id="cardPreview">
-      <canvas id="cardCanvas"></canvas>
-      <div class="meta-row">
-        Format: <span>Standard Form Frame</span> | Output: <span>JPG Format</span>
+      <label>2. Choose Dimension Preset</label>
+      <div class="presets-grid">
+        <div class="preset-btn active" onclick="setPreset(200, 230, this)">Aadhaar / PAN (200×230)</div>
+        <div class="preset-btn" onclick="setPreset(138, 177, this)">SSC / UPSC (3.5×4.5 cm)</div>
+        <div class="preset-btn" onclick="setPreset(300, 400, this)">Passport (300×400)</div>
+        <div class="preset-btn" onclick="setPreset(150, 200, this)">IBPS / Bank (150×200)</div>
       </div>
-      <button class="btn" onclick="downloadCard()">Download Card Image</button>
+    </div>
+
+    <div class="form-group">
+      <label>3. Quality Compression (<span id="qualLabel">85%</span>)</label>
+      <input type="range" id="qualityRange" min="20" max="100" value="85" oninput="updateQuality(this.value)">
+    </div>
+
+    <div class="preview-area" id="previewBox">
+      <canvas id="canvas"></canvas>
+      <div class="meta-row">
+        Dimensions: <span id="metaDim">-</span> | File Size: <span id="metaSize">-</span>
+      </div>
+      <button class="btn" onclick="downloadPhoto()">Download Form-Ready Photo</button>
     </div>
 
     <div class="ad-card">
@@ -216,102 +244,60 @@ input[type="text"]:focus { border-color: var(--amber); }
 </div>
 
 <script>
-let photoImg = null;
-let signImg = null;
+let img = new Image();
+let targetW = 200, targetH = 230;
+let quality = 0.85;
 
-function loadPhoto(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = function(evt) {
-    photoImg = new Image();
-    photoImg.onload = renderCard;
-    photoImg.src = evt.target.result;
-  };
-  r.readAsDataURL(file);
+function setPreset(w, h, el) {
+  targetW = w;
+  targetH = h;
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (img.src) processImage();
 }
 
-function loadSign(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = function(evt) {
-    signImg = new Image();
-    signImg.onload = renderCard;
-    signImg.src = evt.target.result;
-  };
-  r.readAsDataURL(file);
+function updateQuality(val) {
+  quality = val / 100;
+  document.getElementById('qualLabel').innerText = val + '%';
+  if (img.src) processImage();
 }
 
-function renderCard() {
-  if (!photoImg && !signImg) return;
+function loadFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    img.onload = function() {
+      processImage();
+      document.getElementById('previewBox').style.display = 'block';
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
 
-  const canvas = document.getElementById('cardCanvas');
+function processImage() {
+  const canvas = document.getElementById('canvas');
+  canvas.width = targetW;
+  canvas.height = targetH;
   const ctx = canvas.getContext('2d');
-  const name = document.getElementById('candidateName').value.trim();
-
-  const width = 360;
-  const height = name ? 480 : 450;
-  canvas.width = width;
-  canvas.height = height;
-
-  // Background white card
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, width, height);
+  ctx.fillRect(0, 0, targetW, targetH);
+  ctx.drawImage(img, 0, 0, targetW, targetH);
 
-  // Outer border
-  ctx.strokeStyle = '#222222';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(1, 1, width - 2, height - 2);
-
-  // Photo
-  if (photoImg) {
-    ctx.drawImage(photoImg, 30, 20, 300, 320);
-    ctx.strokeStyle = '#cccccc';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(30, 20, 300, 320);
-  } else {
-    ctx.fillStyle = '#f5efe6';
-    ctx.fillRect(30, 20, 300, 320);
-    ctx.fillStyle = '#9e9080';
-    ctx.font = '13px Plus Jakarta Sans, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Passport Photo Area', width / 2, 175);
-  }
-
-  // Name
-  let signY = 350;
-  if (name) {
-    ctx.fillStyle = '#13100e';
-    ctx.font = 'bold 15px Plus Jakarta Sans, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(name.toUpperCase(), width / 2, 360);
-    signY = 375;
-  }
-
-  // Signature
-  if (signImg) {
-    ctx.drawImage(signImg, 50, signY, 260, 75);
-    ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(50, signY, 260, 75);
-  } else {
-    ctx.fillStyle = '#faf7f2';
-    ctx.fillRect(50, signY, 260, 75);
-    ctx.fillStyle = '#9e9080';
-    ctx.font = '12px Plus Jakarta Sans, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Signature Area', width / 2, signY + 42);
-  }
-
-  document.getElementById('cardPreview').style.display = 'block';
+  canvas.toBlob(function(blob) {
+    if (!blob) return;
+    const sizeKB = (blob.size / 1024).toFixed(1);
+    document.getElementById('metaDim').innerText = `${targetW}×${targetH} px`;
+    document.getElementById('metaSize').innerText = `${sizeKB} KB`;
+  }, 'image/jpeg', quality);
 }
 
-function downloadCard() {
-  const canvas = document.getElementById('cardCanvas');
+function downloadPhoto() {
+  const canvas = document.getElementById('canvas');
   const link = document.createElement('a');
-  link.download = 'passport_photo_sign_card.jpg';
-  link.href = canvas.toDataURL('image/jpeg', 0.92);
+  link.download = `formready_photo_${targetW}x${targetH}.jpg`;
+  link.href = canvas.toDataURL('image/jpeg', quality);
   link.click();
 }
 </script>
