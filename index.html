@@ -261,27 +261,27 @@ const TOOL_CATALOG = [
     sectionTitle: "📷 Image & Photo Utilities",
     sectionDesc: "High-resolution photo editing, precision cropping, and background tools",
     items: [
-      { title: "Image Format Converter", desc: "Instant format swap: JPG, PNG, and WebP offline.", icon: "🔄", slug: "image-converter", status: "active" },
-      { title: "Photo Cropper", desc: "Touch-friendly precision aspect-ratio cropper for photos.", icon: "✂️", slug: "photo-cropper", status: "active" },
-      { title: "Photo Resizer", desc: "Resize dimensions in pixels, cm, or mm directly.", icon: "📐", slug: "photo-resizer", status: "active" },
-      { title: "Photo Compressor", desc: "Shrink photo KB/MB size while maintaining crisp clarity.", icon: "🗜️", slug: "photo-compressor", status: "active" },
-      { title: "Passport Photo Maker", desc: "Print standard passport photos with clean borders.", icon: "👤", slug: "passport-photo", status: "active" },
-      { title: "Photo Sheet Maker", desc: "Printable A4 grid sheets with multiple photo copies.", icon: "🖨️", slug: "photo-sheet", status: "active" },
-      { title: "Background Remover", desc: "Client-side transparent background cutter for IDs.", icon: "🪄", slug: "background-remover", status: "active" },
-      { title: "Signature Maker", desc: "Sleek, smooth, and export transparent digital signatures.", icon: "✍️", slug: "signature-maker", status: "active" },
-      { title: "Image to Text (OCR)", desc: "Extract text accurately from any photo or scanned receipt.", icon: "👁️", slug: "image-to-text", status: "active" }
+      ["Image Format Converter","Instant format swap: JPG, PNG, and WebP offline.","🔄","image-converter","active"],
+      ["Photo Cropper","Touch-friendly precision aspect-ratio cropper for photos.","✂️","photo-cropper","active"],
+      ["Photo Resizer","Resize dimensions in pixels, cm, or mm directly.","📐","photo-resizer","active"],
+      ["Photo Compressor","Shrink photo KB/MB size while maintaining crisp clarity.","🗜️","photo-compressor","active"],
+      ["Passport Photo Maker","Print standard passport photos with clean borders.","👤","passport-photo","active"],
+      ["Photo Sheet Maker","Printable A4 grid sheets with multiple photo copies.","🖨️","photo-sheet","active"],
+      ["Background Remover","Client-side transparent background cutter for IDs.","🪄","background-remover","active"],
+      ["Signature Maker","Sleek, smooth, and export transparent digital signatures.","✍️","signature-maker","active"],
+      ["Image to Text (OCR)","Extract text accurately from any photo or scanned receipt.","👁️","image-to-text","active"]
     ]
   },
   {
     category: "govt",
     sectionTitle: "🇮🇳 Indian Govt Form & ID Utilities",
-    sectionDesc: "Official Indian exam & recruitment portal formats (SSC, UPSC, State IDs)",
+    sectionDesc: "Official Indian exam & recruitment portal formats",
     items: [
-      { title: "Aadhaar / PAN Photo Resizer", desc: "Strict 200x230 px & exact file size limit cropper/resizer.", icon: "🪪", slug: "aadhaar-pan-photo-resizer", status: "active" },
-      { title: "Signature Resizer & Enhancer", desc: "Strict size-limit with contrast boost for exam portal upload.", icon: "🖋️", slug: "signature-resizer", status: "active" },
-      { title: "Passport Photo + Sign Card", desc: "Merge identity photo and signature onto a single unified frame.", icon: "👥", slug: "passport-photo-sign-card", status: "active" },
-      { title: "Document Scanner", desc: "Camera scan with high-contrast B&W clean doc filter.", icon: "📄", slug: "document-scanner", status: "active" },
-      { title: "Govt Form PDF Helper", desc: "Compress & fit PDF strictly under required portal limits.", icon: "📋", slug: "govt-pdf-helper", status: "active" }
+      ["Aadhaar / PAN Photo Resizer","Strict 200x230 px & exact file size limit cropper/resizer.","🪪","aadhaar-pan-photo-resizer","active"],
+      ["Signature Resizer & Enhancer","Strict size-limit with contrast boost for exam portal upload.","🖋️","signature-resizer","active"],
+      ["Passport Photo + Sign Card","Merge identity photo and signature onto a single frame.","👥","passport-photo-sign-card","active"],
+      ["Document Scanner","Camera scan with high-contrast B&W clean doc filter.","📄","document-scanner","active"],
+      ["Govt Form PDF Helper","Compress & fit PDF strictly under required portal limits.","📋","govt-pdf-helper","active"]
     ]
   },
   {
@@ -289,15 +289,15 @@ const TOOL_CATALOG = [
     sectionTitle: "📄 PDF Tools & Editors",
     sectionDesc: "Client-side private PDF manipulation, inspection, and redaction",
     items: [
-      { title: "PDF Text Inspector & Editor", desc: "Inspect text, redactions, and fonts on PDFs securely.", icon: "📑", slug: "pdf-editor", status: "active" },
-      { title: "Merge PDF", desc: "Combine multiple PDF documents into one indexed file.", icon: "🔗", slug: "merge-pdf", status: "active" },
-      { title: "Split PDF", desc: "Extract pages or custom page ranges into a new PDF.", icon: "✂️", slug: "split-pdf", status: "active" },
-      { title: "JPG to PDF", desc: "Convert photos and image files into multi-page PDFs.", icon: "🖼️", slug: "jpg-to-pdf", status: "active" },
-      { title: "PDF to JPG", desc: "Extract high-resolution JPG images from PDF pages.", icon: "📸", slug: "pdf-to-jpg", status: "active" },
-      { title: "Compress PDF", desc: "Client-side file size compressor keeping clarity intact.", icon: "🗜️", slug: "compress-pdf", status: "active" },
-      { title: "Rotate PDF", desc: "Fix orientation of 90°, 180°, or inverted pages.", icon: "🔃", slug: "rotate-pdf", status: "active" },
-      { title: "PDF Page Organizer", desc: "Drag to reorder pages or delete unwanted sheets.", icon: "📑", slug: "pdf-organizer", status: "coming" },
-      { title: "Add Watermark", desc: "Stamp confidential or custom text/logo over PDF pages.", icon: "💧", slug: "add-watermark", status: "active" }
+      ["PDF Text Inspector & Editor","Inspect text, redactions, and fonts on PDFs securely.","📑","pdf-editor","active"],
+      ["Merge PDF","Combine multiple PDF documents into one indexed file.","🔗","merge-pdf","active"],
+      ["Split PDF","Extract pages or custom page ranges into a new PDF.","✂️","split-pdf","active"],
+      ["JPG to PDF","Convert photos and image files into multi-page PDFs.","🖼️","jpg-to-pdf","active"],
+      ["PDF to JPG","Extract high-resolution JPG images from PDF pages.","📸","pdf-to-jpg","active"],
+      ["Compress PDF","Client-side file size compressor keeping clarity intact.","🗜️","compress-pdf","active"],
+      ["Rotate PDF","Fix orientation of 90°, 180°, or inverted pages.","🔃","rotate-pdf","active"],
+      ["PDF Page Organizer","Drag to reorder pages or delete unwanted sheets.","📑","pdf-organizer","coming"],
+      ["Add Watermark","Stamp confidential or custom text/logo over PDF pages.","💧","add-watermark","active"]
     ]
   },
   {
@@ -305,13 +305,13 @@ const TOOL_CATALOG = [
     sectionTitle: "📝 Text, Code & Content Tools",
     sectionDesc: "Quick string formatters, counters, and offline code utilities",
     items: [
-      { title: "Word & Character Counter", desc: "Real-time count of words, characters, and reading time.", icon: "🔢", slug: "word-counter", status: "coming" },
-      { title: "Case Converter", desc: "Toggle UPPERCASE, lower case, Title Case & camelCase.", icon: "🔠", slug: "case-converter", status: "coming" },
-      { title: "Text Cleaner", desc: "Strip accidental double spaces, tabs, and blank lines.", icon: "🧹", slug: "text-cleaner", status: "coming" },
-      { title: "QR Code Generator", desc: "Create QR codes for links, UPI payments, and Wi-Fi.", icon: "🏁", slug: "qr-generator", status: "coming" },
-      { title: "Barcode Generator", desc: "Generate standard barcodes easily.", icon: "📊", slug: "barcode-generator", status: "coming" },
-      { title: "Text to PDF / Image", desc: "Convert plain text notes into a printable document.", icon: "📄", slug: "text-to-pdf", status: "coming" },
-      { title: "Lorem Ipsum Generator", desc: "Generate placeholder text for layouts and forms.", icon: "📜", slug: "lorem-ipsum", status: "coming" }
+      ["Word & Character Counter","Real-time count of words, characters, and reading time.","🔢","word-counter","coming"],
+      ["Case Converter","Toggle UPPERCASE, lower case, Title Case & camelCase.","🔠","case-converter","coming"],
+      ["Text Cleaner","Strip accidental double spaces, tabs, and blank lines.","🧹","text-cleaner","coming"],
+      ["QR Code Generator","Create QR codes for links, UPI payments, and Wi-Fi.","🏁","qr-generator","coming"],
+      ["Barcode Generator","Generate standard barcodes easily.","📊","barcode-generator","coming"],
+      ["Text to PDF / Image","Convert plain text notes into a printable document.","📄","text-to-pdf","coming"],
+      ["Lorem Ipsum Generator","Generate placeholder text for layouts and forms.","📜","lorem-ipsum","coming"]
     ]
   },
   {
@@ -319,74 +319,119 @@ const TOOL_CATALOG = [
     sectionTitle: "🧮 Daily & Finance Calculators",
     sectionDesc: "Instant eligibility calculations, loan EMI, GST, and daily math tools",
     items: [
-      { title: "Govt Form Age Calculator", desc: "Calculate exact age as on notification date (Y/M/D).", icon: "🎂", slug: "age-calculator", status: "active" },
-      { title: "GST Calculator", desc: "Breakdown CGST, SGST & total amount (add/remove).", icon: "📊", slug: "gst-calculator", status: "active" },
-      { title: "EMI Calculator", desc: "Calculate monthly installments and total loan interest.", icon: "💳", slug: "emi-calculator", status: "coming" },
-      { title: "Percentage & Discount", desc: "Instant shopping discounts, markups, and margins.", icon: "🏷️", slug: "discount-calculator", status: "coming" },
-      { title: "BMI & Health Calculator", desc: "Body Mass Index calculation with health bracket indicators.", icon: "⚖️", slug: "bmi-calculator", status: "coming" },
-      { title: "Date Gap Calculator", desc: "Exact days, weeks, and month gaps between two dates.", icon: "📅", slug: "date-gap-calculator", status: "coming" },
-      { title: "Unit Converter", desc: "Convert Land, Weight, Length & Units.", icon: "📐", slug: "unit-converter", status: "coming" },
-      { title: "Currency Converter", desc: "Quick currency rate estimations and conversions.", icon: "💱", slug: "currency-converter", status: "coming" }
+      ["Govt Form Age Calculator","Calculate exact age as on notification date (Y/M/D).","🎂","age-calculator","active"],
+      ["GST Calculator","Breakdown CGST, SGST & total amount (add/remove).","📊","gst-calculator","active"],
+      ["EMI Calculator","Calculate monthly installments and total loan interest.","💳","emi-calculator","coming"],
+      ["Percentage & Discount","Instant shopping discounts, markups, and margins.","🏷️","discount-calculator","coming"],
+      ["BMI & Health Calculator","Body Mass Index calculation with health bracket indicators.","⚖️","bmi-calculator","coming"],
+      ["Date Gap Calculator","Exact days, weeks, and month gaps between two dates.","📅","date-gap-calculator","coming"],
+      ["Unit Converter","Convert Land, Weight, Length & Units.","📐","unit-converter","coming"],
+      ["Currency Converter","Quick currency rate estimations and conversions.","💱","currency-converter","coming"]
     ]
   }
 ];
 
-let activeFilter = 'all';
+let activeFilter = "all";
 
-function renderTools(searchQuery = '') {
-  const container = document.getElementById('toolsContainer');
-  container.innerHTML = '';
+function renderTools(searchQuery = "") {
+  const container = document.getElementById("toolsContainer");
+  if (!container) return;
 
-  TOOL_CATALOG.forEach(sec => {
-    if (activeFilter !== 'all' && sec.category !== activeFilter) return;
+  container.innerHTML = "";
 
-    const filteredItems = sec.items.filter(item => 
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      item.desc.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  TOOL_CATALOG.forEach(function(sec) {
+    if (activeFilter !== "all" && sec.category !== activeFilter) return;
 
-    if (filteredItems.length === 0) return;
+    const q = searchQuery.toLowerCase();
 
-    const sectionEl = document.createElement('div');
-    sectionEl.className = 'section-wrapper';
-    sectionEl.innerHTML = `
-      <div class="section-title">${sec.sectionTitle}</div>
-      <div class="section-desc">${sec.sectionDesc}</div>
-      <div class="tools-grid">
-        ${filteredItems.map(item => `
-          <a href="tools/${item.slug}/index.html" class="tool-card">
-            <div class="card-left">
-              <span class="card-icon">${item.icon}</span>
-              <div class="card-info">
-                <div class="card-title">${item.title}</div>
-                <div class="card-desc">${item.desc}</div>
-              </div>
-            </div>
-            <div class="card-right">
-              <span class="status-badge ${item.status === 'active' ? 'badge-active' : 'badge-coming'}">
-                ${item.status === 'active' ? 'ACTIVE' : 'SOON'}
-              </span>
-            </div>
-          </a>
-        `).join('')}
-      </div>
-    `;
-    container.appendChild(sectionEl);
+    const items = sec.items.filter(function(item) {
+      return item[0].toLowerCase().includes(q) ||
+             item[1].toLowerCase().includes(q);
+    });
+
+    if (!items.length) return;
+
+    const section = document.createElement("div");
+    section.className = "section-wrapper";
+
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.textContent = sec.sectionTitle;
+
+    const desc = document.createElement("div");
+    desc.className = "section-desc";
+    desc.textContent = sec.sectionDesc;
+
+    const grid = document.createElement("div");
+    grid.className = "tools-grid";
+
+    items.forEach(function(item) {
+      const card = document.createElement("a");
+      card.className = "tool-card";
+      card.href = "tools/" + item[3] + "/index.html";
+
+      const left = document.createElement("div");
+      left.className = "card-left";
+
+      const icon = document.createElement("span");
+      icon.className = "card-icon";
+      icon.textContent = item[2];
+
+      const info = document.createElement("div");
+      info.className = "card-info";
+
+      const cardTitle = document.createElement("div");
+      cardTitle.className = "card-title";
+      cardTitle.textContent = item[0];
+
+      const cardDesc = document.createElement("div");
+      cardDesc.className = "card-desc";
+      cardDesc.textContent = item[1];
+
+      info.appendChild(cardTitle);
+      info.appendChild(cardDesc);
+      left.appendChild(icon);
+      left.appendChild(info);
+
+      const right = document.createElement("div");
+      right.className = "card-right";
+
+      const badge = document.createElement("span");
+      badge.className = "status-badge " +
+        (item[4] === "active" ? "badge-active" : "badge-coming");
+      badge.textContent = item[4] === "active" ? "ACTIVE" : "SOON";
+
+      right.appendChild(badge);
+      card.appendChild(left);
+      card.appendChild(right);
+      grid.appendChild(card);
+    });
+
+    section.appendChild(title);
+    section.appendChild(desc);
+    section.appendChild(grid);
+    container.appendChild(section);
   });
 }
 
 function selectCategory(cat, btn) {
   activeFilter = cat;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  renderTools(document.getElementById('searchInput').value);
+
+  document.querySelectorAll(".filter-chip").forEach(function(c) {
+    c.classList.remove("active");
+  });
+
+  btn.classList.add("active");
+  renderTools(document.getElementById("searchInput").value);
 }
 
 function filterTools() {
-  renderTools(document.getElementById('searchInput').value);
+  renderTools(document.getElementById("searchInput").value);
 }
 
-renderTools();
+document.addEventListener("DOMContentLoaded", function() {
+  renderTools();
+});
 </script>
 </body>
 </html>
