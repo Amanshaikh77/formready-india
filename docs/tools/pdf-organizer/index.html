@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PDF Page Organizer - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- PDF.js for rendering thumbnails -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<!-- PDF-Lib for merging & saving organized pages -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<style>
+:root {
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+  --danger: #ef4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper { width: 100%; max-width: 650px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+
+/* HOW TO USE GUIDE */
+.how-to-box {
+  background: rgba(217, 154, 63, 0.05);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* FILE INPUT */
+.form-group { margin-bottom: 16px; }
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+input[type="file"] {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 13.5px;
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+
+/* LOADING STATUS */
+.loading-indicator {
+  display: none;
+  text-align: center;
+  font-size: 13px;
+  color: var(--amber);
+  margin: 14px 0;
+  font-weight: 600;
+}
+
+/* PAGES GRID */
+.pages-container {
+  display: none;
+  margin-top: 18px;
+}
+.pages-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.pages-header span { color: var(--paper); font-weight: 700; }
+
+.pages-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+@media (min-width: 520px) {
+  .pages-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.page-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: transform 0.15s;
+}
+.page-thumb-wrap {
+  width: 100%;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.page-thumb-wrap canvas {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.page-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--paper);
+  margin-bottom: 8px;
+}
+.page-actions {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+.action-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 6px 2px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.15s;
+}
+.action-btn:hover { border-color: var(--amber); color: var(--amber); }
+.action-btn.del:hover { border-color: var(--danger); color: var(--danger); }
+
+/* EXPORT BUTTON */
+.btn {
+  background: var(--amber);
+  color: #13100e;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+/* ADVERTISEMENT CONTAINER */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>PDF Page Organizer</h2>
+    <div class="subtitle">Reorder pages, rotate sheets, or delete unwanted pages in seconds</div>
+
+    <!-- HOW TO USE -->
+    <div class="how-to-box">
+      <div class="how-to-title">📘 How to Use PDF Organizer</div>
+      <ol class="how-to-list">
+        <li>1. <span>Upload PDF:</span> Select any document from your local device.</li>
+        <li>2. <span>Rearrange & Clean:</span> Use ◀/▶ to move pages, 🔄 to rotate, or 🗑️ to delete.</li>
+        <li>3. <span>Save PDF:</span> Click export to generate the newly ordered document offline.</li>
+      </ol>
+    </div>
+
+    <!-- FILE INPUT -->
+    <div class="form-group">
+      <label>1. Select PDF Document</label>
+      <input type="file" id="pdfFileInput" accept="application/pdf" onchange="loadPdf(event)">
+    </div>
+
+    <div class="loading-indicator" id="loadingText">⏳ Reading & rendering document pages...</div>
+
+    <!-- PAGES DISPLAY -->
+    <div class="pages-container" id="pagesContainer">
+      <div class="pages-header">
+        <div>Remaining Pages: <span id="totalPageCount">0</span></div>
+        <div style="font-size:11px; color:var(--muted);">100% Client-Side Processing</div>
+      </div>
+
+      <div class="pages-grid" id="pagesGrid"></div>
+
+      <button class="btn" onclick="exportOrganizedPdf()">📥 Export Organized PDF</button>
+    </div>
+
+    <!-- ADVERTISEMENT CONTAINER -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+let originalFileBuffer = null;
+let pagesData = []; // [{ pageIndex: 0, rotation: 0, canvas: canvasElement }]
+
+async function loadPdf(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  document.getElementById('loadingText').style.display = 'block';
+  document.getElementById('pagesContainer').style.display = 'none';
+
+  originalFileBuffer = await file.arrayBuffer();
+  const pdfDoc = await pdfjsLib.getDocument({ data: originalFileBuffer.slice(0) }).promise;
+
+  pagesData = [];
+  const numPages = pdfDoc.numPages;
+
+  for (let i = 1; i <= numPages; i++) {
+    const page = await pdfDoc.getPage(i);
+    const viewport = page.getViewport({ scale: 0.35 });
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+    pagesData.push({
+      originalIndex: i - 1,
+      rotation: 0,
+      canvas: canvas
+    });
+  }
+
+  document.getElementById('loadingText').style.display = 'none';
+  document.getElementById('pagesContainer').style.display = 'block';
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('pagesGrid');
+  grid.innerHTML = '';
+  document.getElementById('totalPageCount').innerText = pagesData.length;
+
+  pagesData.forEach((p, idx) => {
+    const card = document.createElement('div');
+    card.className = 'page-card';
+
+    const thumbWrap = document.createElement('div');
+    thumbWrap.className = 'page-thumb-wrap';
+    p.canvas.style.transform = `rotate(${p.rotation}deg)`;
+    thumbWrap.appendChild(p.canvas);
+
+    const label = document.createElement('div');
+    label.className = 'page-label';
+    label.innerText = `Page ${idx + 1} (Orig #${p.originalIndex + 1})`;
+
+    const actions = document.createElement('div');
+    actions.className = 'page-actions';
+
+    // Move Left
+    const btnLeft = document.createElement('button');
+    btnLeft.className = 'action-btn';
+    btnLeft.innerText = '◀';
+    btnLeft.title = 'Move Left';
+    btnLeft.onclick = () => movePage(idx, -1);
+    if (idx === 0) btnLeft.disabled = true;
+
+    // Rotate
+    const btnRot = document.createElement('button');
+    btnRot.className = 'action-btn';
+    btnRot.innerText = '🔄';
+    btnRot.title = 'Rotate 90°';
+    btnRot.onclick = () => rotatePage(idx);
+
+    // Delete
+    const btnDel = document.createElement('button');
+    btnDel.className = 'action-btn del';
+    btnDel.innerText = '🗑️';
+    btnDel.title = 'Delete Page';
+    btnDel.onclick = () => deletePage(idx);
+
+    // Move Right
+    const btnRight = document.createElement('button');
+    btnRight.className = 'action-btn';
+    btnRight.innerText = '▶';
+    btnRight.title = 'Move Right';
+    btnRight.onclick = () => movePage(idx, 1);
+    if (idx === pagesData.length - 1) btnRight.disabled = true;
+
+    actions.appendChild(btnLeft);
+    actions.appendChild(btnRot);
+    actions.appendChild(btnDel);
+    actions.appendChild(btnRight);
+
+    card.appendChild(thumbWrap);
+    card.appendChild(label);
+    card.appendChild(actions);
+    grid.appendChild(card);
+  });
+}
+
+function movePage(index, dir) {
+  const target = index + dir;
+  if (target < 0 || target >= pagesData.length) return;
+  const temp = pagesData[index];
+  pagesData[index] = pagesData[target];
+  pagesData[target] = temp;
+  renderGrid();
+}
+
+function rotatePage(index) {
+  pagesData[index].rotation = (pagesData[index].rotation + 90) % 360;
+  renderGrid();
+}
+
+function deletePage(index) {
+  if (pagesData.length <= 1) {
+    alert("Document must have at least one page.");
+    return;
+  }
+  pagesData.splice(index, 1);
+  renderGrid();
+}
+
+async function exportOrganizedPdf() {
+  if (!pagesData.length) {
+    alert("No pages to export.");
+    return;
+  }
+
+  const { PDFDocument, degrees } = PDFLib;
+  const srcDoc = await PDFDocument.load(originalFileBuffer);
+  const outDoc = await PDFDocument.create();
+
+  const originalIndices = pagesData.map(p => p.originalIndex);
+  const copiedPages = await outDoc.copyPages(srcDoc, originalIndices);
+
+  copiedPages.forEach((cp, idx) => {
+    const extraRot = pagesData[idx].rotation;
+    if (extraRot !== 0) {
+      const curRot = cp.getRotation().angle;
+      cp.setRotation(degrees((curRot + extraRot) % 360));
+    }
+    outDoc.addPage(cp);
+  });
+
+  const pdfBytes = await outDoc.save();
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.download = `formready_organized_${Date.now()}.pdf`;
+  link.href = url;
+  link.click();
+}
+</script>
+</body>
+</html>
