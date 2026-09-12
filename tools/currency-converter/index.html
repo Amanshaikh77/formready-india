@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Currency Converter - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper { width: 100%; max-width: 540px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+
+/* HOW TO USE GUIDE */
+.how-to-box {
+  background: rgba(217, 154, 63, 0.05);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* FORM CONTROLS */
+.form-group { margin-bottom: 14px; }
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+input[type="number"], select {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+input[type="number"]:focus, select:focus { border-color: var(--amber); }
+
+/* CURRENCY SELECTOR ROW */
+.currency-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.swap-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--amber);
+  border-radius: 8px;
+  width: 38px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  transition: 0.15s;
+}
+.swap-btn:hover {
+  background: var(--amber);
+  color: #13100e;
+}
+
+/* RATE SOURCE BADGE */
+.rate-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 14px;
+  padding: 0 4px;
+}
+.rate-status-bar span { color: var(--paper); font-weight: 600; }
+.refresh-btn {
+  background: transparent;
+  border: none;
+  color: var(--amber);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.btn {
+  background: var(--amber);
+  color: #13100e;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+/* RESULT BOX */
+.result-card {
+  display: none;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 14px;
+  margin-top: 20px;
+  text-align: center;
+}
+.result-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.result-val {
+  color: var(--amber);
+  font-size: 26px;
+  font-weight: 800;
+  margin: 6px 0 8px;
+}
+.exchange-rate {
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+.exchange-rate span { color: var(--paper); font-weight: 600; }
+
+/* ADVERTISEMENT CONTAINER */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>Currency Converter</h2>
+    <div class="subtitle">Fast exchange calculations with offline fallback & live rate sync</div>
+
+    <!-- HOW TO USE -->
+    <div class="how-to-box">
+      <div class="how-to-title">📘 How to Use Currency Converter</div>
+      <ol class="how-to-list">
+        <li>1. <span>Amount:</span> Enter the sum of money you wish to exchange.</li>
+        <li>2. <span>Currencies:</span> Choose source currency (From) and target currency (To).</li>
+        <li>3. <span>Offline Ready:</span> Converts instantly using built-in rates even without internet.</li>
+      </ol>
+    </div>
+
+    <!-- AMOUNT INPUT -->
+    <div class="form-group">
+      <label>1. Amount to Convert</label>
+      <input type="number" id="amountInput" placeholder="e.g. 100" value="100" step="any" inputmode="decimal">
+    </div>
+
+    <!-- CURRENCY DROPDOWNS -->
+    <div class="currency-row">
+      <div class="form-group" style="margin-bottom:0;">
+        <label>From</label>
+        <select id="fromCurrency"></select>
+      </div>
+      <button class="swap-btn" onclick="swapCurrencies()" title="Swap Currencies">⇄</button>
+      <div class="form-group" style="margin-bottom:0;">
+        <label>To</label>
+        <select id="toCurrency"></select>
+      </div>
+    </div>
+
+    <!-- LIVE / OFFLINE STATUS -->
+    <div class="rate-status-bar">
+      <div id="rateStatus">Mode: <span>Offline Reference Rates</span></div>
+      <button class="refresh-btn" onclick="fetchLiveRates()">Sync Live Rates</button>
+    </div>
+
+    <button class="btn" onclick="convertCurrency()">Convert Currency</button>
+
+    <!-- RESULT OUTPUT -->
+    <div class="result-card" id="resultCard">
+      <div class="result-label">Converted Amount</div>
+      <div class="result-val" id="resultAmount">-</div>
+      <div class="exchange-rate" id="rateInfo">-</div>
+    </div>
+
+    <!-- ADVERTISEMENT CONTAINER -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Standard major currency list
+const CURRENCIES = [
+  { code: "USD", name: "USD - US Dollar ($)", symbol: "$" },
+  { code: "INR", name: "INR - Indian Rupee (₹)", symbol: "₹" },
+  { code: "EUR", name: "EUR - Euro (€)", symbol: "€" },
+  { code: "GBP", name: "GBP - British Pound (£)", symbol: "£" },
+  { code: "AED", name: "AED - UAE Dirham (د.إ)", symbol: "AED" },
+  { code: "SAR", name: "SAR - Saudi Riyal (﷼)", symbol: "SAR" },
+  { code: "CAD", name: "CAD - Canadian Dollar (C$)", symbol: "C$" },
+  { code: "AUD", name: "AUD - Australian Dollar (A$)", symbol: "A$" },
+  { code: "SGD", name: "SGD - Singapore Dollar (S$)", symbol: "S$" },
+  { code: "JPY", name: "JPY - Japanese Yen (¥)", symbol: "¥" },
+  { code: "KWD", name: "KWD - Kuwaiti Dinar (د.ك)", symbol: "KWD" },
+  { code: "QAR", name: "QAR - Qatari Riyal (﷼)", symbol: "QAR" }
+];
+
+// Offline fallback rates against USD base (USD = 1.0)
+let rates = {
+  USD: 1.0,
+  INR: 83.85,
+  EUR: 0.92,
+  GBP: 0.78,
+  AED: 3.67,
+  SAR: 3.75,
+  CAD: 1.36,
+  AUD: 1.52,
+  SGD: 1.34,
+  JPY: 154.5,
+  KWD: 0.307,
+  QAR: 3.64
+};
+
+function populateDropdowns() {
+  const fromEl = document.getElementById('fromCurrency');
+  const toEl = document.getElementById('toCurrency');
+  fromEl.innerHTML = '';
+  toEl.innerHTML = '';
+
+  CURRENCIES.forEach(c => {
+    const opt1 = document.createElement('option');
+    opt1.value = c.code;
+    opt1.text = c.name;
+    fromEl.appendChild(opt1);
+
+    const opt2 = document.createElement('option');
+    opt2.value = c.code;
+    opt2.text = c.name;
+    toEl.appendChild(opt2);
+  });
+
+  fromEl.value = "USD";
+  toEl.value = "INR";
+}
+
+function swapCurrencies() {
+  const fromEl = document.getElementById('fromCurrency');
+  const toEl = document.getElementById('toCurrency');
+  const temp = fromEl.value;
+  fromEl.value = toEl.value;
+  toEl.value = temp;
+  convertCurrency();
+}
+
+async function fetchLiveRates() {
+  const statusEl = document.getElementById('rateStatus');
+  statusEl.innerHTML = `Mode: <span style="color:var(--amber);">Fetching live data...</span>`;
+
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    if (!res.ok) throw new Error("Network response not ok");
+    const data = await res.json();
+    if (data && data.rates) {
+      // Merge live rates
+      Object.keys(rates).forEach(k => {
+        if (data.rates[k]) rates[k] = data.rates[k];
+      });
+      statusEl.innerHTML = `Mode: <span style="color:var(--success);">Live Rates Synced (${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})})</span>`;
+      convertCurrency();
+    }
+  } catch (e) {
+    statusEl.innerHTML = `Mode: <span>Offline Mode (Reference Rates)</span>`;
+    alert("Could not fetch live rates (offline or blocked). Using built-in offline reference rates.");
+  }
+}
+
+function convertCurrency() {
+  const amount = parseFloat(document.getElementById('amountInput').value);
+  if (isNaN(amount) || amount < 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
+
+  const from = document.getElementById('fromCurrency').value;
+  const to = document.getElementById('toCurrency').value;
+
+  // Convert to base USD then to target
+  const inUSD = amount / rates[from];
+  const converted = inUSD * rates[to];
+
+  // 1 From = X To
+  const unitRate = rates[to] / rates[from];
+
+  const toObj = CURRENCIES.find(c => c.code === to);
+  const symbol = toObj ? toObj.symbol : to;
+
+  document.getElementById('resultAmount').innerText = `${symbol} ${converted.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}`;
+  document.getElementById('rateInfo').innerHTML = `1 ${from} = <span>${unitRate.toFixed(4)} ${to}</span>`;
+  document.getElementById('resultCard').style.display = 'block';
+}
+
+// Init
+populateDropdowns();
+convertCurrency();
+</script>
+</body>
+</html>

@@ -202,7 +202,7 @@
 
   <div class="search-box">
     <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-    <input type="text" id="searchInput" placeholder="Search any tool (e.g. GST, Age, Resize)..." oninput="filterTools()">
+    <input type="text" id="searchInput" placeholder="Search any tool (e.g. GST, QR, Age, Resize)..." oninput="filterTools()">
   </div>
 
   <div class="chips-bar">
@@ -252,13 +252,13 @@ const TOOL_CATALOG = [
     categoryId: "text",
     categoryTitle: "📝 Text, Code & Content Tools",
     tools: [
-      { slug: "word-counter", name: "Word & Character Counter", icon: "📊", desc: "Real-time count of words, characters, and reading time", status: "soon" },
-      { slug: "case-converter", name: "Case Converter", icon: "🔤", desc: "Toggle UPPERCASE, lower case, Title Case & camelCase", status: "soon" },
-      { slug: "text-cleaner", name: "Text Cleaner", icon: "🧹", desc: "Strip accidental double spaces, tabs, and blank lines", status: "soon" },
-      { slug: "qr-generator", name: "QR Code Generator", icon: "🏁", desc: "Create QR codes for links, UPI payments, and Wi-Fi", status: "soon" },
-      { slug: "barcode-generator", name: "Barcode Generator", icon: "📶", desc: "Generate standard barcodes easily", status: "soon" },
-      { slug: "text-to-pdf", name: "Text to PDF / Image", icon: "📜", desc: "Convert plain text notes into a printable document", status: "soon" },
-      { slug: "lorem-generator", name: "Lorem Ipsum Generator", icon: "📜", desc: "Generate placeholder text for layouts and forms", status: "soon" }
+      { slug: "word-counter", name: "Word & Character Counter", icon: "📊", desc: "Real-time count of words, characters, and reading time", status: "active" },
+      { slug: "case-converter", name: "Case Converter", icon: "🔤", desc: "Toggle UPPERCASE, lower case, Title Case & camelCase", status: "active" },
+      { slug: "text-cleaner", name: "Text Cleaner", icon: "🧹", desc: "Strip accidental double spaces, tabs, and blank lines", status: "active" },
+      { slug: "qr-generator", name: "QR Code Generator", icon: "🏁", desc: "Create QR codes for links, UPI payments, and Wi-Fi", status: "active" },
+      { slug: "barcode-generator", name: "Barcode Generator", icon: "📶", desc: "Generate standard barcodes easily", status: "active" },
+      { slug: "text-to-pdf", name: "Text to PDF / Image", icon: "📜", desc: "Convert plain text notes into a printable document", status: "active" },
+      { slug: "lorem-generator", name: "Lorem Ipsum Generator", icon: "📜", desc: "Generate placeholder text for layouts and forms", status: "active" }
     ]
   },
   {
@@ -272,7 +272,7 @@ const TOOL_CATALOG = [
       { slug: "bmi-calculator", name: "BMI & Health Calculator", icon: "⚖️", desc: "Body Mass Index calculation with health bracket indicators", status: "active" },
       { slug: "date-gap-calculator", name: "Date Gap Calculator", icon: "📅", desc: "Exact days, weeks, and month gaps between two dates", status: "active" },
       { slug: "unit-converter", name: "Unit Converter", icon: "📐", desc: "Convert Land, Weight, Length & Units", status: "active" },
-      { slug: "currency-converter", name: "Currency Converter", icon: "💱", desc: "Quick currency rate estimations and conversions", status: "soon" }
+      { slug: "currency-converter", name: "Currency Converter", icon: "💱", desc: "Quick currency rate estimations and conversions", status: "active" }
     ]
   }
 ];
@@ -339,7 +339,6 @@ function filterTools() {
   renderTools();
 }
 
-// Initial render
 document.addEventListener('DOMContentLoaded', renderTools);
 renderTools();
 </script>

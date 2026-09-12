@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>QR Code Generator - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root {
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper { width: 100%; max-width: 540px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+
+/* HOW TO USE GUIDE */
+.how-to-box {
+  background: rgba(217, 154, 63, 0.05);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* TYPE SWITCHER */
+.type-grid {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.type-grid::-webkit-scrollbar { display: none; }
+.type-btn {
+  flex: 1;
+  min-width: 80px;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 9px 4px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.15s;
+  white-space: nowrap;
+}
+.type-btn.active {
+  background: var(--amber);
+  color: #13100e;
+  border-color: var(--amber);
+}
+
+/* FORM CONTROLS */
+.form-group { margin-bottom: 14px; }
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+input[type="text"], input[type="number"], select, textarea {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--amber); }
+
+.btn {
+  background: var(--amber);
+  color: #13100e;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 6px;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+/* RESULT BOX */
+.result-card {
+  display: none;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 14px;
+  margin-top: 20px;
+  text-align: center;
+}
+.qr-container {
+  display: inline-block;
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 10px;
+  margin: 10px auto 14px;
+}
+.qr-container img, .qr-container canvas {
+  display: block;
+  margin: 0 auto;
+}
+
+/* ADVERTISEMENT CONTAINER */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>QR Code Generator</h2>
+    <div class="subtitle">Generate high-clarity QR codes for links, UPI payments & Wi-Fi credentials</div>
+
+    <!-- HOW TO USE -->
+    <div class="how-to-box">
+      <div class="how-to-title">📘 How to Use QR Generator</div>
+      <ol class="how-to-list">
+        <li>1. <span>Select Format:</span> Pick Web Link, UPI Payment, Wi-Fi, or Text.</li>
+        <li>2. <span>Enter Details:</span> Fill in required address, ID, or text.</li>
+        <li>3. <span>Download:</span> Save high-res QR code PNG directly to your device.</li>
+      </ol>
+    </div>
+
+    <!-- TYPE SELECTOR -->
+    <div class="type-grid">
+      <button class="type-btn active" onclick="switchType('url', this)">🔗 URL</button>
+      <button class="type-btn" onclick="switchType('upi', this)">💳 UPI Pay</button>
+      <button class="type-btn" onclick="switchType('wifi', this)">📶 Wi-Fi</button>
+      <button class="type-btn" onclick="switchType('text', this)">📝 Text</button>
+    </div>
+
+    <!-- FIELDS: URL -->
+    <div id="fieldUrl">
+      <div class="form-group">
+        <label>Website / Link URL</label>
+        <input type="text" id="urlInput" placeholder="https://example.com" value="https://">
+      </div>
+    </div>
+
+    <!-- FIELDS: UPI -->
+    <div id="fieldUpi" style="display:none;">
+      <div class="form-group">
+        <label>UPI ID (VPA)</label>
+        <input type="text" id="upiId" placeholder="e.g. yourname@okhdfcbank">
+      </div>
+      <div class="form-group">
+        <label>Payee Name</label>
+        <input type="text" id="upiName" placeholder="e.g. Aman Shaikh">
+      </div>
+      <div class="form-group">
+        <label>Amount (₹) (Optional)</label>
+        <input type="number" id="upiAmount" placeholder="Leave empty for open amount" inputmode="decimal">
+      </div>
+    </div>
+
+    <!-- FIELDS: WIFI -->
+    <div id="fieldWifi" style="display:none;">
+      <div class="form-group">
+        <label>Network Name (SSID)</label>
+        <input type="text" id="wifiSsid" placeholder="e.g. Home_WiFi_5G">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="text" id="wifiPass" placeholder="Network password">
+      </div>
+      <div class="form-group">
+        <label>Security</label>
+        <select id="wifiType">
+          <option value="WPA">WPA / WPA2 (Default)</option>
+          <option value="WEP">WEP</option>
+          <option value="nopass">None (Open Network)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- FIELDS: PLAIN TEXT -->
+    <div id="fieldText" style="display:none;">
+      <div class="form-group">
+        <label>Plain Text Content</label>
+        <textarea id="plainTextInput" rows="4" placeholder="Enter custom message or code..."></textarea>
+      </div>
+    </div>
+
+    <button class="btn" onclick="generateQR()">Generate QR Code</button>
+
+    <!-- RESULT OUTPUT -->
+    <div class="result-card" id="resultCard">
+      <div class="qr-container" id="qrTarget"></div>
+      <button class="btn" onclick="downloadQR()">⬇️ Download QR Code (PNG)</button>
+    </div>
+
+    <!-- ADVERTISEMENT CONTAINER -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentMode = 'url';
+let qrInstance = null;
+
+function switchType(mode, btn) {
+  currentMode = mode;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.getElementById('fieldUrl').style.display = (mode === 'url') ? 'block' : 'none';
+  document.getElementById('fieldUpi').style.display = (mode === 'upi') ? 'block' : 'none';
+  document.getElementById('fieldWifi').style.display = (mode === 'wifi') ? 'block' : 'none';
+  document.getElementById('fieldText').style.display = (mode === 'text') ? 'block' : 'none';
+  document.getElementById('resultCard').style.display = 'none';
+}
+
+function getQRPayload() {
+  if (currentMode === 'url') {
+    const u = document.getElementById('urlInput').value.trim();
+    return u || 'https://';
+  } else if (currentMode === 'upi') {
+    const vpa = document.getElementById('upiId').value.trim();
+    const name = document.getElementById('upiName').value.trim() || 'Merchant';
+    const amount = document.getElementById('upiAmount').value.trim();
+    if (!vpa) {
+      alert("Please enter a valid UPI ID.");
+      return null;
+    }
+    let upiUri = `upi://pay?pa=${encodeURIComponent(vpa)}&pn=${encodeURIComponent(name)}&cu=INR`;
+    if (amount && parseFloat(amount) > 0) {
+      upiUri += `&am=${encodeURIComponent(amount)}`;
+    }
+    return upiUri;
+  } else if (currentMode === 'wifi') {
+    const ssid = document.getElementById('wifiSsid').value.trim();
+    const pass = document.getElementById('wifiPass').value;
+    const type = document.getElementById('wifiType').value;
+    if (!ssid) {
+      alert("Please enter Wi-Fi network name (SSID).");
+      return null;
+    }
+    return `WIFI:T:${type};S:${ssid};P:${pass};;`;
+  } else if (currentMode === 'text') {
+    const t = document.getElementById('plainTextInput').value.trim();
+    if (!t) {
+      alert("Please enter some text.");
+      return null;
+    }
+    return t;
+  }
+  return '';
+}
+
+function generateQR() {
+  const payload = getQRPayload();
+  if (!payload) return;
+
+  const target = document.getElementById('qrTarget');
+  target.innerHTML = '';
+
+  qrInstance = new QRCode(target, {
+    text: payload,
+    width: 220,
+    height: 220,
+    colorDark: "#13100e",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  document.getElementById('resultCard').style.display = 'block';
+}
+
+function downloadQR() {
+  const target = document.getElementById('qrTarget');
+  const img = target.querySelector('img');
+  const canvas = target.querySelector('canvas');
+
+  let dataUrl = '';
+  if (img && img.src) {
+    dataUrl = img.src;
+  } else if (canvas) {
+    dataUrl = canvas.toDataURL("image/png");
+  }
+
+  if (!dataUrl) {
+    alert("Please generate QR code first.");
+    return;
+  }
+
+  const link = document.createElement('a');
+  link.download = `formready_qr_${Date.now()}.png`;
+  link.href = dataUrl;
+  link.click();
+}
+</script>
+</body>
+</html>

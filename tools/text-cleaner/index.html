@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Text Cleaner - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper { width: 100%; max-width: 580px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+
+/* HOW TO USE GUIDE */
+.how-to-box {
+  background: rgba(217, 154, 63, 0.05);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+.how-to-title {
+  color: var(--amber);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.how-to-list {
+  list-style: none;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* TEXTAREA */
+textarea {
+  width: 100%;
+  height: 180px;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 14px;
+  padding: 14px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.5;
+}
+textarea:focus { border-color: var(--amber); }
+
+/* STATS */
+.stat-strip {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 8px 4px;
+  margin-bottom: 12px;
+}
+.stat-strip span { color: var(--paper); font-weight: 700; }
+
+/* CLEANING OPTIONS GRID */
+.clean-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.opt-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 10px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.15s;
+}
+.opt-btn:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+/* MASTER CLEAN BUTTON */
+.btn-master {
+  background: var(--amber);
+  color: #13100e;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 12px;
+  transition: opacity 0.2s;
+}
+.btn-master:hover { opacity: 0.9; }
+
+/* UTILITY BUTTONS */
+.util-row {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.btn {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+  text-align: center;
+}
+.btn:hover { border-color: var(--amber); color: var(--amber); }
+
+/* ADVERTISEMENT CONTAINER */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>Text Cleaner</h2>
+    <div class="subtitle">Strip accidental double spaces, line breaks, duplicate lines, and blank rows</div>
+
+    <!-- HOW TO USE -->
+    <div class="how-to-box">
+      <div class="how-to-title">📘 How to Use Text Cleaner</div>
+      <ol class="how-to-list">
+        <li>1. <span>Paste Text:</span> Insert unformatted or messy text below.</li>
+        <li>2. <span>Clean:</span> Click specific cleaners or tap <b>Fix All Formatting</b>.</li>
+        <li>3. <span>Copy:</span> Instantly copy cleaned text ready for forms or notes.</li>
+      </ol>
+    </div>
+
+    <!-- TEXT EDITOR -->
+    <textarea id="textInput" placeholder="Paste unformatted or messy text here..." oninput="updateStats()"></textarea>
+
+    <div class="stat-strip">
+      <div>Characters: <span id="charStat">0</span></div>
+      <div>Lines: <span id="lineStat">0</span></div>
+    </div>
+
+    <button class="btn-master" onclick="cleanAll()">✨ Fix All Formatting (Recommended)</button>
+
+    <!-- CLEANING ACTIONS -->
+    <div class="clean-grid">
+      <button class="opt-btn" onclick="removeExtraSpaces()">Remove Extra Spaces</button>
+      <button class="opt-btn" onclick="removeBlankLines()">Remove Blank Lines</button>
+      <button class="opt-btn" onclick="trimLines()">Trim Edge Spaces</button>
+      <button class="opt-btn" onclick="removeDuplicateLines()">Remove Duplicate Lines</button>
+      <button class="opt-btn" onclick="removeLineBreaks()">Join Lines (Single Line)</button>
+      <button class="opt-btn" onclick="stripHtml()">Strip HTML Tags</button>
+    </div>
+
+    <!-- UTILITIES -->
+    <div class="util-row">
+      <button class="btn" style="background:var(--card-bg); font-weight:700; color:var(--amber);" onclick="copyText()">📋 Copy Cleaned Text</button>
+      <button class="btn" onclick="clearText()">🗑️ Clear</button>
+    </div>
+
+    <!-- ADVERTISEMENT CONTAINER -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const input = document.getElementById('textInput');
+
+function updateStats() {
+  const val = input.value;
+  document.getElementById('charStat').innerText = val.length.toLocaleString();
+  const lines = val ? val.split('\n').length : 0;
+  document.getElementById('lineStat').innerText = lines.toLocaleString();
+}
+
+function removeExtraSpaces() {
+  input.value = input.value.replace(/[^\S\r\n]+/g, ' ');
+  updateStats();
+}
+
+function removeBlankLines() {
+  input.value = input.value.split('\n').filter(line => line.trim() !== '').join('\n');
+  updateStats();
+}
+
+function trimLines() {
+  input.value = input.value.split('\n').map(line => line.trim()).join('\n');
+  updateStats();
+}
+
+function removeDuplicateLines() {
+  const lines = input.value.split('\n');
+  const seen = new Set();
+  const unique = [];
+  for (let l of lines) {
+    if (!seen.has(l)) {
+      seen.add(l);
+      unique.push(l);
+    }
+  }
+  input.value = unique.join('\n');
+  updateStats();
+}
+
+function removeLineBreaks() {
+  input.value = input.value.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+  updateStats();
+}
+
+function stripHtml() {
+  input.value = input.value.replace(/<[^>]*>?/gm, '');
+  updateStats();
+}
+
+function cleanAll() {
+  let val = input.value;
+  val = val.replace(/<[^>]*>?/gm, ''); // strip html
+  val = val.split('\n').map(l => l.replace(/[^\S\r\n]+/g, ' ').trim()).filter(l => l !== '').join('\n');
+  input.value = val;
+  updateStats();
+}
+
+function copyText() {
+  if (!input.value) return;
+  navigator.clipboard.writeText(input.value).then(() => {
+    alert("Cleaned text copied to clipboard!");
+  });
+}
+
+function clearText() {
+  input.value = '';
+  updateStats();
+}
+</script>
+</body>
+</html>
