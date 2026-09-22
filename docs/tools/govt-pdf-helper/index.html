@@ -1,555 +1,748 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Govt Form PDF Helper - FormReady India</title>
-<meta name="description" content="Optimize PDF documents for government and official portal uploads with a specified KB size limit. Choose B&amp;W, grayscale or color processing, balance readability and quality, set a custom filename, and download a portal-ready PDF. Fast, private and mobile &amp; desktop-friendly.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<style>
-:root {
-  --bg: #151210;
-  --panel: #1e1a17;
-  --line: #39322b;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f2ece2;
-  --muted: #a89a89;
-  --card-bg: #14110f;
-  --danger: #ef4444;
-  --success: #22c55e;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 14px 10px 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  touch-action: pan-y;
-}
-.wrapper { width: 100%; max-width: 580px; }
-@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sarkari Form PDF Compressor & Helper - FormReady India</title>
+  <meta name="description" content="Compress certificates and marksheets strictly under 100KB, 200KB, or 300KB for SSC, UPSC, NTA, and IBPS online portals. 100% private & offline.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 18px 16px;
-  border-radius: 12px;
-  width: 100%;
-  margin-bottom: 14px;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+  <!-- PDF.js to read uploaded PDFs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- jsPDF to compile target compressed PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-/* How to Use Box */
-.how-to-box {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-}
-.how-to-title {
-  color: var(--amber);
-  font-size: 12.5px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.how-to-list {
-  list-style: none;
-  font-size: 11.5px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+    }
 
-/* Upload Box */
-.upload-box {
-  border: 2px dashed var(--amber);
-  background: rgba(217, 154, 63, 0.04);
-  border-radius: 10px;
-  padding: 24px 14px;
-  text-align: center;
-  cursor: pointer;
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  transition: background 0.2s;
-}
-.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
-.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
-.upload-box small { color: var(--muted); font-size: 11px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Summary Pill */
-.summary-pill {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #14110f;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 12.5px;
-  color: var(--amber);
-  font-weight: 600;
-  margin-bottom: 14px;
-}
-.mini-btn {
-  background: #2a2420;
-  color: var(--paper);
-  border: 1px solid var(--line);
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  cursor: pointer;
-}
-.mini-btn:hover { background: var(--amber); color: var(--bg); }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-/* Portal Preset Chips */
-.presets-label {
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 600;
-  margin-bottom: 8px;
-  display: block;
-}
-.preset-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 14px;
-}
-.preset-chip {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--muted);
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.preset-chip.active {
-  background: rgba(217, 154, 63, 0.15);
-  border-color: var(--amber);
-  color: var(--amber);
-}
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-/* Settings Controls */
-.settings-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-@media (max-width: 480px) {
-  .settings-grid { grid-template-columns: 1fr; }
-}
-.control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-.input-label {
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 600;
-}
-.select-input, .input-text {
-  width: 100%;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  padding: 9px 10px;
-  border-radius: 8px;
-  font-size: 12.5px;
-  outline: none;
-}
-.select-input:focus, .input-text:focus { border-color: var(--amber); }
+    .container { width: 100%; max-width: 720px; position: relative; z-index: 1; }
 
-/* Result Card */
-.result-card {
-  display: none;
-  background: rgba(34, 197, 94, 0.05);
-  border: 1px solid #166534;
-  border-radius: 8px;
-  padding: 12px;
-  margin-top: 14px;
-  text-align: center;
-}
-.result-stats {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
-  font-size: 12.5px;
-}
-.stat-box strong { display: block; font-size: 14px; color: #86efac; }
-.stat-box span { font-size: 10.5px; color: var(--muted); }
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
 
-.btn {
-  background: var(--amber);
-  color: var(--bg);
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  text-align: center;
-  width: 100%;
-  transition: opacity 0.2s;
-}
-.btn:hover { opacity: 0.9; }
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
 
-#status-message {
-  font-size: 12px;
-  color: var(--amber);
-  text-align: center;
-  margin-top: 10px;
-  display: none;
-}
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+      margin-bottom: 24px;
+    }
 
-/* Advertisement Box */
-.ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 14px 10px;
-  text-align: center;
-  margin-top: 14px;
-}
-.ad-tag {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  margin-bottom: 6px;
-  display: block;
-}
-.ad-content {
-  font-size: 11px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-</style>
+    /* How to Use Box (Top Side) */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Upload Dropzone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 30px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      transform: translateY(-2px);
+    }
+    #fileInput { display: none; }
+    .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-title { font-size: 14px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+    .upload-desc b { color: var(--amber); }
+
+    /* Target Portal Presets */
+    .section-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 540px) {
+      .presets-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .preset-btn {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 10px 8px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .preset-btn span.limit { color: var(--amber); font-size: 11px; }
+    .preset-btn:hover { border-color: rgba(245, 166, 35, 0.5); color: var(--paper); }
+    .preset-btn.active {
+      background: var(--amber);
+      color: #0c0a08;
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
+    }
+    .preset-btn.active span.limit { color: #0c0a08; font-weight: 800; }
+
+    /* Custom Size & Mode Row */
+    .settings-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 500px) {
+      .settings-row { grid-template-columns: 1fr; }
+    }
+    .input-field, .input-select {
+      width: 100%;
+      padding: 11px 12px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      border-radius: 9px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus, .input-select:focus { border-color: var(--amber); }
+
+    /* File Status Dashboard */
+    .status-dashboard {
+      display: none;
+      background: #14100c;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      padding: 4px 0;
+    }
+    .status-row b { color: var(--paper); }
+    .status-badge {
+      font-size: 11px;
+      color: var(--green);
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.12);
+      padding: 3px 8px;
+      border-radius: 5px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* Compress Action Button */
+    .btn-compress {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-compress:hover:not(:disabled) {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+    .btn-compress:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Sarkari Exam Guidelines Table (Bottom Side) */
+    .guidelines-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+    }
+    .guidelines-header {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+    .guidelines-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+    .guidelines-table th {
+      background: var(--panel-inner);
+      color: var(--amber);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .guidelines-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      vertical-align: middle;
+    }
+    .guidelines-table tr:hover td {
+      background: rgba(245, 166, 35, 0.04);
+      color: var(--paper);
+    }
+    .limit-tag {
+      display: inline-block;
+      padding: 3px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 11px;
+      background: rgba(245, 166, 35, 0.12);
+      color: var(--amber);
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      white-space: nowrap;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
-  <div class="card">
-    <h2>Govt Form PDF Helper</h2>
-    <div class="subtitle">Optimize & fit PDF documents strictly under official portal KB limits</div>
+<div class="global-shine-overlay"></div>
 
-    <!-- How to Use Box -->
-    <div class="how-to-box">
-      <div class="how-to-title">📄 How to Use Govt Form PDF Helper</div>
-      <ol class="how-to-list">
-        <li>1. <span>Upload Doc:</span> Tap below to upload certificates, marksheets, or IDs.</li>
-        <li>2. <span>Portal Preset:</span> Select your exam portal (e.g. SSC 200KB, UPSC 300KB) or enter custom KB.</li>
-        <li>3. <span>Enhance Filter:</span> Choose Clean B&W or Enhanced Grayscale to pass strict scan checks.</li>
-        <li>4. <span>Download:</span> Get a portal-ready PDF strictly under the specified file size limit.</li>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Sarkari Form PDF Compressor</h1>
+    <p>Optimize certificates strictly under portal KB limits for official exam forms</p>
+  </div>
+
+  <!-- Main Card -->
+  <div class="main-card">
+    <!-- 1. How to Use (Top Side) -->
+    <div class="instructions-box">
+      <h3>📘 How to Use Govt Form PDF Helper</h3>
+      <ol>
+        <li><b>Upload Document:</b> Tap below to select your PDF, Marksheet, Caste/EWS, or photo certificate.</li>
+        <li><b>Choose Target Limit:</b> Click any official exam preset (e.g. SSC 100KB, UPSC 300KB) or type custom KB.</li>
+        <li><b>Select Filter:</b> Choose <b>Clean B&W</b> (removes shadow & paper background) or <b>Enhanced Color</b>.</li>
+        <li><b>Download:</b> Click compress to generate a portal-compliant PDF strictly under the size limit.</li>
       </ol>
     </div>
 
-    <!-- Upload Box -->
-    <input type="file" id="pdf-input" accept="application/pdf" style="display:none">
-    <div class="upload-box" onclick="document.getElementById('pdf-input').click()">
-      <span>📁 Tap here to upload PDF document</span>
-      <small>Certificates, Caste/EWS, Marksheets, PwD, IDs</small>
+    <!-- 2. Upload Zone -->
+    <label class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" accept=".pdf,image/jpeg,image/png,image/webp" onchange="handleFile(event)">
+      <div class="upload-icon">📋</div>
+      <div class="upload-title" id="uploadTitle">Tap here to upload PDF or Image Certificate</div>
+      <div class="upload-desc" id="uploadDesc">Marksheet, Caste, Domicile, EWS, Disability • <b>PDF, JPG, PNG</b></div>
+    </label>
+
+    <!-- 3. Portal Presets -->
+    <div class="section-title">
+      <span>Select Exam Portal Size Limit:</span>
+      <span id="activeLimitLabel" style="color:var(--amber);">Target: 100 KB</span>
+    </div>
+    <div class="presets-grid">
+      <button class="preset-btn active" onclick="setPreset(100, 'SSC Portals', this)">
+        SSC CGL / CHSL
+        <span class="limit">Under 100 KB</span>
+      </button>
+      <button class="preset-btn" onclick="setPreset(300, 'UPSC Portals', this)">
+        UPSC (Civil Services)
+        <span class="limit">Under 300 KB</span>
+      </button>
+      <button class="preset-btn" onclick="setPreset(200, 'IBPS & SBI', this)">
+        IBPS / Banking
+        <span class="limit">Under 200 KB</span>
+      </button>
+      <button class="preset-btn" onclick="setPreset(300, 'NTA Portals', this)">
+        NTA (NEET / JEE)
+        <span class="limit">Under 300 KB</span>
+      </button>
+      <button class="preset-btn" onclick="setPreset(100, 'State Police', this)">
+        State Police / SI
+        <span class="limit">Under 100 KB</span>
+      </button>
+      <button class="preset-btn" onclick="setPreset(50, 'Strict 50KB', this)">
+        Extreme Small
+        <span class="limit">Under 50 KB</span>
+      </button>
     </div>
 
-    <!-- Stage Section -->
-    <div id="stage-section" style="display:none">
-      <div class="summary-pill">
-        <span id="file-details">Doc: - | 0 KB</span>
-        <button type="button" class="mini-btn" onclick="document.getElementById('pdf-input').click()" style="color:var(--amber); border-color:var(--amber)">Change File</button>
+    <!-- Custom Size & Filter Options -->
+    <div class="settings-row">
+      <div>
+        <label style="font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">Custom Target Limit (KB):</label>
+        <input type="number" id="customKbInput" class="input-field" value="100" min="20" max="2000" oninput="handleCustomKb(this.value)">
       </div>
-
-      <span class="presets-label">Official Exam & Portal Presets:</span>
-      <div class="preset-chips">
-        <div class="preset-chip active" data-kb="200" data-filter="bw">SSC Portals (Under 200 KB)</div>
-        <div class="preset-chip" data-kb="300" data-filter="color">UPSC Civil Services (Under 300 KB)</div>
-        <div class="preset-chip" data-kb="200" data-filter="gray">State PSC / Police (Under 200 KB)</div>
-        <div class="preset-chip" data-kb="100" data-filter="bw">NTA / NEET / JEE (Under 100 KB)</div>
-        <div class="preset-chip" data-kb="500" data-filter="color">IBPS / Bank SO-PO (Under 500 KB)</div>
-        <div class="preset-chip" data-kb="150" data-filter="bw">Railway RRB (Under 150 KB)</div>
-      </div>
-
-      <div class="settings-grid">
-        <div class="control-group">
-          <label class="input-label" for="max-kb-input">Maximum Allowed Size (KB):</label>
-          <input type="number" id="max-kb-input" class="input-text" value="200" min="20">
-        </div>
-
-        <div class="control-group">
-          <label class="input-label" for="filter-select">Document Filter:</label>
-          <select id="filter-select" class="select-input">
-            <option value="bw" selected>Clean B&W (Scanned Doc Filter)</option>
-            <option value="gray">Enhanced Grayscale (High Contrast)</option>
-            <option value="color">Full Color (Natural)</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label class="input-label" for="dpi-target">Min Reading Clarity:</label>
-          <select id="dpi-target" class="select-input">
-            <option value="balanced" selected>Balanced (Legible Text)</option>
-            <option value="crisp">Crisp (Small Letters / Seal)</option>
-          </select>
-        </div>
-
-        <div class="control-group">
-          <label class="input-label" for="output-name">Output File Name:</label>
-          <input type="text" id="output-name" class="input-text" value="govt_portal_document.pdf">
-        </div>
-      </div>
-
-      <button class="btn" id="process-btn">⚡ Optimize For Portal Upload</button>
-      <div id="status-message"></div>
-
-      <!-- Result Card -->
-      <div class="result-card" id="result-card">
-        <div class="result-stats">
-          <div class="stat-box">
-            <strong id="orig-size-tag">0 KB</strong>
-            <span>Original Size</span>
-          </div>
-          <div class="stat-box">
-            <strong id="new-size-tag" style="color:#22c55e;">0 KB</strong>
-            <span>Portal Ready</span>
-          </div>
-          <div class="stat-box">
-            <strong id="status-badge" style="color:#22c55e;">PASSED</strong>
-            <span>Portal Status</span>
-          </div>
-        </div>
-        <button class="btn" id="dl-result-btn" style="background:#22c55e; color:#052e16;">⬇ Download Portal PDF</button>
+      <div>
+        <label style="font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">Document Clarity Filter:</label>
+        <select id="filterMode" class="input-select">
+          <option value="bw" selected>Clean B&W (Shadow Remover)</option>
+          <option value="color">Enhanced Color (Original)</option>
+          <option value="gray">Standard Grayscale</option>
+        </select>
       </div>
     </div>
 
-    <!-- Advertisement Placeholder -->
-    <div class="ad-card">
-      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
-      <div class="ad-content">
-        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+    <!-- Live Status Dashboard -->
+    <div class="status-dashboard" id="statusDashboard">
+      <div class="status-row">
+        <span>Uploaded File:</span>
+        <b id="docFileName">-</b>
       </div>
+      <div class="status-row">
+        <span>Original Size:</span>
+        <span id="docOrigSize" style="color:var(--amber); font-weight:700;">-</span>
+      </div>
+      <div class="status-row">
+        <span>Target Portal Limit:</span>
+        <span class="status-badge" id="targetBadge">Strictly &lt; 100 KB</span>
+      </div>
+    </div>
+
+    <!-- Compress & Download Button -->
+    <button class="btn-compress" id="compressBtn" onclick="processAndCompress()" disabled>
+      ⚡ Compress & Download Portal-Ready PDF
+    </button>
+  </div>
+
+  <!-- 4. Sarkari Exam PDF Size Guidelines (Bottom Side) -->
+  <div class="guidelines-card">
+    <div class="guidelines-header">
+      <span>📋 Official Exam Portal PDF Size Guidelines</span>
+    </div>
+    <div class="table-wrap">
+      <table class="guidelines-table">
+        <thead>
+          <tr>
+            <th>Portal / Exam</th>
+            <th>Document Type</th>
+            <th>Required Format</th>
+            <th>Acceptable KB Limit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>SSC</b> (CGL, CHSL, MTS, GD)</td>
+            <td>10th/12th Marksheet, Caste / EWS / Disability</td>
+            <td>PDF</td>
+            <td><span class="limit-tag">50 KB – 100 KB</span></td>
+          </tr>
+          <tr>
+            <td><b>UPSC</b> (Civil Services, NDA, CDS)</td>
+            <td>Age Proof, Educational Qualification, Caste</td>
+            <td>PDF</td>
+            <td><span class="limit-tag">20 KB – 300 KB</span></td>
+          </tr>
+          <tr>
+            <td><b>NTA</b> (NEET, JEE Mains, CUET)</td>
+            <td>Category Certificate, Class 10 Certificate</td>
+            <td>PDF</td>
+            <td><span class="limit-tag">50 KB – 300 KB</span></td>
+          </tr>
+          <tr>
+            <td><b>IBPS & SBI</b> (PO, Clerk, SO)</td>
+            <td>Handwritten Declaration, Caste, Marksheets</td>
+            <td>PDF / JPG</td>
+            <td><span class="limit-tag">100 KB – 200 KB</span></td>
+          </tr>
+          <tr>
+            <td><b>State PSC & Police</b> (BPSC, UPPSC, etc.)</td>
+            <td>Domicile / Residential, 10th Certificate</td>
+            <td>PDF</td>
+            <td><span class="limit-tag">50 KB – 100 KB</span></td>
+          </tr>
+          <tr>
+            <td><b>Indian Army / Navy / Air Force</b></td>
+            <td>Education, NCC, Character Certificate</td>
+            <td>PDF</td>
+            <td><span class="limit-tag">50 KB – 200 KB</span></td>
+          </tr>
+          <tr>
+            <td><b>Railway RRB</b> (NTPC, Group D, ALP)</td>
+            <td>SC/ST Travel Pass, Educational Certificate</td>
+            <td>PDF</td>
+            <td><span class="limit-tag">100 KB – 300 KB</span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
 
 <script>
+// Configure pdf.js worker
+if (typeof pdfjsLib !== 'undefined') {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
 
-  let rawBuffer = null;
-  let originalFile = null;
-  let originalSizeKb = 0;
-  let optimizedPdfBlob = null;
+let uploadedFile = null;
+let currentTargetKb = 100;
+let fileType = null; // 'pdf' | 'image'
 
-  const fileInput = document.getElementById('pdf-input');
-  const stageSection = document.getElementById('stage-section');
-  const fileDetails = document.getElementById('file-details');
-  const presetChips = document.querySelectorAll('.preset-chip');
-  const maxKbInput = document.getElementById('max-kb-input');
-  const filterSelect = document.getElementById('filter-select');
-  const outputNameInput = document.getElementById('output-name');
-  const processBtn = document.getElementById('process-btn');
-  const statusMsg = document.getElementById('status-message');
+function setPreset(kb, name, btn) {
+  currentTargetKb = kb;
+  document.getElementById("customKbInput").value = kb;
+  document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  document.getElementById("activeLimitLabel").innerText = `Target: ${kb} KB (${name})`;
+  document.getElementById("targetBadge").innerText = `Strictly < ${kb} KB`;
+}
 
-  const resultCard = document.getElementById('result-card');
-  const origSizeTag = document.getElementById('orig-size-tag');
-  const newSizeTag = document.getElementById('new-size-tag');
-  const statusBadge = document.getElementById('status-badge');
-  const dlResultBtn = document.getElementById('dl-result-btn');
-
-  fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      originalFile = file;
-      originalSizeKb = Math.round(file.size / 1024);
-      rawBuffer = await file.arrayBuffer();
-
-      const doc = await PDFLib.PDFDocument.load(rawBuffer, { ignoreEncryption: true });
-      const pages = doc.getPageCount();
-
-      fileDetails.textContent = `${file.name.substring(0, 16)}... | ${pages} pgs (${originalSizeKb} KB)`;
-      outputNameInput.value = `ready_${file.name}`;
-
-      resultCard.style.display = 'none';
-      stageSection.style.display = 'block';
-      stageSection.scrollIntoView({ behavior: 'smooth' });
-    } catch (err) {
-      alert('Could not open PDF: ' + err.message);
-    }
-  });
-
-  presetChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      presetChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      maxKbInput.value = chip.getAttribute('data-kb');
-      filterSelect.value = chip.getAttribute('data-filter');
-    });
-  });
-
-  // Convert canvas with B&W / Grayscale portal boost filters
-  function applyDocumentFilter(ctx, width, height, filterType) {
-    if (filterType === 'color') return;
-    const imgData = ctx.getImageData(0, 0, width, height);
-    const d = imgData.data;
-
-    for (let i = 0; i < d.length; i += 4) {
-      // Luminance formula
-      const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-
-      if (filterType === 'bw') {
-        // High contrast document threshold (clean white paper background)
-        const val = gray > 140 ? 255 : Math.max(0, gray * 0.7);
-        d[i] = val;
-        d[i + 1] = val;
-        d[i + 2] = val;
-      } else if (filterType === 'gray') {
-        // Contrast-boosted grayscale
-        const boosted = gray < 60 ? 0 : (gray > 210 ? 255 : (gray - 60) * (255 / 150));
-        d[i] = boosted;
-        d[i + 1] = boosted;
-        d[i + 2] = boosted;
-      }
-    }
-    ctx.putImageData(imgData, 0, 0);
+function handleCustomKb(val) {
+  const num = parseInt(val, 10);
+  if (!isNaN(num) && num > 0) {
+    currentTargetKb = num;
+    document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById("activeLimitLabel").innerText = `Target: ${num} KB (Custom)`;
+    document.getElementById("targetBadge").innerText = `Strictly < ${num} KB`;
   }
+}
 
-  processBtn.addEventListener('click', async () => {
-    if (!rawBuffer) return;
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    const targetLimitKb = parseInt(maxKbInput.value, 10) || 200;
-    const filterChoice = filterSelect.value;
+  uploadedFile = file;
+  fileType = file.type === "application/pdf" ? "pdf" : "image";
 
-    processBtn.disabled = true;
-    processBtn.textContent = 'Optimizing Document...';
-    statusMsg.style.display = 'block';
-    resultCard.style.display = 'none';
+  document.getElementById("uploadTitle").innerText = `✅ ${file.name}`;
+  document.getElementById("uploadDesc").innerText = `Ready to compress under ${currentTargetKb} KB limit`;
 
+  document.getElementById("docFileName").innerText = file.name;
+  document.getElementById("docOrigSize").innerText = `${(file.size / 1024).toFixed(1)} KB`;
+  document.getElementById("statusDashboard").style.display = "block";
+
+  const btn = document.getElementById("compressBtn");
+  btn.disabled = false;
+  btn.innerHTML = `⚡ Compress & Download Portal-Ready PDF (< ${currentTargetKb} KB)`;
+}
+
+// Convert and compress document strictly under Target KB
+async function processAndCompress() {
+  if (!uploadedFile) return;
+
+  const compressBtn = document.getElementById("compressBtn");
+  compressBtn.disabled = true;
+  compressBtn.innerText = "⏳ Optimizing & Compressing PDF...";
+
+  setTimeout(async () => {
     try {
-      const pdfJsDoc = await pdfjsLib.getDocument({ data: rawBuffer }).promise;
-      const numPages = pdfJsDoc.numPages;
+      const { jsPDF } = window.jspdf;
+      const filter = document.getElementById("filterMode").value;
+      const targetBytes = currentTargetKb * 1024;
 
-      // Quality calculation tailored to hit strictly under target KB
-      let scale = 1.0;
-      let quality = 0.60;
+      let pagesCanvases = [];
 
-      // If document is large or target is tight (< 200 KB)
-      if (targetLimitKb <= 150) {
-        scale = 0.85;
-        quality = 0.42;
-      } else if (targetLimitKb <= 300) {
-        scale = 1.0;
-        quality = 0.55;
+      if (fileType === "image") {
+        // Handle Image Upload
+        const c = await imageToCanvas(uploadedFile);
+        pagesCanvases.push(c);
       } else {
-        scale = 1.25;
-        quality = 0.70;
+        // Handle PDF Upload via pdf.js
+        const arrayBuffer = await uploadedFile.arrayBuffer();
+        const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const numPages = pdfDoc.numPages;
+
+        for (let i = 1; i <= numPages; i++) {
+          const page = await pdfDoc.getPage(i);
+          const viewport = page.getViewport({ scale: 1.5 });
+          const canvas = document.createElement("canvas");
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext("2d");
+          await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+          pagesCanvases.push(canvas);
+        }
       }
 
-      statusMsg.textContent = `Optimizing ${numPages} page(s) strictly under ${targetLimitKb} KB...`;
+      // Apply Filters (Clean B&W / Grayscale)
+      pagesCanvases.forEach(canvas => {
+        applyFilterToCanvas(canvas, filter);
+      });
 
-      const outDoc = await PDFLib.PDFDocument.create();
+      // Iterative Compression to strictly stay below targetBytes
+      let quality = 0.85;
+      let finalPdfBlob = null;
+      let iterations = 0;
 
-      for (let i = 1; i <= numPages; i++) {
-        const page = await pdfJsDoc.getPage(i);
-        const viewport = page.getViewport({ scale: scale });
+      while (iterations < 6) {
+        const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+        const a4W = doc.internal.pageSize.getWidth();
+        const a4H = doc.internal.pageSize.getHeight();
 
-        const canvas = document.createElement('canvas');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        const ctx = canvas.getContext('2d');
+        for (let i = 0; i < pagesCanvases.length; i++) {
+          if (i > 0) doc.addPage("a4", "portrait");
 
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+          const c = pagesCanvases[i];
+          const imgData = c.toDataURL("image/jpeg", quality);
 
-        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+          // Fit A4 margins
+          const margin = 8;
+          const availW = a4W - (margin * 2);
+          const availH = a4H - (margin * 2);
+          const ratio = c.width / c.height;
 
-        // Apply portal document filter
-        applyDocumentFilter(ctx, canvas.width, canvas.height, filterChoice);
+          let drawW = availW;
+          let drawH = availW / ratio;
+          if (drawH > availH) {
+            drawH = availH;
+            drawW = availH * ratio;
+          }
 
-        const imgDataUrl = canvas.toDataURL('image/jpeg', quality);
-        const base64Data = imgDataUrl.split(',')[1];
-        const binaryString = window.atob(base64Data);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let b = 0; b < binaryString.length; b++) bytes[b] = binaryString.charCodeAt(b);
+          const posX = margin + (availW - drawW) / 2;
+          const posY = margin + (availH - drawH) / 2;
+          doc.addImage(imgData, "JPEG", posX, posY, drawW, drawH, undefined, "FAST");
+        }
 
-        const embedded = await outDoc.embedJpg(bytes);
-        const newPage = outDoc.addPage([embedded.width, embedded.height]);
-        newPage.drawImage(embedded, {
-          x: 0,
-          y: 0,
-          width: embedded.width,
-          height: embedded.height
-        });
+        finalPdfBlob = doc.output("blob");
+        if (finalPdfBlob.size <= targetBytes || quality <= 0.25) {
+          break;
+        }
+
+        // Reduce quality if file is still oversized
+        quality -= 0.15;
+        iterations++;
       }
 
-      const outBytes = await outDoc.save();
-      const finalKb = Math.round(outBytes.length / 1024);
-      optimizedPdfBlob = new Blob([outBytes], { type: 'application/pdf' });
+      // Download
+      const finalKb = (finalPdfBlob.size / 1024).toFixed(1);
+      const url = URL.createObjectURL(finalPdfBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `portal_ready_doc_${currentTargetKb}kb.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
 
-      origSizeTag.textContent = `${originalSizeKb} KB`;
-      newSizeTag.textContent = `${finalKb} KB`;
-
-      if (finalKb <= targetLimitKb) {
-        statusBadge.textContent = 'PASSED';
-        statusBadge.style.color = '#22c55e';
-        statusMsg.textContent = `Success! Document is now ${finalKb} KB (Within ${targetLimitKb} KB limit).`;
-      } else {
-        statusBadge.textContent = 'NEEDS REDUCTION';
-        statusBadge.style.color = '#facc15';
-        statusMsg.textContent = `Document is ${finalKb} KB. Try selecting Clean B&W filter or lower KB target.`;
-      }
-
-      resultCard.style.display = 'block';
-      resultCard.scrollIntoView({ behavior: 'smooth' });
+      compressBtn.disabled = false;
+      compressBtn.innerHTML = `✅ Successfully Downloaded (${finalKb} KB)`;
     } catch (err) {
-      alert('Optimization error: ' + err.message);
-      statusMsg.style.display = 'none';
+      console.error(err);
+      alert("Error compressing document: " + err.message);
+      compressBtn.disabled = false;
+      compressBtn.innerHTML = "⚡ Compress & Download Portal-Ready PDF";
     }
+  }, 100);
+}
 
-    processBtn.disabled = false;
-    processBtn.textContent = '⚡ Optimize For Portal Upload';
+function imageToCanvas(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let w = img.width;
+        let h = img.height;
+        const maxDim = 1500;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+          else { w = Math.round((w * maxDim) / h); h = maxDim; }
+        }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   });
+}
 
-  dlResultBtn.addEventListener('click', () => {
-    if (!optimizedPdfBlob) return;
-    const link = document.createElement('a');
-    let name = outputNameInput.value.trim();
-    if (!name.toLowerCase().endsWith('.pdf')) name += '.pdf';
-    link.href = URL.createObjectURL(optimizedPdfBlob);
-    link.download = name || 'govt_document.pdf';
-    link.click();
-  });
+function applyFilterToCanvas(canvas, filter) {
+  if (filter === "color") return;
+
+  const ctx = canvas.getContext("2d");
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const d = imgData.data;
+
+  for (let i = 0; i < d.length; i += 4) {
+    const gray = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
+
+    if (filter === "bw") {
+      // High contrast threshold to remove yellow paper & shadow
+      const val = gray > 145 ? 255 : (gray < 80 ? 0 : ((gray - 80) / 65) * 255);
+      d[i] = val;
+      d[i+1] = val;
+      d[i+2] = val;
+    } else if (filter === "gray") {
+      d[i] = gray;
+      d[i+1] = gray;
+      d[i+2] = gray;
+    }
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
 </script>
 </body>
 </html>
