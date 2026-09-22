@@ -3,182 +3,889 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ID Utility - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Card Splitter - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <style>
 :root {
-  --bg: #151210;
-  --panel: #1e1a17;
-  --line: #39322b;
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
   --amber: #d99a3f;
   --amber-hover: #c48733;
-  --paper: #f2ece2;
-  --muted: #a89a89;
-  --card-bg: #14110f;
-  --danger: #ef4444;
-  --success: #22c55e;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+  --danger: #e74c3c;
+  --glow: rgba(217, 154, 63, 0.35);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(217,154,63,0.06), transparent 40%),
+    radial-gradient(circle at 85% 100%, rgba(217,154,63,0.05), transparent 45%),
+    var(--bg);
   color: var(--paper);
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 14px 10px 40px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  touch-action: pan-y;
 }
-.wrapper { width: 100%; max-width: 580px; }
-@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+.wrapper { width: 100%; max-width: 560px; }
 
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
+.top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 10px; }
+.back-link { color: var(--amber); text-decoration: none; font-size: 13px; font-weight: 600; }
+.offline-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.4px; color: var(--success);
+  background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.3);
+  padding: 5px 9px; border-radius: 20px; display: flex; align-items: center; gap: 5px;
 }
+.offline-badge .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--success);
+  box-shadow: 0 0 8px var(--success); animation: pulseDot 1.6s infinite ease-in-out;
+}
+@keyframes pulseDot { 0%,100%{opacity:1; transform:scale(1);} 50%{opacity:.4; transform:scale(.7);} }
+
 .card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 18px 16px;
-  border-radius: 12px;
-  width: 100%;
-  margin-bottom: 14px;
+  background: var(--panel); border: 1px solid var(--line); padding: 22px 18px;
+  border-radius: 14px; width: 100%; position: relative; overflow: hidden;
 }
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+.card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(217,154,63,0.04) 50%, transparent 70%);
+  background-size: 200% 200%; animation: sheen 8s linear infinite; pointer-events: none;
+}
+@keyframes sheen { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
-/* How to Use Box */
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; position: relative; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; position: relative; }
+
 .how-to-box {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
+  background: rgba(217, 154, 63, 0.05); border-left: 3px solid var(--amber);
+  border-radius: 8px; padding: 12px 14px; margin-bottom: 18px; position: relative;
 }
-.how-to-title {
-  color: var(--amber);
-  font-size: 12.5px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.how-to-list {
-  list-style: none;
-  font-size: 11.5px;
-  color: var(--muted);
-  line-height: 1.6;
-}
+.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
 .how-to-list li span { color: var(--paper); font-weight: 600; }
 
-/* Upload Box */
-.upload-box {
-  border: 2px dashed var(--amber);
-  background: rgba(217, 154, 63, 0.04);
-  border-radius: 10px;
-  padding: 24px 14px;
-  text-align: center;
-  cursor: pointer;
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  transition: background 0.2s;
+.steps { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; position: relative; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; position: relative; z-index: 2; }
+.step .circle {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--card-bg); border: 1.5px solid var(--line);
+  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--muted);
+  transition: all 0.3s ease;
 }
-.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
-.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
-.upload-box small { color: var(--muted); font-size: 11px; }
+.step .label { font-size: 9.5px; color: var(--muted); font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
+.step.active .circle { background: var(--amber); border-color: var(--amber); color: #13100e; box-shadow: 0 0 14px var(--glow); }
+.step.active .label { color: var(--amber); }
+.step.done .circle { background: rgba(52,211,153,0.15); border-color: var(--success); color: var(--success); }
+.step.done .label { color: var(--success); }
+.steps::before { content: ''; position: absolute; top: 13px; left: 13%; right: 13%; height: 1.5px; background: var(--line); z-index: 1; }
+
+.form-group { margin-bottom: 16px; position: relative; }
+label { display: block; font-size: 13px; font-weight: 600; color: var(--paper); margin-bottom: 6px; }
+
+.dropzone {
+  border: 1.5px dashed var(--line); border-radius: 10px; padding: 26px 14px; text-align: center;
+  cursor: pointer; transition: all 0.2s ease; background: var(--card-bg);
+}
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--amber); background: rgba(217,154,63,0.05); box-shadow: 0 0 20px rgba(217,154,63,0.08) inset;
+}
+.dropzone .icon { font-size: 28px; margin-bottom: 8px; }
+.dropzone .main-txt { font-size: 13.5px; font-weight: 700; color: var(--paper); margin-bottom: 3px; }
+.dropzone .sub-txt { font-size: 11px; color: var(--muted); }
+.dropzone input { display: none; }
+
+input[type="range"] { width: 100%; accent-color: var(--amber); background: var(--card-bg); }
+
+.stage-section { display: none; margin-top: 18px; }
+.stage-box { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #000; user-select: none; }
+.stage-box img { width: 100%; display: block; pointer-events: none; }
+
+.scan-line {
+  position: absolute; left: 0; right: 0; height: 2px; background: var(--amber);
+  box-shadow: 0 0 12px 3px var(--glow); animation: scanMove 1.1s ease-in-out infinite; display: none; z-index: 5;
+}
+.scan-line.active { display: block; }
+@keyframes scanMove { 0%{top:2%;} 50%{top:96%;} 100%{top:2%;} }
+
+.scan-status {
+  position: absolute; top: 8px; left: 8px; font-size: 10px; font-weight: 700; color: var(--amber);
+  background: rgba(0,0,0,0.55); padding: 4px 8px; border-radius: 20px; letter-spacing: 0.4px; display: none; z-index: 5;
+}
+.scan-status.active { display: block; }
+
+.crop-box {
+  position: absolute; border: 2px solid var(--amber); background: rgba(217,154,63,0.10);
+  touch-action: none; cursor: move; z-index: 3;
+}
+.crop-box.back { border-color: var(--success); background: rgba(52,211,153,0.10); }
+.crop-box .box-label {
+  position: absolute; top: -22px; left: -2px; font-size: 10px; font-weight: 800; padding: 3px 8px;
+  border-radius: 5px; color: #13100e; background: var(--amber); white-space: nowrap;
+}
+.crop-box.back .box-label { background: var(--success); }
+.crop-handle {
+  position: absolute; width: 20px; height: 20px; background: var(--paper);
+  border: 2px solid var(--amber); border-radius: 50%; touch-action: none; z-index: 4;
+}
+.crop-box.back .crop-handle { border-color: var(--success); }
+.crop-handle[data-corner="tl"] { left: 0; top: 0; transform: translate(-50%, -50%); cursor: nwse-resize; }
+.crop-handle[data-corner="tr"] { left: 100%; top: 0; transform: translate(-50%, -50%); cursor: nesw-resize; }
+.crop-handle[data-corner="bl"] { left: 0; top: 100%; transform: translate(-50%, -50%); cursor: nesw-resize; }
+.crop-handle[data-corner="br"] { left: 100%; top: 100%; transform: translate(-50%, -50%); cursor: nwse-resize; }
+
+.stage-actions { display: flex; gap: 8px; margin-top: 12px; }
+.stage-actions .btn { margin-top: 0; }
+.btn-secondary { background: transparent; color: var(--amber); border: 1px solid var(--line); }
+.btn-secondary:hover { border-color: var(--amber); }
+
+.results-section { display: none; margin-top: 20px; }
+.perspective-wrap { perspective: 900px; }
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.result-card {
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px; text-align: center;
+  transform-style: preserve-3d; transition: transform 0.15s ease, box-shadow 0.2s ease;
+  animation: floatCard 4s ease-in-out infinite;
+}
+.result-card:nth-child(2) { animation-delay: 0.6s; }
+@keyframes floatCard { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.result-card:hover { box-shadow: 0 10px 24px rgba(217,154,63,0.15); }
+.result-card canvas { width: 100%; border-radius: 6px; border: 1px solid var(--line); background: #fff; display: block; }
+.result-card .tag { font-size: 11px; font-weight: 800; color: var(--amber); margin: 8px 0 3px; letter-spacing: 0.4px; }
+.result-card .dims { font-size: 10px; color: var(--muted); }
+.result-card .mini-dl {
+  margin-top: 8px; width: 100%; padding: 8px; font-size: 11.5px; font-weight: 700;
+  background: rgba(217,154,63,0.1); color: var(--amber); border: 1px solid rgba(217,154,63,0.3);
+  border-radius: 6px; cursor: pointer; transition: 0.2s;
+}
+.result-card .mini-dl:hover { background: rgba(217,154,63,0.18); }
+
+.a4-preview-wrap { margin-bottom: 16px; }
+.a4-preview-box {
+  background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--line);
+  max-width: 220px; margin: 8px auto 0; box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+.a4-preview-box img { width: 100%; display: block; }
 
 .btn {
-  background: var(--amber);
-  color: var(--bg);
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  text-align: center;
-  width: 100%;
-  margin-top: 10px;
-  transition: opacity 0.2s;
+  background: var(--amber); color: #13100e; border: none; padding: 13px; border-radius: 9px;
+  font-weight: 800; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px;
+  transition: all 0.2s ease; position: relative; overflow: hidden;
 }
-.btn:hover { opacity: 0.9; }
+.btn:hover { opacity: 0.92; box-shadow: 0 0 22px var(--glow); }
+.btn:active { transform: scale(0.98); }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+.btn .spin {
+  display: inline-block; width: 13px; height: 13px; border-radius: 50%;
+  border: 2px solid rgba(19,16,14,0.3); border-top-color: #13100e;
+  animation: spin 0.7s linear infinite; margin-right: 7px; vertical-align: -2px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* Standard Ad Banner Container */
+.reset-link {
+  display: block; text-align: center; margin-top: 14px; font-size: 12px; color: var(--muted);
+  text-decoration: underline; cursor: pointer; background: none; border: none; width: 100%;
+}
+.reset-link:hover { color: var(--amber); }
+
+.hint-note { font-size: 10.5px; color: var(--muted); text-align: center; margin-top: 6px; }
+
 .ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 16px;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 8px; padding: 16px; text-align: center;
+  margin-top: 22px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
 }
-.ad-tag {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  display: block;
+.ad-tag { font-size: 9.5px; font-weight: 700; color: var(--muted); letter-spacing: 0.8px; display: block; text-transform: uppercase; }
+.ad-content { font-size: 11.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 50;
+  align-items: center; justify-content: center; padding: 20px;
 }
-.ad-content {
-  font-size: 11.5px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+.modal-overlay.active { display: flex; }
+.modal-box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; width: 100%; max-width: 340px; }
+.modal-title { font-size: 15px; font-weight: 800; color: var(--amber); margin-bottom: 4px; }
+.modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.modal-box input[type="password"] {
+  width: 100%; background: var(--card-bg); border: 1px solid var(--line); color: var(--paper);
+  padding: 11px 12px; border-radius: 8px; font-size: 14px; outline: none; font-family: inherit;
 }
+.modal-box input[type="password"]:focus { border-color: var(--amber); }
+.modal-error { font-size: 11.5px; color: var(--danger); min-height: 16px; margin-top: 6px; }
+.modal-actions { display: flex; gap: 8px; margin-top: 6px; }
+.modal-actions .btn { margin-top: 0; }
 </style>
 </head>
 <body>
 <div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+  <div class="top-row">
+    <a href="../../index.html" class="back-link">&larr; Home</a>
+    <div class="offline-badge"><span class="dot"></span>100% Client-Side · Offline &amp; Secure</div>
+  </div>
 
   <div class="card">
-    <h2>ID Tool Utility</h2>
-    <div class="subtitle">Secure offline processing for official document alignment</div>
+    <h2>Aadhaar / PAN Card Splitter</h2>
+    <div class="subtitle">Auto-detect &amp; crop front/back · Download single or A4 print-ready</div>
 
-    <!-- How to Use Box -->
     <div class="how-to-box">
-      <div class="how-to-title">📄 How to Use ID Tool</div>
+      <div class="how-to-title">📘 How to Use</div>
       <ol class="how-to-list">
-        <li>1. <span>Upload Document:</span> Tap the upload box to select your file.</li>
-        <li>2. <span>Process:</span> Adjust alignment or dimensions securely in your browser.</li>
-        <li>3. <span>Download:</span> Save your final document instantly.</li>
+        <li>1. <span>Upload:</span> image or PDF (password-protected PDFs will ask for the password).</li>
+        <li>2. <span>Auto-Crop:</span> front &amp; back are boxed automatically — drag a corner or the box to fix mistakes.</li>
+        <li>3. <span>Download:</span> each side separately, or both on clean A4 sheet without lines or labels.</li>
       </ol>
     </div>
 
-    <!-- Upload Box -->
-    <input type="file" id="file-input" accept="image/*,application/pdf" style="display:none">
-    <div class="upload-box" onclick="document.getElementById('file-input').click()">
-      <span>📁 Tap here to upload document</span>
-      <small>Supports PDF, JPG, PNG formats</small>
+    <div class="steps" id="stepsBar">
+      <div class="step active" data-step="1"><div class="circle">1</div><div class="label">Upload</div></div>
+      <div class="step" data-step="2"><div class="circle">2</div><div class="label">Adjust</div></div>
+      <div class="step" data-step="3"><div class="circle">3</div><div class="label">Download</div></div>
     </div>
 
-    <!-- Standard Ad Banner -->
-    <div class="ad-card">
-      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
-      <div class="ad-content">
-        <span>📢</span> Google AdSense / Responsive Banner Space (Optimized for Mobile & Desktop)
+    <div class="form-group" id="uploadGroup">
+      <label>Upload Aadhaar / PAN (Image or PDF)</label>
+      <div class="dropzone" id="dropzone">
+        <div class="icon">📄</div>
+        <div class="main-txt">Tap to Upload File</div>
+        <div class="sub-txt">JPG, PNG or PDF · Processed fully offline in your browser</div>
+        <input type="file" id="fileInput" accept="image/*,application/pdf">
       </div>
+    </div>
+
+    <div class="form-group">
+      <label>Output Quality (<span id="qualLabel">90%</span>)</label>
+      <input type="range" id="qualityRange" min="50" max="100" value="90">
+    </div>
+
+    <div class="stage-section" id="stageSection">
+      <label>Adjust Crop if Needed</label>
+      <div class="stage-box" id="stageBox">
+        <img id="stageImg" alt="Uploaded document preview">
+        <div class="scan-status" id="scanStatus">⟳ Auto-detecting card edges…</div>
+        <div class="scan-line" id="scanLine"></div>
+        <div class="crop-box front" id="frontCropBox" data-box="front" style="display:none;">
+          <div class="box-label">FRONT</div>
+          <div class="crop-handle" data-corner="tl"></div>
+          <div class="crop-handle" data-corner="tr"></div>
+          <div class="crop-handle" data-corner="bl"></div>
+          <div class="crop-handle" data-corner="br"></div>
+        </div>
+        <div class="crop-box back" id="backCropBox" data-box="back" style="display:none;">
+          <div class="box-label">BACK</div>
+          <div class="crop-handle" data-corner="tl"></div>
+          <div class="crop-handle" data-corner="tr"></div>
+          <div class="crop-handle" data-corner="bl"></div>
+          <div class="crop-handle" data-corner="br"></div>
+        </div>
+      </div>
+      <div class="stage-actions">
+        <button class="btn btn-secondary" id="reAutoBtn">↻ Re-Detect</button>
+        <button class="btn" id="confirmCropBtn">Confirm Crop →</button>
+      </div>
+      <div class="hint-note">Amber box = FRONT, Green box = BACK. Drag a corner to resize, or drag the box to move it.</div>
+    </div>
+
+    <div class="results-section" id="resultsSection">
+      <label>Preview</label>
+      <div class="perspective-wrap">
+        <div class="results-grid">
+          <div class="result-card" id="frontResultCard">
+            <canvas id="frontCanvasView"></canvas>
+            <div class="tag">FRONT SIDE</div>
+            <div class="dims" id="frontMeta">-</div>
+            <button class="mini-dl" id="dlFrontBtn">⬇ Download Front</button>
+          </div>
+          <div class="result-card" id="backResultCard">
+            <canvas id="backCanvasView"></canvas>
+            <div class="tag">BACK SIDE</div>
+            <div class="dims" id="backMeta">-</div>
+            <button class="mini-dl" id="dlBackBtn">⬇ Download Back</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="a4-preview-wrap">
+        <label>A4 Sheet Preview — Clean top-aligned output</label>
+        <div class="a4-preview-box"><img id="a4PreviewImg" alt="A4 output preview"></div>
+      </div>
+
+      <button class="btn" id="dlBothBtn">⬇ Download Both — A4 Print-Ready PDF</button>
+      <div class="hint-note">Clean A4 sheet with top-aligned cards, ready to print &amp; submit.</div>
+      <button class="reset-link" id="resetBtn">↺ Upload a Different File</button>
+    </div>
+
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content"><span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)</div>
     </div>
   </div>
 </div>
+
+<div class="modal-overlay" id="pdfPasswordModal">
+  <div class="modal-box">
+    <div class="modal-title">🔒 Password Protected PDF</div>
+    <div class="modal-sub">Enter the password to unlock this file.</div>
+    <input type="password" id="pdfPasswordInput" placeholder="Enter PDF password" autocomplete="off">
+    <div class="modal-error" id="pdfPasswordError"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="pdfPasswordCancel" type="button">Cancel</button>
+      <button class="btn" id="pdfPasswordSubmit" type="button">Unlock</button>
+    </div>
+  </div>
+</div>
+<script>
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const qualityRange = document.getElementById('qualityRange');
+const qualLabel = document.getElementById('qualLabel');
+const stageSection = document.getElementById('stageSection');
+const stageBox = document.getElementById('stageBox');
+const stageImg = document.getElementById('stageImg');
+const scanLine = document.getElementById('scanLine');
+const scanStatus = document.getElementById('scanStatus');
+const frontCropBoxEl = document.getElementById('frontCropBox');
+const backCropBoxEl = document.getElementById('backCropBox');
+const reAutoBtn = document.getElementById('reAutoBtn');
+const confirmCropBtn = document.getElementById('confirmCropBtn');
+const resultsSection = document.getElementById('resultsSection');
+const frontCanvasView = document.getElementById('frontCanvasView');
+const backCanvasView = document.getElementById('backCanvasView');
+const frontMeta = document.getElementById('frontMeta');
+const backMeta = document.getElementById('backMeta');
+const dlFrontBtn = document.getElementById('dlFrontBtn');
+const dlBackBtn = document.getElementById('dlBackBtn');
+const dlBothBtn = document.getElementById('dlBothBtn');
+const a4PreviewImg = document.getElementById('a4PreviewImg');
+const resetBtn = document.getElementById('resetBtn');
+const stepEls = document.querySelectorAll('.step');
+const pdfPasswordModal = document.getElementById('pdfPasswordModal');
+const pdfPasswordInput = document.getElementById('pdfPasswordInput');
+const pdfPasswordError = document.getElementById('pdfPasswordError');
+const pdfPasswordSubmit = document.getElementById('pdfPasswordSubmit');
+const pdfPasswordCancel = document.getElementById('pdfPasswordCancel');
+
+let quality = 0.9;
+let sourceCanvas = null;
+let frontCanvas = null;
+let backCanvas = null;
+let activeDrag = null;
+const boxRatios = {
+  front: { x0: 0.06, y0: 0.06, x1: 0.94, y1: 0.42 },
+  back: { x0: 0.06, y0: 0.56, x1: 0.94, y1: 0.92 }
+};
+const boxEls = { front: frontCropBoxEl, back: backCropBoxEl };
+
+function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+function fitDims(img, maxW, maxH) {
+  const ratio = Math.min(maxW / img.width, maxH / img.height);
+  return { w: img.width * ratio, h: img.height * ratio };
+}
+
+qualityRange.addEventListener('input', function() {
+  quality = qualityRange.value / 100;
+  qualLabel.textContent = qualityRange.value + '%';
+});
+
+function setStep(n) {
+  stepEls.forEach(function(el) {
+    const s = parseInt(el.dataset.step, 10);
+    el.classList.remove('active', 'done');
+    if (s < n) el.classList.add('done');
+    else if (s === n) el.classList.add('active');
+  });
+}
+
+dropzone.addEventListener('click', function() { fileInput.click(); });
+dropzone.addEventListener('dragover', function(e) { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', function() { dropzone.classList.remove('dragover'); });
+dropzone.addEventListener('drop', function(e) {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', function(e) {
+  if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+});
+
+function readFileAsDataURL(file) {
+  return new Promise(function(resolve, reject) {
+    const reader = new FileReader();
+    reader.onload = function() { resolve(reader.result); };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImageEl(src) {
+  return new Promise(function(resolve, reject) {
+    const img = new Image();
+    img.onload = function() { resolve(img); };
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+async function renderPdfPageToCanvas(pdf, pageNum, scale) {
+  const page = await pdf.getPage(pageNum);
+  const viewport = page.getViewport({ scale: scale || 2 });
+  const canvas = document.createElement('canvas');
+  canvas.width = viewport.width;
+  canvas.height = viewport.height;
+  const ctx = canvas.getContext('2d');
+  await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+  return canvas;
+}
+
+function showPasswordModal(isRetry, onSubmit, onCancel) {
+  pdfPasswordError.textContent = isRetry ? 'Incorrect password. Try again.' : '';
+  pdfPasswordInput.value = '';
+  pdfPasswordModal.classList.add('active');
+  setTimeout(function() { pdfPasswordInput.focus(); }, 50);
+  pdfPasswordSubmit.onclick = function() {
+    const val = pdfPasswordInput.value;
+    if (!val) { pdfPasswordError.textContent = 'Please enter a password.'; return; }
+    pdfPasswordModal.classList.remove('active');
+    onSubmit(val);
+  };
+  pdfPasswordCancel.onclick = function() {
+    pdfPasswordModal.classList.remove('active');
+    onCancel();
+  };
+}
+
+function loadPdfWithPassword(buf) {
+  return new Promise(function(resolve, reject) {
+    const loadingTask = pdfjsLib.getDocument({ data: buf });
+    loadingTask.onPassword = function(updatePassword, reason) {
+      const isRetry = !!(window.pdfjsLib && pdfjsLib.PasswordResponses && reason === pdfjsLib.PasswordResponses.INCORRECT_PASSWORD);
+      showPasswordModal(isRetry, function(pwd) {
+        updatePassword(pwd);
+      }, function() {
+        loadingTask.destroy();
+        reject(new Error('CANCELLED'));
+      });
+    };
+    loadingTask.promise.then(resolve).catch(reject);
+  });
+}
+
+function autoDetectSplit(canvas) {
+  try {
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    const startY = Math.floor(h * 0.25);
+    const endY = Math.floor(h * 0.75);
+    let bestRow = Math.floor(h / 2);
+    let bestScore = -Infinity;
+    const step = Math.max(1, Math.floor(h / 300));
+    const sampleStepX = Math.max(1, Math.floor(w / 80));
+    for (let y = startY; y < endY; y += step) {
+      const rowData = ctx.getImageData(0, y, w, 1).data;
+      let sum = 0, sumSq = 0, count = 0;
+      for (let x = 0; x < w; x += sampleStepX) {
+        const idx = x * 4;
+        const bright = (rowData[idx] + rowData[idx + 1] + rowData[idx + 2]) / 3;
+        sum += bright;
+        sumSq += bright * bright;
+        count++;
+      }
+      if (count === 0) continue;
+      const mean = sum / count;
+      const variance = (sumSq / count) - (mean * mean);
+      const score = mean - Math.sqrt(Math.max(variance, 0)) * 1.5;
+      if (score > bestScore) { bestScore = score; bestRow = y; }
+    }
+    if (bestScore < 150) return 0.5;
+    return bestRow / h;
+  } catch (e) {
+    return 0.5;
+  }
+}
+
+function autoDetectCardBox(canvas, yStart, yEnd) {
+  const w = canvas.width, h = canvas.height;
+  const py0 = Math.floor(h * yStart);
+  const py1 = Math.floor(h * yEnd);
+  const zoneH = py1 - py0;
+  const fallback = {
+    x0: 0.04, x1: 0.96,
+    y0: yStart + (yEnd - yStart) * 0.04,
+    y1: yEnd - (yEnd - yStart) * 0.04
+  };
+  if (zoneH < 10) return fallback;
+  try {
+    const ctx = canvas.getContext('2d');
+    const imgData = ctx.getImageData(0, py0, w, zoneH).data;
+    function pixelAt(x, y) { const idx = (y * w + x) * 4; return [imgData[idx], imgData[idx + 1], imgData[idx + 2]]; }
+    const cx1 = Math.min(2, w - 1), cx2 = Math.max(w - 3, 0);
+    const cy1 = Math.min(2, zoneH - 1), cy2 = Math.max(zoneH - 3, 0);
+    const corners = [pixelAt(cx1, cy1), pixelAt(cx2, cy1), pixelAt(cx1, cy2), pixelAt(cx2, cy2)];
+    const bg = [0, 1, 2].map(function(c) { return corners.reduce(function(s, p) { return s + p[c]; }, 0) / corners.length; });
+    const threshold = 28;
+    const stepX = Math.max(1, Math.floor(w / 150));
+    const stepY = Math.max(1, Math.floor(zoneH / 150));
+    let minX = w, maxX = 0, minY = zoneH, maxY = 0, found = false;
+    for (let y = 0; y < zoneH; y += stepY) {
+      for (let x = 0; x < w; x += stepX) {
+        const idx = (y * w + x) * 4;
+        const dr = imgData[idx] - bg[0], dg = imgData[idx + 1] - bg[1], db = imgData[idx + 2] - bg[2];
+        const dev = Math.sqrt(dr * dr + dg * dg + db * db);
+        if (dev > threshold) {
+          found = true;
+          if (x < minX) minX = x; if (x > maxX) maxX = x;
+          if (y < minY) minY = y; if (y > maxY) maxY = y;
+        }
+      }
+    }
+    if (!found || (maxX - minX) < w * 0.2 || (maxY - minY) < zoneH * 0.15) return fallback;
+    const padX = (maxX - minX) * 0.03, padY = (maxY - minY) * 0.03;
+    return {
+      x0: clamp01((minX - padX) / w),
+      x1: clamp01((maxX + padX) / w),
+      y0: clamp01((py0 + minY - padY) / h),
+      y1: clamp01((py0 + maxY + padY) / h)
+    };
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function cropFromRatio(srcCanvas, r) {
+  const w = srcCanvas.width, h = srcCanvas.height;
+  const sx = Math.round(r.x0 * w), sy = Math.round(r.y0 * h);
+  const sw = Math.max(1, Math.round((r.x1 - r.x0) * w));
+  const sh = Math.max(1, Math.round((r.y1 - r.y0) * h));
+  const c = document.createElement('canvas');
+  c.width = sw; c.height = sh;
+  c.getContext('2d').drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+  return c;
+}
+
+function renderCropBoxes() {
+  ['front', 'back'].forEach(function(k) {
+    const r = boxRatios[k], el = boxEls[k];
+    el.style.left = (r.x0 * 100) + '%';
+    el.style.top = (r.y0 * 100) + '%';
+    el.style.width = ((r.x1 - r.x0) * 100) + '%';
+    el.style.height = ((r.y1 - r.y0) * 100) + '%';
+  });
+}
+
+function onPointerDownHandle(e) {
+  e.stopPropagation();
+  const corner = e.currentTarget.dataset.corner;
+  const boxKey = e.currentTarget.closest('.crop-box').dataset.box;
+  activeDrag = { type: 'resize', box: boxKey, corner: corner };
+  try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+}
+function onPointerDownBox(e) {
+  if (e.target.classList.contains('crop-handle')) return;
+  const boxKey = e.currentTarget.dataset.box;
+  const r = boxRatios[boxKey];
+  const rect = stageBox.getBoundingClientRect();
+  activeDrag = {
+    type: 'move', box: boxKey,
+    startRatio: { x0: r.x0, y0: r.y0, x1: r.x1, y1: r.y1 },
+    startPX: (e.clientX - rect.left) / rect.width,
+    startPY: (e.clientY - rect.top) / rect.height
+  };
+  try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+}
+function onPointerMoveGlobal(e) {
+  if (!activeDrag) return;
+  const rect = stageBox.getBoundingClientRect();
+  const px = clamp01((e.clientX - rect.left) / rect.width);
+  const py = clamp01((e.clientY - rect.top) / rect.height);
+  const minSize = 0.06;
+  const r = boxRatios[activeDrag.box];
+  if (activeDrag.type === 'resize') {
+    if (activeDrag.corner === 'tl') { r.x0 = Math.min(px, r.x1 - minSize); r.y0 = Math.min(py, r.y1 - minSize); }
+    else if (activeDrag.corner === 'tr') { r.x1 = Math.max(px, r.x0 + minSize); r.y0 = Math.min(py, r.y1 - minSize); }
+    else if (activeDrag.corner === 'bl') { r.x0 = Math.min(px, r.x1 - minSize); r.y1 = Math.max(py, r.y0 + minSize); }
+    else if (activeDrag.corner === 'br') { r.x1 = Math.max(px, r.x0 + minSize); r.y1 = Math.max(py, r.y0 + minSize); }
+    r.x0 = clamp01(r.x0); r.x1 = clamp01(r.x1); r.y0 = clamp01(r.y0); r.y1 = clamp01(r.y1);
+  } else if (activeDrag.type === 'move') {
+    let dx = px - activeDrag.startPX, dy = py - activeDrag.startPY;
+    const w = activeDrag.startRatio.x1 - activeDrag.startRatio.x0;
+    const h = activeDrag.startRatio.y1 - activeDrag.startRatio.y0;
+    let nx0 = activeDrag.startRatio.x0 + dx, ny0 = activeDrag.startRatio.y0 + dy;
+    if (nx0 < 0) nx0 = 0; if (nx0 + w > 1) nx0 = 1 - w;
+    if (ny0 < 0) ny0 = 0; if (ny0 + h > 1) ny0 = 1 - h;
+    r.x0 = nx0; r.x1 = nx0 + w; r.y0 = ny0; r.y1 = ny0 + h;
+  }
+  renderCropBoxes();
+}
+function onPointerUpGlobal() { activeDrag = null; }
+
+document.addEventListener('pointermove', onPointerMoveGlobal);
+document.addEventListener('pointerup', onPointerUpGlobal);
+document.addEventListener('pointercancel', onPointerUpGlobal);
+document.querySelectorAll('.crop-handle').forEach(function(h) { h.addEventListener('pointerdown', onPointerDownHandle); });
+frontCropBoxEl.addEventListener('pointerdown', onPointerDownBox);
+backCropBoxEl.addEventListener('pointerdown', onPointerDownBox);
+
+async function handleFile(file) {
+  resetToUpload(false);
+  if (file.type === 'application/pdf') {
+    let buf;
+    try { buf = await file.arrayBuffer(); } catch (e) { alert('Could not read the PDF file.'); return; }
+    let pdf;
+    try {
+      pdf = await loadPdfWithPassword(buf);
+    } catch (pdfErr) {
+      if (pdfErr && pdfErr.message === 'CANCELLED') return;
+      alert('Could not open this PDF. It may be corrupted or unsupported.');
+      return;
+    }
+    try {
+      if (pdf.numPages >= 2) {
+        let fCanvas = await renderPdfPageToCanvas(pdf, 1, 2);
+        let bCanvas = await renderPdfPageToCanvas(pdf, 2, 2);
+        fCanvas = cropFromRatio(fCanvas, autoDetectCardBox(fCanvas, 0, 1));
+        bCanvas = cropFromRatio(bCanvas, autoDetectCardBox(bCanvas, 0, 1));
+        finalizeSides(fCanvas, bCanvas);
+      } else {
+        const single = await renderPdfPageToCanvas(pdf, 1, 2.2);
+        loadSourceCanvas(single);
+      }
+    } catch (renderErr) {
+      alert('Could not render the PDF pages.');
+    }
+  } else if (file.type.indexOf('image/') === 0) {
+    try {
+      const dataUrl = await readFileAsDataURL(file);
+      const img = await loadImageEl(dataUrl);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      canvas.getContext('2d').drawImage(img, 0, 0);
+      loadSourceCanvas(canvas);
+    } catch (imgErr) {
+      alert('Could not read this image file.');
+    }
+  } else {
+    alert('Please upload an image (JPG/PNG) or a PDF file.');
+  }
+}
+
+function loadSourceCanvas(canvas) {
+  sourceCanvas = canvas;
+  stageImg.src = canvas.toDataURL('image/jpeg', 0.92);
+  stageSection.style.display = 'block';
+  setStep(2);
+  scanStatus.classList.add('active');
+  scanLine.classList.add('active');
+  frontCropBoxEl.style.display = 'none';
+  backCropBoxEl.style.display = 'none';
+  setTimeout(function() {
+    const seedSplit = autoDetectSplit(canvas);
+    boxRatios.front = autoDetectCardBox(canvas, 0, seedSplit);
+    boxRatios.back = autoDetectCardBox(canvas, seedSplit, 1);
+    scanStatus.classList.remove('active');
+    scanLine.classList.remove('active');
+    frontCropBoxEl.style.display = 'block';
+    backCropBoxEl.style.display = 'block';
+    renderCropBoxes();
+  }, 1100);
+  stageSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+reAutoBtn.addEventListener('click', function() {
+  if (!sourceCanvas) return;
+  scanStatus.classList.add('active');
+  scanLine.classList.add('active');
+  frontCropBoxEl.style.display = 'none';
+  backCropBoxEl.style.display = 'none';
+  setTimeout(function() {
+    const seedSplit = autoDetectSplit(sourceCanvas);
+    boxRatios.front = autoDetectCardBox(sourceCanvas, 0, seedSplit);
+    boxRatios.back = autoDetectCardBox(sourceCanvas, seedSplit, 1);
+    scanStatus.classList.remove('active');
+    scanLine.classList.remove('active');
+    frontCropBoxEl.style.display = 'block';
+    backCropBoxEl.style.display = 'block';
+    renderCropBoxes();
+  }, 900);
+});
+
+confirmCropBtn.addEventListener('click', function() {
+  if (!sourceCanvas) return;
+  const fCanvas = cropFromRatio(sourceCanvas, boxRatios.front);
+  const bCanvas = cropFromRatio(sourceCanvas, boxRatios.back);
+  finalizeSides(fCanvas, bCanvas);
+});
+
+function finalizeSides(fCanvas, bCanvas) {
+  frontCanvas = fCanvas;
+  backCanvas = bCanvas;
+  stageSection.style.display = 'none';
+
+  frontCanvasView.width = fCanvas.width; frontCanvasView.height = fCanvas.height;
+  frontCanvasView.getContext('2d').drawImage(fCanvas, 0, 0);
+  backCanvasView.width = bCanvas.width; backCanvasView.height = bCanvas.height;
+  backCanvasView.getContext('2d').drawImage(bCanvas, 0, 0);
+
+  frontCanvas.toBlob(function(blob) {
+    frontMeta.textContent = fCanvas.width + '×' + fCanvas.height + ' px · ' + (blob.size / 1024).toFixed(1) + ' KB';
+  }, 'image/jpeg', quality);
+  backCanvas.toBlob(function(blob) {
+    backMeta.textContent = bCanvas.width + '×' + bCanvas.height + ' px · ' + (blob.size / 1024).toFixed(1) + ' KB';
+  }, 'image/jpeg', quality);
+
+  renderA4Preview();
+
+  resultsSection.style.display = 'block';
+  setStep(3);
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  setupTilt(document.getElementById('frontResultCard'));
+  setupTilt(document.getElementById('backResultCard'));
+}
+function renderA4Preview() {
+  if (!frontCanvas || !backCanvas) return;
+  const pw = 350, ph = Math.round(350 * 1.4142);
+  const canvas = document.createElement('canvas');
+  canvas.width = pw; canvas.height = ph;
+  const ctx = canvas.getContext('2d');
+  
+  // Clean Plain White A4 Background
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, pw, ph);
+
+  const margin = 20, colGap = 12;
+  const usableW = pw - margin * 2;
+  const colW = (usableW - colGap) / 2;
+  const topMargin = 22; // Cards bilkul top par
+
+  // Front Card at Top Left
+  const fH = colW * (frontCanvas.height / frontCanvas.width);
+  ctx.drawImage(frontCanvas, margin, topMargin, colW, fH);
+
+  // Back Card at Top Right
+  const bH = colW * (backCanvas.height / backCanvas.width);
+  ctx.drawImage(backCanvas, margin + colW + colGap, topMargin, colW, bH);
+
+  a4PreviewImg.src = canvas.toDataURL('image/jpeg', 0.92);
+}
+
+function setupTilt(card) {
+  if (!window.matchMedia('(hover: hover)').matches) return;
+  card.addEventListener('mousemove', function(e) {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = 'perspective(700px) rotateY(' + (x * 10) + 'deg) rotateX(' + (-y * 10) + 'deg)';
+  });
+  card.addEventListener('mouseleave', function() { card.style.transform = ''; });
+}
+
+function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function() { URL.revokeObjectURL(url); }, 3000);
+}
+
+function downloadCanvas(canvas, filename) {
+  canvas.toBlob(function(blob) {
+    if (!blob) return;
+    triggerDownload(blob, filename);
+  }, 'image/jpeg', quality);
+}
+
+dlFrontBtn.addEventListener('click', function() { if (frontCanvas) downloadCanvas(frontCanvas, 'card_front.jpg'); });
+dlBackBtn.addEventListener('click', function() { if (backCanvas) downloadCanvas(backCanvas, 'card_back.jpg'); });
+
+function canvasToJpgBytes(canvas, q) {
+  return new Promise(function(resolve) {
+    canvas.toBlob(async function(blob) {
+      const buf = await blob.arrayBuffer();
+      resolve(new Uint8Array(buf));
+    }, 'image/jpeg', q);
+  });
+}
+
+dlBothBtn.addEventListener('click', async function() {
+  if (!frontCanvas || !backCanvas) return;
+  dlBothBtn.disabled = true;
+  const originalTxt = dlBothBtn.innerHTML;
+  dlBothBtn.innerHTML = '<span class="spin"></span>Generating Clean A4 PDF...';
+  try {
+    const PDFDocument = PDFLib.PDFDocument;
+    const pdfDoc = await PDFDocument.create();
+    
+    // A4 Size in points (595.28 x 841.89)
+    const page = pdfDoc.addPage([595.28, 841.89]);
+
+    const frontBytes = await canvasToJpgBytes(frontCanvas, quality);
+    const backBytes = await canvasToJpgBytes(backCanvas, quality);
+    const frontImg = await pdfDoc.embedJpg(frontBytes);
+    const backImg = await pdfDoc.embedJpg(backBytes);
+
+    const pageW = 595.28, pageH = 841.89;
+    const margin = 35, colGap = 20;
+    const usableW = pageW - margin * 2;
+    const colW = (usableW - colGap) / 2; // Card width
+
+    const topMargin = 40; // Top se distance
+
+    // Front Card placed at Top-Left
+    const fH = colW * (frontCanvas.height / frontCanvas.width);
+    const fY = pageH - topMargin - fH;
+    page.drawImage(frontImg, {
+      x: margin,
+      y: fY,
+      width: colW,
+      height: fH
+    });
+
+    // Back Card placed at Top-Right
+    const bH = colW * (backCanvas.height / backCanvas.width);
+    const bY = pageH - topMargin - bH;
+    page.drawImage(backImg, {
+      x: margin + colW + colGap,
+      y: bY,
+      width: colW,
+      height: bH
+    });
+
+    // Clean plain paper: Ek bhi line, border ya label draw nahi kiya gaya hai
+
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    triggerDownload(blob, 'clean_both_sides_A4.pdf');
+  } catch (err) {
+    alert('Could not generate the PDF: ' + err.message);
+  }
+  dlBothBtn.disabled = false;
+  dlBothBtn.innerHTML = originalTxt;
+});
+
+function resetToUpload(scroll) {
+  sourceCanvas = null;
+  frontCanvas = null;
+  backCanvas = null;
+  activeDrag = null;
+  stageSection.style.display = 'none';
+  resultsSection.style.display = 'none';
+  scanStatus.classList.remove('active');
+  scanLine.classList.remove('active');
+  fileInput.value = '';
+  setStep(1);
+  if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+resetBtn.addEventListener('click', function() { resetToUpload(true); });
+</script>
 </body>
 </html>
