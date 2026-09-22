@@ -1,208 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Photo Sheet Maker - FormReady India</title>
-<meta name="description" content="Create printable passport photo sheets on A4 or A5 paper. Upload a photo, choose portrait or landscape orientation, set photo dimensions, copies and spacing, preview the sheet, and download it as a high-resolution JPG or PDF. Fast, private and mobile &amp; desktop-friendly.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<!-- jsPDF for direct PDF export matching preview -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<style>
-:root {
-  --bg: #151210;
-  --panel: #1e1a17;
-  --panel-2: #262019;
-  --line: #39322b;
-  --amber: #d99a3f;
-  --amber-bright: #f0b158;
-  --paper: #f2ece2;
-  --muted: #a89a89;
-  --green: #2ea043;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Inter', sans-serif;
-  padding: 16px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.nav-bar { max-width: 750px; margin: 0 auto 20px; width: 100%; }
-.back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-.header { text-align: center; margin-bottom: 20px; }
-.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
-.header p { font-size: 13px; color: var(--muted); }
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 24px;
-  max-width: 750px;
-  margin: 0 auto 24px;
-  width: 100%;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-}
-.instructions-box {
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--amber);
-  border-radius: 8px;
-  padding: 14px 16px;
-  margin-bottom: 18px;
-}
-.instructions-box h3 {
-  font-size: 13.5px;
-  color: var(--amber);
-  font-family: 'Space Grotesk', sans-serif;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.instructions-box ol { padding-left: 18px; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
-.instructions-box li { margin-bottom: 3px; }
-.upload-zone {
-  border: 2px dashed var(--line);
-  padding: 28px 16px;
-  text-align: center;
-  border-radius: 10px;
-  cursor: pointer;
-  background: var(--panel-2);
-  transition: border-color 0.2s;
-  margin-bottom: 20px;
-  display: block;
-  width: 100%;
-}
-.upload-zone:hover { border-color: var(--amber); }
-#fileInput { display: none; }
-.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; pointer-events: none; }
-.upload-text b { color: var(--amber); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Passport Photo Sheet Maker (4x6 / A4) - FormReady India</title>
+  <meta name="description" content="Create printable passport photo sheets on A4 or A5 paper. Upload a photo, set photo dimensions, copies and spacing, preview the sheet, and download it as a high-resolution JPG or PDF.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- jsPDF for direct PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+    }
 
-.controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-@media(max-width: 500px) { .controls-grid { grid-template-columns: 1fr; } }
-.options-group { margin-bottom: 16px; }
-.options-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-.input-field, .input-select {
-  width: 100%; padding: 12px 14px; background: var(--panel-2); border: 1px solid var(--line); color: var(--paper); border-radius: 8px; font-size: 14px; outline: none;
-}
-.checkbox-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--paper); cursor: pointer; margin-top: 6px; }
-.checkbox-wrap input { accent-color: var(--amber); width: 16px; height: 16px; cursor: pointer; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.action-row { display: flex; gap: 10px; margin-bottom: 24px; }
-.btn { background: var(--amber); color: #151210; border: none; flex: 1; padding: 14px; border-radius: 9px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; text-align: center; }
-.btn:hover { background: var(--amber-bright); }
-.btn-download { background: var(--green); color: #fff; text-decoration: none; display: block; }
-.btn-download:hover { background: #3fb950; }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-.preview-container {
-  margin-top: 20px;
-  background: #000;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px;
-  text-align: center;
-  overflow-x: auto;
-}
-.preview-container h3 {
-  font-size: 13.5px;
-  color: var(--amber);
-  margin-bottom: 10px;
-  font-family: 'Space Grotesk', sans-serif;
-  text-align: left;
-}
-#sheetCanvas {
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-  background: #fff;
-}
+    /* Full-Screen Continuous Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-.ad-container { margin-top: 24px; background: var(--panel-2); border: 1px dashed var(--line); border-radius: 10px; padding: 16px; text-align: center; }
-.ad-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
-.ad-banner { font-size: 12.5px; color: var(--muted); padding: 10px; }
-footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: auto; }
-</style>
+    .container { width: 100%; max-width: 780px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 18px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    .header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Tool Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Instructions Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 2px; }
+
+    /* Modern Glowing Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 30px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.04);
+      box-shadow: 0 0 18px rgba(245, 166, 35, 0.18);
+    }
+    #fileInput { display: none; }
+    .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-text { font-size: 13.5px; color: var(--muted); line-height: 1.4; }
+    .upload-text b { color: var(--amber); }
+
+    /* Controls Alignment Grid */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 520px) {
+      .controls-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    }
+    .options-group { display: flex; flex-direction: column; }
+    .options-group label {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .input-field, .input-select {
+      width: 100%;
+      padding: 11px 13px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      border-radius: 9px;
+      font-size: 13.5px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field:focus, .input-select:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.2);
+    }
+
+    /* Checkbox */
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--paper);
+      cursor: pointer;
+      margin: 8px 0 20px;
+    }
+    .checkbox-wrap input {
+      accent-color: var(--amber);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* Clean Framed Canvas Preview Container */
+    .preview-wrapper {
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 22px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .preview-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      color: var(--amber);
+      font-weight: 700;
+    }
+    .preview-hint { font-size: 11px; color: var(--muted); }
+
+    .canvas-viewport {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0806;
+      border-radius: 8px;
+      padding: 12px;
+      overflow: hidden;
+    }
+    #sheetCanvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+      background: #fff;
+    }
+
+    /* Action Download Buttons */
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px) {
+      .action-row { grid-template-columns: 1fr; }
+    }
+    .btn {
+      padding: 13px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-jpg {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+    }
+    .btn-jpg:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(245, 166, 35, 0.45);
+    }
+    .btn-pdf {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-pdf:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="nav-bar"><a href="../../" class="back-btn">← Back to Dashboard</a></div>
-<div class="header"><h1>Photo Sheet Maker</h1><p>Arrange passport photos onto printable A4/A5 sheets</p></div>
-<div class="card">
-  <div class="instructions-box">
-    <h3>📖 How to Use Photo Sheet Maker</h3>
-    <ol>
-      <li>Upload your passport photo.</li>
-      <li>Choose Sheet Size (A4 / A5) and Orientation.</li>
-      <li>Set individual photo dimensions in mm, and specify exact number of photo copies needed.</li>
-      <li>View live preview and download as High-Res JPG or PDF.</li>
-    </ol>
-  </div>
-  <label class="upload-zone">
-    <input type="file" id="fileInput" accept="image/*">
-    <div class="upload-text">📁 Tap here to upload photo<br><b>JPG, PNG supported</b></div>
-  </label>
 
-  <div class="controls-grid">
-    <div class="options-group">
-      <label>Sheet Size:</label>
-      <select id="sheetSize" class="input-select">
-        <option value="a4">A4 Sheet (210 × 297 mm)</option>
-        <option value="a5">A5 Sheet (148 × 210 mm)</option>
-      </select>
+<!-- Full-Screen Shining Overlay -->
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Photo Sheet Maker</h1>
+    <p>Arrange passport photos onto printable A4 / A5 studio sheets</p>
+  </div>
+
+  <div class="main-card">
+    <div class="instructions-box">
+      <h3>📖 How to Use Photo Sheet Maker</h3>
+      <ol>
+        <li>Upload your passport photo (JPG or PNG).</li>
+        <li>Choose Sheet Size (A4 / A5) and Portrait/Landscape Orientation.</li>
+        <li>Set photo dimensions in mm, copies count, and spacing between photos.</li>
+        <li>Check the live preview and download as print-ready high-resolution JPG or PDF.</li>
+      </ol>
     </div>
-    <div class="options-group">
-      <label>Orientation:</label>
-      <select id="orientation" class="input-select">
-        <option value="portrait">Portrait</option>
-        <option value="landscape">Landscape</option>
-      </select>
+
+    <label class="upload-zone">
+      <input type="file" id="fileInput" accept="image/*">
+      <div class="upload-icon">📷</div>
+      <div class="upload-text">Tap here to select passport photo<br><b>JPG, PNG, WEBP supported</b></div>
+    </label>
+
+    <div class="controls-grid">
+      <div class="options-group">
+        <label>Sheet Size:</label>
+        <select id="sheetSize" class="input-select">
+          <option value="a4">A4 Sheet (210 × 297 mm)</option>
+          <option value="a5">A5 Sheet (148 × 210 mm)</option>
+        </select>
+      </div>
+      <div class="options-group">
+        <label>Orientation:</label>
+        <select id="orientation" class="input-select">
+          <option value="portrait">Portrait</option>
+          <option value="landscape">Landscape</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="controls-grid">
+      <div class="options-group">
+        <label>Photo Width (mm):</label>
+        <input type="number" id="photoWidthMm" class="input-field" value="35" min="10" max="150">
+      </div>
+      <div class="options-group">
+        <label>Photo Height (mm):</label>
+        <input type="number" id="photoHeightMm" class="input-field" value="45" min="10" max="150">
+      </div>
+    </div>
+
+    <div class="controls-grid">
+      <div class="options-group">
+        <label>Number of Photos (Copies):</label>
+        <input type="number" id="photoCountInput" class="input-field" value="8" min="1" max="100">
+      </div>
+      <div class="options-group">
+        <label>Spacing Between Photos (mm):</label>
+        <input type="number" id="spacingMm" class="input-field" value="5" min="0" max="30">
+      </div>
+    </div>
+
+    <label class="checkbox-wrap">
+      <input type="checkbox" id="showCutLines" checked> Show Cut Lines / Border around photos
+    </label>
+
+    <!-- Canvas Preview Box -->
+    <div class="preview-wrapper">
+      <div class="preview-header">
+        <h3>Live Sheet Preview</h3>
+        <span class="preview-hint">300 DPI Print Quality</span>
+      </div>
+      <div class="canvas-viewport">
+        <canvas id="sheetCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Download Buttons -->
+    <div class="action-row">
+      <button class="btn btn-jpg" id="downloadJpgBtn">📥 Download Sheet (JPG)</button>
+      <button class="btn btn-pdf" id="downloadPdfBtn">📄 Download Sheet (PDF)</button>
     </div>
   </div>
 
-  <div class="controls-grid">
-    <div class="options-group">
-      <label>Photo Width (mm):</label>
-      <input type="number" id="photoWidthMm" class="input-field" value="35" min="10" max="150">
-    </div>
-    <div class="options-group">
-      <label>Photo Height (mm):</label>
-      <input type="number" id="photoHeightMm" class="input-field" value="45" min="10" max="150">
-    </div>
-  </div>
-
-  <div class="controls-grid">
-    <div class="options-group">
-      <label>Number of Photos (Copies):</label>
-      <input type="number" id="photoCountInput" class="input-field" value="8" min="1" max="100">
-    </div>
-    <div class="options-group">
-      <label>Spacing (mm X/Y):</label>
-      <input type="number" id="spacingMm" class="input-field" value="5" min="0" max="30">
-    </div>
-  </div>
-
-  <div class="options-group">
-    <label class="checkbox-wrap"><input type="checkbox" id="showCutLines" checked> Show Cut Lines / Border around photos</label>
-  </div>
-
-  <div class="preview-container">
-    <h3>Live Sheet Preview</h3>
-    <canvas id="sheetCanvas"></canvas>
-  </div>
-
-  <div class="action-row" style="margin-top: 20px;">
-    <button class="btn btn-download" id="downloadJpgBtn">📥 Download Sheet (JPG)</button>
-    <button class="btn btn-download" id="downloadPdfBtn" style="background:#238636;">📥 Download Sheet (PDF)</button>
-  </div>
-
-  <div class="ad-container"><div class="ad-label">Sponsored Advertisement</div><div class="ad-banner">📢 Advertisement Space (Google AdSense / Banner Placeholder)</div></div>
+  <footer>
+    &copy; 2026 FormReady India • 100% Secure Client-Side Processing
+  </footer>
 </div>
-<footer>&copy; 2026 FormReady India. 100% Secure Client-Side Processing.</footer>
+
 <script>
 const fileInput = document.getElementById("fileInput");
 const sheetSizeSelect = document.getElementById("sheetSize");
@@ -249,7 +462,7 @@ function renderSheet() {
     ctx.fillStyle = "#FFFFFF";
     ctx.fillRect(0, 0, sheetCanvas.width, sheetCanvas.height);
     ctx.fillStyle = "#a89a89";
-    ctx.font = "24px Inter, sans-serif";
+    ctx.font = "24px 'Plus Jakarta Sans', sans-serif";
     ctx.textAlign = "center";
     ctx.fillText("Upload a photo above to generate sheet preview", sheetCanvas.width / 2, sheetCanvas.height / 2);
     return;
@@ -273,7 +486,6 @@ function renderSheet() {
   sheetCanvas.width = sheetWidthPx;
   sheetCanvas.height = sheetHeightPx;
   const ctx = sheetCanvas.getContext("2d");
-
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, sheetWidthPx, sheetHeightPx);
 
@@ -296,7 +508,6 @@ function renderSheet() {
         ctx.lineWidth = 2;
         ctx.strokeRect(currentX, currentY, pWidthPx, pHeightPx);
       }
-
       drawnCount++;
       currentX += pWidthPx + gapPx;
     }
@@ -313,7 +524,7 @@ downloadJpgBtn.addEventListener("click", () => {
     return;
   }
   const link = document.createElement("a");
-  link.download = "photo-sheet.jpg";
+  link.download = "passport-photo-sheet.jpg";
   link.href = sheetCanvas.toDataURL("image/jpeg", 0.95);
   link.click();
 });
@@ -341,7 +552,7 @@ downloadPdfBtn.addEventListener("click", () => {
   const pdfHeight = pdf.internal.pageSize.getHeight();
 
   pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-  pdf.save("photo-sheet.pdf");
+  pdf.save("passport-photo-sheet.pdf");
 });
 </script>
 </body>
