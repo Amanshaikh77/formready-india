@@ -11,22 +11,22 @@
   
   <style>
     :root {
-      --bg: #0e0c0a;
-      --card-bg: #181410;
-      --card-border: #2c2219;
+      --bg: #0c0a08;
+      --card-bg: #16120e;
+      --card-border: rgba(217, 154, 63, 0.22);
       --card-hover-border: #f5a623;
       --amber: #f5a623;
-      --paper: #f7f3ec;
-      --muted: #9e8e7c;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
       --green: #10b981;
-      --panel: #14110d;
+      --panel: #130f0c;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background-color: var(--bg);
-      background-image: radial-gradient(circle at 50% 0%, #24190e 0%, #0e0c0a 70%);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
       color: var(--paper);
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
@@ -63,12 +63,13 @@
       align-items: center;
       gap: 6px;
       padding: 5px 14px;
-      background: #1e1710;
+      background: #1c150e;
       border: 1px solid rgba(245, 166, 35, 0.35);
       border-radius: 999px;
       font-size: 11.5px;
       color: var(--amber);
       font-weight: 700;
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.12);
     }
 
     /* Search Box */
@@ -88,11 +89,11 @@
       font-size: 13.5px;
       font-family: inherit;
       outline: none;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .search-box input:focus {
       border-color: var(--amber);
-      box-shadow: 0 0 12px rgba(245, 166, 35, 0.2);
+      box-shadow: 0 0 14px rgba(245, 166, 35, 0.25);
     }
     .search-box svg {
       position: absolute;
@@ -126,11 +127,11 @@
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
     .chip.active, .chip:hover {
       background: var(--amber);
-      color: #0e0c0a;
+      color: #0c0a08;
       border-color: var(--amber);
     }
 
@@ -160,7 +161,7 @@
       .grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* High-Performance Lightweight Card */
+    /* Branded Card with Glass Finish */
     .tool-card {
       position: relative;
       background: var(--card-bg);
@@ -172,48 +173,64 @@
       gap: 12px;
       text-decoration: none;
       color: inherit;
-      overflow: hidden;
+      overflow: hidden; /* Shine beam ko card bounds ke andar rakhta hai */
       transform: translate3d(0, 0, 0);
-      transition: border-color 0.2s, transform 0.2s;
+      transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Desktop Hover Lift */
     @media (hover: hover) {
       .tool-card:hover {
         border-color: var(--card-hover-border);
         transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(245, 166, 35, 0.2);
       }
     }
 
-    /* White Transparent Glass Shine Beam (GPU Accelerated) */
+    /* WHITE TRANSPARENT GLASS SHINE BEAM (Continuous Repeat & GPU-Smooth) */
     .tool-card::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -100%;
+      top: -60%;
+      left: -130%;
       width: 60%;
-      height: 200%;
+      height: 220%;
       background: linear-gradient(
-        105deg,
+        110deg,
         rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.05) 30%,
-        rgba(255, 255, 255, 0.28) 50%,
-        rgba(255, 255, 255, 0.05) 70%,
+        rgba(255, 255, 255, 0.03) 25%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0.03) 75%,
         rgba(255, 255, 255, 0) 100%
       );
-      transform: rotate(25deg) translate3d(-100%, 0, 0);
+      transform: rotate(26deg);
       pointer-events: none;
-      opacity: 0;
-      transition: transform 0.75s ease-out, opacity 0.2s ease;
+      animation: glassShineSweep 5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
     }
 
-    /* Hover & Touch Sweep Animation */
-    .tool-card:hover::after,
-    .tool-card:active::after {
-      opacity: 1;
-      transform: rotate(25deg) translate3d(350%, 0, 0);
+    /* Staggered Wave Delays taaki sab ek sath flash na karein */
+    .grid .tool-card:nth-child(2n)::after {
+      animation-delay: 1.2s;
+    }
+    .grid .tool-card:nth-child(3n)::after {
+      animation-delay: 2.4s;
+    }
+    .grid .tool-card:nth-child(4n)::after {
+      animation-delay: 3.6s;
+    }
+
+    /* Auto-Shining Animation Keyframe (Sweep + Rest Pause = Zero Lag) */
+    @keyframes glassShineSweep {
+      0% {
+        transform: rotate(26deg) translate3d(-100%, 0, 0);
+      }
+      24% {
+        transform: rotate(26deg) translate3d(360%, 0, 0);
+      }
+      100% {
+        transform: rotate(26deg) translate3d(360%, 0, 0);
+      }
     }
 
     .tool-icon {
@@ -247,7 +264,7 @@
       line-height: 1.4;
     }
 
-    /* Static Clean Badge (Zero GPU Repaints) */
+    /* Badge */
     .badge {
       font-size: 9px;
       font-weight: 800;
@@ -280,7 +297,7 @@
 <div class="container">
   <header>
     <h1>FormReady India</h1>
-    <p class="tagline">⚡ Superfast, 100% Private Offline Document & Form Toolbox</p>
+    <p class="tagline">⚡ Superfast, 100% Secure Offline Document & Form Toolbox</p>
     <div class="author-badge">✨ Made by Aman Shaikh</div>
   </header>
 
