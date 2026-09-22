@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Aadhaar / PAN Card Splitter - FormReady India</title>
+<title>Card Splitter - FormReady India</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -237,7 +237,7 @@ input[type="range"] { width: 100%; accent-color: var(--amber); background: var(-
       <ol class="how-to-list">
         <li>1. <span>Upload:</span> image or PDF (password-protected PDFs will ask for the password).</li>
         <li>2. <span>Auto-Crop:</span> front &amp; back are boxed automatically — drag a corner or the box to fix mistakes.</li>
-        <li>3. <span>Download:</span> each side separately, or both on one A4 sheet with a preview before you download.</li>
+        <li>3. <span>Download:</span> each side separately, or both on clean A4 sheet without lines or labels.</li>
       </ol>
     </div>
 
@@ -310,12 +310,12 @@ input[type="range"] { width: 100%; accent-color: var(--amber); background: var(-
       </div>
 
       <div class="a4-preview-wrap">
-        <label>A4 Sheet Preview — exactly how your download will look</label>
+        <label>A4 Sheet Preview — Clean top-aligned output</label>
         <div class="a4-preview-box"><img id="a4PreviewImg" alt="A4 output preview"></div>
       </div>
 
       <button class="btn" id="dlBothBtn">⬇ Download Both — A4 Print-Ready PDF</button>
-      <div class="hint-note">A4 sheet with both sides + labels, ready to print &amp; submit.</div>
+      <div class="hint-note">Clean A4 sheet with top-aligned cards, ready to print &amp; submit.</div>
       <button class="reset-link" id="resetBtn">↺ Upload a Different File</button>
     </div>
 
@@ -338,7 +338,6 @@ input[type="range"] { width: 100%; accent-color: var(--amber); background: var(-
     </div>
   </div>
 </div>
-
 <script>
 if (window.pdfjsLib) {
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -751,42 +750,31 @@ function finalizeSides(fCanvas, bCanvas) {
   setupTilt(document.getElementById('frontResultCard'));
   setupTilt(document.getElementById('backResultCard'));
 }
-
 function renderA4Preview() {
   if (!frontCanvas || !backCanvas) return;
   const pw = 350, ph = Math.round(350 * 1.4142);
   const canvas = document.createElement('canvas');
   canvas.width = pw; canvas.height = ph;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, pw, ph);
+  
+  // Clean Plain White A4 Background
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, pw, ph);
 
-  const margin = 22, colGap = 14;
+  const margin = 20, colGap = 12;
   const usableW = pw - margin * 2;
   const colW = (usableW - colGap) / 2;
+  const topMargin = 22; // Cards bilkul top par
 
-  ctx.fillStyle = '#2b2b2b'; ctx.font = 'bold 11px Arial'; ctx.textAlign = 'center';
-  ctx.fillText('Aadhaar / PAN — Front & Back', pw / 2, margin + 2);
+  // Front Card at Top Left
+  const fH = colW * (frontCanvas.height / frontCanvas.width);
+  ctx.drawImage(frontCanvas, margin, topMargin, colW, fH);
 
-  const contentTop = margin + 18;
-  const arrowLabelH = 34;
-  const imgBoxH = ph - margin - arrowLabelH - contentTop;
+  // Back Card at Top Right
+  const bH = colW * (backCanvas.height / backCanvas.width);
+  ctx.drawImage(backCanvas, margin + colW + colGap, topMargin, colW, bH);
 
-  function drawCol(img, colX, label, color) {
-    const dims = fitDims(img, colW, imgBoxH);
-    const dx = colX + (colW - dims.w) / 2, dy = contentTop + (imgBoxH - dims.h) / 2;
-    ctx.strokeStyle = '#d8d2c6'; ctx.lineWidth = 1; ctx.strokeRect(colX, contentTop, colW, imgBoxH);
-    ctx.drawImage(img, dx, dy, dims.w, dims.h);
-    const arrowCx = colX + colW / 2, arrowTop = contentTop + imgBoxH + 4;
-    ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(arrowCx, arrowTop); ctx.lineTo(arrowCx, arrowTop + 12); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(arrowCx - 6, arrowTop + 6); ctx.lineTo(arrowCx, arrowTop + 12); ctx.lineTo(arrowCx + 6, arrowTop + 6); ctx.stroke();
-    ctx.fillStyle = color; ctx.font = 'bold 13px Arial'; ctx.textAlign = 'center';
-    ctx.fillText(label, arrowCx, arrowTop + 28);
-  }
-
-  drawCol(frontCanvas, margin, 'FRONT', '#c48733');
-  drawCol(backCanvas, margin + colW + colGap, 'BACK', '#1f8a63');
-  a4PreviewImg.src = canvas.toDataURL('image/jpeg', 0.88);
+  a4PreviewImg.src = canvas.toDataURL('image/jpeg', 0.92);
 }
 
 function setupTilt(card) {
@@ -815,8 +803,8 @@ function downloadCanvas(canvas, filename) {
   }, 'image/jpeg', quality);
 }
 
-dlFrontBtn.addEventListener('click', function() { if (frontCanvas) downloadCanvas(frontCanvas, 'aadhaar_pan_front.jpg'); });
-dlBackBtn.addEventListener('click', function() { if (backCanvas) downloadCanvas(backCanvas, 'aadhaar_pan_back.jpg'); });
+dlFrontBtn.addEventListener('click', function() { if (frontCanvas) downloadCanvas(frontCanvas, 'card_front.jpg'); });
+dlBackBtn.addEventListener('click', function() { if (backCanvas) downloadCanvas(backCanvas, 'card_back.jpg'); });
 
 function canvasToJpgBytes(canvas, q) {
   return new Promise(function(resolve) {
@@ -831,15 +819,13 @@ dlBothBtn.addEventListener('click', async function() {
   if (!frontCanvas || !backCanvas) return;
   dlBothBtn.disabled = true;
   const originalTxt = dlBothBtn.innerHTML;
-  dlBothBtn.innerHTML = '<span class="spin"></span>Generating A4 PDF...';
+  dlBothBtn.innerHTML = '<span class="spin"></span>Generating Clean A4 PDF...';
   try {
     const PDFDocument = PDFLib.PDFDocument;
-    const StandardFonts = PDFLib.StandardFonts;
-    const rgb = PDFLib.rgb;
-
     const pdfDoc = await PDFDocument.create();
+    
+    // A4 Size in points (595.28 x 841.89)
     const page = pdfDoc.addPage([595.28, 841.89]);
-    const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
     const frontBytes = await canvasToJpgBytes(frontCanvas, quality);
     const backBytes = await canvasToJpgBytes(backCanvas, quality);
@@ -847,46 +833,37 @@ dlBothBtn.addEventListener('click', async function() {
     const backImg = await pdfDoc.embedJpg(backBytes);
 
     const pageW = 595.28, pageH = 841.89;
-    const margin = 40, colGap = 24;
+    const margin = 35, colGap = 20;
     const usableW = pageW - margin * 2;
-    const colW = (usableW - colGap) / 2;
+    const colW = (usableW - colGap) / 2; // Card width
 
-    const titleY = pageH - margin - 4;
-    page.drawText('Aadhaar / PAN Card — Front & Back', { x: pageW / 2 - 130, y: titleY, size: 12, font: font, color: rgb(0.6, 0.55, 0.48) });
+    const topMargin = 40; // Top se distance
 
-    const contentTop = titleY - 26;
-    const arrowLabelH = 55;
-    const imgBoxH = contentTop - margin - arrowLabelH;
+    // Front Card placed at Top-Left
+    const fH = colW * (frontCanvas.height / frontCanvas.width);
+    const fY = pageH - topMargin - fH;
+    page.drawImage(frontImg, {
+      x: margin,
+      y: fY,
+      width: colW,
+      height: fH
+    });
 
-    function drawArrowDown(cx, topY, color) {
-      const len = 16, headSize = 6;
-      const bottomY = topY - len;
-      page.drawLine({ start: { x: cx, y: topY }, end: { x: cx, y: bottomY }, thickness: 2.5, color: color });
-      page.drawLine({ start: { x: cx - headSize, y: bottomY + headSize }, end: { x: cx, y: bottomY }, thickness: 2.5, color: color });
-      page.drawLine({ start: { x: cx + headSize, y: bottomY + headSize }, end: { x: cx, y: bottomY }, thickness: 2.5, color: color });
-      return bottomY;
-    }
+    // Back Card placed at Top-Right
+    const bH = colW * (backCanvas.height / backCanvas.width);
+    const bY = pageH - topMargin - bH;
+    page.drawImage(backImg, {
+      x: margin + colW + colGap,
+      y: bY,
+      width: colW,
+      height: bH
+    });
 
-    function drawColumn(img, colX, label, color) {
-      const dims = fitDims(img, colW, imgBoxH);
-      const dx = colX + (colW - dims.w) / 2;
-      const dy = contentTop - imgBoxH + (imgBoxH - dims.h) / 2;
-      page.drawImage(img, { x: dx, y: dy, width: dims.w, height: dims.h });
-      const arrowCx = colX + colW / 2;
-      const arrowBottomY = drawArrowDown(arrowCx, contentTop - imgBoxH - 6, color);
-      const labelSize = 15;
-      const labelW = font.widthOfTextAtSize(label, labelSize);
-      page.drawText(label, { x: arrowCx - labelW / 2, y: arrowBottomY - 16, size: labelSize, font: font, color: color });
-    }
-
-    drawColumn(frontImg, margin, 'FRONT', rgb(0.85, 0.6, 0.24));
-    drawColumn(backImg, margin + colW + colGap, 'BACK', rgb(0.12, 0.54, 0.39));
-
-    page.drawText('Generated with FormReady India', { x: margin, y: 16, size: 7, font: font, color: rgb(0.55, 0.55, 0.55) });
+    // Clean plain paper: Ek bhi line, border ya label draw nahi kiya gaya hai
 
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    triggerDownload(blob, 'aadhaar_pan_both_sides_A4.pdf');
+    triggerDownload(blob, 'clean_both_sides_A4.pdf');
   } catch (err) {
     alert('Could not generate the PDF: ' + err.message);
   }
