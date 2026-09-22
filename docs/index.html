@@ -35,9 +35,54 @@
       flex-direction: column;
       align-items: center;
       overflow-x: hidden;
+      position: relative;
     }
 
-    .container { width: 100%; max-width: 1140px; }
+    /* FULL-PAGE WHITE TRANSPARENT GLASS SHINE BEAM */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -120%;
+      left: -120%;
+      width: 340%;
+      height: 340%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.03) 45%,
+        rgba(255, 255, 255, 0.18) 50%,
+        rgba(255, 255, 255, 0.03) 55%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-70%, -70%, 0);
+      animation: pageWideShine 6s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    @keyframes pageWideShine {
+      0% {
+        transform: translate3d(-70%, -70%, 0);
+      }
+      35% {
+        transform: translate3d(70%, 70%, 0);
+      }
+      100% {
+        transform: translate3d(70%, 70%, 0);
+      }
+    }
+
+    .container { width: 100%; max-width: 1140px; position: relative; z-index: 1; }
 
     /* Header */
     header { text-align: center; margin-bottom: 24px; }
@@ -161,7 +206,7 @@
       .grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* Branded Card with Glass Finish */
+    /* Clean Branded Card (No Individual Shine) */
     .tool-card {
       position: relative;
       background: var(--card-bg);
@@ -173,7 +218,6 @@
       gap: 12px;
       text-decoration: none;
       color: inherit;
-      overflow: hidden; /* Shine beam ko card bounds ke andar rakhta hai */
       transform: translate3d(0, 0, 0);
       transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
       -webkit-tap-highlight-color: transparent;
@@ -184,52 +228,6 @@
         border-color: var(--card-hover-border);
         transform: translateY(-3px);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(245, 166, 35, 0.2);
-      }
-    }
-
-    /* WHITE TRANSPARENT GLASS SHINE BEAM (Continuous Repeat & GPU-Smooth) */
-    .tool-card::after {
-      content: '';
-      position: absolute;
-      top: -60%;
-      left: -130%;
-      width: 60%;
-      height: 220%;
-      background: linear-gradient(
-        110deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.03) 25%,
-        rgba(255, 255, 255, 0.25) 50%,
-        rgba(255, 255, 255, 0.03) 75%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      transform: rotate(26deg);
-      pointer-events: none;
-      animation: glassShineSweep 5s infinite cubic-bezier(0.4, 0, 0.2, 1);
-      will-change: transform;
-    }
-
-    /* Staggered Wave Delays taaki sab ek sath flash na karein */
-    .grid .tool-card:nth-child(2n)::after {
-      animation-delay: 1.2s;
-    }
-    .grid .tool-card:nth-child(3n)::after {
-      animation-delay: 2.4s;
-    }
-    .grid .tool-card:nth-child(4n)::after {
-      animation-delay: 3.6s;
-    }
-
-    /* Auto-Shining Animation Keyframe (Sweep + Rest Pause = Zero Lag) */
-    @keyframes glassShineSweep {
-      0% {
-        transform: rotate(26deg) translate3d(-100%, 0, 0);
-      }
-      24% {
-        transform: rotate(26deg) translate3d(360%, 0, 0);
-      }
-      100% {
-        transform: rotate(26deg) translate3d(360%, 0, 0);
       }
     }
 
@@ -293,6 +291,9 @@
   </style>
 </head>
 <body>
+
+<!-- Full-Page Shining Beam Overlay -->
+<div class="global-shine-overlay"></div>
 
 <div class="container">
   <header>
