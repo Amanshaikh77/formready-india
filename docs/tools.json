@@ -1,0 +1,236 @@
+[
+  {
+    "id": "aadhaar-pan-cutter",
+    "name": "Aadhaar Pan Cutter",
+    "path": "tools/aadhaar-pan-cutter/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "aadhaar-pan-resizer",
+    "name": "Aadhaar Pan Resizer",
+    "path": "tools/aadhaar-pan-resizer/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "add-watermark",
+    "name": "Add Watermark",
+    "path": "tools/add-watermark/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "age-calculator",
+    "name": "Age Calculator",
+    "path": "tools/age-calculator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "background-remover",
+    "name": "Background Remover",
+    "path": "tools/background-remover/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "barcode-generator",
+    "name": "Barcode Generator",
+    "path": "tools/barcode-generator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "bmi-calculator",
+    "name": "Bmi Calculator",
+    "path": "tools/bmi-calculator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "case-converter",
+    "name": "Case Converter",
+    "path": "tools/case-converter/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "currency-converter",
+    "name": "Currency Converter",
+    "path": "tools/currency-converter/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "date-gap-calculator",
+    "name": "Date Gap Calculator",
+    "path": "tools/date-gap-calculator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "discount-calculator",
+    "name": "Discount Calculator",
+    "path": "tools/discount-calculator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "document-scanner",
+    "name": "Document Scanner",
+    "path": "tools/document-scanner/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "emi-calculator",
+    "name": "Emi Calculator",
+    "path": "tools/emi-calculator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "govt-pdf-helper",
+    "name": "Govt Pdf Helper",
+    "path": "tools/govt-pdf-helper/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "gst-calculator",
+    "name": "Gst Calculator",
+    "path": "tools/gst-calculator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "image-converter",
+    "name": "Image Converter",
+    "path": "tools/image-converter/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "image-to-text",
+    "name": "Image To Text",
+    "path": "tools/image-to-text/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "jpg-to-pdf",
+    "name": "Jpg To Pdf",
+    "path": "tools/jpg-to-pdf/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "lorem-generator",
+    "name": "Lorem Generator",
+    "path": "tools/lorem-generator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "merge-pdf",
+    "name": "Merge Pdf",
+    "path": "tools/merge-pdf/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "passport-photo-maker",
+    "name": "Passport Photo Maker",
+    "path": "tools/passport-photo-maker/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "pdf-compressor",
+    "name": "Pdf Compressor",
+    "path": "tools/pdf-compressor/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "pdf-editor",
+    "name": "Pdf Editor",
+    "path": "tools/pdf-editor/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "pdf-organizer",
+    "name": "Pdf Organizer",
+    "path": "tools/pdf-organizer/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "pdf-to-jpg",
+    "name": "Pdf To Jpg",
+    "path": "tools/pdf-to-jpg/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "photo-compressor",
+    "name": "Photo Compressor",
+    "path": "tools/photo-compressor/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "photo-cropper",
+    "name": "Photo Cropper",
+    "path": "tools/photo-cropper/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "photo-resizer",
+    "name": "Photo Resizer",
+    "path": "tools/photo-resizer/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "photo-sheet",
+    "name": "Photo Sheet",
+    "path": "tools/photo-sheet/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "photo-sign-card",
+    "name": "Photo Sign Card",
+    "path": "tools/photo-sign-card/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "qr-generator",
+    "name": "Qr Generator",
+    "path": "tools/qr-generator/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "rotate-pdf",
+    "name": "Rotate Pdf",
+    "path": "tools/rotate-pdf/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "signature-maker",
+    "name": "Signature Maker",
+    "path": "tools/signature-maker/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "signature-resizer",
+    "name": "Signature Resizer",
+    "path": "tools/signature-resizer/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "split-pdf",
+    "name": "Split Pdf",
+    "path": "tools/split-pdf/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "text-cleaner",
+    "name": "Text Cleaner",
+    "path": "tools/text-cleaner/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "text-to-pdf",
+    "name": "Text To Pdf",
+    "path": "tools/text-to-pdf/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "unit-converter",
+    "name": "Unit Converter",
+    "path": "tools/unit-converter/index.html",
+    "category": "Tools"
+  },
+  {
+    "id": "word-counter",
+    "name": "Word Counter",
+    "path": "tools/word-counter/index.html",
+    "category": "Tools"
+  }
+]
