@@ -53,3 +53,4 @@ const TOOL_CATALOG = [
     ]
   }
 
+];
