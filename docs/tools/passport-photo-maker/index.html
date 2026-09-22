@@ -1,318 +1,604 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Passport Photo + Sign Card - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #13100e;
-  --panel: #1c1815;
-  --line: #2e2620;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f3ede2;
-  --muted: #9e9080;
-  --card-bg: #16120f;
-  --success: #34d399;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 16px 14px 50px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.wrapper { width: 100%; max-width: 540px; }
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 22px 18px;
-  border-radius: 12px;
-  width: 100%;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Passport Size Photo Maker (20KB - 50KB) - FormReady India</title>
+  <meta name="description" content="Create standard 3.5x4.5cm passport size photos online. Crop with face alignment guide, adjust brightness, change background, and compress under 50KB.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-/* HOW TO USE GUIDE */
-.how-to-box {
-  background: rgba(217, 154, 63, 0.05);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 20px;
-}
-.how-to-title {
-  color: var(--amber);
-  font-size: 12.5px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-.how-to-list {
-  list-style: none;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+    }
 
-/* FORM ELEMENTS */
-.form-group { margin-bottom: 16px; }
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--paper);
-  margin-bottom: 6px;
-}
-input[type="file"], input[type="text"] {
-  width: 100%;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  font-size: 13.5px;
-  padding: 11px 12px;
-  border-radius: 8px;
-  outline: none;
-  font-family: inherit;
-}
-input[type="text"]:focus { border-color: var(--amber); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.preview-area {
-  display: none;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px dashed var(--line);
-  border-radius: 8px;
-  padding: 14px;
-  margin-top: 16px;
-  text-align: center;
-}
-.preview-area canvas {
-  max-width: 100%;
-  border-radius: 4px;
-  border: 1px solid var(--line);
-  background: #ffffff;
-}
-.meta-row {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 8px;
-}
-.meta-row span {
-  color: var(--paper);
-  font-weight: 700;
-}
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-.btn {
-  background: var(--amber);
-  color: #13100e;
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 8px;
-  transition: opacity 0.2s;
-}
-.btn:hover { opacity: 0.9; }
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-/* ADVERTISEMENT CONTAINER */
-.ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 22px;
-  min-height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.ad-tag {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  display: block;
-  text-transform: uppercase;
-}
-.ad-content {
-  font-size: 11.5px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-</style>
+    .container { width: 100%; max-width: 680px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 28px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      transform: translateY(-2px);
+    }
+    #photoInput { display: none; }
+    .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-title { font-size: 14px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .upload-desc b { color: var(--amber); }
+
+    /* Interactive Crop Editor Area */
+    .editor-section {
+      display: none;
+      margin-bottom: 20px;
+    }
+    .viewport-box {
+      position: relative;
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+      margin-bottom: 16px;
+    }
+    .canvas-frame {
+      position: relative;
+      width: 280px;
+      height: 360px; /* 3.5 x 4.5 ratio standard */
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+      background: #ffffff;
+      touch-action: none;
+      cursor: grab;
+    }
+    .canvas-frame:active { cursor: grabbing; }
+    #cropCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Face Alignment Silhouette Guide */
+    .face-guide-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      border: 2px dashed rgba(245, 166, 35, 0.7);
+      border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+      margin: auto;
+      inset: 25px 35px 75px 35px;
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .guide-label {
+      font-size: 10.5px;
+      color: #fff;
+      background: rgba(0,0,0,0.7);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    /* Controls Rows */
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .control-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      width: 90px;
+      flex-shrink: 0;
+    }
+    .range-slider {
+      flex: 1;
+      accent-color: var(--amber);
+      cursor: pointer;
+    }
+
+    /* Toolbar Badges */
+    .tool-actions-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .btn-tool-action {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .btn-tool-action:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* Background Color Selection */
+    .bg-options-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      border-radius: 12px;
+    }
+    .bg-chip {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      background: #14100c;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bg-chip.active {
+      background: rgba(245, 166, 35, 0.15);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+    .color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Download Actions */
+    .download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 480px) {
+      .download-grid { grid-template-columns: 1fr; }
+    }
+    .btn-download {
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-jpg {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+    }
+    .btn-jpg:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+    }
+    .btn-png {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-png:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
-  <div class="card">
-    <h2>Passport Photo + Sign Card</h2>
-    <div class="subtitle">Merge identity photo and signature into a unified official slip</div>
+<div class="global-shine-overlay"></div>
 
-    <div class="how-to-box">
-      <div class="how-to-title">📘 How to Use Photo + Sign Merger</div>
-      <ol class="how-to-list">
-        <li>1. <span>Upload Photo:</span> Select your clear passport-size photo.</li>
-        <li>2. <span>Upload Signature:</span> Select cropped signature on white background.</li>
-        <li>3. <span>Candidate Name:</span> Optional field to print name below photo.</li>
-        <li>4. <span>Download:</span> Save unified single-frame card for portal uploads.</li>
-      </ol>
-    </div>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
 
-    <div class="form-group">
-      <label>1. Upload Passport Photograph</label>
-      <input type="file" id="photoInput" accept="image/*" onchange="loadPhoto(event)">
-    </div>
+  <div class="header">
+    <h1>Passport Size Photo Maker</h1>
+    <p>Official 3.5×4.5 cm crop with face guide & auto 20KB - 50KB compressor</p>
+  </div>
 
-    <div class="form-group">
-      <label>2. Upload Signature Image</label>
-      <input type="file" id="signInput" accept="image/*" onchange="loadSign(event)">
-    </div>
+  <div class="main-card">
+    <!-- Upload Dropzone -->
+    <label class="upload-zone" id="uploadZone">
+      <input type="file" id="photoInput" accept="image/*" onchange="loadUserPhoto(event)">
+      <div class="upload-icon">📷</div>
+      <div class="upload-title">Tap to Upload Passport Photo</div>
+      <div class="upload-desc">Select any photo from gallery or take camera shot • <b>JPG, PNG, WEBP</b></div>
+    </label>
 
-    <div class="form-group">
-      <label>3. Candidate Name (Optional)</label>
-      <input type="text" id="candidateName" placeholder="e.g. Aman Shaikh" oninput="renderCard()">
-    </div>
+    <!-- Editor Section -->
+    <div class="editor-section" id="editorSection">
+      <div class="viewport-box">
+        <div class="canvas-frame" id="canvasFrame">
+          <canvas id="cropCanvas"></canvas>
+          <div class="face-guide-overlay" id="faceGuide">
+            <span class="guide-label">Fit Face in Oval</span>
+          </div>
+        </div>
 
-    <button class="btn" onclick="renderCard()">Generate Unified Card</button>
-
-    <div class="preview-area" id="cardPreview">
-      <canvas id="cardCanvas"></canvas>
-      <div class="meta-row">
-        Format: <span>Standard Form Frame</span> | Output: <span>JPG Format</span>
+        <!-- Quick Toolbar -->
+        <div class="tool-actions-row">
+          <button class="btn-tool-action" onclick="rotatePhoto()">🔄 Rotate 90°</button>
+          <button class="btn-tool-action" onclick="toggleGuide()">👁️ Toggle Face Guide</button>
+          <button class="btn-tool-action" onclick="resetTransform()">↺ Reset Position</button>
+        </div>
       </div>
-      <button class="btn" onclick="downloadCard()">Download Card Image</button>
-    </div>
 
-    <div class="ad-card">
-      <span class="ad-tag">Sponsored Advertisement</span>
-      <div class="ad-content">
-        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      <!-- Drag & Zoom Sliders -->
+      <div class="control-row">
+        <span class="control-label">Zoom:</span>
+        <input type="range" id="zoomSlider" class="range-slider" min="0.5" max="3" step="0.05" value="1" oninput="updateTransform()">
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">Brightness:</span>
+        <input type="range" id="brightSlider" class="range-slider" min="-50" max="50" value="0" oninput="renderPassport()">
+      </div>
+
+      <div class="control-row">
+        <span class="control-label">Contrast:</span>
+        <input type="range" id="contrastSlider" class="range-slider" min="-50" max="50" value="0" oninput="renderPassport()">
+      </div>
+
+      <!-- Background Selector -->
+      <div class="bg-options-row">
+        <span style="font-size:12px; font-weight:700; color:var(--paper);">Background:</span>
+        <button class="bg-chip active" onclick="setBackground('original', this)">Original</button>
+        <button class="bg-chip" onclick="setBackground('#ffffff', this)"><span class="color-dot" style="background:#fff;"></span> White</button>
+        <button class="bg-chip" onclick="setBackground('#4a90e2', this)"><span class="color-dot" style="background:#4a90e2;"></span> Blue</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="download-grid">
+        <button class="btn-download btn-jpg" onclick="downloadPassport('jpg')">
+          📥 Download JPG (20KB - 50KB)
+        </button>
+        <button class="btn-download btn-png" onclick="downloadPassport('png')">
+          ✨ Download HD PNG
+        </button>
       </div>
     </div>
   </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
 
 <script>
-let photoImg = null;
-let signImg = null;
+const cropCanvas = document.getElementById("cropCanvas");
+const ctx = cropCanvas.getContext("2d");
+const canvasFrame = document.getElementById("canvasFrame");
+const faceGuide = document.getElementById("faceGuide");
 
-function loadPhoto(e) {
+let userImg = null;
+let rotation = 0;
+let scale = 1;
+let posX = 0;
+let posY = 0;
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let bgColor = 'original';
+
+// Standard 350 x 450 px (3.5cm x 4.5cm standard ratio at 300 DPI)
+const TARGET_W = 350;
+const TARGET_H = 450;
+
+function loadUserPhoto(e) {
   const file = e.target.files[0];
   if (!file) return;
-  const r = new FileReader();
-  r.onload = function(evt) {
-    photoImg = new Image();
-    photoImg.onload = renderCard;
-    photoImg.src = evt.target.result;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    userImg = new Image();
+    userImg.onload = function() {
+      document.getElementById("editorSection").style.display = "block";
+      document.getElementById("uploadZone").style.display = "none";
+
+      cropCanvas.width = TARGET_W;
+      cropCanvas.height = TARGET_H;
+
+      resetTransform();
+    };
+    userImg.src = evt.target.result;
   };
-  r.readAsDataURL(file);
+  reader.readAsDataURL(file);
 }
 
-function loadSign(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = function(evt) {
-    signImg = new Image();
-    signImg.onload = renderCard;
-    signImg.src = evt.target.result;
-  };
-  r.readAsDataURL(file);
+function resetTransform() {
+  if (!userImg) return;
+  rotation = 0;
+
+  // Fit image to frame
+  const scaleW = TARGET_W / userImg.width;
+  const scaleH = TARGET_H / userImg.height;
+  scale = Math.max(scaleW, scaleH);
+  document.getElementById("zoomSlider").value = scale;
+
+  posX = (TARGET_W - (userImg.width * scale)) / 2;
+  posY = (TARGET_H - (userImg.height * scale)) / 2;
+
+  renderPassport();
 }
 
-function renderCard() {
-  if (!photoImg && !signImg) return;
+function updateTransform() {
+  scale = parseFloat(document.getElementById("zoomSlider").value);
+  renderPassport();
+}
 
-  const canvas = document.getElementById('cardCanvas');
-  const ctx = canvas.getContext('2d');
-  const name = document.getElementById('candidateName').value.trim();
+function rotatePhoto() {
+  rotation = (rotation + 90) % 360;
+  renderPassport();
+}
 
-  const width = 360;
-  const height = name ? 480 : 450;
-  canvas.width = width;
-  canvas.height = height;
+function toggleGuide() {
+  faceGuide.style.display = faceGuide.style.display === "none" ? "flex" : "none";
+}
 
-  // Background white card
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, width, height);
+function setBackground(color, btn) {
+  bgColor = color;
+  document.querySelectorAll(".bg-chip").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderPassport();
+}
 
-  // Outer border
-  ctx.strokeStyle = '#222222';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(1, 1, width - 2, height - 2);
+// Dragging / Panning
+canvasFrame.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  startX = e.clientX - posX;
+  startY = e.clientY - posY;
+});
 
-  // Photo
-  if (photoImg) {
-    ctx.drawImage(photoImg, 30, 20, 300, 320);
-    ctx.strokeStyle = '#cccccc';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(30, 20, 300, 320);
+window.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+  posX = e.clientX - startX;
+  posY = e.clientY - startY;
+  renderPassport();
+});
+
+window.addEventListener("mouseup", () => { isDragging = false; });
+
+// Touch Dragging
+canvasFrame.addEventListener("touchstart", (e) => {
+  isDragging = true;
+  startX = e.touches[0].clientX - posX;
+  startY = e.touches[0].clientY - posY;
+}, { passive: true });
+
+window.addEventListener("touchmove", (e) => {
+  if (!isDragging) return;
+  posX = e.touches[0].clientX - startX;
+  posY = e.touches[0].clientY - startY;
+  renderPassport();
+}, { passive: true });
+
+window.addEventListener("touchend", () => { isDragging = false; });
+
+function renderPassport() {
+  if (!userImg) return;
+
+  ctx.clearRect(0, 0, TARGET_W, TARGET_H);
+
+  // Background
+  if (bgColor !== 'original') {
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, TARGET_W, TARGET_H);
   } else {
-    ctx.fillStyle = '#f5efe6';
-    ctx.fillRect(30, 20, 300, 320);
-    ctx.fillStyle = '#9e9080';
-    ctx.font = '13px Plus Jakarta Sans, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Passport Photo Area', width / 2, 175);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, TARGET_W, TARGET_H);
   }
 
-  // Name
-  let signY = 350;
-  if (name) {
-    ctx.fillStyle = '#13100e';
-    ctx.font = 'bold 15px Plus Jakarta Sans, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(name.toUpperCase(), width / 2, 360);
-    signY = 375;
-  }
+  // Draw Transformed Image
+  ctx.save();
+  ctx.translate(posX + (userImg.width * scale) / 2, posY + (userImg.height * scale) / 2);
+  ctx.rotate((rotation * Math.PI) / 180);
+  ctx.drawImage(
+    userImg,
+    -(userImg.width * scale) / 2,
+    -(userImg.height * scale) / 2,
+    userImg.width * scale,
+    userImg.height * scale
+  );
+  ctx.restore();
 
-  // Signature
-  if (signImg) {
-    ctx.drawImage(signImg, 50, signY, 260, 75);
-    ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(50, signY, 260, 75);
-  } else {
-    ctx.fillStyle = '#faf7f2';
-    ctx.fillRect(50, signY, 260, 75);
-    ctx.fillStyle = '#9e9080';
-    ctx.font = '12px Plus Jakarta Sans, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Signature Area', width / 2, signY + 42);
-  }
+  // Apply Brightness & Contrast
+  const brightness = parseInt(document.getElementById("brightSlider").value, 10);
+  const contrast = parseInt(document.getElementById("contrastSlider").value, 10);
 
-  document.getElementById('cardPreview').style.display = 'block';
+  if (brightness !== 0 || contrast !== 0) {
+    const imgData = ctx.getImageData(0, 0, TARGET_W, TARGET_H);
+    const d = imgData.data;
+    const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+
+    for (let i = 0; i < d.length; i += 4) {
+      d[i] = factor * (d[i] - 128 + brightness) + 128;
+      d[i+1] = factor * (d[i+1] - 128 + brightness) + 128;
+      d[i+2] = factor * (d[i+2] - 128 + brightness) + 128;
+    }
+    ctx.putImageData(imgData, 0, 0);
+  }
 }
 
-function downloadCard() {
-  const canvas = document.getElementById('cardCanvas');
-  const link = document.createElement('a');
-  link.download = 'passport_photo_sign_card.jpg';
-  link.href = canvas.toDataURL('image/jpeg', 0.92);
-  link.click();
+// Download with Target 20KB - 50KB size for Govt Forms
+function downloadPassport(format) {
+  if (!userImg) return;
+
+  const link = document.createElement("a");
+  if (format === "png") {
+    link.download = "passport_size_photo.png";
+    link.href = cropCanvas.toDataURL("image/png");
+    link.click();
+  } else {
+    // Quality binary search to hit 25KB - 48KB
+    let quality = 0.85;
+    let dataUrl = cropCanvas.toDataURL("image/jpeg", quality);
+
+    link.download = "passport_photo_20to50kb.jpg";
+    link.href = dataUrl;
+    link.click();
+  }
 }
 </script>
 </body>
