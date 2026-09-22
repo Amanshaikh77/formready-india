@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Passport Photo Sheet Maker (4x6 / A4) - FormReady India</title>
-  <meta name="description" content="Create printable passport photo sheets on A4 or A5 paper. Upload a photo, set photo dimensions, copies and spacing, preview the sheet, and download it as a high-resolution JPG or PDF.">
+  <meta name="description" content="Create printable passport photo sheets on A4, A5, or 4x6 paper. Auto-centered layout with sharp 300 DPI print quality.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
@@ -330,15 +330,15 @@
 
   <div class="header">
     <h1>Photo Sheet Maker</h1>
-    <p>Arrange passport photos onto printable A4 / A5 studio sheets</p>
+    <p>Arrange passport photos onto printable A4, A5 or 4x6 studio sheets</p>
   </div>
 
   <div class="main-card">
     <div class="instructions-box">
       <h3>📖 How to Use Photo Sheet Maker</h3>
       <ol>
-        <li>Upload your passport photo (JPG or PNG).</li>
-        <li>Choose Sheet Size (A4 / A5) and Portrait/Landscape Orientation.</li>
+        <li>Upload your passport photo (JPG, PNG or WEBP).</li>
+        <li>Choose Sheet Size (A4, A5 or 4×6) and Orientation.</li>
         <li>Set photo dimensions in mm, copies count, and spacing between photos.</li>
         <li>Check the live preview and download as print-ready high-resolution JPG or PDF.</li>
       </ol>
@@ -354,7 +354,8 @@
       <div class="options-group">
         <label>Sheet Size:</label>
         <select id="sheetSize" class="input-select">
-          <option value="a4">A4 Sheet (210 × 297 mm)</option>
+          <option value="a4" selected>A4 Sheet (210 × 297 mm)</option>
+          <option value="4x6">4×6 Inch Studio (102 × 152 mm)</option>
           <option value="a5">A5 Sheet (148 × 210 mm)</option>
         </select>
       </div>
@@ -385,7 +386,7 @@
       </div>
       <div class="options-group">
         <label>Spacing Between Photos (mm):</label>
-        <input type="number" id="spacingMm" class="input-field" value="5" min="0" max="30">
+        <input type="number" id="spacingMm" class="input-field" value="4" min="0" max="30">
       </div>
     </div>
 
@@ -397,7 +398,7 @@
     <div class="preview-wrapper">
       <div class="preview-header">
         <h3>Live Sheet Preview</h3>
-        <span class="preview-hint">300 DPI Print Quality</span>
+        <span class="preview-hint">300 DPI Studio Quality • Auto Centered</span>
       </div>
       <div class="canvas-viewport">
         <canvas id="sheetCanvas"></canvas>
@@ -454,32 +455,31 @@ fileInput.addEventListener("change", (e) => {
   elem.addEventListener("change", renderSheet);
 });
 
-function renderSheet() {
-  if (!loadedImg) {
-    sheetCanvas.width = 800;
-    sheetCanvas.height = 1131;
-    const ctx = sheetCanvas.getContext("2d");
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0, 0, sheetCanvas.width, sheetCanvas.height);
-    ctx.fillStyle = "#a89a89";
-    ctx.font = "24px 'Plus Jakarta Sans', sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("Upload a photo above to generate sheet preview", sheetCanvas.width / 2, sheetCanvas.height / 2);
-    return;
-  }
-
-  const isA4 = sheetSizeSelect.value === "a4";
+function getSheetDimensionsMm() {
+  const sheetSize = sheetSizeSelect.value;
   const isPortrait = orientationSelect.value === "portrait";
 
-  let sheetWidthMm = isA4 ? 210 : 148;
-  let sheetHeightMm = isA4 ? 297 : 210;
+  let w = 210;
+  let h = 297;
 
-  if (!isPortrait) {
-    const temp = sheetWidthMm;
-    sheetWidthMm = sheetHeightMm;
-    sheetHeightMm = temp;
+  if (sheetSize === "4x6") {
+    w = 102;
+    h = 152;
+  } else if (sheetSize === "a5") {
+    w = 148;
+    h = 210;
   }
 
+  if (!isPortrait) {
+    const temp = w;
+    w = h;
+    h = temp;
+  }
+  return { w, h };
+}
+
+function renderSheet() {
+  const { w: sheetWidthMm, h: sheetHeightMm } = getSheetDimensionsMm();
   const sheetWidthPx = Math.round(sheetWidthMm * MM_TO_PX);
   const sheetHeightPx = Math.round(sheetHeightMm * MM_TO_PX);
 
@@ -489,30 +489,65 @@ function renderSheet() {
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, sheetWidthPx, sheetHeightPx);
 
-  const pWidthPx = Math.round(parseFloat(photoWidthMmInput.value || 35) * MM_TO_PX);
-  const pHeightPx = Math.round(parseFloat(photoHeightMmInput.value || 45) * MM_TO_PX);
-  const gapPx = Math.round(parseFloat(spacingMmInput.value || 5) * MM_TO_PX);
-  const marginPx = Math.round(10 * MM_TO_PX);
-  const targetCount = parseInt(photoCountInput.value || 4, 10);
+  if (!loadedImg) {
+    ctx.fillStyle = "#a89a89";
+    ctx.font = "24px 'Plus Jakarta Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Upload a photo above to generate sheet preview", sheetCanvas.width / 2, sheetCanvas.height / 2);
+    return;
+  }
 
-  let currentX = marginPx;
-  let currentY = marginPx;
-  let drawnCount = 0;
+  const pWidthMm = parseFloat(photoWidthMmInput.value) || 35;
+  const pHeightMm = parseFloat(photoHeightMmInput.value) || 45;
+  const inputGap = parseFloat(spacingMmInput.value);
+  const gapMm = isNaN(inputGap) ? 4 : inputGap;
+  const targetCount = parseInt(photoCountInput.value, 10) || 1;
 
-  while (currentY + pHeightPx <= sheetHeightPx - marginPx && drawnCount < targetCount) {
-    while (currentX + pWidthPx <= sheetWidthPx - marginPx && drawnCount < targetCount) {
-      ctx.drawImage(loadedImg, currentX, currentY, pWidthPx, pHeightPx);
+  // Safe minimal printable edge (5mm)
+  const minEdgeMm = 5;
 
-      if (showCutLinesCheck.checked) {
-        ctx.strokeStyle = "#333333";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(currentX, currentY, pWidthPx, pHeightPx);
-      }
-      drawnCount++;
-      currentX += pWidthPx + gapPx;
+  // Calculate maximum columns that comfortably fit across the paper
+  let maxCols = Math.floor((sheetWidthMm - (2 * minEdgeMm) + gapMm) / (pWidthMm + gapMm));
+  if (maxCols < 1) maxCols = 1;
+
+  // Total grid width for these columns
+  const gridWidthMm = (maxCols * pWidthMm) + ((maxCols - 1) * gapMm);
+
+  // Auto-center grid horizontally (equal left & right margins)
+  const startX_Mm = Math.max(minEdgeMm, (sheetWidthMm - gridWidthMm) / 2);
+  const startY_Mm = Math.max(minEdgeMm, 8); // Clean 8mm top margin
+
+  const pWidthPx = Math.round(pWidthMm * MM_TO_PX);
+  const pHeightPx = Math.round(pHeightMm * MM_TO_PX);
+  const gapPx = Math.round(gapMm * MM_TO_PX);
+  const startXPx = Math.round(startX_Mm * MM_TO_PX);
+  const startYPx = Math.round(startY_Mm * MM_TO_PX);
+
+  let col = 0;
+  let row = 0;
+
+  for (let i = 0; i < targetCount; i++) {
+    const posX = startXPx + (col * (pWidthPx + gapPx));
+    const posY = startYPx + (row * (pHeightPx + gapPx));
+
+    // Stop if photo crosses bottom edge
+    if (posY + pHeightPx > sheetHeightPx - Math.round(minEdgeMm * MM_TO_PX)) {
+      break;
     }
-    currentX = marginPx;
-    currentY += pHeightPx + gapPx;
+
+    ctx.drawImage(loadedImg, posX, posY, pWidthPx, pHeightPx);
+
+    if (showCutLinesCheck.checked) {
+      ctx.strokeStyle = "#444444";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(posX, posY, pWidthPx, pHeightPx);
+    }
+
+    col++;
+    if (col >= maxCols) {
+      col = 0;
+      row++;
+    }
   }
 }
 
@@ -535,23 +570,17 @@ downloadPdfBtn.addEventListener("click", () => {
     return;
   }
   const { jsPDF } = window.jspdf;
-  const isA4 = sheetSizeSelect.value === "a4";
+  const { w: sheetWidthMm, h: sheetHeightMm } = getSheetDimensionsMm();
   const isPortrait = orientationSelect.value === "portrait";
 
-  let format = isA4 ? "a4" : "a5";
-  let orientation = isPortrait ? "portrait" : "landscape";
-
   const pdf = new jsPDF({
-    orientation: orientation,
+    orientation: isPortrait ? "portrait" : "landscape",
     unit: "mm",
-    format: format
+    format: [sheetWidthMm, sheetHeightMm]
   });
 
   const imgData = sheetCanvas.toDataURL("image/jpeg", 0.95);
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = pdf.internal.pageSize.getHeight();
-
-  pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+  pdf.addImage(imgData, 'JPEG', 0, 0, sheetWidthMm, sheetHeightMm);
   pdf.save("passport-photo-sheet.pdf");
 });
 </script>
