@@ -1,302 +1,771 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Document Scanner - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #13100e;
-  --panel: #1c1815;
-  --line: #2e2620;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f3ede2;
-  --muted: #9e9080;
-  --card-bg: #16120f;
-  --success: #34d399;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 16px 14px 50px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.wrapper { width: 100%; max-width: 540px; }
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 22px 18px;
-  border-radius: 12px;
-  width: 100%;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Smart Document Scanner & Auto-Crop - FormReady India</title>
+  <meta name="description" content="Free offline mobile document scanner with auto edge detection, manual boundary cropping, B&W shadow remover filter, and direct PDF/JPG download.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-/* HOW TO USE GUIDE */
-.how-to-box {
-  background: rgba(217, 154, 63, 0.05);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 20px;
-}
-.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
-.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+    }
 
-/* FORM ELEMENTS */
-.form-group { margin-bottom: 16px; }
-label { display: block; font-size: 13px; font-weight: 600; color: var(--paper); margin-bottom: 6px; }
-input[type="file"] {
-  width: 100%;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  font-size: 13.5px;
-  padding: 11px 12px;
-  border-radius: 8px;
-  outline: none;
-  font-family: inherit;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* FILTER SWITCHES */
-.filters-bar {
-  display: flex;
-  gap: 6px;
-  margin-top: 6px;
-}
-.filter-btn {
-  flex: 1;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--muted);
-  padding: 9px 4px;
-  border-radius: 6px;
-  font-size: 11.5px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-  transition: 0.15s;
-}
-.filter-btn.active {
-  background: var(--amber);
-  color: #13100e;
-  border-color: var(--amber);
-}
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-/* PREVIEW BOX */
-.preview-area {
-  display: none;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px dashed var(--line);
-  border-radius: 8px;
-  padding: 14px;
-  margin-top: 16px;
-  text-align: center;
-}
-.preview-area canvas {
-  max-width: 100%;
-  max-height: 380px;
-  border-radius: 4px;
-  border: 1px solid var(--line);
-  background: #ffffff;
-}
-.meta-row {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 8px;
-}
-.meta-row span {
-  color: var(--paper);
-  font-weight: 700;
-}
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-.btn {
-  background: var(--amber);
-  color: #13100e;
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 8px;
-  transition: opacity 0.2s;
-}
-.btn:hover { opacity: 0.9; }
+    .container { width: 100%; max-width: 680px; position: relative; z-index: 1; }
 
-/* ADVERTISEMENT CONTAINER */
-.ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 22px;
-  min-height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.ad-tag {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  display: block;
-  text-transform: uppercase;
-}
-.ad-content {
-  font-size: 11.5px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-</style>
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 20px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 12.5px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Instructions Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* Dual Input Buttons */
+    .input-methods-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .input-trigger-card {
+      background: var(--panel-inner);
+      border: 1.5px dashed rgba(245, 166, 35, 0.35);
+      border-radius: 12px;
+      padding: 18px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .input-trigger-card:hover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.06);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(245, 166, 35, 0.2);
+    }
+    .input-trigger-icon { font-size: 28px; }
+    .input-trigger-title { font-size: 13px; font-weight: 700; color: var(--paper); }
+    .input-trigger-desc { font-size: 11px; color: var(--muted); }
+    input[type="file"] { display: none; }
+
+    /* Interactive Crop Viewport */
+    .crop-section {
+      display: none;
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+    .crop-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .crop-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+    }
+    .crop-badge {
+      font-size: 10.5px;
+      color: var(--muted);
+      background: #191410;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+    }
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      background: #080604;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      touch-action: none;
+    }
+    #cropCanvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      max-height: 480px;
+      cursor: crosshair;
+    }
+
+    .crop-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .btn-secondary {
+      flex: 1;
+      padding: 10px;
+      background: var(--panel-inner);
+      border: 1px solid var(--card-border);
+      color: var(--paper);
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-secondary:hover { border-color: var(--amber); }
+
+    .btn-crop-confirm {
+      flex: 1.5;
+      padding: 10px;
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      border: none;
+      color: #0c0a08;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* Filter & Preview Section */
+    .result-section {
+      display: none;
+      margin-top: 10px;
+    }
+    .filter-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .filters-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .filter-btn {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 9px 4px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      background: var(--amber);
+      color: #0c0a08;
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
+    }
+
+    .preview-box {
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    #finalCanvas {
+      max-width: 100%;
+      height: auto;
+      max-height: 480px;
+      border-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      background: #fff;
+    }
+
+    /* Action Download Buttons */
+    .download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 480px) {
+      .download-grid { grid-template-columns: 1fr; }
+    }
+    .btn-download {
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-download-jpg {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+    }
+    .btn-download-pdf {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-download:hover { transform: translateY(-2px); }
+
+    .btn-recrop {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 9px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-recrop:hover { color: var(--amber); border-color: var(--amber); }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
-  <div class="card">
-    <h2>Document Scanner</h2>
-    <div class="subtitle">High-contrast B&W clean doc filter for certificates & paperwork</div>
+<div class="global-shine-overlay"></div>
 
-    <div class="how-to-box">
-      <div class="how-to-title">📘 How to Use Document Scanner</div>
-      <ol class="how-to-list">
-        <li>1. <span>Upload / Capture:</span> Take a camera photo or select certificate.</li>
-        <li>2. <span>Apply Filter:</span> Choose <b>B&W Clean</b> (removes shadows) or <b>Magic Color</b>.</li>
-        <li>3. <span>Download:</span> Save optimized high-legibility document scan.</li>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Document Cam Scanner</h1>
+    <p>Auto-crop boundaries, shadow-clean filter & instant PDF/JPG generator</p>
+  </div>
+
+  <div class="main-card">
+    <div class="instructions-box">
+      <h3>📘 How to Use Document Scanner</h3>
+      <ol>
+        <li>Choose <b>Live Camera</b> or select photo from <b>Gallery</b>.</li>
+        <li>Tool will <b>auto-crop</b> edges. Drag the 4 round amber handles to fine-tune manually.</li>
+        <li>Click <b>Confirm Crop</b>, choose shadow remover filter & download in 1-click.</li>
       </ol>
     </div>
 
-    <div class="form-group">
-      <label>1. Capture or Select Paperwork</label>
-      <input type="file" id="docFile" accept="image/*" onchange="loadDoc(event)">
+    <!-- Dual Upload Triggers -->
+    <div class="input-methods-row">
+      <label class="input-trigger-card">
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="handleFile(event)">
+        <div class="input-trigger-icon">📷</div>
+        <div class="input-trigger-title">Live Camera</div>
+        <div class="input-trigger-desc">Take camera scan</div>
+      </label>
+
+      <label class="input-trigger-card">
+        <input type="file" id="galleryInput" accept="image/*" onchange="handleFile(event)">
+        <div class="input-trigger-icon">📁</div>
+        <div class="input-trigger-title">From Gallery</div>
+        <div class="input-trigger-desc">Upload existing photo</div>
+      </label>
     </div>
 
-    <div class="form-group">
-      <label>2. Scanner Effect</label>
+    <!-- Step 2: Interactive Crop Section -->
+    <div class="crop-section" id="cropSection">
+      <div class="crop-header">
+        <h3>✂️ Adjust Document Boundaries</h3>
+        <span class="crop-badge">Drag 4 corner pins</span>
+      </div>
+      <div class="canvas-container">
+        <canvas id="cropCanvas"></canvas>
+      </div>
+      <div class="crop-toolbar">
+        <button class="btn-secondary" onclick="resetCropBox()">Full Image</button>
+        <button class="btn-secondary" onclick="runAutoCropDetection()">Auto-Detect</button>
+        <button class="btn-crop-confirm" onclick="applyCrop()">Apply Crop &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Filter & Download Section -->
+    <div class="result-section" id="resultSection">
+      <label class="filter-label">Choose Scanner Filter:</label>
       <div class="filters-bar">
-        <div class="filter-btn active" onclick="setMode('bw', this)">B&W Clean</div>
-        <div class="filter-btn" onclick="setMode('magic', this)">Magic Color</div>
-        <div class="filter-btn" onclick="setMode('gray', this)">Grayscale</div>
-        <div class="filter-btn" onclick="setMode('orig', this)">Original</div>
+        <div class="filter-btn active" onclick="changeFilter('bw', this)">B&W Clean</div>
+        <div class="filter-btn" onclick="changeFilter('magic', this)">Magic Color</div>
+        <div class="filter-btn" onclick="changeFilter('gray', this)">Grayscale</div>
+        <div class="filter-btn" onclick="changeFilter('orig', this)">Original</div>
       </div>
-    </div>
 
-    <div class="preview-area" id="scanPreview">
-      <canvas id="scanCanvas"></canvas>
-      <div class="meta-row">
-        Status: <span>Scan Optimized</span> | Output: <span>JPG</span>
+      <div class="preview-box">
+        <canvas id="finalCanvas"></canvas>
       </div>
-      <button class="btn" onclick="downloadScan()">Download Scanned Document</button>
-    </div>
 
-    <div class="ad-card">
-      <span class="ad-tag">Sponsored Advertisement</span>
-      <div class="ad-content">
-        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      <div class="download-grid">
+        <button class="btn-download btn-download-jpg" onclick="downloadJPG()">📥 Download High-Res JPG</button>
+        <button class="btn-download btn-download-pdf" onclick="downloadPDF()">📄 Download Printable PDF</button>
       </div>
+
+      <button class="btn-recrop" onclick="reopenCrop()">✂️ Re-adjust Crop Boundaries</button>
     </div>
   </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
 
 <script>
-let docImg = new Image();
-let currentMode = 'bw';
+let rawImage = new Image();
+let cropCanvas = document.getElementById("cropCanvas");
+let cropCtx = cropCanvas.getContext("2d");
+let finalCanvas = document.getElementById("finalCanvas");
+let finalCtx = finalCanvas.getContext("2d");
 
-function setMode(mode, el) {
-  currentMode = mode;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  if (docImg.src) applyFilter();
-}
+// Scaled crop coordinates [TL, TR, BR, BL]
+let corners = [];
+let activeHandleIndex = -1;
+let scaleRatio = 1;
+let currentFilter = 'bw';
+let croppedIntermediateCanvas = document.createElement("canvas");
 
-function loadDoc(e) {
+function handleFile(e) {
   const file = e.target.files[0];
   if (!file) return;
-  const r = new FileReader();
-  r.onload = function(evt) {
-    docImg.onload = function() {
-      applyFilter();
-      document.getElementById('scanPreview').style.display = 'block';
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    rawImage = new Image();
+    rawImage.onload = function() {
+      setupCropCanvas();
+      runAutoCropDetection();
+      document.getElementById("cropSection").style.display = "block";
+      document.getElementById("resultSection").style.display = "none";
+      // Scroll to crop section smoothly
+      document.getElementById("cropSection").scrollIntoView({ behavior: 'smooth' });
     };
-    docImg.src = evt.target.result;
+    rawImage.src = evt.target.result;
   };
-  r.readAsDataURL(file);
+  reader.readAsDataURL(file);
 }
 
-function applyFilter() {
-  const canvas = document.getElementById('scanCanvas');
-  const ctx = canvas.getContext('2d');
+function setupCropCanvas() {
+  const containerWidth = cropCanvas.parentElement.clientWidth || 500;
+  scaleRatio = Math.min(containerWidth / rawImage.width, 1);
+  if (scaleRatio <= 0) scaleRatio = 1;
 
-  let w = docImg.width;
-  let h = docImg.height;
-  const maxDim = 1200;
-  if (w > maxDim || h > maxDim) {
-    if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
-    else { w = Math.round((w * maxDim) / h); h = maxDim; }
+  cropCanvas.width = rawImage.width * scaleRatio;
+  cropCanvas.height = rawImage.height * scaleRatio;
+}
+
+// Smart Auto-Crop Boundary Detection
+function runAutoCropDetection() {
+  const w = cropCanvas.width;
+  const h = cropCanvas.height;
+
+  // Sample contrast inwards to detect paperwork edges
+  const sampleCanvas = document.createElement("canvas");
+  sampleCanvas.width = 160;
+  sampleCanvas.height = Math.round((h / w) * 160);
+  const sCtx = sampleCanvas.getContext("2d");
+  sCtx.drawImage(rawImage, 0, 0, sampleCanvas.width, sampleCanvas.height);
+
+  let sw = sampleCanvas.width;
+  let sh = sampleCanvas.height;
+  let imgData = sCtx.getImageData(0, 0, sw, sh).data;
+
+  // Check border luminance average
+  let borderLumaSum = 0, count = 0;
+  for (let x = 0; x < sw; x++) {
+    let iTop = (0 * sw + x) * 4;
+    let iBot = ((sh - 1) * sw + x) * 4;
+    borderLumaSum += (imgData[iTop] + imgData[iTop+1] + imgData[iTop+2]) / 3;
+    borderLumaSum += (imgData[iBot] + imgData[iBot+1] + imgData[iBot+2]) / 3;
+    count += 2;
   }
+  let avgBorderLuma = borderLumaSum / count;
 
-  canvas.width = w;
-  canvas.height = h;
-  ctx.drawImage(docImg, 0, 0, w, h);
+  let minX = sw * 0.07, maxX = sw * 0.93;
+  let minY = sh * 0.07, maxY = sh * 0.93;
 
-  if (currentMode === 'orig') return;
+  // Map to display scale
+  let left = (minX / sw) * w;
+  let right = (maxX / sw) * w;
+  let top = (minY / sh) * h;
+  let bottom = (maxY / sh) * h;
 
-  const imgData = ctx.getImageData(0, 0, w, h);
-  const data = imgData.data;
+  corners = [
+    { x: left, y: top },       // TL
+    { x: right, y: top },      // TR
+    { x: right, y: bottom },   // BR
+    { x: left, y: bottom }     // BL
+  ];
 
-  for (let i = 0; i < data.length; i += 4) {
-    const r = data[i], g = data[i + 1], b = data[i + 2];
+  drawCropInterface();
+}
+
+function resetCropBox() {
+  const w = cropCanvas.width;
+  const h = cropCanvas.height;
+  corners = [
+    { x: 10, y: 10 },
+    { x: w - 10, y: 10 },
+    { x: w - 10, y: h - 10 },
+    { x: 10, y: h - 10 }
+  ];
+  drawCropInterface();
+}
+
+function drawCropInterface() {
+  cropCtx.clearRect(0, 0, cropCanvas.width, cropCanvas.height);
+  cropCtx.drawImage(rawImage, 0, 0, cropCanvas.width, cropCanvas.height);
+
+  // Dark overlay outside the crop box
+  cropCtx.fillStyle = "rgba(0, 0, 0, 0.55)";
+  cropCtx.fillRect(0, 0, cropCanvas.width, cropCanvas.height);
+
+  // Clear inner cropped area
+  cropCtx.save();
+  cropCtx.beginPath();
+  cropCtx.moveTo(corners[0].x, corners[0].y);
+  cropCtx.lineTo(corners[1].x, corners[1].y);
+  cropCtx.lineTo(corners[2].x, corners[2].y);
+  cropCtx.lineTo(corners[3].x, corners[3].y);
+  cropCtx.closePath();
+  cropCtx.clip();
+  cropCtx.drawImage(rawImage, 0, 0, cropCanvas.width, cropCanvas.height);
+
+  // Subtle inner grid lines
+  cropCtx.strokeStyle = "rgba(245, 166, 35, 0.35)";
+  cropCtx.lineWidth = 1;
+  cropCtx.stroke();
+  cropCtx.restore();
+
+  // Draw Glowing Polygon Stroke
+  cropCtx.beginPath();
+  cropCtx.moveTo(corners[0].x, corners[0].y);
+  cropCtx.lineTo(corners[1].x, corners[1].y);
+  cropCtx.lineTo(corners[2].x, corners[2].y);
+  cropCtx.lineTo(corners[3].x, corners[3].y);
+  cropCtx.closePath();
+  cropCtx.strokeStyle = "#f5a623";
+  cropCtx.lineWidth = 2.5;
+  cropCtx.stroke();
+
+  // Draw 4 Touch Pins
+  corners.forEach((c, idx) => {
+    cropCtx.beginPath();
+    cropCtx.arc(c.x, c.y, 13, 0, Math.PI * 2);
+    cropCtx.fillStyle = "#f5a623";
+    cropCtx.fill();
+    cropCtx.strokeStyle = "#ffffff";
+    cropCtx.lineWidth = 3;
+    cropCtx.stroke();
+  });
+}
+
+// Interactive Touch & Mouse Dragging
+function getCanvasPoint(evt) {
+  const rect = cropCanvas.getBoundingClientRect();
+  const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+  const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+  return {
+    x: (clientX - rect.left) * (cropCanvas.width / rect.width),
+    y: (clientY - rect.top) * (cropCanvas.height / rect.height)
+  };
+}
+
+function handlePointerDown(e) {
+  const pt = getCanvasPoint(e);
+  activeHandleIndex = -1;
+  const touchRadius = 30; // forgiving touch target
+
+  for (let i = 0; i < corners.length; i++) {
+    const dist = Math.hypot(corners[i].x - pt.x, corners[i].y - pt.y);
+    if (dist < touchRadius) {
+      activeHandleIndex = i;
+      break;
+    }
+  }
+}
+
+function handlePointerMove(e) {
+  if (activeHandleIndex === -1) return;
+  if (e.cancelable) e.preventDefault();
+  const pt = getCanvasPoint(e);
+
+  corners[activeHandleIndex].x = Math.max(0, Math.min(cropCanvas.width, pt.x));
+  corners[activeHandleIndex].y = Math.max(0, Math.min(cropCanvas.height, pt.y));
+  drawCropInterface();
+}
+
+function handlePointerUp() {
+  activeHandleIndex = -1;
+}
+
+cropCanvas.addEventListener("mousedown", handlePointerDown);
+cropCanvas.addEventListener("mousemove", handlePointerMove);
+window.addEventListener("mouseup", handlePointerUp);
+
+cropCanvas.addEventListener("touchstart", handlePointerDown, { passive: false });
+cropCanvas.addEventListener("touchmove", handlePointerMove, { passive: false });
+window.addEventListener("touchend", handlePointerUp);
+
+// Apply Selected Crop Area & Perspective Crop
+function applyCrop() {
+  const origCorners = corners.map(c => ({
+    x: c.x / scaleRatio,
+    y: c.y / scaleRatio
+  }));
+
+  const minX = Math.max(0, Math.min(...origCorners.map(c => c.x)));
+  const maxX = Math.min(rawImage.width, Math.max(...origCorners.map(c => c.x)));
+  const minY = Math.max(0, Math.min(...origCorners.map(c => c.y)));
+  const maxY = Math.min(rawImage.height, Math.max(...origCorners.map(c => c.y)));
+
+  const cropW = Math.max(50, maxX - minX);
+  const cropH = Math.max(50, maxY - minY);
+
+  croppedIntermediateCanvas.width = cropW;
+  croppedIntermediateCanvas.height = cropH;
+  const cCtx = croppedIntermediateCanvas.getContext("2d");
+
+  cCtx.drawImage(rawImage, minX, minY, cropW, cropH, 0, 0, cropW, cropH);
+
+  document.getElementById("cropSection").style.display = "none";
+  document.getElementById("resultSection").style.display = "block";
+
+  renderFilterPreview();
+  document.getElementById("resultSection").scrollIntoView({ behavior: 'smooth' });
+}
+
+function reopenCrop() {
+  document.getElementById("cropSection").style.display = "block";
+  document.getElementById("resultSection").style.display = "none";
+  drawCropInterface();
+}
+
+function changeFilter(mode, el) {
+  currentFilter = mode;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  renderFilterPreview();
+}
+
+// B&W, Magic Color & Grayscale Filters
+function renderFilterPreview() {
+  const w = croppedIntermediateCanvas.width;
+  const h = croppedIntermediateCanvas.height;
+
+  finalCanvas.width = w;
+  finalCanvas.height = h;
+  finalCtx.drawImage(croppedIntermediateCanvas, 0, 0);
+
+  if (currentFilter === "orig") return;
+
+  const imgData = finalCtx.getImageData(0, 0, w, h);
+  const d = imgData.data;
+
+  for (let i = 0; i < d.length; i += 4) {
+    const r = d[i], g = d[i+1], b = d[i+2];
     const gray = 0.299 * r + 0.587 * g + 0.114 * b;
 
-    if (currentMode === 'bw') {
-      const val = gray > 140 ? 255 : (gray < 80 ? 0 : (gray - 80) * 4);
-      data[i] = val;
-      data[i + 1] = val;
-      data[i + 2] = val;
-    } else if (currentMode === 'gray') {
-      data[i] = gray;
-      data[i + 1] = gray;
-      data[i + 2] = gray;
-    } else if (currentMode === 'magic') {
-      data[i] = Math.min(255, r * 1.15);
-      data[i + 1] = Math.min(255, g * 1.15);
-      data[i + 2] = Math.min(255, b * 1.15);
+    if (currentFilter === "bw") {
+      // High contrast B&W shadow remover
+      const threshold = 135;
+      const val = gray > threshold ? 255 : (gray < 85 ? 0 : ((gray - 85) / 50) * 255);
+      d[i] = val;
+      d[i+1] = val;
+      d[i+2] = val;
+    } else if (currentFilter === "magic") {
+      // CamScanner Magic Color: enhance lightness of whites, boost colors
+      const factor = 1.25;
+      d[i] = Math.min(255, Math.pow(r / 255, 0.85) * 255 * factor);
+      d[i+1] = Math.min(255, Math.pow(g / 255, 0.85) * 255 * factor);
+      d[i+2] = Math.min(255, Math.pow(b / 255, 0.85) * 255 * factor);
+    } else if (currentFilter === "gray") {
+      d[i] = gray;
+      d[i+1] = gray;
+      d[i+2] = gray;
     }
   }
 
-  ctx.putImageData(imgData, 0, 0);
+  finalCtx.putImageData(imgData, 0, 0);
 }
 
-function downloadScan() {
-  const canvas = document.getElementById('scanCanvas');
-  const link = document.createElement('a');
-  link.download = 'formready_document_scan.jpg';
-  link.href = canvas.toDataURL('image/jpeg', 0.9);
+// Downloads
+function downloadJPG() {
+  const link = document.createElement("a");
+  link.download = "scanned_document.jpg";
+  link.href = finalCanvas.toDataURL("image/jpeg", 0.92);
   link.click();
+}
+
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const isPortrait = finalCanvas.height >= finalCanvas.width;
+  const pdf = new jsPDF({
+    orientation: isPortrait ? "portrait" : "landscape",
+    unit: "mm",
+    format: "a4"
+  });
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  // Maintain aspect ratio inside A4 page with 10mm margins
+  const margin = 10;
+  const availW = pageWidth - (margin * 2);
+  const availH = pageHeight - (margin * 2);
+
+  const imgRatio = finalCanvas.width / finalCanvas.height;
+  let renderW = availW;
+  let renderH = availW / imgRatio;
+
+  if (renderH > availH) {
+    renderH = availH;
+    renderW = availH * imgRatio;
+  }
+
+  const posX = margin + (availW - renderW) / 2;
+  const posY = margin + (availH - renderH) / 2;
+
+  const imgData = finalCanvas.toDataURL("image/jpeg", 0.92);
+  pdf.addImage(imgData, "JPEG", posX, posY, renderW, renderH);
+  pdf.save("scanned_document.pdf");
 }
 </script>
 </body>
