@@ -93,17 +93,66 @@ h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: cente
 }
 .preset-btn:hover, .preset-btn.active { border-color: var(--amber); color: var(--amber); background: rgba(217,154,63,0.1); }
 
-.crop-area-wrap {
-  position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--line);
-  background: #000; user-select: none; margin-bottom: 14px; display: none;
+/* BOTH SIDE SCROLL GUTTERS */
+.crop-outer-wrapper {
+  display: none;
+  align-items: stretch;
+  gap: 8px;
+  margin-bottom: 14px;
+  position: relative;
+  touch-action: pan-y !important;
 }
-.crop-area-wrap img { width: 100%; display: block; pointer-events: none; }
+.scroll-gutter {
+  width: 32px;
+  flex-shrink: 0;
+  background: rgba(217, 154, 63, 0.05);
+  border: 1.5px dashed rgba(217, 154, 63, 0.35);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: pan-y !important;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: ns-resize;
+  transition: background 0.2s, border-color 0.2s;
+}
+.scroll-gutter:active {
+  background: rgba(217, 154, 63, 0.18);
+  border-color: var(--amber);
+}
+.scroll-gutter .gutter-txt {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--amber);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.crop-area-wrap {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #000;
+  user-select: none;
+  max-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.crop-area-wrap img { width: 100%; max-height: 420px; object-fit: contain; display: block; pointer-events: none; }
 .crop-box {
   position: absolute; border: 2px solid var(--amber); background: rgba(217, 154, 63, 0.12);
   touch-action: none; cursor: move;
 }
 .crop-handle {
-  position: absolute; width: 18px; height: 18px; background: var(--paper);
+  position: absolute; width: 20px; height: 20px; background: var(--paper);
   border: 2px solid var(--amber); border-radius: 50%; touch-action: none;
 }
 .crop-handle[data-h="tl"] { left: 0; top: 0; transform: translate(-50%, -50%); cursor: nwse-resize; }
@@ -170,9 +219,9 @@ input[type="range"] { width: 100%; accent-color: var(--amber); background: var(-
     <div class="how-to-box">
       <div class="how-to-title">📘 How to Use</div>
       <ol class="how-to-list">
-        <li>1. <span>Upload:</span> Signature ki photo/scan select karein.</li>
-        <li>2. <span>Enhance &amp; Crop:</span> Paper Whiten slider se shadow hatayein aur crop box adjust karein.</li>
-        <li>3. <span>Download:</span> Preset chunein (SSC, UPSC, PAN) ya custom KB &amp; px set karke download karein.</li>
+        <li>1. <span>Upload:</span> Signature photo ya image upload karein.</li>
+        <li>2. <span>Enhance &amp; Crop:</span> Paper Whiten slider se shadow hatayein. Page scroll karne ke liye aaju-baaju wale <b>SCROLL</b> area par swipe karein.</li>
+        <li>3. <span>Download:</span> Govt preset (SSC, UPSC, PAN) chunein ya custom KB &amp; size set karke download karein.</li>
       </ol>
     </div>
 
@@ -200,14 +249,26 @@ input[type="range"] { width: 100%; accent-color: var(--amber); background: var(-
         <button class="preset-btn" data-preset="custom">Custom Mode</button>
       </div>
 
-      <span class="section-label">2. Adjust Crop Area</span>
-      <div class="crop-area-wrap" id="cropWrap">
-        <img id="stageImg" alt="Signature preview">
-        <div class="crop-box" id="cropBox">
-          <div class="crop-handle" data-h="tl"></div>
-          <div class="crop-handle" data-h="tr"></div>
-          <div class="crop-handle" data-h="bl"></div>
-          <div class="crop-handle" data-h="br"></div>
+      <span class="section-label">2. Adjust Crop Area (Swipe sides to scroll)</span>
+      
+      <!-- DUAL SIDE SCROLL WRAPPER -->
+      <div class="crop-outer-wrapper" id="cropOuterWrap">
+        <div class="scroll-gutter" title="Swipe here to scroll page">
+          <span class="gutter-txt">↕ SCROLL</span>
+        </div>
+        
+        <div class="crop-area-wrap" id="cropWrap">
+          <img id="stageImg" alt="Signature preview">
+          <div class="crop-box" id="cropBox">
+            <div class="crop-handle" data-h="tl"></div>
+            <div class="crop-handle" data-h="tr"></div>
+            <div class="crop-handle" data-h="bl"></div>
+            <div class="crop-handle" data-h="br"></div>
+          </div>
+        </div>
+
+        <div class="scroll-gutter" title="Swipe here to scroll page">
+          <span class="gutter-txt">↕ SCROLL</span>
         </div>
       </div>
 
@@ -271,6 +332,7 @@ input[type="range"] { width: 100%; accent-color: var(--amber); background: var(-
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('fileInput');
 const editorWrap = document.getElementById('editorWrap');
+const cropOuterWrap = document.getElementById('cropOuterWrap');
 const cropWrap = document.getElementById('cropWrap');
 const stageImg = document.getElementById('stageImg');
 const cropBox = document.getElementById('cropBox');
@@ -325,12 +387,12 @@ function loadFile(file) {
       stageImg.src = ev.target.result;
       dropzone.style.display = 'none';
       editorWrap.style.display = 'block';
-      cropWrap.style.display = 'block';
+      cropOuterWrap.style.display = 'flex';
       
       st1.classList.replace('active', 'done');
       st2.classList.add('active');
 
-      crop = { x: 0.08, y: 0.15, w: 0.84, h: 0.7 };
+      crop = { x: 0.06, y: 0.15, w: 0.88, h: 0.7 };
       updateCropUI();
       processSignature();
     };
@@ -421,21 +483,20 @@ function processSignature() {
   previewCanvas.height = targetH;
   const ctx = previewCanvas.getContext('2d');
 
-  // 1. Crop original selection
+  // Crop selection
   const sx = Math.round(crop.x * rawCanvas.width);
   const sy = Math.round(crop.y * rawCanvas.height);
   const sw = Math.round(crop.w * rawCanvas.width);
   const sh = Math.round(crop.h * rawCanvas.height);
 
-  // Fill with clean white canvas first
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, targetW, targetH);
   ctx.drawImage(rawCanvas, sx, sy, sw, sh, 0, 0, targetW, targetH);
 
-  // 2. Pixel Enhancement: Whiten background & darken ink
+  // Background whitening & ink enhancement
   const imgData = ctx.getImageData(0, 0, targetW, targetH);
   const d = imgData.data;
-  const whitenThresh = 255 - (parseInt(whitenRange.value, 10) * 1.3); // Sensitivity
+  const whitenThresh = 255 - (parseInt(whitenRange.value, 10) * 1.3);
   const contrastFactor = (259 * (parseInt(contrastRange.value, 10) + 255)) / (255 * (259 - parseInt(contrastRange.value, 10)));
 
   for (let i = 0; i < d.length; i += 4) {
@@ -443,10 +504,8 @@ function processSignature() {
     let gray = (r * 0.299 + g * 0.587 + b * 0.114);
 
     if (gray >= whitenThresh) {
-      // Remove gray paper & shadows -> Pure White
       d[i] = 255; d[i+1] = 255; d[i+2] = 255;
     } else {
-      // Darken Ink
       let newGray = contrastFactor * (gray - 128) + 128;
       newGray = clamp(newGray, 0, 255);
       d[i] = newGray; d[i+1] = newGray; d[i+2] = newGray;
@@ -457,7 +516,6 @@ function processSignature() {
   optimizeFileSize();
 }
 
-// Binary Search Compression for Exact KB Limit
 async function optimizeFileSize() {
   const maxKb = parseInt(maxKbInput.value, 10) || 20;
   const format = formatSelect.value;
@@ -479,9 +537,9 @@ async function optimizeFileSize() {
 
     if (kb <= maxKb) {
       bestBlob = blob;
-      minQ = midQ; // Try slightly better quality
+      minQ = midQ;
     } else {
-      maxQ = midQ; // Reduce quality
+      maxQ = midQ;
     }
   }
 
@@ -503,7 +561,6 @@ function showMeta(bytes) {
   st3.classList.add('active');
 }
 
-// Controls Listeners
 whitenRange.oninput = () => { whitenVal.textContent = 'Level ' + whitenRange.value; processSignature(); };
 contrastRange.oninput = () => { contrastVal.textContent = '+' + contrastRange.value + '%'; processSignature(); };
 widthInput.oninput = processSignature;
@@ -538,6 +595,7 @@ downloadBtn.onclick = () => {
 
 resetBtn.onclick = () => {
   editorWrap.style.display = 'none';
+  cropOuterWrap.style.display = 'none';
   dropzone.style.display = 'block';
   fileInput.value = '';
   st1.classList.add('active'); st1.classList.remove('done');
