@@ -38,7 +38,7 @@
       position: relative;
     }
 
-    /* FULL-PAGE PROMINENT GLASS SHINE (CONTINUOUS BACK-TO-BACK LOOP) */
+    /* FULL-PAGE PROMINENT GLASS SHINE */
     .global-shine-overlay {
       position: fixed;
       top: 0;
@@ -73,8 +73,12 @@
     }
 
     @keyframes continuousGlassSweep {
-      0% { transform: translate3d(-55%, -55%, 0); }
-      100% { transform: translate3d(55%, 55%, 0); }
+      0% {
+        transform: translate3d(-55%, -55%, 0);
+      }
+      100% {
+        transform: translate3d(55%, 55%, 0);
+      }
     }
 
     .container { width: 100%; max-width: 1140px; position: relative; z-index: 1; }
@@ -299,7 +303,7 @@
 
   <div class="search-box">
     <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-    <input type="text" id="searchInput" placeholder="Search tools (e.g. ID Card, PDF, GST, Scanner)..." oninput="filterTools()">
+    <input type="text" id="searchInput" placeholder="Search tools (e.g. Background Remover, ID Card, PDF, GST)..." oninput="filterTools()">
   </div>
 
   <div class="chips-bar">
@@ -326,6 +330,7 @@ const TOOL_CATALOG = [
     categoryTitle: "🔥 Most Popular Tools",
     tools: [
       { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print Maker", desc: "Auto-crop front & back sides into clean, top-aligned A4 print-ready PDF.", icon: "🪪", status: "active" },
+      { slug: "background-remover", name: "AI Background Remover", desc: "Make photo background white or transparent in 1-click for IDs & forms.", icon: "🪄", status: "active" },
       { slug: "photo-sheet", name: "Passport Photo Sheet (4x6 / A4)", desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", icon: "🖨️", status: "active" },
       { slug: "document-scanner", name: "HD Document Cam Scanner", desc: "Scan certificates via mobile camera with auto black & white filter.", icon: "📷", status: "active" },
       { slug: "pdf-editor", name: "Online PDF Editor & Markup", desc: "Edit text, annotate, highlight and sign PDF files directly offline.", icon: "📝", status: "active" },
