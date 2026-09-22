@@ -11,182 +11,147 @@
   
   <style>
     :root {
-      --bg-gradient: radial-gradient(circle at 50% 0%, #1d150e 0%, #0d0b09 60%, #070605 100%);
-      --card-bg: rgba(28, 24, 20, 0.75);
-      --card-border: rgba(217, 154, 63, 0.2);
-      --card-border-glow: rgba(255, 175, 75, 0.7);
+      --bg: #0e0c0a;
+      --card-bg: #181410;
+      --card-border: #2c2219;
+      --card-hover-border: #f5a623;
       --amber: #f5a623;
-      --amber-glow: rgba(245, 166, 35, 0.4);
-      --neon-cyan: #00f2fe;
-      --paper: #f9f6f0;
-      --muted: #a39585;
-      --green: #00ffaa;
-      --green-glow: rgba(0, 255, 170, 0.35);
-      --panel: rgba(20, 17, 14, 0.85);
+      --paper: #f7f3ec;
+      --muted: #9e8e7c;
+      --green: #10b981;
+      --panel: #14110d;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: var(--bg-gradient);
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #24190e 0%, #0e0c0a 70%);
       color: var(--paper);
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
-      padding: 28px 16px 70px;
+      padding: 24px 14px 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
       overflow-x: hidden;
-      perspective: 1200px;
     }
 
-    /* Ambient Glowing Background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: -150px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(245, 166, 35, 0.12) 0%, transparent 70%);
-      filter: blur(60px);
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .container { width: 100%; max-width: 1160px; }
+    .container { width: 100%; max-width: 1140px; }
 
     /* Header */
-    header { text-align: center; margin-bottom: 28px; position: relative; }
+    header { text-align: center; margin-bottom: 24px; }
     h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
-      background: linear-gradient(135deg, #fff2e0 20%, #f5a623 70%, #ff8c00 100%);
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       letter-spacing: -0.5px;
-      text-shadow: 0 0 35px rgba(245, 166, 35, 0.35);
     }
     .tagline {
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--muted);
-      margin-bottom: 14px;
-      letter-spacing: 0.2px;
+      margin-bottom: 12px;
     }
 
-    /* 3D Author Badge with Shining Border */
+    /* Author Badge */
     .author-badge {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
-      padding: 6px 16px;
-      background: rgba(245, 166, 35, 0.08);
-      border: 1px solid rgba(245, 166, 35, 0.3);
+      gap: 6px;
+      padding: 5px 14px;
+      background: #1e1710;
+      border: 1px solid rgba(245, 166, 35, 0.35);
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--amber);
       font-weight: 700;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 16px rgba(245, 166, 35, 0.15);
-      transition: all 0.3s ease;
-    }
-    .author-badge:hover {
-      border-color: var(--amber);
-      box-shadow: 0 0 25px rgba(245, 166, 35, 0.35);
-      transform: translateY(-2px);
     }
 
-    /* Futuristic Search Box */
+    /* Search Box */
     .search-box {
       width: 100%;
-      max-width: 600px;
-      margin: 0 auto 20px;
+      max-width: 580px;
+      margin: 0 auto 18px;
       position: relative;
     }
     .search-box input {
       width: 100%;
       background: var(--panel);
       border: 1px solid var(--card-border);
-      padding: 14px 18px 14px 44px;
+      padding: 13px 16px 13px 42px;
       border-radius: 12px;
       color: var(--paper);
-      font-size: 14px;
+      font-size: 13.5px;
       font-family: inherit;
       outline: none;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-      transition: all 0.3s ease;
+      transition: border-color 0.2s ease;
     }
     .search-box input:focus {
       border-color: var(--amber);
-      box-shadow: 0 0 20px rgba(245, 166, 35, 0.35), inset 0 0 10px rgba(245, 166, 35, 0.05);
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.2);
     }
     .search-box svg {
       position: absolute;
-      left: 15px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       fill: var(--muted);
-      transition: fill 0.3s;
+      pointer-events: none;
     }
-    .search-box input:focus + svg { fill: var(--amber); }
 
-    /* Category Chips with Glow */
+    /* Category Chips */
     .chips-bar {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       overflow-x: auto;
-      padding: 4px 4px 12px;
-      margin-bottom: 28px;
+      padding-bottom: 10px;
+      margin-bottom: 24px;
       scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
     }
     .chips-bar::-webkit-scrollbar { display: none; }
     .chip {
       background: var(--panel);
       border: 1px solid var(--card-border);
       color: var(--muted);
-      padding: 8px 16px;
+      padding: 8px 15px;
       border-radius: 10px;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
-      backdrop-filter: blur(8px);
+      transition: background 0.15s, color 0.15s;
     }
     .chip.active, .chip:hover {
-      background: linear-gradient(135deg, #f5a623, #d98218);
-      color: #0d0b09;
-      border-color: #f5a623;
-      box-shadow: 0 4px 16px rgba(245, 166, 35, 0.35);
-      transform: translateY(-2px);
+      background: var(--amber);
+      color: #0e0c0a;
+      border-color: var(--amber);
     }
 
-    /* Category Section */
-    .category-section { margin-bottom: 34px; }
+    /* Categories */
+    .category-section { margin-bottom: 30px; }
     .cat-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--amber);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 8px;
-      letter-spacing: -0.2px;
-      text-shadow: 0 0 15px rgba(245, 166, 35, 0.2);
     }
 
-    /* Grid Layout */
+    /* Grid */
     .grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 14px;
+      gap: 12px;
     }
     @media (min-width: 640px) {
       .grid { grid-template-columns: repeat(2, 1fr); }
@@ -195,129 +160,118 @@
       .grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* 3D Glowing Card */
+    /* High-Performance Lightweight Card */
     .tool-card {
       position: relative;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 16px 18px;
+      border-radius: 12px;
+      padding: 15px;
       display: flex;
       align-items: flex-start;
-      gap: 14px;
+      gap: 12px;
       text-decoration: none;
       color: inherit;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      transform-style: preserve-3d;
-      transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                  border-color 0.25s ease, 
-                  box-shadow 0.25s ease;
       overflow: hidden;
+      transform: translate3d(0, 0, 0);
+      transition: border-color 0.2s, transform 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* Card 3D Lift & Outer Neon Glow */
-    .tool-card.active-tool:hover {
-      border-color: var(--card-border-glow);
-      box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.6), 
-                  0 0 25px rgba(245, 166, 35, 0.28);
-      transform: translateY(-5px) scale(1.015);
+    /* Desktop Hover Lift */
+    @media (hover: hover) {
+      .tool-card:hover {
+        border-color: var(--card-hover-border);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+      }
     }
 
-    /* Holographic Shining Sweep Effect */
-    .tool-card::before {
+    /* White Transparent Glass Shine Beam (GPU Accelerated) */
+    .tool-card::after {
       content: '';
       position: absolute;
-      top: 0;
-      left: -150%;
-      width: 70%;
-      height: 100%;
+      top: -50%;
+      left: -100%;
+      width: 60%;
+      height: 200%;
       background: linear-gradient(
-        115deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.03) 40%,
-        rgba(255, 255, 255, 0.18) 50%,
-        rgba(255, 255, 255, 0.03) 60%,
-        transparent 100%
+        105deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.05) 30%,
+        rgba(255, 255, 255, 0.28) 50%,
+        rgba(255, 255, 255, 0.05) 70%,
+        rgba(255, 255, 255, 0) 100%
       );
-      transform: skewX(-25deg);
+      transform: rotate(25deg) translate3d(-100%, 0, 0);
       pointer-events: none;
-      z-index: 1;
+      opacity: 0;
+      transition: transform 0.75s ease-out, opacity 0.2s ease;
     }
-    .tool-card:hover::before {
-      left: 170%;
-      transition: all 0.85s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    /* Hover & Touch Sweep Animation */
+    .tool-card:hover::after,
+    .tool-card:active::after {
+      opacity: 1;
+      transform: rotate(25deg) translate3d(350%, 0, 0);
     }
 
     .tool-icon {
-      font-size: 26px;
-      min-width: 36px;
-      height: 36px;
+      font-size: 24px;
+      min-width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
-      transition: transform 0.3s;
-    }
-    .tool-card:hover .tool-icon {
-      transform: scale(1.15) rotate(4deg);
     }
 
-    .tool-info { flex: 1; min-width: 0; z-index: 2; }
+    .tool-info { flex: 1; min-width: 0; }
     .tool-title-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 6px;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
     .tool-name {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       color: var(--paper);
-      letter-spacing: -0.2px;
-      transition: color 0.2s;
     }
     .tool-card:hover .tool-name {
-      color: #ffc266;
+      color: #ffbe53;
     }
     .tool-desc {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--muted);
-      line-height: 1.45;
+      line-height: 1.4;
     }
 
-    /* Glowing Status Badges */
+    /* Static Clean Badge (Zero GPU Repaints) */
     .badge {
       font-size: 9px;
       font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 2px 7px;
+      border-radius: 5px;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
     }
     .badge.active {
-      background: rgba(0, 255, 170, 0.12);
-      color: var(--green);
-      border: 1px solid rgba(0, 255, 170, 0.4);
-      box-shadow: 0 0 10px rgba(0, 255, 170, 0.25);
-      animation: pulseActive 2.5s infinite ease-in-out;
-    }
-    @keyframes pulseActive {
-      0%, 100% { box-shadow: 0 0 6px rgba(0, 255, 170, 0.2); }
-      50% { box-shadow: 0 0 14px rgba(0, 255, 170, 0.5); }
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
     }
 
     /* Footer */
     footer {
       text-align: center;
-      margin-top: 45px;
-      font-size: 12px;
+      margin-top: 36px;
+      font-size: 11.5px;
       color: var(--muted);
       border-top: 1px solid var(--card-border);
-      padding-top: 22px;
+      padding-top: 18px;
       width: 100%;
-      max-width: 650px;
+      max-width: 600px;
     }
   </style>
 </head>
@@ -326,13 +280,13 @@
 <div class="container">
   <header>
     <h1>FormReady India</h1>
-    <p class="tagline">⚡ Superfast, 100% Secure Offline Toolbox for Forms, IDs & Documents</p>
+    <p class="tagline">⚡ Superfast, 100% Private Offline Document & Form Toolbox</p>
     <div class="author-badge">✨ Made by Aman Shaikh</div>
   </header>
 
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search tools (e.g. 50KB resize, signature, cutter, GST)..." oninput="filterTools()">
     <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    <input type="text" id="searchInput" placeholder="Search tools (e.g. 50KB resize, signature, cutter, GST)..." oninput="filterTools()">
   </div>
 
   <div class="chips-bar">
@@ -352,309 +306,74 @@
 </div>
 
 <script>
-// High-Search-Volume Keywords Catalog (All 39 Tools Mapped with Path)
 const TOOL_CATALOG = [
   {
     categoryId: "govt",
     categoryTitle: "🇮🇳 Indian Govt Exam & ID Utilities",
     tools: [
-      {
-        slug: "aadhaar-pan-resizer",
-        name: "Sarkari Photo Resizer (20KB - 50KB)",
-        desc: "Exact 200x230 px crop for SSC, UPSC, Railway, Police & PAN cards.",
-        icon: "🪪",
-        status: "active"
-      },
-      {
-        slug: "signature-resizer",
-        name: "Sign Resizer (10KB - 20KB)",
-        desc: "Boost contrast & compress signature for official online exam portals.",
-        icon: "✍️",
-        status: "active"
-      },
-      {
-        slug: "aadhaar-pan-cutter",
-        name: "Aadhaar / PAN Card Cutter",
-        desc: "Extract & crop standard wallet-size ID cards from e-Aadhaar & PAN PDF.",
-        icon: "✂️",
-        status: "active"
-      },
-      {
-        slug: "signature-maker",
-        name: "Digital Signature Draw Maker",
-        desc: "Draw ultra-smooth signature on mobile/mouse and get transparent PNG.",
-        icon: "🖊️",
-        status: "active"
-      },
-      {
-        slug: "passport-photo-maker",
-        name: "Passport Size Photo Maker",
-        desc: "Create single or multi-copy passport photos with plain white background.",
-        icon: "👥",
-        status: "active"
-      },
-      {
-        slug: "photo-sign-card",
-        name: "Photo + Signature Joiner",
-        desc: "Merge photo & signature in a single standard box required for NTA/IBPS.",
-        icon: "🔲",
-        status: "active"
-      },
-      {
-        slug: "photo-sheet",
-        name: "Passport Photo Sheet (4x6 / A4)",
-        desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.",
-        icon: "🖨️",
-        status: "active"
-      },
-      {
-        slug: "document-scanner",
-        name: "HD Document Cam Scanner",
-        desc: "Scan certificates via mobile camera with auto black & white filter.",
-        icon: "📷",
-        status: "active"
-      },
-      {
-        slug: "govt-pdf-helper",
-        name: "Sarkari PDF Compressor (Under 100KB)",
-        desc: "Compress marksheet & caste certificate under 100KB/200KB upload limits.",
-        icon: "📋",
-        status: "active"
-      }
+      { slug: "aadhaar-pan-resizer", name: "Sarkari Photo Resizer (20KB - 50KB)", desc: "Exact 200x230 px crop for SSC, UPSC, Railway, Police & PAN cards.", icon: "🪪", status: "active" },
+      { slug: "signature-resizer", name: "Sign Resizer (10KB - 20KB)", desc: "Boost contrast & compress signature for official online exam portals.", icon: "✍️", status: "active" },
+      { slug: "aadhaar-pan-cutter", name: "Aadhaar / PAN Card Cutter", desc: "Extract & crop standard wallet-size ID cards from e-Aadhaar & PAN PDF.", icon: "✂️", status: "active" },
+      { slug: "signature-maker", name: "Digital Signature Draw Maker", desc: "Draw ultra-smooth signature on mobile/mouse and get transparent PNG.", icon: "🖊️", status: "active" },
+      { slug: "passport-photo-maker", name: "Passport Size Photo Maker", desc: "Create single or multi-copy passport photos with plain white background.", icon: "👥", status: "active" },
+      { slug: "photo-sign-card", name: "Photo + Signature Joiner", desc: "Merge photo & signature in a single standard box required for NTA/IBPS.", icon: "🔲", status: "active" },
+      { slug: "photo-sheet", name: "Passport Photo Sheet (4x6 / A4)", desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", icon: "🖨️", status: "active" },
+      { slug: "document-scanner", name: "HD Document Cam Scanner", desc: "Scan certificates via mobile camera with auto black & white filter.", icon: "📷", status: "active" },
+      { slug: "govt-pdf-helper", name: "Sarkari PDF Compressor (Under 100KB)", desc: "Compress marksheet & caste certificate under 100KB/200KB upload limits.", icon: "📋", status: "active" }
     ]
   },
   {
     categoryId: "pdf",
     categoryTitle: "📄 PDF Tools & Utilities",
     tools: [
-      {
-        slug: "pdf-editor",
-        name: "Online PDF Editor & Markup",
-        desc: "Edit text, annotate, highlight and sign PDF files directly offline.",
-        icon: "📝",
-        status: "active"
-      },
-      {
-        slug: "pdf-compressor",
-        name: "Compress PDF (Lossless)",
-        desc: "Reduce heavy PDF MBs down to KBs while preserving sharp text clarity.",
-        icon: "🗜️",
-        status: "active"
-      },
-      {
-        slug: "merge-pdf",
-        name: "Merge PDF (Join Multiple Files)",
-        desc: "Combine multiple PDF documents and marksheets into one single file.",
-        icon: "🔗",
-        status: "active"
-      },
-      {
-        slug: "split-pdf",
-        name: "Split & Extract PDF Pages",
-        desc: "Extract custom pages or break large PDF books into separate files.",
-        icon: "✂️",
-        status: "active"
-      },
-      {
-        slug: "jpg-to-pdf",
-        name: "JPG to PDF Converter",
-        desc: "Convert multiple gallery images into a single printable high-res PDF.",
-        icon: "🖼️",
-        status: "active"
-      },
-      {
-        slug: "pdf-to-jpg",
-        name: "PDF to JPG / Image Extractor",
-        desc: "Extract high-resolution JPG pictures from each page of your PDF file.",
-        icon: "📷",
-        status: "active"
-      },
-      {
-        slug: "rotate-pdf",
-        name: "Rotate PDF (90° / 180°)",
-        desc: "Fix upside down and sideways scanned documents permanently.",
-        icon: "🔄",
-        status: "active"
-      },
-      {
-        slug: "pdf-organizer",
-        name: "PDF Page Organizer",
-        desc: "Drag-and-drop to reorder, delete or arrange pages in any PDF document.",
-        icon: "📑",
-        status: "active"
-      },
-      {
-        slug: "add-watermark",
-        name: "Add Watermark to PDF",
-        desc: "Stamp confidential, custom text or logos across your PDF pages.",
-        icon: "💧",
-        status: "active"
-      }
+      { slug: "pdf-editor", name: "Online PDF Editor & Markup", desc: "Edit text, annotate, highlight and sign PDF files directly offline.", icon: "📝", status: "active" },
+      { slug: "pdf-compressor", name: "Compress PDF (Lossless)", desc: "Reduce heavy PDF MBs down to KBs while preserving sharp text clarity.", icon: "🗜️", status: "active" },
+      { slug: "merge-pdf", name: "Merge PDF (Join Multiple Files)", desc: "Combine multiple PDF documents and marksheets into one single file.", icon: "🔗", status: "active" },
+      { slug: "split-pdf", name: "Split & Extract PDF Pages", desc: "Extract custom pages or break large PDF books into separate files.", icon: "✂️", status: "active" },
+      { slug: "jpg-to-pdf", name: "JPG to PDF Converter", desc: "Convert multiple gallery images into a single printable high-res PDF.", icon: "🖼️", status: "active" },
+      { slug: "pdf-to-jpg", name: "PDF to JPG / Image Extractor", desc: "Extract high-resolution JPG pictures from each page of your PDF file.", icon: "📷", status: "active" },
+      { slug: "rotate-pdf", name: "Rotate PDF (90° / 180°)", desc: "Fix upside down and sideways scanned documents permanently.", icon: "🔄", status: "active" },
+      { slug: "pdf-organizer", name: "PDF Page Organizer", desc: "Drag-and-drop to reorder, delete or arrange pages in any PDF document.", icon: "📑", status: "active" },
+      { slug: "add-watermark", name: "Add Watermark to PDF", desc: "Stamp confidential, custom text or logos across your PDF pages.", icon: "💧", status: "active" }
     ]
   },
   {
     categoryId: "photo",
     categoryTitle: "🖼️ Photo & Image Optimization",
     tools: [
-      {
-        slug: "photo-resizer",
-        name: "Photo Resizer (PX, CM, INCH)",
-        desc: "Resize dimensions with custom DPI for online form upload requirements.",
-        icon: "📐",
-        status: "active"
-      },
-      {
-        slug: "photo-compressor",
-        name: "Photo Compressor (KB to MB)",
-        desc: "Compress image file size up to 80% without losing quality or sharpness.",
-        icon: "🗜️",
-        status: "active"
-      },
-      {
-        slug: "photo-cropper",
-        name: "Photo Cropper (Custom Ratios)",
-        desc: "Crop photos with custom aspect ratios (1:1, 3:4, 3.5x4.5cm) effortlessly.",
-        icon: "✂️",
-        status: "active"
-      },
-      {
-        slug: "image-converter",
-        name: "Image Format Converter",
-        desc: "Instant lossless conversion between JPG, PNG, WEBP, and ICO formats.",
-        icon: "🔄",
-        status: "active"
-      },
-      {
-        slug: "background-remover",
-        name: "AI Background Remover",
-        desc: "Make photo background white or transparent in 1-click for IDs & forms.",
-        icon: "🪄",
-        status: "active"
-      }
+      { slug: "photo-resizer", name: "Photo Resizer (PX, CM, INCH)", desc: "Resize dimensions with custom DPI for online form upload requirements.", icon: "📐", status: "active" },
+      { slug: "photo-compressor", name: "Photo Compressor (KB to MB)", desc: "Compress image file size up to 80% without losing quality or sharpness.", icon: "🗜️", status: "active" },
+      { slug: "photo-cropper", name: "Photo Cropper (Custom Ratios)", desc: "Crop photos with custom aspect ratios (1:1, 3:4, 3.5x4.5cm) effortlessly.", icon: "✂️", status: "active" },
+      { slug: "image-converter", name: "Image Format Converter", desc: "Instant lossless conversion between JPG, PNG, WEBP, and ICO formats.", icon: "🔄", status: "active" },
+      { slug: "background-remover", name: "AI Background Remover", desc: "Make photo background white or transparent in 1-click for IDs & forms.", icon: "🪄", status: "active" }
     ]
   },
   {
     categoryId: "text",
     categoryTitle: "📝 Text & Generator Utilities",
     tools: [
-      {
-        slug: "image-to-text",
-        name: "Image to Text (OCR Extractor)",
-        desc: "Extract printed or handwritten text from photos, scans & books instantly.",
-        icon: "🔍",
-        status: "active"
-      },
-      {
-        slug: "text-cleaner",
-        name: "Text Cleaner & Space Fixer",
-        desc: "Remove weird duplicate spaces, line breaks, and messy formatting.",
-        icon: "🧹",
-        status: "active"
-      },
-      {
-        slug: "case-converter",
-        name: "Case Converter (UPPER/lower)",
-        desc: "Quickly convert text into UPPERCASE, lowercase, Title Case or camelCase.",
-        icon: "🔠",
-        status: "active"
-      },
-      {
-        slug: "word-counter",
-        name: "Word & Character Counter",
-        desc: "Real-time character count, word density, reading time and essay stats.",
-        icon: "📊",
-        status: "active"
-      },
-      {
-        slug: "text-to-pdf",
-        name: "Text to PDF Generator",
-        desc: "Convert raw notes, code, and text snippets into formatted clean PDFs.",
-        icon: "📄",
-        status: "active"
-      },
-      {
-        slug: "lorem-generator",
-        name: "Lorem Ipsum Dummy Generator",
-        desc: "Generate sample placeholder text and paragraphs for design wireframes.",
-        icon: "📜",
-        status: "active"
-      },
-      {
-        slug: "qr-generator",
-        name: "HD QR Code Generator",
-        desc: "Create colored high-res QR codes for URLs, WiFi logins, and UPI links.",
-        icon: "📱",
-        status: "active"
-      },
-      {
-        slug: "barcode-generator",
-        name: "Barcode Generator (Code128)",
-        desc: "Generate Code128, EAN, and UPC retail barcodes ready to print.",
-        icon: "🏷️",
-        status: "active"
-      }
+      { slug: "image-to-text", name: "Image to Text (OCR Extractor)", desc: "Extract printed or handwritten text from photos, scans & books instantly.", icon: "🔍", status: "active" },
+      { slug: "text-cleaner", name: "Text Cleaner & Space Fixer", desc: "Remove weird duplicate spaces, line breaks, and messy formatting.", icon: "🧹", status: "active" },
+      { slug: "case-converter", name: "Case Converter (UPPER/lower)", desc: "Quickly convert text into UPPERCASE, lowercase, Title Case or camelCase.", icon: "🔠", status: "active" },
+      { slug: "word-counter", name: "Word & Character Counter", desc: "Real-time character count, word density, reading time and essay stats.", icon: "📊", status: "active" },
+      { slug: "text-to-pdf", name: "Text to PDF Generator", desc: "Convert raw notes, code, and text snippets into formatted clean PDFs.", icon: "📄", status: "active" },
+      { slug: "lorem-generator", name: "Lorem Ipsum Dummy Generator", desc: "Generate sample placeholder text and paragraphs for design wireframes.", icon: "📜", status: "active" },
+      { slug: "qr-generator", name: "HD QR Code Generator", desc: "Create colored high-res QR codes for URLs, WiFi logins, and UPI links.", icon: "📱", status: "active" },
+      { slug: "barcode-generator", name: "Barcode Generator (Code128)", desc: "Generate Code128, EAN, and UPC retail barcodes ready to print.", icon: "🏷️", status: "active" }
     ]
   },
   {
     categoryId: "calc",
     categoryTitle: "🧮 Everyday Smart Calculators",
     tools: [
-      {
-        slug: "gst-calculator",
-        name: "GST Calculator (CGST / SGST)",
-        desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.",
-        icon: "💰",
-        status: "active"
-      },
-      {
-        slug: "age-calculator",
-        name: "Sarkari Job Age Calculator",
-        desc: "Calculate exact age in years, months & days against cut-off eligibility dates.",
-        icon: "🎂",
-        status: "active"
-      },
-      {
-        slug: "emi-calculator",
-        name: "Loan EMI & Interest Calculator",
-        desc: "Calculate monthly installments, interest breakdown for Home & Car loans.",
-        icon: "💳",
-        status: "active"
-      },
-      {
-        slug: "discount-calculator",
-        name: "Discount & Percentage Calculator",
-        desc: "Calculate festive shopping discounts, profit/loss margins, and savings.",
-        icon: "🏷️",
-        status: "active"
-      },
-      {
-        slug: "bmi-calculator",
-        name: "BMI & Fitness Calculator",
-        desc: "Check Body Mass Index, healthy weight range, and fitness category.",
-        icon: "⚖️",
-        status: "active"
-      },
-      {
-        slug: "date-gap-calculator",
-        name: "Date Gap & Working Days",
-        desc: "Count exact total days, weeks, months, and exclude public holidays.",
-        icon: "📅",
-        status: "active"
-      },
-      {
-        slug: "unit-converter",
-        name: "Land & Unit Converter",
-        desc: "Convert regional land units (Bigha, Sq Ft, Acre), length, and weights.",
-        icon: "📐",
-        status: "active"
-      },
-      {
-        slug: "currency-converter",
-        name: "Live Currency Converter",
-        desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.",
-        icon: "💱",
-        status: "active"
-      }
+      { slug: "gst-calculator", name: "GST Calculator (CGST / SGST)", desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", icon: "💰", status: "active" },
+      { slug: "age-calculator", name: "Sarkari Job Age Calculator", desc: "Calculate exact age in years, months & days against cut-off eligibility dates.", icon: "🎂", status: "active" },
+      { slug: "emi-calculator", name: "Loan EMI & Interest Calculator", desc: "Calculate monthly installments, interest breakdown for Home & Car loans.", icon: "💳", status: "active" },
+      { slug: "discount-calculator", name: "Discount & Percentage Calculator", desc: "Calculate festive shopping discounts, profit/loss margins, and savings.", icon: "🏷️", status: "active" },
+      { slug: "bmi-calculator", name: "BMI & Fitness Calculator", desc: "Check Body Mass Index, healthy weight range, and fitness category.", icon: "⚖️", status: "active" },
+      { slug: "date-gap-calculator", name: "Date Gap & Working Days", desc: "Count exact total days, weeks, months, and exclude public holidays.", icon: "📅", status: "active" },
+      { slug: "unit-converter", name: "Land & Unit Converter", desc: "Convert regional land units (Bigha, Sq Ft, Acre), length, and weights.", icon: "📐", status: "active" },
+      { slug: "currency-converter", name: "Live Currency Converter", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", icon: "💱", status: "active" }
     ]
   }
 ];
@@ -690,34 +409,19 @@ function renderTools() {
 
     filtered.forEach(tool => {
       const card = document.createElement('a');
-      const isActive = tool.status === 'active';
-      card.className = `tool-card ${isActive ? 'active-tool' : 'coming-tool'}`;
-      card.href = isActive ? `tools/${tool.slug}/index.html` : 'javascript:void(0);';
+      card.className = 'tool-card';
+      card.href = `tools/${tool.slug}/index.html`;
 
       card.innerHTML = `
         <div class="tool-icon">${tool.icon}</div>
         <div class="tool-info">
           <div class="tool-title-row">
             <div class="tool-name">${tool.name}</div>
-            <span class="badge ${isActive ? 'active' : 'soon'}">${isActive ? 'ACTIVE' : 'SOON'}</span>
+            <span class="badge active">ACTIVE</span>
           </div>
           <div class="tool-desc">${tool.desc}</div>
         </div>
       `;
-
-      // 3D Tilt Event Listener
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        const rotateX = -(y / 14);
-        const rotateY = (x / 14);
-        card.style.transform = `perspective(700px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px) scale(1.02)`;
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
-      });
 
       grid.appendChild(card);
     });

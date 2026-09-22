@@ -1,901 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ID Card to A4 Print Maker - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<style>
-:root {
-  --bg: #13100e;
-  --panel: #1c1815;
-  --line: #2e2620;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f3ede2;
-  --muted: #9e9080;
-  --card-bg: #16120f;
-  --success: #34d399;
-  --danger: #ef4444;
-  --glow: rgba(217, 154, 63, 0.35);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background:
-    radial-gradient(circle at 15% 0%, rgba(217,154,63,0.06), transparent 40%),
-    radial-gradient(circle at 85% 100%, rgba(217,154,63,0.05), transparent 45%),
-    var(--bg);
-  color: var(--paper);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 16px 14px 50px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.wrapper { width: 100%; max-width: 580px; }
+  <script src="https://quge5.com/88/tag.min.js" data-zone="284561" async data-cfasync="false"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FormReady India - 100% Private Offline Document & Form Toolbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0e0c0a;
+      --card-bg: #181410;
+      --card-border: #2c2219;
+      --card-hover-border: #f5a623;
+      --amber: #f5a623;
+      --paper: #f7f3ec;
+      --muted: #9e8e7c;
+      --green: #10b981;
+      --panel: #14110d;
+    }
 
-.top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 10px; }
-.back-link { color: var(--amber); text-decoration: none; font-size: 13px; font-weight: 600; }
-.offline-badge {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.4px; color: var(--success);
-  background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.3);
-  padding: 5px 9px; border-radius: 20px; display: flex; align-items: center; gap: 5px;
-}
-.offline-badge .dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--success);
-  box-shadow: 0 0 8px var(--success); animation: pulseDot 1.6s infinite ease-in-out;
-}
-@keyframes pulseDot { 0%,100%{opacity:1; transform:scale(1);} 50%{opacity:.4; transform:scale(.7);} }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.card {
-  background: var(--panel); border: 1px solid var(--line); padding: 22px 18px;
-  border-radius: 14px; width: 100%; position: relative; overflow: hidden;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #24190e 0%, #0e0c0a 70%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 24px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
 
-.how-to-box {
-  background: rgba(217, 154, 63, 0.05); border-left: 3px solid var(--amber);
-  border-radius: 8px; padding: 12px 14px; margin-bottom: 18px;
-}
-.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
-.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+    .container { width: 100%; max-width: 1140px; }
 
-.steps { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; position: relative; }
-.step { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; position: relative; z-index: 2; }
-.step .circle {
-  width: 26px; height: 26px; border-radius: 50%; background: var(--card-bg); border: 1.5px solid var(--line);
-  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--muted);
-  transition: all 0.3s;
-}
-.step .label { font-size: 9.5px; color: var(--muted); font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
-.step.active .circle { background: var(--amber); border-color: var(--amber); color: #13100e; box-shadow: 0 0 14px var(--glow); }
-.step.active .label { color: var(--amber); }
-.step.done .circle { background: rgba(52,211,153,0.15); border-color: var(--success); color: var(--success); }
-.step.done .label { color: var(--success); }
-.steps::before { content: ''; position: absolute; top: 13px; left: 13%; right: 13%; height: 1.5px; background: var(--line); z-index: 1; }
+    /* Header */
+    header { text-align: center; margin-bottom: 24px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    .tagline {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
 
-/* Upload Mode Tabs */
-.mode-switch {
-  display: flex; background: var(--card-bg); border: 1px solid var(--line);
-  border-radius: 10px; padding: 4px; margin-bottom: 16px; gap: 6px;
-}
-.mode-btn {
-  flex: 1; padding: 10px 8px; border: none; background: transparent; color: var(--muted);
-  font-weight: 700; font-size: 12px; border-radius: 7px; cursor: pointer; transition: all 0.2s;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-}
-.mode-btn.active { background: var(--amber); color: #13100e; box-shadow: 0 2px 10px var(--glow); }
+    /* Author Badge */
+    .author-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background: #1e1710;
+      border: 1px solid rgba(245, 166, 35, 0.35);
+      border-radius: 999px;
+      font-size: 11.5px;
+      color: var(--amber);
+      font-weight: 700;
+    }
 
-.dropzone {
-  border: 1.5px dashed var(--line); border-radius: 10px; padding: 26px 14px; text-align: center;
-  cursor: pointer; transition: all 0.2s; background: var(--card-bg);
-}
-.dropzone:hover, .dropzone.dragover { border-color: var(--amber); background: rgba(217,154,63,0.05); }
-.dropzone .icon { font-size: 28px; margin-bottom: 8px; }
-.dropzone .main-txt { font-size: 13.5px; font-weight: 700; color: var(--paper); margin-bottom: 3px; }
-.dropzone .sub-txt { font-size: 11px; color: var(--muted); }
-.dropzone input { display: none; }
+    /* Search Box */
+    .search-box {
+      width: 100%;
+      max-width: 580px;
+      margin: 0 auto 18px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      padding: 13px 16px 13px 42px;
+      border-radius: 12px;
+      color: var(--paper);
+      font-size: 13.5px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .search-box input:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.2);
+    }
+    .search-box svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 17px;
+      height: 17px;
+      fill: var(--muted);
+      pointer-events: none;
+    }
 
-/* 2 Separate Photos Grid */
-.dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.dual-zone {
-  border: 1.5px dashed var(--line); border-radius: 10px; padding: 16px 10px; text-align: center;
-  cursor: pointer; background: var(--card-bg); transition: 0.2s; position: relative; min-height: 140px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.dual-zone:hover { border-color: var(--amber); background: rgba(217,154,63,0.05); }
-.dual-zone.filled { border-color: var(--success); background: rgba(52,211,153,0.05); }
-.dual-badge {
-  position: absolute; top: 6px; left: 6px; font-size: 9px; font-weight: 800; padding: 2px 6px;
-  border-radius: 4px; background: var(--amber); color: #13100e;
-}
-.dual-badge.back-badge { background: var(--success); }
-.dual-zone img { max-width: 100%; max-height: 100px; border-radius: 6px; display: none; object-fit: contain; }
-.dual-zone .empty-content { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.dual-zone .empty-icon { font-size: 24px; }
-.dual-zone .empty-txt { font-size: 12px; font-weight: 700; color: var(--paper); }
-.dual-zone .empty-sub { font-size: 10px; color: var(--muted); }
+    /* Category Chips */
+    .chips-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .chips-bar::-webkit-scrollbar { display: none; }
+    .chip {
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      color: var(--muted);
+      padding: 8px 15px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .chip.active, .chip:hover {
+      background: var(--amber);
+      color: #0e0c0a;
+      border-color: var(--amber);
+    }
 
-.stage-section { display: none; margin-top: 18px; }
-.stage-box { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #000; user-select: none; }
-.stage-box img { width: 100%; display: block; pointer-events: none; }
+    /* Categories */
+    .category-section { margin-bottom: 30px; }
+    .cat-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.scan-line {
-  position: absolute; left: 0; right: 0; height: 2px; background: var(--amber);
-  box-shadow: 0 0 12px 3px var(--glow); animation: scanMove 1.1s ease-in-out infinite; display: none; z-index: 5;
-}
-.scan-line.active { display: block; }
-@keyframes scanMove { 0%{top:2%;} 50%{top:96%;} 100%{top:2%;} }
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 980px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+    }
 
-.scan-status {
-  position: absolute; top: 8px; left: 8px; font-size: 10px; font-weight: 700; color: var(--amber);
-  background: rgba(0,0,0,0.55); padding: 4px 8px; border-radius: 20px; letter-spacing: 0.4px; display: none; z-index: 5;
-}
-.scan-status.active { display: block; }
+    /* High-Performance Lightweight Card */
+    .tool-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 15px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      transform: translate3d(0, 0, 0);
+      transition: border-color 0.2s, transform 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-.crop-box {
-  position: absolute; border: 2px solid var(--amber); background: rgba(217,154,63,0.10);
-  touch-action: none; cursor: move; z-index: 3;
-}
-.crop-box.back { border-color: var(--success); background: rgba(52,211,153,0.10); }
-.crop-box .box-label {
-  position: absolute; top: -22px; left: -2px; font-size: 10px; font-weight: 800; padding: 3px 8px;
-  border-radius: 5px; color: #13100e; background: var(--amber); white-space: nowrap;
-}
-.crop-box.back .box-label { background: var(--success); }
-.crop-handle {
-  position: absolute; width: 20px; height: 20px; background: var(--paper);
-  border: 2px solid var(--amber); border-radius: 50%; touch-action: none; z-index: 4;
-}
-.crop-box.back .crop-handle { border-color: var(--success); }
-.crop-handle[data-corner="tl"] { left: 0; top: 0; transform: translate(-50%, -50%); cursor: nwse-resize; }
-.crop-handle[data-corner="tr"] { left: 100%; top: 0; transform: translate(-50%, -50%); cursor: nesw-resize; }
-.crop-handle[data-corner="bl"] { left: 0; top: 100%; transform: translate(-50%, -50%); cursor: nesw-resize; }
-.crop-handle[data-corner="br"] { left: 100%; top: 100%; transform: translate(-50%, -50%); cursor: nwse-resize; }
+    /* Desktop Hover Lift */
+    @media (hover: hover) {
+      .tool-card:hover {
+        border-color: var(--card-hover-border);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+      }
+    }
 
-.stage-actions { display: flex; gap: 8px; margin-top: 12px; }
-.stage-actions .btn { margin-top: 0; }
-.btn-secondary { background: transparent; color: var(--amber); border: 1px solid var(--line); }
-.btn-secondary:hover { border-color: var(--amber); }
+    /* White Transparent Glass Shine Beam (GPU Accelerated) */
+    .tool-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -100%;
+      width: 60%;
+      height: 200%;
+      background: linear-gradient(
+        105deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.05) 30%,
+        rgba(255, 255, 255, 0.28) 50%,
+        rgba(255, 255, 255, 0.05) 70%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(25deg) translate3d(-100%, 0, 0);
+      pointer-events: none;
+      opacity: 0;
+      transition: transform 0.75s ease-out, opacity 0.2s ease;
+    }
 
-.results-section { display: none; margin-top: 20px; }
-.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-.result-card { background: var(--card-bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px; text-align: center; }
-.result-card canvas { width: 100%; border-radius: 6px; border: 1px solid var(--line); background: #fff; display: block; }
-.result-card .tag { font-size: 11px; font-weight: 800; color: var(--amber); margin: 8px 0 3px; }
-.result-card .dims { font-size: 10px; color: var(--muted); }
-.result-card .mini-dl {
-  margin-top: 8px; width: 100%; padding: 8px; font-size: 11.5px; font-weight: 700;
-  background: rgba(217,154,63,0.1); color: var(--amber); border: 1px solid rgba(217,154,63,0.3);
-  border-radius: 6px; cursor: pointer; transition: 0.2s;
-}
+    /* Hover & Touch Sweep Animation */
+    .tool-card:hover::after,
+    .tool-card:active::after {
+      opacity: 1;
+      transform: rotate(25deg) translate3d(350%, 0, 0);
+    }
 
-.a4-preview-wrap { margin-bottom: 16px; }
-.a4-preview-box {
-  background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--line);
-  max-width: 240px; margin: 8px auto 0; box-shadow: 0 8px 20px rgba(0,0,0,0.35);
-}
-.a4-preview-box img { width: 100%; display: block; }
+    .tool-icon {
+      font-size: 24px;
+      min-width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-.btn {
-  background: var(--amber); color: #13100e; border: none; padding: 13px; border-radius: 9px;
-  font-weight: 800; font-size: 14px; cursor: pointer; width: 100%; margin-top: 10px;
-  transition: all 0.2s ease;
-}
-.btn:hover { opacity: 0.92; box-shadow: 0 0 22px var(--glow); }
-.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+    .tool-info { flex: 1; min-width: 0; }
+    .tool-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .tool-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--paper);
+    }
+    .tool-card:hover .tool-name {
+      color: #ffbe53;
+    }
+    .tool-desc {
+      font-size: 11.5px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
 
-.reset-link {
-  display: block; text-align: center; margin-top: 14px; font-size: 12px; color: var(--muted);
-  text-decoration: underline; cursor: pointer; background: none; border: none; width: 100%;
-}
-.reset-link:hover { color: var(--amber); }
-.hint-note { font-size: 10.5px; color: var(--muted); text-align: center; margin-top: 6px; }
+    /* Static Clean Badge (Zero GPU Repaints) */
+    .badge {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge.active {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
 
-.ad-card {
-  background: var(--card-bg); border: 1px solid var(--line); border-radius: 8px; padding: 16px; text-align: center;
-  margin-top: 22px; min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-}
-.ad-tag { font-size: 9px; font-weight: 700; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; }
-.ad-content { font-size: 11.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-
-.modal-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 50;
-  align-items: center; justify-content: center; padding: 20px;
-}
-.modal-overlay.active { display: flex; }
-.modal-box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; width: 100%; max-width: 340px; }
-.modal-title { font-size: 15px; font-weight: 800; color: var(--amber); margin-bottom: 4px; }
-.modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
-.modal-box input[type="password"] {
-  width: 100%; background: var(--card-bg); border: 1px solid var(--line); color: var(--paper);
-  padding: 11px 12px; border-radius: 8px; font-size: 14px; outline: none;
-}
-.modal-error { font-size: 11.5px; color: var(--danger); min-height: 16px; margin-top: 6px; }
-.modal-actions { display: flex; gap: 8px; margin-top: 6px; }
-.modal-actions .btn { margin-top: 0; }
-</style>
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 36px;
+      font-size: 11.5px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+      width: 100%;
+      max-width: 600px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <div class="top-row">
-    <a href="../../index.html" class="back-link">&larr; Home</a>
-    <div class="offline-badge"><span class="dot"></span>100% Client-Side · Private &amp; Secure</div>
+
+<div class="container">
+  <header>
+    <h1>FormReady India</h1>
+    <p class="tagline">⚡ Superfast, 100% Private Offline Document & Form Toolbox</p>
+    <div class="author-badge">✨ Made by Aman Shaikh</div>
+  </header>
+
+  <div class="search-box">
+    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    <input type="text" id="searchInput" placeholder="Search tools (e.g. 50KB resize, signature, cutter, GST)..." oninput="filterTools()">
   </div>
 
-  <div class="card">
-    <h2>ID Card to A4 Print Maker</h2>
-    <div class="subtitle">Auto-crop front &amp; back sides · Clean, top-aligned A4 print-ready PDF</div>
-
-    <div class="how-to-box">
-      <div class="how-to-title">📘 How to Use</div>
-      <ol class="how-to-list">
-        <li>1. <span>Choose Upload Mode:</span> Select 1 PDF/Combined file or 2 separate photos (Front &amp; Back).</li>
-        <li>2. <span>Auto-Crop:</span> Card edges are automatically detected and cropped.</li>
-        <li>3. <span>Download:</span> Get a 100% clean A4 PDF with both sides perfectly top-aligned.</li>
-      </ol>
-    </div>
-
-    <div class="steps" id="stepsBar">
-      <div class="step active" data-step="1"><div class="circle">1</div><div class="label">Upload</div></div>
-      <div class="step" data-step="2"><div class="circle">2</div><div class="label">Adjust</div></div>
-      <div class="step" data-step="3"><div class="circle">3</div><div class="label">Download</div></div>
-    </div>
-
-    <!-- Mode Switcher -->
-    <div class="mode-switch">
-      <button class="mode-btn active" id="singleModeBtn">📄 1 File / PDF</button>
-      <button class="mode-btn" id="dualModeBtn">📷 2 Separate Photos</button>
-    </div>
-
-    <!-- Single Mode (PDF or Combined Image) -->
-    <div id="singleUploadGroup">
-      <div class="dropzone" id="dropzone">
-        <div class="icon">📄</div>
-        <div class="main-txt">Tap to Upload File (PDF or Image)</div>
-        <div class="sub-txt">Single PDF or Combined Front+Back photo · Offline</div>
-        <input type="file" id="fileInput" accept="image/*,application/pdf">
-      </div>
-    </div>
-
-    <!-- Dual Mode (Front Photo + Back Photo) -->
-    <div id="dualUploadGroup" style="display:none;">
-      <div class="dual-grid">
-        <!-- Front Zone -->
-        <div class="dual-zone" id="frontDropzone">
-          <span class="dual-badge">FRONT SIDE</span>
-          <input type="file" id="frontFileInput" accept="image/*" style="display:none;">
-          <img id="frontThumb" alt="Front preview">
-          <div class="empty-content" id="frontEmpty">
-            <span class="empty-icon">📷</span>
-            <span class="empty-txt">Upload Front</span>
-            <span class="empty-sub">JPG, PNG</span>
-          </div>
-        </div>
-
-        <!-- Back Zone -->
-        <div class="dual-zone" id="backDropzone">
-          <span class="dual-badge back-badge">BACK SIDE</span>
-          <input type="file" id="backFileInput" accept="image/*" style="display:none;">
-          <img id="backThumb" alt="Back preview">
-          <div class="empty-content" id="backEmpty">
-            <span class="empty-icon">📷</span>
-            <span class="empty-txt">Upload Back</span>
-            <span class="empty-sub">JPG, PNG</span>
-          </div>
-        </div>
-      </div>
-      <button class="btn" id="dualProcessBtn" style="margin-top:12px;" disabled>Align &amp; Generate Clean A4 →</button>
-    </div>
-
-    <!-- Cropping Adjustment Section -->
-    <div class="stage-section" id="stageSection">
-      <label style="font-size:13px; font-weight:700; margin-bottom:6px; display:block;">Adjust Crop Area if Needed</label>
-      <div class="stage-box" id="stageBox">
-        <img id="stageImg" alt="Uploaded document preview">
-        <div class="scan-status" id="scanStatus">⟳ Auto-detecting card edges…</div>
-        <div class="scan-line" id="scanLine"></div>
-        <div class="crop-box front" id="frontCropBox" data-box="front" style="display:none;">
-          <div class="box-label">FRONT</div>
-          <div class="crop-handle" data-corner="tl"></div>
-          <div class="crop-handle" data-corner="tr"></div>
-          <div class="crop-handle" data-corner="bl"></div>
-          <div class="crop-handle" data-corner="br"></div>
-        </div>
-        <div class="crop-box back" id="backCropBox" data-box="back" style="display:none;">
-          <div class="box-label">BACK</div>
-          <div class="crop-handle" data-corner="tl"></div>
-          <div class="crop-handle" data-corner="tr"></div>
-          <div class="crop-handle" data-corner="bl"></div>
-          <div class="crop-handle" data-corner="br"></div>
-        </div>
-      </div>
-      <div class="stage-actions">
-        <button class="btn btn-secondary" id="reAutoBtn">↻ Re-Detect</button>
-        <button class="btn" id="confirmCropBtn">Confirm Crop →</button>
-      </div>
-    </div>
-
-    <!-- Output Preview & Download Section -->
-    <div class="results-section" id="resultsSection">
-      <label style="font-size:13px; font-weight:700; margin-bottom:8px; display:block;">Individual Cards</label>
-      <div class="results-grid">
-        <div class="result-card">
-          <canvas id="frontCanvasView"></canvas>
-          <div class="tag">FRONT SIDE</div>
-          <div class="dims" id="frontMeta">-</div>
-          <button class="mini-dl" id="dlFrontBtn">⬇ Download Front</button>
-        </div>
-        <div class="result-card">
-          <canvas id="backCanvasView"></canvas>
-          <div class="tag">BACK SIDE</div>
-          <div class="dims" id="backMeta">-</div>
-          <button class="mini-dl" id="dlBackBtn">⬇ Download Back</button>
-        </div>
-      </div>
-
-      <div class="a4-preview-wrap">
-        <label style="font-size:13px; font-weight:700; margin-bottom:8px; display:block;">Clean A4 Print Preview (Top-Aligned)</label>
-        <div class="a4-preview-box"><img id="a4PreviewImg" alt="A4 output preview"></div>
-      </div>
-
-      <button class="btn" id="dlBothBtn">⬇ Download Both — A4 Print-Ready PDF</button>
-      <div class="hint-note">100% clean A4 page without labels, lines or watermarks.</div>
-      <button class="reset-link" id="resetBtn">↺ Upload a Different File</button>
-    </div>
-
-    <div class="ad-card">
-      <span class="ad-tag">Sponsored Advertisement</span>
-      <div class="ad-content"><span>📢</span> Google AdSense / Responsive Banner Space</div>
-    </div>
+  <div class="chips-bar">
+    <button class="chip active" onclick="selectCategory('all', this)">All Tools (39)</button>
+    <button class="chip" onclick="selectCategory('govt', this)">🇮🇳 Sarkari Form & IDs</button>
+    <button class="chip" onclick="selectCategory('pdf', this)">📄 PDF Tools</button>
+    <button class="chip" onclick="selectCategory('photo', this)">🖼️ Photo & Images</button>
+    <button class="chip" onclick="selectCategory('text', this)">📝 Text & OCR</button>
+    <button class="chip" onclick="selectCategory('calc', this)">🧮 Smart Calculators</button>
   </div>
+
+  <main id="catalogContainer"></main>
+
+  <footer>
+    © 2026 FormReady India • Zero Server Uploads • Client-Side 100% Privacy
+  </footer>
 </div>
 
-<div class="modal-overlay" id="pdfPasswordModal">
-  <div class="modal-box">
-    <div class="modal-title">🔒 Password Protected PDF</div>
-    <div class="modal-sub">Enter the password to unlock this file.</div>
-    <input type="password" id="pdfPasswordInput" placeholder="Enter PDF password" autocomplete="off">
-    <div class="modal-error" id="pdfPasswordError"></div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" id="pdfPasswordCancel" type="button">Cancel</button>
-      <button class="btn" id="pdfPasswordSubmit" type="button">Unlock</button>
-    </div>
-  </div>
-</div>
 <script>
-if (window.pdfjsLib) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-}
+const TOOL_CATALOG = [
+  {
+    categoryId: "govt",
+    categoryTitle: "🇮🇳 Indian Govt Exam & ID Utilities",
+    tools: [
+      { slug: "aadhaar-pan-resizer", name: "Sarkari Photo Resizer (20KB - 50KB)", desc: "Exact 200x230 px crop for SSC, UPSC, Railway, Police & PAN cards.", icon: "🪪", status: "active" },
+      { slug: "signature-resizer", name: "Sign Resizer (10KB - 20KB)", desc: "Boost contrast & compress signature for official online exam portals.", icon: "✍️", status: "active" },
+      { slug: "aadhaar-pan-cutter", name: "Aadhaar / PAN Card Cutter", desc: "Extract & crop standard wallet-size ID cards from e-Aadhaar & PAN PDF.", icon: "✂️", status: "active" },
+      { slug: "signature-maker", name: "Digital Signature Draw Maker", desc: "Draw ultra-smooth signature on mobile/mouse and get transparent PNG.", icon: "🖊️", status: "active" },
+      { slug: "passport-photo-maker", name: "Passport Size Photo Maker", desc: "Create single or multi-copy passport photos with plain white background.", icon: "👥", status: "active" },
+      { slug: "photo-sign-card", name: "Photo + Signature Joiner", desc: "Merge photo & signature in a single standard box required for NTA/IBPS.", icon: "🔲", status: "active" },
+      { slug: "photo-sheet", name: "Passport Photo Sheet (4x6 / A4)", desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", icon: "🖨️", status: "active" },
+      { slug: "document-scanner", name: "HD Document Cam Scanner", desc: "Scan certificates via mobile camera with auto black & white filter.", icon: "📷", status: "active" },
+      { slug: "govt-pdf-helper", name: "Sarkari PDF Compressor (Under 100KB)", desc: "Compress marksheet & caste certificate under 100KB/200KB upload limits.", icon: "📋", status: "active" }
+    ]
+  },
+  {
+    categoryId: "pdf",
+    categoryTitle: "📄 PDF Tools & Utilities",
+    tools: [
+      { slug: "pdf-editor", name: "Online PDF Editor & Markup", desc: "Edit text, annotate, highlight and sign PDF files directly offline.", icon: "📝", status: "active" },
+      { slug: "pdf-compressor", name: "Compress PDF (Lossless)", desc: "Reduce heavy PDF MBs down to KBs while preserving sharp text clarity.", icon: "🗜️", status: "active" },
+      { slug: "merge-pdf", name: "Merge PDF (Join Multiple Files)", desc: "Combine multiple PDF documents and marksheets into one single file.", icon: "🔗", status: "active" },
+      { slug: "split-pdf", name: "Split & Extract PDF Pages", desc: "Extract custom pages or break large PDF books into separate files.", icon: "✂️", status: "active" },
+      { slug: "jpg-to-pdf", name: "JPG to PDF Converter", desc: "Convert multiple gallery images into a single printable high-res PDF.", icon: "🖼️", status: "active" },
+      { slug: "pdf-to-jpg", name: "PDF to JPG / Image Extractor", desc: "Extract high-resolution JPG pictures from each page of your PDF file.", icon: "📷", status: "active" },
+      { slug: "rotate-pdf", name: "Rotate PDF (90° / 180°)", desc: "Fix upside down and sideways scanned documents permanently.", icon: "🔄", status: "active" },
+      { slug: "pdf-organizer", name: "PDF Page Organizer", desc: "Drag-and-drop to reorder, delete or arrange pages in any PDF document.", icon: "📑", status: "active" },
+      { slug: "add-watermark", name: "Add Watermark to PDF", desc: "Stamp confidential, custom text or logos across your PDF pages.", icon: "💧", status: "active" }
+    ]
+  },
+  {
+    categoryId: "photo",
+    categoryTitle: "🖼️ Photo & Image Optimization",
+    tools: [
+      { slug: "photo-resizer", name: "Photo Resizer (PX, CM, INCH)", desc: "Resize dimensions with custom DPI for online form upload requirements.", icon: "📐", status: "active" },
+      { slug: "photo-compressor", name: "Photo Compressor (KB to MB)", desc: "Compress image file size up to 80% without losing quality or sharpness.", icon: "🗜️", status: "active" },
+      { slug: "photo-cropper", name: "Photo Cropper (Custom Ratios)", desc: "Crop photos with custom aspect ratios (1:1, 3:4, 3.5x4.5cm) effortlessly.", icon: "✂️", status: "active" },
+      { slug: "image-converter", name: "Image Format Converter", desc: "Instant lossless conversion between JPG, PNG, WEBP, and ICO formats.", icon: "🔄", status: "active" },
+      { slug: "background-remover", name: "AI Background Remover", desc: "Make photo background white or transparent in 1-click for IDs & forms.", icon: "🪄", status: "active" }
+    ]
+  },
+  {
+    categoryId: "text",
+    categoryTitle: "📝 Text & Generator Utilities",
+    tools: [
+      { slug: "image-to-text", name: "Image to Text (OCR Extractor)", desc: "Extract printed or handwritten text from photos, scans & books instantly.", icon: "🔍", status: "active" },
+      { slug: "text-cleaner", name: "Text Cleaner & Space Fixer", desc: "Remove weird duplicate spaces, line breaks, and messy formatting.", icon: "🧹", status: "active" },
+      { slug: "case-converter", name: "Case Converter (UPPER/lower)", desc: "Quickly convert text into UPPERCASE, lowercase, Title Case or camelCase.", icon: "🔠", status: "active" },
+      { slug: "word-counter", name: "Word & Character Counter", desc: "Real-time character count, word density, reading time and essay stats.", icon: "📊", status: "active" },
+      { slug: "text-to-pdf", name: "Text to PDF Generator", desc: "Convert raw notes, code, and text snippets into formatted clean PDFs.", icon: "📄", status: "active" },
+      { slug: "lorem-generator", name: "Lorem Ipsum Dummy Generator", desc: "Generate sample placeholder text and paragraphs for design wireframes.", icon: "📜", status: "active" },
+      { slug: "qr-generator", name: "HD QR Code Generator", desc: "Create colored high-res QR codes for URLs, WiFi logins, and UPI links.", icon: "📱", status: "active" },
+      { slug: "barcode-generator", name: "Barcode Generator (Code128)", desc: "Generate Code128, EAN, and UPC retail barcodes ready to print.", icon: "🏷️", status: "active" }
+    ]
+  },
+  {
+    categoryId: "calc",
+    categoryTitle: "🧮 Everyday Smart Calculators",
+    tools: [
+      { slug: "gst-calculator", name: "GST Calculator (CGST / SGST)", desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", icon: "💰", status: "active" },
+      { slug: "age-calculator", name: "Sarkari Job Age Calculator", desc: "Calculate exact age in years, months & days against cut-off eligibility dates.", icon: "🎂", status: "active" },
+      { slug: "emi-calculator", name: "Loan EMI & Interest Calculator", desc: "Calculate monthly installments, interest breakdown for Home & Car loans.", icon: "💳", status: "active" },
+      { slug: "discount-calculator", name: "Discount & Percentage Calculator", desc: "Calculate festive shopping discounts, profit/loss margins, and savings.", icon: "🏷️", status: "active" },
+      { slug: "bmi-calculator", name: "BMI & Fitness Calculator", desc: "Check Body Mass Index, healthy weight range, and fitness category.", icon: "⚖️", status: "active" },
+      { slug: "date-gap-calculator", name: "Date Gap & Working Days", desc: "Count exact total days, weeks, months, and exclude public holidays.", icon: "📅", status: "active" },
+      { slug: "unit-converter", name: "Land & Unit Converter", desc: "Convert regional land units (Bigha, Sq Ft, Acre), length, and weights.", icon: "📐", status: "active" },
+      { slug: "currency-converter", name: "Live Currency Converter", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", icon: "💱", status: "active" }
+    ]
+  }
+];
 
-const singleModeBtn = document.getElementById('singleModeBtn');
-const dualModeBtn = document.getElementById('dualModeBtn');
-const singleUploadGroup = document.getElementById('singleUploadGroup');
-const dualUploadGroup = document.getElementById('dualUploadGroup');
+let activeCategory = 'all';
 
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('fileInput');
-const frontDropzone = document.getElementById('frontDropzone');
-const backDropzone = document.getElementById('backDropzone');
-const frontFileInput = document.getElementById('frontFileInput');
-const backFileInput = document.getElementById('backFileInput');
-const frontThumb = document.getElementById('frontThumb');
-const backThumb = document.getElementById('backThumb');
-const frontEmpty = document.getElementById('frontEmpty');
-const backEmpty = document.getElementById('backEmpty');
-const dualProcessBtn = document.getElementById('dualProcessBtn');
+function renderTools() {
+  const container = document.getElementById('catalogContainer');
+  const query = document.getElementById('searchInput').value.toLowerCase().trim();
+  container.innerHTML = '';
 
-const stageSection = document.getElementById('stageSection');
-const stageBox = document.getElementById('stageBox');
-const stageImg = document.getElementById('stageImg');
-const scanLine = document.getElementById('scanLine');
-const scanStatus = document.getElementById('scanStatus');
-const frontCropBoxEl = document.getElementById('frontCropBox');
-const backCropBoxEl = document.getElementById('backCropBox');
-const reAutoBtn = document.getElementById('reAutoBtn');
-const confirmCropBtn = document.getElementById('confirmCropBtn');
+  TOOL_CATALOG.forEach(cat => {
+    if (activeCategory !== 'all' && cat.categoryId !== activeCategory) return;
 
-const resultsSection = document.getElementById('resultsSection');
-const frontCanvasView = document.getElementById('frontCanvasView');
-const backCanvasView = document.getElementById('backCanvasView');
-const frontMeta = document.getElementById('frontMeta');
-const backMeta = document.getElementById('backMeta');
-const dlFrontBtn = document.getElementById('dlFrontBtn');
-const dlBackBtn = document.getElementById('dlBackBtn');
-const dlBothBtn = document.getElementById('dlBothBtn');
-const a4PreviewImg = document.getElementById('a4PreviewImg');
-const resetBtn = document.getElementById('resetBtn');
-const stepEls = document.querySelectorAll('.step');
+    const filtered = cat.tools.filter(t =>
+      t.name.toLowerCase().includes(query) || 
+      t.desc.toLowerCase().includes(query) ||
+      t.slug.toLowerCase().includes(query)
+    );
 
-const pdfPasswordModal = document.getElementById('pdfPasswordModal');
-const pdfPasswordInput = document.getElementById('pdfPasswordInput');
-const pdfPasswordError = document.getElementById('pdfPasswordError');
-const pdfPasswordSubmit = document.getElementById('pdfPasswordSubmit');
-const pdfPasswordCancel = document.getElementById('pdfPasswordCancel');
+    if (filtered.length === 0) return;
 
-let quality = 0.92;
-let sourceCanvas = null;
-let frontCanvas = null;
-let backCanvas = null;
-let dualFrontCanvas = null;
-let dualBackCanvas = null;
-let activeDrag = null;
+    const section = document.createElement('div');
+    section.className = 'category-section';
 
-const boxRatios = {
-  front: { x0: 0.06, y0: 0.06, x1: 0.94, y1: 0.42 },
-  back: { x0: 0.06, y0: 0.56, x1: 0.94, y1: 0.92 }
-};
-const boxEls = { front: frontCropBoxEl, back: backCropBoxEl };
+    const title = document.createElement('div');
+    title.className = 'cat-title';
+    title.innerText = cat.categoryTitle;
+    section.appendChild(title);
 
-// Tab Switcher
-singleModeBtn.onclick = () => {
-  singleModeBtn.classList.add('active');
-  dualModeBtn.classList.remove('active');
-  singleUploadGroup.style.display = 'block';
-  dualUploadGroup.style.display = 'none';
-};
-dualModeBtn.onclick = () => {
-  dualModeBtn.classList.add('active');
-  singleModeBtn.classList.remove('active');
-  singleUploadGroup.style.display = 'none';
-  dualUploadGroup.style.display = 'block';
-};
+    const grid = document.createElement('div');
+    grid.className = 'grid';
 
-function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+    filtered.forEach(tool => {
+      const card = document.createElement('a');
+      card.className = 'tool-card';
+      card.href = `tools/${tool.slug}/index.html`;
 
-function setStep(n) {
-  stepEls.forEach(el => {
-    const s = parseInt(el.dataset.step, 10);
-    el.classList.remove('active', 'done');
-    if (s < n) el.classList.add('done');
-    else if (s === n) el.classList.add('active');
+      card.innerHTML = `
+        <div class="tool-icon">${tool.icon}</div>
+        <div class="tool-info">
+          <div class="tool-title-row">
+            <div class="tool-name">${tool.name}</div>
+            <span class="badge active">ACTIVE</span>
+          </div>
+          <div class="tool-desc">${tool.desc}</div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    container.appendChild(section);
   });
 }
 
-// Single Upload Listeners
-dropzone.onclick = () => fileInput.click();
-dropzone.ondragover = (e) => { e.preventDefault(); dropzone.classList.add('dragover'); };
-dropzone.ondragleave = () => dropzone.classList.remove('dragover');
-dropzone.ondrop = (e) => {
-  e.preventDefault();
-  dropzone.classList.remove('dragover');
-  if (e.dataTransfer.files[0]) handleSingleFile(e.dataTransfer.files[0]);
-};
-fileInput.onchange = (e) => { if (e.target.files[0]) handleSingleFile(e.target.files[0]); };
-
-// Dual Upload Listeners
-frontDropzone.onclick = () => frontFileInput.click();
-backDropzone.onclick = () => backFileInput.click();
-
-frontFileInput.onchange = (e) => {
-  if (e.target.files[0]) loadDualSide(e.target.files[0], 'front');
-};
-backFileInput.onchange = (e) => {
-  if (e.target.files[0]) loadDualSide(e.target.files[0], 'back');
-};
-
-function readFileAsDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+function selectCategory(catId, el) {
+  activeCategory = catId;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderTools();
 }
 
-function loadImageEl(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
+function filterTools() {
+  renderTools();
 }
 
-async function loadDualSide(file, side) {
-  try {
-    const dataUrl = await readFileAsDataURL(file);
-    const img = await loadImageEl(dataUrl);
-    let canvas = document.createElement('canvas');
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    canvas.getContext('2d').drawImage(img, 0, 0);
-
-    // Auto crop ID card margins out of the individual photo
-    const cropBox = autoDetectCardBox(canvas, 0, 1);
-    canvas = cropFromRatio(canvas, cropBox);
-
-    if (side === 'front') {
-      dualFrontCanvas = canvas;
-      frontThumb.src = canvas.toDataURL('image/jpeg', 0.85);
-      frontThumb.style.display = 'block';
-      frontEmpty.style.display = 'none';
-      frontDropzone.classList.add('filled');
-    } else {
-      dualBackCanvas = canvas;
-      backThumb.src = canvas.toDataURL('image/jpeg', 0.85);
-      backThumb.style.display = 'block';
-      backEmpty.style.display = 'none';
-      backDropzone.classList.add('filled');
-    }
-
-    if (dualFrontCanvas && dualBackCanvas) {
-      dualProcessBtn.disabled = false;
-      dualProcessBtn.innerHTML = 'Align &amp; Generate Clean A4 →';
-    }
-  } catch (err) {
-    alert('Error loading image. Please try another photo.');
-  }
-}
-
-dualProcessBtn.onclick = () => {
-  if (!dualFrontCanvas || !dualBackCanvas) return;
-  singleUploadGroup.style.display = 'none';
-  dualUploadGroup.style.display = 'none';
-  finalizeSides(dualFrontCanvas, dualBackCanvas);
-};
-async function renderPdfPageToCanvas(pdf, pageNum, scale) {
-  const page = await pdf.getPage(pageNum);
-  const viewport = page.getViewport({ scale: scale || 2 });
-  const canvas = document.createElement('canvas');
-  canvas.width = viewport.width; canvas.height = viewport.height;
-  await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-  return canvas;
-}
-
-function showPasswordModal(isRetry, onSubmit, onCancel) {
-  pdfPasswordError.textContent = isRetry ? 'Incorrect password. Try again.' : '';
-  pdfPasswordInput.value = '';
-  pdfPasswordModal.classList.add('active');
-  setTimeout(() => pdfPasswordInput.focus(), 50);
-  pdfPasswordSubmit.onclick = () => {
-    const val = pdfPasswordInput.value;
-    if (!val) { pdfPasswordError.textContent = 'Please enter password.'; return; }
-    pdfPasswordModal.classList.remove('active');
-    onSubmit(val);
-  };
-  pdfPasswordCancel.onclick = () => {
-    pdfPasswordModal.classList.remove('active');
-    onCancel();
-  };
-}
-
-function loadPdfWithPassword(buf) {
-  return new Promise((resolve, reject) => {
-    const loadingTask = pdfjsLib.getDocument({ data: buf });
-    loadingTask.onPassword = (updatePassword, reason) => {
-      const isRetry = !!(window.pdfjsLib && pdfjsLib.PasswordResponses && reason === pdfjsLib.PasswordResponses.INCORRECT_PASSWORD);
-      showPasswordModal(isRetry, pwd => updatePassword(pwd), () => {
-        loadingTask.destroy();
-        reject(new Error('CANCELLED'));
-      });
-    };
-    loadingTask.promise.then(resolve).catch(reject);
-  });
-}
-
-function autoDetectSplit(canvas) {
-  try {
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width, h = canvas.height;
-    const startY = Math.floor(h * 0.25), endY = Math.floor(h * 0.75);
-    let bestRow = Math.floor(h / 2), bestScore = -Infinity;
-    const step = Math.max(1, Math.floor(h / 300)), sampleStepX = Math.max(1, Math.floor(w / 80));
-    for (let y = startY; y < endY; y += step) {
-      const rowData = ctx.getImageData(0, y, w, 1).data;
-      let sum = 0, count = 0;
-      for (let x = 0; x < w; x += sampleStepX) {
-        const idx = x * 4;
-        sum += (rowData[idx] + rowData[idx + 1] + rowData[idx + 2]) / 3;
-        count++;
-      }
-      const mean = sum / count;
-      if (mean > bestScore) { bestScore = mean; bestRow = y; }
-    }
-    return bestScore < 140 ? 0.5 : bestRow / h;
-  } catch (e) {
-    return 0.5;
-  }
-}
-
-function autoDetectCardBox(canvas, yStart, yEnd) {
-  const w = canvas.width, h = canvas.height;
-  const py0 = Math.floor(h * yStart), py1 = Math.floor(h * yEnd);
-  const zoneH = py1 - py0;
-  const fallback = { x0: 0.04, x1: 0.96, y0: yStart + (yEnd - yStart) * 0.04, y1: yEnd - (yEnd - yStart) * 0.04 };
-  if (zoneH < 10) return fallback;
-  try {
-    const ctx = canvas.getContext('2d');
-    const imgData = ctx.getImageData(0, py0, w, zoneH).data;
-    const threshold = 28, stepX = Math.max(1, Math.floor(w / 140)), stepY = Math.max(1, Math.floor(zoneH / 140));
-    let minX = w, maxX = 0, minY = zoneH, maxY = 0, found = false;
-    for (let y = 0; y < zoneH; y += stepY) {
-      for (let x = 0; x < w; x += stepX) {
-        const idx = (y * w + x) * 4;
-        const dev = Math.sqrt(Math.pow(imgData[idx] - 250, 2) + Math.pow(imgData[idx+1] - 250, 2) + Math.pow(imgData[idx+2] - 250, 2));
-        if (dev > threshold) {
-          found = true;
-          if (x < minX) minX = x; if (x > maxX) maxX = x;
-          if (y < minY) minY = y; if (y > maxY) maxY = y;
-        }
-      }
-    }
-    if (!found || (maxX - minX) < w * 0.2) return fallback;
-    const padX = (maxX - minX) * 0.02, padY = (maxY - minY) * 0.02;
-    return {
-      x0: clamp01((minX - padX) / w),
-      x1: clamp01((maxX + padX) / w),
-      y0: clamp01((py0 + minY - padY) / h),
-      y1: clamp01((py0 + maxY + padY) / h)
-    };
-  } catch (e) {
-    return fallback;
-  }
-}
-
-function cropFromRatio(srcCanvas, r) {
-  const w = srcCanvas.width, h = srcCanvas.height;
-  const sx = Math.round(r.x0 * w), sy = Math.round(r.y0 * h);
-  const sw = Math.max(1, Math.round((r.x1 - r.x0) * w));
-  const sh = Math.max(1, Math.round((r.y1 - r.y0) * h));
-  const c = document.createElement('canvas');
-  c.width = sw; c.height = sh;
-  c.getContext('2d').drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
-  return c;
-}
-
-function renderCropBoxes() {
-  ['front', 'back'].forEach(k => {
-    const r = boxRatios[k], el = boxEls[k];
-    el.style.left = (r.x0 * 100) + '%';
-    el.style.top = (r.y0 * 100) + '%';
-    el.style.width = ((r.x1 - r.x0) * 100) + '%';
-    el.style.height = ((r.y1 - r.y0) * 100) + '%';
-  });
-}
-
-// Box Drag & Resize Handlers
-function onPointerDownHandle(e) {
-  e.stopPropagation();
-  activeDrag = { type: 'resize', box: e.currentTarget.closest('.crop-box').dataset.box, corner: e.currentTarget.dataset.corner };
-  try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
-}
-function onPointerDownBox(e) {
-  if (e.target.classList.contains('crop-handle')) return;
-  const boxKey = e.currentTarget.dataset.box;
-  const r = boxRatios[boxKey], rect = stageBox.getBoundingClientRect();
-  activeDrag = {
-    type: 'move', box: boxKey,
-    startRatio: { ...r },
-    startPX: (e.clientX - rect.left) / rect.width,
-    startPY: (e.clientY - rect.top) / rect.height
-  };
-  try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
-}
-function onPointerMoveGlobal(e) {
-  if (!activeDrag) return;
-  const rect = stageBox.getBoundingClientRect();
-  const px = clamp01((e.clientX - rect.left) / rect.width);
-  const py = clamp01((e.clientY - rect.top) / rect.height);
-  const r = boxRatios[activeDrag.box];
-  if (activeDrag.type === 'resize') {
-    const minSize = 0.06;
-    if (activeDrag.corner === 'tl') { r.x0 = Math.min(px, r.x1 - minSize); r.y0 = Math.min(py, r.y1 - minSize); }
-    else if (activeDrag.corner === 'tr') { r.x1 = Math.max(px, r.x0 + minSize); r.y0 = Math.min(py, r.y1 - minSize); }
-    else if (activeDrag.corner === 'bl') { r.x0 = Math.min(px, r.x1 - minSize); r.y1 = Math.max(py, r.y0 + minSize); }
-    else if (activeDrag.corner === 'br') { r.x1 = Math.max(px, r.x0 + minSize); r.y1 = Math.max(py, r.y0 + minSize); }
-  } else if (activeDrag.type === 'move') {
-    let dx = px - activeDrag.startPX, dy = py - activeDrag.startPY;
-    const w = activeDrag.startRatio.x1 - activeDrag.startRatio.x0;
-    const h = activeDrag.startRatio.y1 - activeDrag.startRatio.y0;
-    r.x0 = clamp01(activeDrag.startRatio.x0 + dx);
-    r.y0 = clamp01(activeDrag.startRatio.y0 + dy);
-    r.x1 = clamp01(r.x0 + w);
-    r.y1 = clamp01(r.y0 + h);
-  }
-  renderCropBoxes();
-}
-function onPointerUpGlobal() { activeDrag = null; }
-
-document.addEventListener('pointermove', onPointerMoveGlobal);
-document.addEventListener('pointerup', onPointerUpGlobal);
-document.addEventListener('pointercancel', onPointerUpGlobal);
-document.querySelectorAll('.crop-handle').forEach(h => h.addEventListener('pointerdown', onPointerDownHandle));
-frontCropBoxEl.addEventListener('pointerdown', onPointerDownBox);
-backCropBoxEl.addEventListener('pointerdown', onPointerDownBox);
-
-async function handleSingleFile(file) {
-  resetToUpload(false);
-  if (file.type === 'application/pdf') {
-    let buf = await file.arrayBuffer();
-    let pdf;
-    try {
-      pdf = await loadPdfWithPassword(buf);
-    } catch (e) {
-      if (e.message !== 'CANCELLED') alert('Could not open this PDF.');
-      return;
-    }
-    if (pdf.numPages >= 2) {
-      let fCanvas = await renderPdfPageToCanvas(pdf, 1, 2);
-      let bCanvas = await renderPdfPageToCanvas(pdf, 2, 2);
-      fCanvas = cropFromRatio(fCanvas, autoDetectCardBox(fCanvas, 0, 1));
-      bCanvas = cropFromRatio(bCanvas, autoDetectCardBox(bCanvas, 0, 1));
-      finalizeSides(fCanvas, bCanvas);
-    } else {
-      const single = await renderPdfPageToCanvas(pdf, 1, 2.2);
-      loadSourceCanvas(single);
-    }
-  } else if (file.type.startsWith('image/')) {
-    const dataUrl = await readFileAsDataURL(file);
-    const img = await loadImageEl(dataUrl);
-    const canvas = document.createElement('canvas');
-    canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
-    canvas.getContext('2d').drawImage(img, 0, 0);
-    loadSourceCanvas(canvas);
-  }
-}
-
-function loadSourceCanvas(canvas) {
-  sourceCanvas = canvas;
-  stageImg.src = canvas.toDataURL('image/jpeg', 0.92);
-  singleUploadGroup.style.display = 'none';
-  dualUploadGroup.style.display = 'none';
-  stageSection.style.display = 'block';
-  setStep(2);
-  scanStatus.classList.add('active'); scanLine.classList.add('active');
-  frontCropBoxEl.style.display = 'none'; backCropBoxEl.style.display = 'none';
-
-  setTimeout(() => {
-    const split = autoDetectSplit(canvas);
-    boxRatios.front = autoDetectCardBox(canvas, 0, split);
-    boxRatios.back = autoDetectCardBox(canvas, split, 1);
-    scanStatus.classList.remove('active'); scanLine.classList.remove('active');
-    frontCropBoxEl.style.display = 'block'; backCropBoxEl.style.display = 'block';
-    renderCropBoxes();
-  }, 900);
-}
-
-reAutoBtn.onclick = () => {
-  if (!sourceCanvas) return;
-  const split = autoDetectSplit(sourceCanvas);
-  boxRatios.front = autoDetectCardBox(sourceCanvas, 0, split);
-  boxRatios.back = autoDetectCardBox(sourceCanvas, split, 1);
-  renderCropBoxes();
-};
-
-confirmCropBtn.onclick = () => {
-  if (!sourceCanvas) return;
-  const fCanvas = cropFromRatio(sourceCanvas, boxRatios.front);
-  const bCanvas = cropFromRatio(sourceCanvas, boxRatios.back);
-  finalizeSides(fCanvas, bCanvas);
-};
-
-function finalizeSides(fCanvas, bCanvas) {
-  frontCanvas = fCanvas; backCanvas = bCanvas;
-  stageSection.style.display = 'none';
-  singleUploadGroup.style.display = 'none';
-  dualUploadGroup.style.display = 'none';
-
-  frontCanvasView.width = fCanvas.width; frontCanvasView.height = fCanvas.height;
-  frontCanvasView.getContext('2d').drawImage(fCanvas, 0, 0);
-  backCanvasView.width = bCanvas.width; backCanvasView.height = bCanvas.height;
-  backCanvasView.getContext('2d').drawImage(bCanvas, 0, 0);
-
-  frontCanvas.toBlob(blob => {
-    frontMeta.textContent = fCanvas.width + '×' + fCanvas.height + ' px · ' + (blob.size / 1024).toFixed(1) + ' KB';
-  }, 'image/jpeg', quality);
-  backCanvas.toBlob(blob => {
-    backMeta.textContent = bCanvas.width + '×' + bCanvas.height + ' px · ' + (blob.size / 1024).toFixed(1) + ' KB';
-  }, 'image/jpeg', quality);
-
-  renderA4Preview();
-  resultsSection.style.display = 'block';
-  setStep(3);
-}
-
-// Render Clean A4 Top-Aligned Output (85.6mm x 54mm)
-function renderA4Preview() {
-  if (!frontCanvas || !backCanvas) return;
-  const pw = 350, ph = Math.round(350 * 1.4142);
-  const canvas = document.createElement('canvas');
-  canvas.width = pw; canvas.height = ph;
-  const ctx = canvas.getContext('2d');
-  
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, pw, ph);
-
-  const marginX = 22, colGap = 12;
-  const cardW = (pw - marginX * 2 - colGap) / 2;
-  const cardH = cardW * (54 / 85.6);
-  const topMargin = 26;
-
-  ctx.drawImage(frontCanvas, marginX, topMargin, cardW, cardH);
-  ctx.drawImage(backCanvas, marginX + cardW + colGap, topMargin, cardW, cardH);
-
-  a4PreviewImg.src = canvas.toDataURL('image/jpeg', 0.92);
-}
-
-function triggerDownload(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
-}
-
-dlFrontBtn.onclick = () => {
-  if (frontCanvas) frontCanvas.toBlob(blob => triggerDownload(blob, 'card_front.jpg'), 'image/jpeg', quality);
-};
-dlBackBtn.onclick = () => {
-  if (backCanvas) backCanvas.toBlob(blob => triggerDownload(blob, 'card_back.jpg'), 'image/jpeg', quality);
-};
-
-// Download 100% Clean A4 PDF
-dlBothBtn.onclick = async () => {
-  if (!frontCanvas || !backCanvas) return;
-  dlBothBtn.disabled = true;
-  const origTxt = dlBothBtn.innerHTML;
-  dlBothBtn.innerHTML = 'Generating Clean A4 PDF...';
-  try {
-    const { PDFDocument } = PDFLib;
-    const pdfDoc = await PDFDocument.create();
-    const pageW = 595.28, pageH = 841.89;
-    const page = pdfDoc.addPage([pageW, pageH]);
-
-    const frontBytes = await new Promise(r => frontCanvas.toBlob(async b => r(new Uint8Array(await b.arrayBuffer())), 'image/jpeg', quality));
-    const backBytes = await new Promise(r => backCanvas.toBlob(async b => r(new Uint8Array(await b.arrayBuffer())), 'image/jpeg', quality));
-
-    const frontImg = await pdfDoc.embedJpg(frontBytes);
-    const backImg = await pdfDoc.embedJpg(backBytes);
-
-    // Exact Standard ID Dimensions: 85.6mm x 54mm
-    const cardW = 242.6, cardH = 153.0, colGap = 20;
-    const totalW = (cardW * 2) + colGap;
-    const startX = (pageW - totalW) / 2;
-    const topMargin = 45;
-    const cardY = pageH - topMargin - cardH;
-
-    page.drawImage(frontImg, { x: startX, y: cardY, width: cardW, height: cardH });
-    page.drawImage(backImg, { x: startX + cardW + colGap, y: cardY, width: cardW, height: cardH });
-
-    const pdfBytes = await pdfDoc.save();
-    triggerDownload(new Blob([pdfBytes], { type: 'application/pdf' }), 'clean_both_sides_A4.pdf');
-  } catch (err) {
-    alert('Could not create PDF: ' + err.message);
-  }
-  dlBothBtn.disabled = false;
-  dlBothBtn.innerHTML = origTxt;
-};
-
-function resetToUpload(scroll) {
-  sourceCanvas = null; frontCanvas = null; backCanvas = null;
-  dualFrontCanvas = null; dualBackCanvas = null;
-  stageSection.style.display = 'none';
-  resultsSection.style.display = 'none';
-
-  frontThumb.style.display = 'none'; backThumb.style.display = 'none';
-  frontEmpty.style.display = 'flex'; backEmpty.style.display = 'flex';
-  frontDropzone.classList.remove('filled'); backDropzone.classList.remove('filled');
-  dualProcessBtn.disabled = true;
-
-  if (singleModeBtn.classList.contains('active')) {
-    singleUploadGroup.style.display = 'block';
-    dualUploadGroup.style.display = 'none';
-  } else {
-    singleUploadGroup.style.display = 'none';
-    dualUploadGroup.style.display = 'block';
-  }
-  fileInput.value = ''; frontFileInput.value = ''; backFileInput.value = '';
-  setStep(1);
-  if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-resetBtn.onclick = () => resetToUpload(true);
+document.addEventListener('DOMContentLoaded', renderTools);
+renderTools();
 </script>
 </body>
 </html>
