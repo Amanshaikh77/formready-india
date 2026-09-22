@@ -38,7 +38,7 @@
       position: relative;
     }
 
-    /* FULL-PAGE WHITE TRANSPARENT GLASS SHINE BEAM */
+    /* FULL-PAGE PROMINENT GLASS SHINE (CONTINUOUS BACK-TO-BACK LOOP) */
     .global-shine-overlay {
       position: fixed;
       top: 0;
@@ -53,32 +53,32 @@
     .global-shine-overlay::after {
       content: '';
       position: absolute;
-      top: -120%;
-      left: -120%;
-      width: 340%;
-      height: 340%;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
       background: linear-gradient(
         125deg,
         rgba(255, 255, 255, 0) 35%,
-        rgba(255, 255, 255, 0.03) 45%,
-        rgba(255, 255, 255, 0.18) 50%,
-        rgba(255, 255, 255, 0.03) 55%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
         rgba(255, 255, 255, 0) 65%
       );
-      transform: translate3d(-70%, -70%, 0);
-      animation: pageWideShine 6s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
       will-change: transform;
     }
 
-    @keyframes pageWideShine {
+    /* Seamless Back-to-Back Loop Animation */
+    @keyframes continuousGlassSweep {
       0% {
-        transform: translate3d(-70%, -70%, 0);
-      }
-      35% {
-        transform: translate3d(70%, 70%, 0);
+        transform: translate3d(-55%, -55%, 0);
       }
       100% {
-        transform: translate3d(70%, 70%, 0);
+        transform: translate3d(55%, 55%, 0);
       }
     }
 
@@ -206,7 +206,7 @@
       .grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* Clean Branded Card (No Individual Shine) */
+    /* Card */
     .tool-card {
       position: relative;
       background: var(--card-bg);
@@ -292,7 +292,7 @@
 </head>
 <body>
 
-<!-- Full-Page Shining Beam Overlay -->
+<!-- Full-Page Continuous Glass Shine Overlay -->
 <div class="global-shine-overlay"></div>
 
 <div class="container">
