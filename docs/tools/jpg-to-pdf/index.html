@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>JPG to PDF Converter - FormReady India</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
+  <style>
+    :root {
+      --bg: #13100e;
+      --panel: #1a1613;
+      --card-bg: #1c1815;
+      --card-border: #2c251f;
+      --amber: #d99a3f;
+      --amber-hover: #c48733;
+      --paper: #f5efe6;
+      --muted: #968877;
+      --danger: #e74c3c;
+      --green: #2ecc71;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      color: var(--paper);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+    .tool-badge {
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(217, 154, 63, 0.15);
+      color: var(--amber);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(217, 154, 63, 0.3);
+    }
+
+    .tool-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .tool-header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--paper);
+      margin-bottom: 6px;
+    }
+    .tool-header p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .dropzone {
+      border: 2px dashed var(--card-border);
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .dropzone.dragover, .dropzone:hover {
+      border-color: var(--amber);
+      background: rgba(217, 154, 63, 0.04);
+    }
+    .dropzone-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .dropzone-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .dropzone-desc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    #fileInput { display: none; }
+
+    .preview-section {
+      margin-top: 24px;
+      display: none;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .clear-btn {
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .grid-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .preview-card {
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .preview-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      background: #000;
+    }
+    .preview-info {
+      padding: 6px 8px;
+      font-size: 11px;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .remove-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .remove-btn:hover { background: var(--danger); }
+
+    .controls-panel {
+      background: var(--panel);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .control-row:last-child { margin-bottom: 0; }
+    .control-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--paper);
+    }
+    .select-control {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--paper);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 14px;
+      background: var(--amber);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-action:hover { background: var(--amber-hover); }
+    .btn-action:disabled {
+      background: var(--card-border);
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+
+    .status-box {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 13px;
+      display: none;
+    }
+    .status-success {
+      background: rgba(46, 204, 113, 0.1);
+      border: 1px solid var(--green);
+      color: var(--green);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <a href="../../index.html" class="back-btn">← Home</a>
+      <span class="tool-badge">100% Client-Side</span>
+    </header>
+
+    <div class="tool-header">
+      <h1>JPG to PDF Converter</h1>
+      <p>Convert multiple photos into a single PDF document securely offline.</p>
+    </div>
+
+    <div class="dropzone" id="dropzone">
+      <span class="dropzone-icon">🖼️</span>
+      <div class="dropzone-title">Click or drag JPG / PNG images here</div>
+      <div class="dropzone-desc">Select one or multiple photos to convert</div>
+      <input type="file" id="fileInput" accept="image/jpeg, image/png, image/webp" multiple>
+    </div>
+
+    <div class="preview-section" id="previewSection">
+      <div class="section-title">
+        <span id="imageCount">Selected Images (0)</span>
+        <button class="clear-btn" id="clearAllBtn">Remove All</button>
+      </div>
+
+      <div class="grid-list" id="previewGrid"></div>
+
+      <div class="controls-panel">
+        <div class="control-row">
+          <span class="control-label">Page Layout</span>
+          <select id="pageSize" class="select-control">
+            <option value="fit">Fit to Image Size</option>
+            <option value="a4-portrait">Standard A4 (Portrait)</option>
+            <option value="a4-landscape">Standard A4 (Landscape)</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="convertBtn" class="btn-action">Convert to PDF & Download</button>
+      <div class="status-box status-success" id="statusBox">✅ PDF generated successfully! Download started.</div>
+    </div>
+  </div>
+
+  <script>
+    let images = [];
+
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const previewSection = document.getElementById('previewSection');
+    const previewGrid = document.getElementById('previewGrid');
+    const imageCount = document.getElementById('imageCount');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const convertBtn = document.getElementById('convertBtn');
+    const statusBox = document.getElementById('statusBox');
+    const pageSizeSelect = document.getElementById('pageSize');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    function handleFiles(files) {
+      statusBox.style.display = 'none';
+      const fileList = Array.from(files).filter(f => f.type.startsWith('image/'));
+      
+      fileList.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          images.push({
+            file: file,
+            dataUrl: e.target.result,
+            name: file.name
+          });
+          renderGrid();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderGrid() {
+      previewGrid.innerHTML = '';
+      if (images.length === 0) {
+        previewSection.style.display = 'none';
+        fileInput.value = '';
+        return;
+      }
+
+      previewSection.style.display = 'block';
+      imageCount.innerText = `Selected Images (${images.length})`;
+
+      images.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'preview-card';
+        card.innerHTML = `
+          <button class="remove-btn" onclick="removeImage(${index})">&times;</button>
+          <img src="${item.dataUrl}" alt="preview">
+          <div class="preview-info">${item.name}</div>
+        `;
+        previewGrid.appendChild(card);
+      });
+    }
+
+    window.removeImage = function(index) {
+      images.splice(index, 1);
+      renderGrid();
+    };
+
+    clearAllBtn.addEventListener('click', () => {
+      images = [];
+      renderGrid();
+    });
+
+    convertBtn.addEventListener('click', async () => {
+      if (images.length === 0) return;
+
+      convertBtn.disabled = true;
+      convertBtn.innerText = 'Creating PDF...';
+      statusBox.style.display = 'none';
+
+      try {
+        const { PDFDocument, PageSizes } = window.PDFLib;
+        const pdfDoc = await PDFDocument.create();
+
+        for (const item of images) {
+          const imgBytes = await fetch(item.dataUrl).then(res => res.arrayBuffer());
+          let embeddedImage;
+
+          if (item.file.type === 'image/png') {
+            embeddedImage = await pdfDoc.embedPng(imgBytes);
+          } else {
+            embeddedImage = await pdfDoc.embedJpg(imgBytes);
+          }
+
+          const mode = pageSizeSelect.value;
+          let pageWidth, pageHeight, drawWidth, drawHeight, x = 0, y = 0;
+
+          if (mode === 'fit') {
+            pageWidth = embeddedImage.width;
+            pageHeight = embeddedImage.height;
+            drawWidth = pageWidth;
+            drawHeight = pageHeight;
+          } else {
+            const isPortrait = mode === 'a4-portrait';
+            pageWidth = isPortrait ? PageSizes.A4[0] : PageSizes.A4[1];
+            pageHeight = isPortrait ? PageSizes.A4[1] : PageSizes.A4[0];
+
+            const ratio = Math.min(pageWidth / embeddedImage.width, pageHeight / embeddedImage.height);
+            drawWidth = embeddedImage.width * ratio;
+            drawHeight = embeddedImage.height * ratio;
+            x = (pageWidth - drawWidth) / 2;
+            y = (pageHeight - drawHeight) / 2;
+          }
+
+          const page = pdfDoc.addPage([pageWidth, pageHeight]);
+          page.drawImage(embeddedImage, {
+            x: x,
+            y: y,
+            width: drawWidth,
+            height: drawHeight
+          });
+        }
+
+        const pdfDataUri = await pdfDoc.save();
+        const blob = new Blob([pdfDataUri], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `converted_${Date.now()}.pdf`;
+        link.click();
+
+        statusBox.style.display = 'block';
+      } catch (err) {
+        alert('PDF Conversion Failed: ' + err.message);
+      } finally {
+        convertBtn.disabled = false;
+        convertBtn.innerText = 'Convert to PDF & Download';
+      }
+    });
+  </script>
+</body>
+</html>
