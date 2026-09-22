@@ -36,7 +36,6 @@ body {
   align-items: center;
 }
 .wrapper { width: 100%; max-width: 560px; }
-
 .top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 10px; }
 .back-link { color: var(--amber); text-decoration: none; font-size: 13px; font-weight: 600; }
 .offline-badge {
@@ -169,7 +168,7 @@ input[type="range"] { width: 100%; accent-color: var(--amber); background: var(-
 .a4-preview-wrap { margin-bottom: 16px; }
 .a4-preview-box {
   background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid var(--line);
-  max-width: 220px; margin: 8px auto 0; box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  max-width: 240px; margin: 8px auto 0; box-shadow: 0 8px 20px rgba(0,0,0,0.35);
 }
 .a4-preview-box img { width: 100%; display: block; }
 
@@ -315,7 +314,7 @@ input[type="range"] { width: 100%; accent-color: var(--amber); background: var(-
       </div>
 
       <button class="btn" id="dlBothBtn">⬇ Download Both — A4 Print-Ready PDF</button>
-      <div class="hint-note">Clean A4 sheet with top-aligned cards, ready to print &amp; submit.</div>
+      <div class="hint-note">Clean A4 sheet with perfectly aligned cards, ready to print &amp; submit.</div>
       <button class="reset-link" id="resetBtn">↺ Upload a Different File</button>
     </div>
 
@@ -385,11 +384,6 @@ const boxRatios = {
 const boxEls = { front: frontCropBoxEl, back: backCropBoxEl };
 
 function clamp01(v) { return Math.max(0, Math.min(1, v)); }
-
-function fitDims(img, maxW, maxH) {
-  const ratio = Math.min(maxW / img.width, maxH / img.height);
-  return { w: img.width * ratio, h: img.height * ratio };
-}
 
 qualityRange.addEventListener('input', function() {
   quality = qualityRange.value / 100;
@@ -750,6 +744,8 @@ function finalizeSides(fCanvas, bCanvas) {
   setupTilt(document.getElementById('frontResultCard'));
   setupTilt(document.getElementById('backResultCard'));
 }
+
+// Fixed Alignment: Standard ID Card dimensions (85.6mm x 54mm)
 function renderA4Preview() {
   if (!frontCanvas || !backCanvas) return;
   const pw = 350, ph = Math.round(350 * 1.4142);
@@ -757,22 +753,19 @@ function renderA4Preview() {
   canvas.width = pw; canvas.height = ph;
   const ctx = canvas.getContext('2d');
   
-  // Clean Plain White A4 Background
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, pw, ph);
 
-  const margin = 20, colGap = 12;
-  const usableW = pw - margin * 2;
-  const colW = (usableW - colGap) / 2;
-  const topMargin = 22; // Cards bilkul top par
+  const marginX = 22;
+  const colGap = 12;
+  const cardW = (pw - marginX * 2 - colGap) / 2;
+  const cardH = cardW * (54 / 85.6); // Perfect standard aspect ratio
+  const topMargin = 26;
 
-  // Front Card at Top Left
-  const fH = colW * (frontCanvas.height / frontCanvas.width);
-  ctx.drawImage(frontCanvas, margin, topMargin, colW, fH);
-
-  // Back Card at Top Right
-  const bH = colW * (backCanvas.height / backCanvas.width);
-  ctx.drawImage(backCanvas, margin + colW + colGap, topMargin, colW, bH);
+  // Front Card
+  ctx.drawImage(frontCanvas, marginX, topMargin, cardW, cardH);
+  // Back Card
+  ctx.drawImage(backCanvas, marginX + cardW + colGap, topMargin, cardW, cardH);
 
   a4PreviewImg.src = canvas.toDataURL('image/jpeg', 0.92);
 }
@@ -815,6 +808,7 @@ function canvasToJpgBytes(canvas, q) {
   });
 }
 
+// Download PDF with Perfectly Aligned Cards
 dlBothBtn.addEventListener('click', async function() {
   if (!frontCanvas || !backCanvas) return;
   dlBothBtn.disabled = true;
@@ -824,42 +818,41 @@ dlBothBtn.addEventListener('click', async function() {
     const PDFDocument = PDFLib.PDFDocument;
     const pdfDoc = await PDFDocument.create();
     
-    // A4 Size in points (595.28 x 841.89)
-    const page = pdfDoc.addPage([595.28, 841.89]);
+    // A4 Size in points
+    const pageW = 595.28, pageH = 841.89;
+    const page = pdfDoc.addPage([pageW, pageH]);
 
     const frontBytes = await canvasToJpgBytes(frontCanvas, quality);
     const backBytes = await canvasToJpgBytes(backCanvas, quality);
     const frontImg = await pdfDoc.embedJpg(frontBytes);
     const backImg = await pdfDoc.embedJpg(backBytes);
 
-    const pageW = 595.28, pageH = 841.89;
-    const margin = 35, colGap = 20;
-    const usableW = pageW - margin * 2;
-    const colW = (usableW - colGap) / 2; // Card width
+    // Standard ID Card Dimensions in Points (85.6mm x 54mm)
+    const cardW = 242.6;
+    const cardH = 153.0;
+    const colGap = 20;
+    
+    // Centered Horizontally & Aligned at Top
+    const totalW = (cardW * 2) + colGap;
+    const startX = (pageW - totalW) / 2;
+    const topMargin = 45; 
+    const cardY = pageH - topMargin - cardH; // Both cards sit on exact same Y line
 
-    const topMargin = 40; // Top se distance
-
-    // Front Card placed at Top-Left
-    const fH = colW * (frontCanvas.height / frontCanvas.width);
-    const fY = pageH - topMargin - fH;
+    // Front Card
     page.drawImage(frontImg, {
-      x: margin,
-      y: fY,
-      width: colW,
-      height: fH
+      x: startX,
+      y: cardY,
+      width: cardW,
+      height: cardH
     });
 
-    // Back Card placed at Top-Right
-    const bH = colW * (backCanvas.height / backCanvas.width);
-    const bY = pageH - topMargin - bH;
+    // Back Card
     page.drawImage(backImg, {
-      x: margin + colW + colGap,
-      y: bY,
-      width: colW,
-      height: bH
+      x: startX + cardW + colGap,
+      y: cardY,
+      width: cardW,
+      height: cardH
     });
-
-    // Clean plain paper: Ek bhi line, border ya label draw nahi kiya gaya hai
 
     const pdfBytes = await pdfDoc.save();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
