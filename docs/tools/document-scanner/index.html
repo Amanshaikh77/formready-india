@@ -424,10 +424,10 @@
     <div class="result-section" id="resultSection">
       <label class="filter-label">Choose Scanner Filter:</label>
       <div class="filters-bar">
-        <div class="filter-btn active" onclick="changeFilter('bw', this)">B&W Clean</div>
+        <div class="filter-btn" onclick="changeFilter('bw', this)">B<div class="filter-btn active" onclick="changeFilter('bw', this)">B&W Clean</div>W Clean</div>
         <div class="filter-btn" onclick="changeFilter('magic', this)">Magic Color</div>
         <div class="filter-btn" onclick="changeFilter('gray', this)">Grayscale</div>
-        <div class="filter-btn" onclick="changeFilter('orig', this)">Original</div>
+        <div class="filter-btn active" onclick="changeFilter('orig', this)">Original</div>
       </div>
 
       <div class="preview-box">
@@ -459,7 +459,7 @@ let finalCtx = finalCanvas.getContext("2d");
 let corners = [];
 let activeHandleIndex = -1;
 let scaleRatio = 1;
-let currentFilter = 'bw';
+let currentFilter = 'orig';
 let croppedIntermediateCanvas = document.createElement("canvas");
 
 function handleFile(e) {
