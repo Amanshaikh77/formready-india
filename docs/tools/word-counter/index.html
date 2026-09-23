@@ -1,314 +1,503 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Word & Character Counter - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #13100e;
-  --panel: #1c1815;
-  --line: #2e2620;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f3ede2;
-  --muted: #9e9080;
-  --card-bg: #16120f;
-  --success: #34d399;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 16px 14px 50px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.wrapper { width: 100%; max-width: 580px; }
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 22px 18px;
-  border-radius: 12px;
-  width: 100%;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Word & Character Counter (Live Stats & Density) - FormReady India</title>
+  <meta name="description" content="Count words, characters, sentences, paragraphs, and estimate reading time in real-time. 100% offline & client-side private text analysis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-/* HOW TO USE GUIDE */
-.how-to-box {
-  background: rgba(217, 154, 63, 0.05);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 18px;
-}
-.how-to-title {
-  color: var(--amber);
-  font-size: 12.5px;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-.how-to-list {
-  list-style: none;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
 
-/* STATS GRID */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
-}
-@media (min-width: 480px) {
-  .stats-grid { grid-template-columns: repeat(4, 1fr); }
-}
-.stat-box {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 12px 8px;
-  text-align: center;
-}
-.stat-val {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--amber);
-  line-height: 1.2;
-}
-.stat-label {
-  font-size: 11px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 4px;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* TEXTAREA */
-textarea {
-  width: 100%;
-  height: 180px;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  font-size: 14px;
-  padding: 14px;
-  border-radius: 8px;
-  outline: none;
-  font-family: inherit;
-  resize: vertical;
-  line-height: 1.5;
-}
-textarea:focus { border-color: var(--amber); }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-/* EXTRA DETAILS BAR */
-.details-bar {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-  font-size: 12px;
-  color: var(--muted);
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-.details-bar span { color: var(--paper); font-weight: 600; }
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-/* BUTTON ROW */
-.btn-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-}
-.btn {
-  flex: 1;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.15s;
-}
-.btn:hover { border-color: var(--amber); color: var(--amber); }
-.btn-primary {
-  background: var(--amber);
-  color: #13100e;
-  border-color: var(--amber);
-  font-weight: 700;
-}
-.btn-primary:hover { opacity: 0.9; color: #13100e; }
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
 
-/* ADVERTISEMENT CONTAINER */
-.ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 22px;
-  min-height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.ad-tag {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  display: block;
-  text-transform: uppercase;
-}
-.ad-content {
-  font-size: 11.5px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-</style>
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Primary Stats Grid (Glowing Numeric Counters) */
+    .stats-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 540px) {
+      .stats-cards-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .stat-card {
+      background: #14100c;
+      border: 1px solid rgba(245, 166, 35, 0.25);
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .stat-card:hover {
+      border-color: var(--amber);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(245, 166, 35, 0.15);
+    }
+    .stat-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--amber);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Secondary Micro Stats Row */
+    .micro-stats-row {
+      display: flex;
+      justify-content: space-around;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      font-size: 12px;
+      color: var(--muted);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .micro-item { display: flex; align-items: center; gap: 6px; }
+    .micro-item b { color: var(--paper); }
+
+    /* Text Area */
+    .textarea-container {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .main-textarea {
+      width: 100%;
+      height: 240px;
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      color: var(--paper);
+      font-size: 14px;
+      font-family: inherit;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .main-textarea:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 14px rgba(245, 166, 35, 0.22);
+    }
+
+    /* Keyword Density Pill Box */
+    .density-section {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+    }
+    .density-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .density-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .density-chip {
+      background: #120e0b;
+      border: 1px solid var(--line);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      color: var(--paper);
+    }
+    .density-chip span { color: var(--amber); font-weight: 700; margin-left: 4px; }
+
+    /* Actions Bottom Grid */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 480px) {
+      .actions-grid { grid-template-columns: 1fr; }
+    }
+    .btn-action {
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: none;
+      transition: all 0.2s;
+    }
+    .btn-copy {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-copy:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+    .btn-clear {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--danger);
+    }
+    .btn-clear:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--danger); }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
-  <div class="card">
-    <h2>Word & Character Counter</h2>
-    <div class="subtitle">Live count of words, characters, sentences, and estimated reading time</div>
+<div class="global-shine-overlay"></div>
 
-    <!-- HOW TO USE -->
-    <div class="how-to-box">
-      <div class="how-to-title">📘 How to Use Word Counter</div>
-      <ol class="how-to-list">
-        <li>1. <span>Type or Paste:</span> Enter text into the box below.</li>
-        <li>2. <span>Live Metrics:</span> View instant word and character stats without reloading.</li>
-        <li>3. <span>Copy or Clear:</span> Quick actions to copy updated text or clear all.</li>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Word & Character Counter</h1>
+    <p>Live count of words, characters, sentences, reading time and keyword density</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📘 How to Use Word Counter</h3>
+      <ol>
+        <li><b>Type or Paste:</b> Enter your content or notes into the editor below.</li>
+        <li><b>Live Metrics:</b> View instant word, character, sentence & reading time stats without page refresh.</li>
+        <li><b>Copy or Clear:</b> Use quick actions to copy formatted text or clear all in 1-click.</li>
       </ol>
     </div>
 
-    <!-- STATS CARDS -->
-    <div class="stats-grid">
-      <div class="stat-box">
-        <div class="stat-val" id="wordCount">0</div>
+    <!-- 2. Primary Glowing Stats Counters -->
+    <div class="stats-cards-grid">
+      <div class="stat-card">
+        <div class="stat-num" id="countWords">0</div>
         <div class="stat-label">Words</div>
       </div>
-      <div class="stat-box">
-        <div class="stat-val" id="charCount">0</div>
+      <div class="stat-card">
+        <div class="stat-num" id="countChars">0</div>
         <div class="stat-label">Characters</div>
       </div>
-      <div class="stat-box">
-        <div class="stat-val" id="charNoSpaces">0</div>
+      <div class="stat-card">
+        <div class="stat-num" id="countNoSpaces">0</div>
         <div class="stat-label">No Spaces</div>
       </div>
-      <div class="stat-box">
-        <div class="stat-val" id="sentenceCount">0</div>
+      <div class="stat-card">
+        <div class="stat-num" id="countSentences">0</div>
         <div class="stat-label">Sentences</div>
       </div>
     </div>
 
-    <!-- INPUT AREA -->
-    <textarea id="textInput" placeholder="Start typing or paste your content here..." oninput="analyzeText()"></textarea>
-
-    <!-- EXTRA READING STATS -->
-    <div class="details-bar">
-      <div>Paragraphs: <span id="paraCount">0</span></div>
-      <div>Reading Time: <span id="readingTime">0 sec</span></div>
-      <div>Speaking Time: <span id="speakingTime">0 sec</span></div>
+    <!-- 3. Secondary Metrics Bar (Paragraphs, Lines, Reading Time) -->
+    <div class="micro-stats-row">
+      <div class="micro-item">📄 Paragraphs: <b id="countParagraphs">0</b></div>
+      <div class="micro-item">📋 Lines: <b id="countLines">0</b></div>
+      <div class="micro-item">⏱️ Reading Time: <b id="readingTime">0 sec</b></div>
+      <div class="micro-item">🗣️ Speaking Time: <b id="speakingTime">0 sec</b></div>
     </div>
 
-    <!-- ACTION BUTTONS -->
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="copyText()">📋 Copy Text</button>
-      <button class="btn" onclick="clearText()">🗑️ Clear</button>
+    <!-- 4. Text Area Input -->
+    <div class="textarea-container">
+      <textarea id="textInput" class="main-textarea" placeholder="Start typing or paste your content here..." oninput="calculateStats()"></textarea>
     </div>
 
-    <!-- ADVERTISEMENT CONTAINER -->
-    <div class="ad-card">
-      <span class="ad-tag">Sponsored Advertisement</span>
-      <div class="ad-content">
-        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
-      </div>
+    <!-- 5. Top Keyword Density Area -->
+    <div class="density-section" id="densitySection" style="display: none;">
+      <div class="density-title">📊 Top Repeated Words (Density):</div>
+      <div class="density-pills" id="densityPills"></div>
+    </div>
+
+    <!-- 6. Actions Grid -->
+    <div class="actions-grid">
+      <button class="btn-action btn-copy" id="copyBtn" onclick="copyContent()">
+        📋 Copy Text Content
+      </button>
+      <button class="btn-action btn-clear" onclick="clearAllContent()">
+        🗑️ Clear All
+      </button>
     </div>
   </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
 
 <script>
-function analyzeText() {
-  const text = document.getElementById('textInput').value;
+const textInput = document.getElementById("textInput");
+const countWords = document.getElementById("countWords");
+const countChars = document.getElementById("countChars");
+const countNoSpaces = document.getElementById("countNoSpaces");
+const countSentences = document.getElementById("countSentences");
+const countParagraphs = document.getElementById("countParagraphs");
+const countLines = document.getElementById("countLines");
+const readingTime = document.getElementById("readingTime");
+const speakingTime = document.getElementById("speakingTime");
+const densitySection = document.getElementById("densitySection");
+const densityPills = document.getElementById("densityPills");
+const copyBtn = document.getElementById("copyBtn");
 
-  // Characters
-  const charsWithSpaces = text.length;
-  const charsWithoutSpaces = text.replace(/\s/g, '').length;
+function calculateStats() {
+  const text = textInput.value;
 
-  // Words
+  // 1. Characters with spaces
+  countChars.innerText = text.length;
+
+  // 2. Characters without spaces
+  const noSpaces = text.replace(/\s/g, '').length;
+  countNoSpaces.innerText = noSpaces;
+
+  // 3. Word Count
   const trimmed = text.trim();
-  const words = trimmed ? trimmed.split(/\s+/).filter(Boolean) : [];
-  const wordCount = words.length;
+  const wordsArr = trimmed ? trimmed.split(/\s+/) : [];
+  const words = wordsArr.length;
+  countWords.innerText = words;
 
-  // Sentences (. ! ?)
-  const sentences = trimmed ? trimmed.split(/[.!?]+/).filter(s => s.trim().length > 0) : [];
-  const sentenceCount = sentences.length;
+  // 4. Sentences Count
+  const sentencesArr = trimmed ? (trimmed.match(/[^.!?]+[.!?]+(\s|$)/g) || [trimmed]) : [];
+  countSentences.innerText = trimmed ? sentencesArr.length : 0;
 
-  // Paragraphs
-  const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
-  const paraCount = paragraphs.length;
+  // 5. Paragraphs Count
+  const paragraphsArr = trimmed ? trimmed.split(/\n+/).filter(p => p.trim().length > 0) : [];
+  countParagraphs.innerText = paragraphsArr.length;
 
-  // Reading time (~200 wpm) & Speaking (~130 wpm)
-  const readSecs = Math.ceil((wordCount / 200) * 60);
-  const speakSecs = Math.ceil((wordCount / 130) * 60);
+  // 6. Lines Count
+  const linesArr = text ? text.split(/\r?\n/) : [];
+  countLines.innerText = text ? linesArr.length : 0;
 
-  function formatTime(s) {
-    if (s < 60) return `${s} sec`;
-    const m = Math.floor(s / 60);
-    const rem = s % 60;
-    return rem > 0 ? `${m}m ${rem}s` : `${m} min`;
+  // 7. Reading & Speaking Time Estimates (avg reading: 225 wpm, speaking: 130 wpm)
+  if (words === 0) {
+    readingTime.innerText = "0 sec";
+    speakingTime.innerText = "0 sec";
+  } else {
+    const readSecs = Math.ceil((words / 225) * 60);
+    const speakSecs = Math.ceil((words / 130) * 60);
+
+    readingTime.innerText = readSecs < 60 ? `${readSecs} sec` : `${Math.ceil(readSecs / 60)} min`;
+    speakingTime.innerText = speakSecs < 60 ? `${speakSecs} sec` : `${Math.ceil(speakSecs / 60)} min`;
   }
 
-  document.getElementById('wordCount').innerText = wordCount.toLocaleString();
-  document.getElementById('charCount').innerText = charsWithSpaces.toLocaleString();
-  document.getElementById('charNoSpaces').innerText = charsWithoutSpaces.toLocaleString();
-  document.getElementById('sentenceCount').innerText = sentenceCount.toLocaleString();
-  document.getElementById('paraCount').innerText = paraCount.toLocaleString();
-  document.getElementById('readingTime').innerText = formatTime(readSecs);
-  document.getElementById('speakingTime').innerText = formatTime(speakSecs);
+  // 8. Keyword Density Analysis
+  updateDensity(wordsArr);
 }
 
-function copyText() {
-  const text = document.getElementById('textInput').value;
-  if (!text) return;
-  navigator.clipboard.writeText(text).then(() => {
-    alert("Text copied to clipboard!");
+function updateDensity(wordsArr) {
+  if (wordsArr.length < 5) {
+    densitySection.style.display = "none";
+    return;
+  }
+
+  const stopWords = new Set([
+    "the","and","a","to","of","in","i","is","that","it","on","you","this","for",
+    "with","as","are","at","be","by","from","or","an","was","we","will","an"
+  ]);
+
+  const freqMap = {};
+  wordsArr.forEach(w => {
+    const clean = w.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+    if (clean.length > 2 && !stopWords.has(clean)) {
+      freqMap[clean] = (freqMap[clean] || 0) + 1;
+    }
+  });
+
+  const sorted = Object.entries(freqMap)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6);
+
+  if (sorted.length === 0) {
+    densitySection.style.display = "none";
+    return;
+  }
+
+  densitySection.style.display = "block";
+  densityPills.innerHTML = "";
+
+  sorted.forEach(([word, count]) => {
+    const pct = Math.round((count / wordsArr.length) * 100);
+    const chip = document.createElement("div");
+    chip.className = "density-chip";
+    chip.innerHTML = `${word} <span>(${count}x • ${pct}%)</span>`;
+    densityPills.appendChild(chip);
   });
 }
 
-function clearText() {
-  document.getElementById('textInput').value = '';
-  analyzeText();
+function copyContent() {
+  const text = textInput.value;
+  if (!text) return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = copyBtn.innerHTML;
+    copyBtn.innerHTML = "✅ Copied to Clipboard!";
+    setTimeout(() => { copyBtn.innerHTML = orig; }, 2000);
+  }).catch(() => {
+    alert("Copied text content:\n" + text);
+  });
+}
+
+function clearAllContent() {
+  textInput.value = "";
+  calculateStats();
 }
 </script>
 </body>
