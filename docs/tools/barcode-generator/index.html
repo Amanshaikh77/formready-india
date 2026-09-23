@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Barcode Generator & Product Scanner - FormReady India</title>
-  <meta name="description" content="Generate CODE128, EAN-13, UPC barcodes & scan retail product barcodes with live camera. 100% private, offline and instant download.">
+  <title>Barcode Studio & Product Scanner - FormReady India</title>
+  <meta name="description" content="Generate standard retail barcodes and scan product barcodes live via camera & image upload. 100% offline & client-side.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-  <!-- JsBarcode Library for Barcode Creation -->
+  <!-- Barcode Generation -->
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-  <!-- Html5Qrcode Library for Live Camera & Image Barcode Scanning -->
+  <!-- Barcode / QR Scanning Engine -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
   <style>
@@ -45,7 +45,6 @@
       position: relative;
     }
 
-    /* Continuous Full-Screen Glass Shine */
     .global-shine-overlay {
       position: fixed;
       top: 0;
@@ -84,7 +83,6 @@
 
     .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
 
-    /* Top Navigation */
     .nav-bar { margin-bottom: 16px; }
     .back-btn {
       display: inline-flex;
@@ -106,7 +104,6 @@
       transform: translateX(-2px);
     }
 
-    /* Header */
     .header { text-align: center; margin-bottom: 22px; }
     h1 {
       font-family: 'Space Grotesk', sans-serif;
@@ -119,7 +116,6 @@
     }
     .header p { font-size: 13px; color: var(--muted); }
 
-    /* Main Card */
     .main-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -160,7 +156,6 @@
       box-shadow: 0 4px 14px rgba(245, 166, 35, 0.35);
     }
 
-    /* How to Use Box */
     .instructions-box {
       background: rgba(245, 166, 35, 0.06);
       border: 1px solid rgba(245, 166, 35, 0.22);
@@ -182,7 +177,6 @@
     .instructions-box li { margin-bottom: 3px; }
     .instructions-box li b { color: var(--paper); }
 
-    /* Form Fields */
     .field-group { margin-bottom: 16px; }
     .field-label {
       font-size: 12.5px;
@@ -200,11 +194,9 @@
       color: var(--paper);
       font-size: 13.5px;
       outline: none;
-      font-family: inherit;
     }
     .input-control:focus { border-color: var(--amber); }
 
-    /* Slider Row */
     .sliders-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -231,7 +223,6 @@
     .slider-head b { color: var(--amber); }
     .range-input { width: 100%; accent-color: var(--amber); cursor: pointer; }
 
-    /* Checkbox */
     .check-wrap {
       display: flex;
       align-items: center;
@@ -244,7 +235,6 @@
     }
     .check-wrap input { width: 16px; height: 16px; accent-color: var(--amber); }
 
-    /* Action Buttons */
     .btn-action-primary {
       width: 100%;
       padding: 14px;
@@ -267,7 +257,6 @@
       transform: translateY(-2px);
     }
 
-    /* Barcode Output Preview Frame */
     .barcode-display-frame {
       background: #000;
       border: 1px solid var(--line);
@@ -287,11 +276,8 @@
       overflow-x: auto;
       margin-bottom: 14px;
     }
-    #barcodeSvg {
-      display: block;
-      margin: 0 auto;
-      max-width: 100%;
-    }
+    #barcodeSvg { display: block; margin: 0 auto; max-width: 100%; }
+
     .btn-download-barcode {
       width: 100%;
       padding: 13px;
@@ -309,16 +295,13 @@
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
       transition: all 0.2s;
     }
-    .btn-download-barcode:hover {
-      background: linear-gradient(135deg, #34d399, #10b981);
-      transform: translateY(-2px);
-    }
 
     /* SCANNER VIEWPORT STYLING */
     .scanner-panel { display: none; }
     .camera-stream-box {
       width: 100%;
       max-width: 480px;
+      min-height: 280px;
       margin: 0 auto 16px;
       border-radius: 12px;
       overflow: hidden;
@@ -327,46 +310,35 @@
       position: relative;
     }
     #reader { width: 100%; }
-
-    .scan-upload-zone {
-      border: 2px dashed rgba(245, 166, 35, 0.35);
-      background: var(--panel-inner);
-      padding: 22px 14px;
-      text-align: center;
-      border-radius: 10px;
-      cursor: pointer;
-      display: block;
-      margin-bottom: 16px;
-      transition: all 0.2s;
-    }
-    .scan-upload-zone:hover { border-color: var(--amber); }
+    #reader video { width: 100% !important; border-radius: 10px; object-fit: cover; }
 
     /* Scan Result Card */
     .scan-result-card {
       display: none;
       background: #14100c;
-      border: 1px solid rgba(16, 185, 129, 0.35);
+      border: 1px solid rgba(16, 185, 129, 0.45);
       border-radius: 12px;
-      padding: 16px;
-      margin-top: 16px;
+      padding: 18px;
+      margin-top: 18px;
       text-align: center;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
     }
     .scan-val-text {
       font-family: 'Space Grotesk', monospace;
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 800;
-      color: var(--green);
-      margin: 8px 0 12px;
+      color: #34d399;
+      margin: 8px 0 14px;
       word-break: break-all;
     }
     .btn-copy-scan {
-      padding: 10px 18px;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid var(--green);
-      color: var(--green);
+      padding: 11px 20px;
+      background: #10b981;
+      border: none;
+      color: #fff;
       border-radius: 8px;
-      font-weight: 700;
-      font-size: 12.5px;
+      font-weight: 800;
+      font-size: 13px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -398,7 +370,6 @@
   </div>
 
   <div class="main-card">
-    <!-- Mode Switcher Tabs -->
     <div class="mode-switch-bar">
       <button class="mode-btn active" id="btnModeGen" onclick="switchMode('gen')">
         🏷️ Generate Barcode
@@ -408,7 +379,7 @@
       </button>
     </div>
 
-    <!-- MODE 1: GENERATE BARCODE -->
+    <!-- MODE 1: GENERATE -->
     <div id="genSection">
       <div class="instructions-box">
         <h3>🏷️ How to Use Barcode Generator</h3>
@@ -463,7 +434,6 @@
         ⚡ Generate Barcode
       </button>
 
-      <!-- Barcode Output Viewport -->
       <div class="barcode-display-frame" id="barcodeOutput">
         <div class="barcode-paper">
           <svg id="barcodeSvg"></svg>
@@ -479,13 +449,12 @@
       <div class="instructions-box">
         <h3>📷 How to Scan Product Barcode</h3>
         <ol>
-          <li><b>Live Camera:</b> Tap <b>Start Live Camera Scanner</b> and align barcode inside box.</li>
-          <li><b>Upload Photo:</b> Or upload a photo of any product barcode from gallery.</li>
-          <li><b>Instant Recognition:</b> Scanned barcode number will appear instantly with 1-click copy.</li>
+          <li><b>Live Camera:</b> Tap <b>Start Live Camera Scanner</b> and align the barcode inside the target box.</li>
+          <li><b>Scan From Image:</b> Upload a picture of any product or packet barcode directly from gallery.</li>
+          <li><b>Instant Recognition:</b> The scanned product barcode number will appear instantly.</li>
         </ol>
       </div>
 
-      <!-- Live Camera Viewport -->
       <div class="camera-stream-box" id="scannerViewportBox" style="display:none;">
         <div id="reader"></div>
       </div>
@@ -500,7 +469,6 @@
       </div>
       <input type="file" id="barcodeImgInput" accept="image/*" style="display:none;" onchange="scanBarcodeFromFile(this.files[0])">
 
-      <!-- Scan Result Card -->
       <div class="scan-result-card" id="scanResultCard">
         <span style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase;">Decoded Product Barcode:</span>
         <div class="scan-val-text" id="scanValueDisplay">-</div>
@@ -515,3 +483,224 @@
     &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
   </footer>
 </div>
+
+<script>
+let currentMode = 'gen';
+let html5QrScanner = null;
+let isCameraRunning = false;
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById('btnModeGen').classList.toggle('active', mode === 'gen');
+  document.getElementById('btnModeScan').classList.toggle('active', mode === 'scan');
+  document.getElementById('genSection').style.display = mode === 'gen' ? 'block' : 'none';
+  document.getElementById('scanSection').style.display = mode === 'scan' ? 'block' : 'none';
+
+  if (mode === 'gen' && isCameraRunning) {
+    stopCamera();
+  }
+}
+
+// ----------------- GENERATOR LOGIC -----------------
+function onFormatChange() {
+  const format = document.getElementById("barcodeFormat").value;
+  const hint = document.getElementById("formatHint");
+  const valInput = document.getElementById("barcodeValue");
+
+  if (format === "EAN13") {
+    hint.innerText = "Must be 12 or 13 numbers (e.g. 8901234567890).";
+    valInput.value = "8901234567890";
+  } else if (format === "UPC") {
+    hint.innerText = "Must be 11 or 12 numbers (e.g. 123456789012).";
+    valInput.value = "123456789012";
+  } else {
+    hint.innerText = "Supports letters, numbers, and basic symbols.";
+    valInput.value = "FR-IND-2026";
+  }
+  renderBarcode();
+}
+
+function onParamChange() {
+  document.getElementById("valHeight").innerText = document.getElementById("sliderHeight").value + "px";
+  document.getElementById("valWidth").innerText = document.getElementById("sliderWidth").value + "x";
+  renderBarcode();
+}
+
+function renderBarcode() {
+  const format = document.getElementById("barcodeFormat").value;
+  let text = document.getElementById("barcodeValue").value.trim();
+  const height = parseInt(document.getElementById("sliderHeight").value, 10);
+  const width = parseInt(document.getElementById("sliderWidth").value, 10);
+  const showText = document.getElementById("checkShowText").checked;
+
+  if (!text) return;
+
+  try {
+    JsBarcode("#barcodeSvg", text, {
+      format: format,
+      width: width,
+      height: height,
+      displayValue: showText,
+      font: "Plus Jakarta Sans",
+      fontOptions: "bold",
+      fontSize: 14,
+      textMargin: 6,
+      background: "#ffffff",
+      lineColor: "#000000"
+    });
+  } catch (err) {
+    console.warn("Invalid format value:", err);
+  }
+}
+
+function downloadBarcodePng() {
+  const svg = document.getElementById("barcodeSvg");
+  const svgData = new XMLSerializer().serializeToString(svg);
+  const canvas = document.createElement("canvas");
+  const svgSize = svg.getBoundingClientRect();
+
+  canvas.width = svgSize.width * 2;
+  canvas.height = svgSize.height * 2;
+  const ctx = canvas.getContext("2d");
+
+  const img = new Image();
+  img.onload = function() {
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    const link = document.createElement("a");
+    link.download = `Barcode_${document.getElementById("barcodeValue").value || "code"}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  };
+  img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+}
+
+// ----------------- PRODUCT SCANNER LOGIC -----------------
+// Supported 1D and 2D formats explicitly configured
+const BARCODE_FORMATS = [
+  Html5QrcodeSupportedFormats.EAN_13,
+  Html5QrcodeSupportedFormats.EAN_8,
+  Html5QrcodeSupportedFormats.CODE_128,
+  Html5QrcodeSupportedFormats.CODE_39,
+  Html5QrcodeSupportedFormats.UPC_A,
+  Html5QrcodeSupportedFormats.UPC_E,
+  Html5QrcodeSupportedFormats.QR_CODE
+];
+
+function toggleCameraScanner() {
+  if (isCameraRunning) {
+    stopCamera();
+  } else {
+    startCamera();
+  }
+}
+
+function startCamera() {
+  const viewport = document.getElementById("scannerViewportBox");
+  viewport.style.display = "block";
+  document.getElementById("scanResultCard").style.display = "none";
+
+  html5QrScanner = new Html5Qrcode("reader", { formatsToSupport: BARCODE_FORMATS });
+
+  const config = {
+    fps: 15,
+    qrbox: { width: 300, height: 180 },
+    aspectRatio: 1.777
+  };
+
+  html5QrScanner.start(
+    { facingMode: "environment" },
+    config,
+    (decodedText) => {
+      onScanSuccess(decodedText);
+      stopCamera();
+    },
+    () => {} // scan errors ignored during stream
+  ).then(() => {
+    isCameraRunning = true;
+    document.getElementById("btnToggleCam").innerText = "🛑 Stop Camera";
+  }).catch(err => {
+    alert("Camera permission denied or camera not accessible: " + err);
+    viewport.style.display = "none";
+  });
+}
+
+function stopCamera() {
+  if (html5QrScanner && isCameraRunning) {
+    html5QrScanner.stop().then(() => {
+      html5QrScanner.clear();
+      isCameraRunning = false;
+      document.getElementById("scannerViewportBox").style.display = "none";
+      document.getElementById("btnToggleCam").innerText = "🎥 Start Live Camera";
+    }).catch(err => {
+      console.error(err);
+      isCameraRunning = false;
+      document.getElementById("scannerViewportBox").style.display = "none";
+      document.getElementById("btnToggleCam").innerText = "🎥 Start Live Camera";
+    });
+  }
+}
+
+// Scan Barcode from Image File (using Native BarcodeDetector if available, else Html5Qrcode)
+async function scanBarcodeFromFile(file) {
+  if (!file) return;
+
+  // Try Native BarcodeDetector API first (Instant on Chrome Android)
+  if ('BarcodeDetector' in window) {
+    try {
+      const barcodeDetector = new BarcodeDetector({
+        formats: ['ean_13', 'ean_8', 'code_128', 'code_39', 'upc_a', 'upc_e', 'qr_code']
+      });
+      const imgBitmap = await createImageBitmap(file);
+      const barcodes = await barcodeDetector.detect(imgBitmap);
+      if (barcodes && barcodes.length > 0) {
+        onScanSuccess(barcodes[0].rawValue);
+        return;
+      }
+    } catch (e) {
+      console.log("BarcodeDetector fallback:", e);
+    }
+  }
+
+  // Fallback to Html5Qrcode engine
+  const scanner = new Html5Qrcode("reader", { formatsToSupport: BARCODE_FORMATS });
+  scanner.scanFile(file, true)
+    .then(decodedText => {
+      onScanSuccess(decodedText);
+      scanner.clear();
+    })
+    .catch(() => {
+      alert("No barcode detected. Ensure product barcode is sharp and well-lit.");
+      scanner.clear();
+    });
+}
+
+function onScanSuccess(text) {
+  const card = document.getElementById("scanResultCard");
+  const display = document.getElementById("scanValueDisplay");
+  display.innerText = text;
+  card.style.display = "block";
+  card.scrollIntoView({ behavior: "smooth" });
+
+  if (navigator.vibrate) navigator.vibrate(80);
+}
+
+function copyScannedBarcode() {
+  const text = document.getElementById("scanValueDisplay").innerText;
+  if (!text || text === "-") return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("btnCopyScan");
+    btn.innerHTML = "✅ Copied!";
+    setTimeout(() => { btn.innerHTML = "📋 Copy Barcode Number"; }, 2000);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderBarcode();
+});
+</script>
+</body>
+</html>
