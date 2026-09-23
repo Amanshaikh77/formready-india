@@ -73,18 +73,26 @@
     }
 
     @keyframes continuousGlassSweep {
-      0% {
-        transform: translate3d(-55%, -55%, 0);
-      }
-      100% {
-        transform: translate3d(55%, 55%, 0);
-      }
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
     }
 
     .container { width: 100%; max-width: 1140px; position: relative; z-index: 1; }
 
     /* Header */
     header { text-align: center; margin-bottom: 24px; }
+    .brand-logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .brand-mark {
+      font-size: 26px;
+      color: var(--amber);
+      text-shadow: 0 0 15px rgba(245, 166, 35, 0.5);
+    }
     h1 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 30px;
@@ -92,7 +100,6 @@
       background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 6px;
       letter-spacing: -0.5px;
     }
     .tagline {
@@ -205,21 +212,22 @@
       .grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* Card */
+    /* Base Tool Card */
     .tool-card {
       position: relative;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 12px;
-      padding: 15px;
+      padding: 14px;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 12px;
       text-decoration: none;
       color: inherit;
       transform: translate3d(0, 0, 0);
       transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
       -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
     }
 
     @media (hover: hover) {
@@ -259,21 +267,146 @@
       font-size: 11.5px;
       color: var(--muted);
       line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    /* Badge */
-    .badge {
-      font-size: 9px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 5px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    /* Right Indicator: Pulsing Live Green Dot */
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      display: inline-block;
+      flex-shrink: 0;
     }
-    .badge.active {
-      background: rgba(16, 185, 129, 0.12);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.35);
+
+    /* Featured / Popular Custom Card Styling (Image 1 Style) */
+    .featured-card {
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      background: linear-gradient(145deg, #18130e, #120e0b);
+      padding: 12px 14px;
+    }
+    .featured-card .tool-desc {
+      max-width: 82%;
+    }
+
+    /* Miniature Visual Thumbnail Graphic on Right (Same as Reference Image) */
+    .preview-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: #1c1611;
+      border: 1px solid rgba(245, 166, 35, 0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Mini Mockups inside the preview thumbnail */
+    .thumb-a4-sheet {
+      width: 24px;
+      height: 30px;
+      background: #fbf7ee;
+      border-radius: 2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 4px;
+      gap: 3px;
+    }
+    .thumb-card-box {
+      width: 18px;
+      height: 10px;
+      background: #2a3b5c;
+      border-radius: 1.5px;
+    }
+    .thumb-card-box.sub {
+      background: #7a8ba9;
+      height: 7px;
+    }
+
+    .thumb-cutout {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f5a623, #d97706);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .thumb-photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 9px);
+      gap: 2px;
+    }
+    .thumb-mini-pic {
+      width: 9px;
+      height: 12px;
+      background: #e2d9cc;
+      border-radius: 1px;
+      border: 0.5px solid #a0907e;
+    }
+
+    .thumb-scanner {
+      width: 26px;
+      height: 28px;
+      border: 1.5px solid var(--amber);
+      border-radius: 3px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+    .thumb-scanner::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1.5px;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+    }
+
+    .thumb-pdf-doc {
+      width: 22px;
+      height: 28px;
+      background: #e11d48;
+      border-radius: 2px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .thumb-calc {
+      width: 24px;
+      height: 28px;
+      background: #1e1914;
+      border: 1px solid var(--amber);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--amber);
+      font-weight: 800;
     }
 
     /* Footer */
@@ -296,8 +429,11 @@
 
 <div class="container">
   <header>
-    <h1>FormReady India</h1>
-    <p class="tagline">⚡ Superfast, 100% Secure Offline Document & Form Toolbox</p>
+    <div class="brand-logo-row">
+      <span class="brand-mark">⚡</span>
+      <h1>FormReady India</h1>
+    </div>
+    <p class="tagline">Superfast, 100% Secure Offline-Capable Document & Form Toolbox</p>
     <div class="author-badge">✨ Made by Aman Shaikh</div>
   </header>
 
@@ -308,11 +444,11 @@
 
   <div class="chips-bar">
     <button class="chip active" onclick="selectCategory('all', this)">All Tools</button>
-    <button class="chip" onclick="selectCategory('popular', this)">🔥 Popular Tools</button>
-    <button class="chip" onclick="selectCategory('govt', this)">🇮🇳 Sarkari Form & IDs</button>
-    <button class="chip" onclick="selectCategory('pdf', this)">📄 PDF Tools</button>
-    <button class="chip" onclick="selectCategory('photo', this)">🖼️ Photo & Images</button>
-    <button class="chip" onclick="selectCategory('text', this)">📝 Text & OCR</button>
+    <button class="chip" onclick="selectCategory('popular', this)">⭐ Popular Picks</button>
+    <button class="chip" onclick="selectCategory('govt', this)">🇮🇳 Govt. & ID Utilities</button>
+    <button class="chip" onclick="selectCategory('pdf', this)">📄 PDF Suite</button>
+    <button class="chip" onclick="selectCategory('photo', this)">🖼️ Photo Tools</button>
+    <button class="chip" onclick="selectCategory('text', this)">📝 Text Utilities</button>
     <button class="chip" onclick="selectCategory('calc', this)">🧮 Smart Calculators</button>
   </div>
 
@@ -324,84 +460,201 @@
 </div>
 
 <script>
+// Catalog with Visual Thumbnail Types for Featured Section
 const TOOL_CATALOG = [
   {
     categoryId: "popular",
-    categoryTitle: "🔥 Most Popular Tools",
+    categoryTitle: "1. Featured Toolkits",
+    isFeatured: true,
     tools: [
-      { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print Maker", desc: "Auto-crop front & back sides into clean, top-aligned A4 print-ready PDF.", icon: "🪪", status: "active" },
-      { slug: "background-remover", name: "AI Background Remover", desc: "Make photo background white or transparent in 1-click for IDs & forms.", icon: "🪄", status: "active" },
-      { slug: "photo-sheet", name: "Passport Photo Sheet (4x6 / A4)", desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", icon: "🖨️", status: "active" },
-      { slug: "document-scanner", name: "HD Document Cam Scanner", desc: "Scan certificates via mobile camera with auto black & white filter.", icon: "📷", status: "active" },
-      { slug: "pdf-editor", name: "Online PDF Editor & Markup", desc: "Edit text, annotate, highlight and sign PDF files directly offline.", icon: "📝", status: "active" },
-      { slug: "jpg-to-pdf", name: "JPG to PDF Converter", desc: "Convert multiple gallery images into a single printable high-res PDF.", icon: "🖼️", status: "active" },
-      { slug: "gst-calculator", name: "GST Calculator (CGST / SGST)", desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", icon: "💰", status: "active" },
-      { slug: "currency-converter", name: "Live Currency Converter", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", icon: "💱", status: "active" }
+      { 
+        slug: "aadhaar-pan-resizer", 
+        name: "ID Card to A4 Print Maker", 
+        desc: "Auto-crop front & back sides into clean, top-aligned A4 print-ready PDF.", 
+        icon: "🪪",
+        thumbHtml: `<div class="thumb-a4-sheet"><div class="thumb-card-box"></div><div class="thumb-card-box sub"></div></div>`
+      },
+      { 
+        slug: "background-remover", 
+        name: "AI Background Remover", 
+        desc: "Make photo background white or transparent in 1-click for IDs & forms.", 
+        icon: "🪄",
+        thumbHtml: `<div class="thumb-cutout">👤</div>`
+      },
+      { 
+        slug: "photo-sheet", 
+        name: "Passport Photo Sheet (4x6 / A4)", 
+        desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", 
+        icon: "🖨️",
+        thumbHtml: `<div class="thumb-photo-grid"><div class="thumb-mini-pic"></div><div class="thumb-mini-pic"></div><div class="thumb-mini-pic"></div><div class="thumb-mini-pic"></div></div>`
+      },
+      { 
+        slug: "document-scanner", 
+        name: "HD Document Cam Scanner", 
+        desc: "Scan certificates via mobile camera with auto black & white filter.", 
+        icon: "📷",
+        thumbHtml: `<div class="thumb-scanner">📄</div>`
+      },
+      { 
+        slug: "pdf-editor", 
+        name: "Online PDF Editor & Markup", 
+        desc: "Edit text, annotate, highlight and sign PDF files directly offline.", 
+        icon: "📝",
+        thumbHtml: `<div class="thumb-pdf-doc">PDF</div>`
+      },
+      { 
+        slug: "jpg-to-pdf", 
+        name: "JPG to PDF Converter", 
+        desc: "Convert multiple gallery images into a single printable high-res PDF.", 
+        icon: "🖼️",
+        thumbHtml: `<div class="thumb-pdf-doc" style="background:#0284c7">JPG</div>`
+      },
+      { 
+        slug: "gst-calculator", 
+        name: "GST Calculator (CGST / SGST)", 
+        desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", 
+        icon: "💰",
+        thumbHtml: `<div class="thumb-calc">₹</div>`
+      },
+      { 
+        slug: "currency-converter", 
+        name: "Live Currency Converter", 
+        desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", 
+        icon: "💱",
+        thumbHtml: `<div class="thumb-calc" style="color:#10b981; border-color:#10b981;">$</div>`
+      }
     ]
   },
   {
     categoryId: "govt",
-    categoryTitle: "🇮🇳 Indian Govt Exam & ID Utilities",
+    categoryTitle: "2. Govt. & ID Utilities",
     tools: [
-      { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print Maker", desc: "Auto-crop front & back sides into clean, top-aligned A4 print-ready PDF.", icon: "🪪", status: "active" },
-      { slug: "signature-maker", name: "Digital Signature Draw Maker", desc: "Draw ultra-smooth signature on mobile/mouse and get transparent PNG.", icon: "🖊️", status: "active" },
-      { slug: "passport-photo-maker", name: "Passport Size Photo Maker", desc: "Create single or multi-copy passport photos with plain white background.", icon: "👥", status: "active" },
-      { slug: "photo-sign-card", name: "Photo + Signature Joiner", desc: "Merge photo & signature in a single standard box required for NTA/IBPS.", icon: "🔲", status: "active" },
-      { slug: "photo-sheet", name: "Passport Photo Sheet (4x6 / A4)", desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", icon: "🖨️", status: "active" },
-      { slug: "document-scanner", name: "HD Document Cam Scanner", desc: "Scan certificates via mobile camera with auto black & white filter.", icon: "📷", status: "active" },
-      { slug: "govt-pdf-helper", name: "Sarkari PDF Compressor (Under 100KB)", desc: "Compress marksheet & caste certificate under 100KB/200KB upload limits.", icon: "📋", status: "active" }
+      { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print Maker", desc: "Auto-crop front & back sides into clean, top-aligned A4 print-ready PDF.", icon: "🪪" },
+      { slug: "signature-maker", name: "Digital Signature Draw Maker", desc: "Draw ultra-smooth signature on mobile/mouse and get transparent PNG.", icon: "🖊️" },
+      { slug: "passport-photo-maker", name: "Passport Size Photo Maker", desc: "Create single or multi-copy passport photos with plain white background.", icon: "👥" },
+      { slug: "photo-sign-card", name: "Photo + Signature Joiner", desc: "Merge photo & signature in a single standard box required for NTA/IBPS.", icon: "🔲" },
+      { slug: "photo-sheet", name: "Passport Photo Sheet (4x6 / A4)", desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", icon: "🖨️" },
+      { slug: "document-scanner", name: "HD Document Cam Scanner", desc: "Scan certificates via mobile camera with auto black & white filter.", icon: "📷" },
+      { slug: "govt-pdf-helper", name: "Sarkari PDF Compressor (Under 100KB)", desc: "Compress marksheet & caste certificate under 100KB/200KB upload limits.", icon: "📋" }
     ]
   },
   {
     categoryId: "pdf",
-    categoryTitle: "📄 PDF Tools & Utilities",
+    categoryTitle: "3. Advanced PDF Suite",
     tools: [
-      { slug: "pdf-editor", name: "Online PDF Editor & Markup", desc: "Edit text, annotate, highlight and sign PDF files directly offline.", icon: "📝", status: "active" },
-      { slug: "merge-pdf", name: "Merge PDF (Join Multiple Files)", desc: "Combine multiple PDF documents and marksheets into one single file.", icon: "🔗", status: "active" },
-      { slug: "split-pdf", name: "Split & Extract PDF Pages", desc: "Extract custom pages or break large PDF books into separate files.", icon: "✂️", status: "active" },
-      { slug: "jpg-to-pdf", name: "JPG to PDF Converter", desc: "Convert multiple gallery images into a single printable high-res PDF.", icon: "🖼️", status: "active" },
-      { slug: "pdf-to-jpg", name: "PDF to JPG / Image Extractor", desc: "Extract high-resolution JPG pictures from each page of your PDF file.", icon: "📷", status: "active" },
-      { slug: "pdf-organizer", name: "PDF Page Organizer", desc: "Drag-and-drop to reorder, delete or arrange pages in any PDF document.", icon: "📑", status: "active" },
-      { slug: "add-watermark", name: "Add Watermark to PDF", desc: "Stamp confidential, custom text or logos across your PDF pages.", icon: "💧", status: "active" }
+      { slug: "pdf-editor", name: "Online PDF Editor & Markup", desc: "Edit text, annotate, highlight and sign PDF files directly offline.", icon: "📝" },
+      { slug: "merge-pdf", name: "Merge PDF (Join Multiple Files)", desc: "Combine multiple PDF documents and marksheets into one single file.", icon: "🔗" },
+      { slug: "split-pdf", name: "Split & Extract PDF Pages", desc: "Extract custom pages or break large PDF books into separate files.", icon: "✂️" },
+      { slug: "jpg-to-pdf", name: "JPG to PDF Converter", desc: "Convert multiple gallery images into a single printable high-res PDF.", icon: "🖼️" },
+      { slug: "pdf-to-jpg", name: "PDF to JPG / Image Extractor", desc: "Extract high-resolution JPG pictures from each page of your PDF file.", icon: "📷" },
+      { slug: "pdf-organizer", name: "PDF Page Organizer", desc: "Drag-and-drop to reorder, delete or arrange pages in any PDF document.", icon: "📑" },
+      { slug: "add-watermark", name: "Add Watermark to PDF", desc: "Stamp confidential, custom text or logos across your PDF pages.", icon: "💧" }
     ]
   },
   {
     categoryId: "photo",
-    categoryTitle: "🖼️ Photo & Image Optimization",
+    categoryTitle: "4. Photo & Image Optimization",
     tools: [
-      { slug: "photo-resizer", name: "Photo Resizer (PX, CM, INCH)", desc: "Resize dimensions with custom DPI for online form upload requirements.", icon: "📐", status: "active" },
-      { slug: "photo-compressor", name: "Photo Compressor (KB to MB)", desc: "Compress image file size up to 80% without losing quality or sharpness.", icon: "🗜️", status: "active" },
-      { slug: "photo-cropper", name: "Photo Cropper (Custom Ratios)", desc: "Crop photos with custom aspect ratios (1:1, 3:4, 3.5x4.5cm) effortlessly.", icon: "✂️", status: "active" },
-      { slug: "image-converter", name: "Image Format Converter", desc: "Instant lossless conversion between JPG, PNG, WEBP, and ICO formats.", icon: "🔄", status: "active" },
-      { slug: "background-remover", name: "AI Background Remover", desc: "Make photo background white or transparent in 1-click for IDs & forms.", icon: "🪄", status: "active" }
+      { slug: "photo-resizer", name: "Photo Resizer (PX, CM, INCH)", desc: "Resize dimensions with custom DPI for online form upload requirements.", icon: "📐" },
+      { slug: "photo-compressor", name: "Photo Compressor (KB to MB)", desc: "Compress image file size up to 80% without losing quality or sharpness.", icon: "🗜️" },
+      { slug: "photo-cropper", name: "Photo Cropper (Custom Ratios)", desc: "Crop photos with custom aspect ratios (1:1, 3:4, 3.5x4.5cm) effortlessly.", icon: "✂️" },
+      { slug: "image-converter", name: "Image Format Converter", desc: "Instant lossless conversion between JPG, PNG, WEBP, and ICO formats.", icon: "🔄" },
+      { slug: "background-remover", name: "AI Background Remover", desc: "Make photo background white or transparent in 1-click for IDs & forms.", icon: "🪄" }
     ]
   },
   {
     categoryId: "text",
-    categoryTitle: "📝 Text & Generator Utilities",
+    categoryTitle: "5. Text & Generator Utilities",
     tools: [
-      { slug: "image-to-text", name: "Image to Text (OCR Extractor)", desc: "Extract printed or handwritten text from photos, scans & books instantly.", icon: "🔍", status: "active" },
-      { slug: "text-cleaner", name: "Text Cleaner & Space Fixer", desc: "Remove weird duplicate spaces, line breaks, and messy formatting.", icon: "🧹", status: "active" },
-      { slug: "case-converter", name: "Case Converter (UPPER/lower)", desc: "Quickly convert text into UPPERCASE, lowercase, Title Case or camelCase.", icon: "🔠", status: "active" },
-      { slug: "word-counter", name: "Word & Character Counter", desc: "Real-time character count, word density, reading time and essay stats.", icon: "📊", status: "active" },
-      { slug: "text-to-pdf", name: "Text to PDF Generator", desc: "Convert raw notes, code, and text snippets into formatted clean PDFs.", icon: "📄", status: "active" },
-      { slug: "lorem-generator", name: "Lorem Ipsum Dummy Generator", desc: "Generate sample placeholder text and paragraphs for design wireframes.", icon: "📜", status: "active" },
-      { slug: "qr-generator", name: "HD QR Code Generator", desc: "Create colored high-res QR codes for URLs, WiFi logins, and UPI links.", icon: "📱", status: "active" },
-      { slug: "barcode-generator", name: "Barcode Generator (Code128)", desc: "Generate Code128, EAN, and UPC retail barcodes ready to print.", icon: "🏷️", status: "active" }
+      { slug: "image-to-text", name: "Image to Text (OCR Extractor)", desc: "Extract printed or handwritten text from photos, scans & books instantly.", icon: "🔍" },
+      { slug: "text-cleaner", name: "Text Cleaner & Space Fixer", desc: "Remove weird duplicate spaces, line breaks, and messy formatting.", icon: "🧹" },
+      { slug: "case-converter", name: "Case Converter (UPPER/lower)", desc: "Quickly convert text into UPPERCASE, lowercase, Title Case or camelCase.", icon: "🔠" },
+      { slug: "word-counter", name: "Word & Character Counter", desc: "Real-time character count, word density, reading time and essay stats.", icon: "📊" },
+      { slug: "text-to-pdf", name: "Text to PDF Generator", desc: "Convert raw notes, code, and text snippets into formatted clean PDFs.", icon: "📄" },
+      { slug: "lorem-generator", name: "Lorem Ipsum Dummy Generator", desc: "Generate sample placeholder text and paragraphs for design wireframes.", icon: "📜" },
+      { slug: "qr-generator", name: "HD QR Code Generator", desc: "Create colored high-res QR codes for URLs, WiFi logins, and UPI links.", icon: "📱" },
+      { slug: "barcode-generator", name: "Barcode Generator (Code128)", desc: "Generate Code128, EAN, and UPC retail barcodes ready to print.", icon: "🏷️" }
     ]
   },
   {
     categoryId: "calc",
-    categoryTitle: "🧮 Everyday Smart Calculators",
+    categoryTitle: "6. Everyday Smart Calculators",
     tools: [
-      { slug: "gst-calculator", name: "GST Calculator (CGST / SGST)", desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", icon: "💰", status: "active" },
-      { slug: "age-calculator", name: "Sarkari Job Age Calculator", desc: "Calculate exact age in years, months & days against cut-off eligibility dates.", icon: "🎂", status: "active" },
-      { slug: "emi-calculator", name: "Loan EMI & Interest Calculator", desc: "Calculate monthly installments, interest breakdown for Home & Car loans.", icon: "💳", status: "active" },
-      { slug: "discount-calculator", name: "Discount & Percentage Calculator", desc: "Calculate festive shopping discounts, profit/loss margins, and savings.", icon: "🏷️", status: "active" },
-      { slug: "bmi-calculator", name: "BMI & Fitness Calculator", desc: "Check Body Mass Index, healthy weight range, and fitness category.", icon: "⚖️", status: "active" },
-      { slug: "date-gap-calculator", name: "Date Gap & Working Days", desc: "Count exact total days, weeks, months, and exclude public holidays.", icon: "📅", status: "active" },
-      { slug: "unit-converter", name: "Land & Unit Converter", desc: "Convert regional land units (Bigha, Sq Ft, Acre), length, and weights.", icon: "📐", status: "active" },
-      { slug: "currency-converter", name: "Live Currency Converter", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", icon: "💱", status: "active" }
+      { slug: "gst-calculator", name: "GST Calculator (CGST / SGST)", desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", icon: "💰" },
+      thumbHtml: `<div class="thumb-calc">₹</div>`
+      },
+      { 
+        slug: "currency-converter", 
+        name: "Live Currency Converter", 
+        desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", 
+        icon: "💱",
+        thumbHtml: `<div class="thumb-calc" style="color:#10b981; border-color:#10b981;">$</div>`
+      }
+    ]
+  },
+  {
+    categoryId: "govt",
+    categoryTitle: "2. Govt. & ID Utilities",
+    tools: [
+      { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print Maker", desc: "Auto-crop front & back sides into clean, top-aligned A4 print-ready PDF.", icon: "🪪" },
+      { slug: "signature-maker", name: "Digital Signature Draw Maker", desc: "Draw ultra-smooth signature on mobile/mouse and get transparent PNG.", icon: "🖊️" },
+      { slug: "passport-photo-maker", name: "Passport Size Photo Maker", desc: "Create single or multi-copy passport photos with plain white background.", icon: "👥" },
+      { slug: "photo-sign-card", name: "Photo + Signature Joiner", desc: "Merge photo & signature in a single standard box required for NTA/IBPS.", icon: "🔲" },
+      { slug: "photo-sheet", name: "Passport Photo Sheet (4x6 / A4)", desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", icon: "🖨️" },
+      { slug: "document-scanner", name: "HD Document Cam Scanner", desc: "Scan certificates via mobile camera with auto black & white filter.", icon: "📷" },
+      { slug: "govt-pdf-helper", name: "Sarkari PDF Compressor (Under 100KB)", desc: "Compress marksheet & caste certificate under 100KB/200KB upload limits.", icon: "📋" }
+    ]
+  },
+  {
+    categoryId: "pdf",
+    categoryTitle: "3. Advanced PDF Suite",
+    tools: [
+      { slug: "pdf-editor", name: "Online PDF Editor & Markup", desc: "Edit text, annotate, highlight and sign PDF files directly offline.", icon: "📝" },
+      { slug: "merge-pdf", name: "Merge PDF (Join Multiple Files)", desc: "Combine multiple PDF documents and marksheets into one single file.", icon: "🔗" },
+      { slug: "split-pdf", name: "Split & Extract PDF Pages", desc: "Extract custom pages or break large PDF books into separate files.", icon: "✂️" },
+      { slug: "jpg-to-pdf", name: "JPG to PDF Converter", desc: "Convert multiple gallery images into a single printable high-res PDF.", icon: "🖼️" },
+      { slug: "pdf-to-jpg", name: "PDF to JPG / Image Extractor", desc: "Extract high-resolution JPG pictures from each page of your PDF file.", icon: "📷" },
+      { slug: "pdf-organizer", name: "PDF Page Organizer", desc: "Drag-and-drop to reorder, delete or arrange pages in any PDF document.", icon: "📑" },
+      { slug: "add-watermark", name: "Add Watermark to PDF", desc: "Stamp confidential, custom text or logos across your PDF pages.", icon: "💧" }
+    ]
+  },
+  {
+    categoryId: "photo",
+    categoryTitle: "4. Photo & Image Optimization",
+    tools: [
+      { slug: "photo-resizer", name: "Photo Resizer (PX, CM, INCH)", desc: "Resize dimensions with custom DPI for online form upload requirements.", icon: "📐" },
+      { slug: "photo-compressor", name: "Photo Compressor (KB to MB)", desc: "Compress image file size up to 80% without losing quality or sharpness.", icon: "🗜️" },
+      { slug: "photo-cropper", name: "Photo Cropper (Custom Ratios)", desc: "Crop photos with custom aspect ratios (1:1, 3:4, 3.5x4.5cm) effortlessly.", icon: "✂️" },
+      { slug: "image-converter", name: "Image Format Converter", desc: "Instant lossless conversion between JPG, PNG, WEBP, and ICO formats.", icon: "🔄" },
+      { slug: "background-remover", name: "AI Background Remover", desc: "Make photo background white or transparent in 1-click for IDs & forms.", icon: "🪄" }
+    ]
+  },
+  {
+    categoryId: "text",
+    categoryTitle: "5. Text & Generator Utilities",
+    tools: [
+      { slug: "image-to-text", name: "Image to Text (OCR Extractor)", desc: "Extract printed or handwritten text from photos, scans & books instantly.", icon: "🔍" },
+      { slug: "text-cleaner", name: "Text Cleaner & Space Fixer", desc: "Remove weird duplicate spaces, line breaks, and messy formatting.", icon: "🧹" },
+      { slug: "case-converter", name: "Case Converter (UPPER/lower)", desc: "Quickly convert text into UPPERCASE, lowercase, Title Case or camelCase.", icon: "🔠" },
+      { slug: "word-counter", name: "Word & Character Counter", desc: "Real-time character count, word density, reading time and essay stats.", icon: "📊" },
+      { slug: "text-to-pdf", name: "Text to PDF Generator", desc: "Convert raw notes, code, and text snippets into formatted clean PDFs.", icon: "📄" },
+      { slug: "lorem-generator", name: "Lorem Ipsum Dummy Generator", desc: "Generate sample placeholder text and paragraphs for design wireframes.", icon: "📜" },
+      { slug: "qr-generator", name: "HD QR Code Generator", desc: "Create colored high-res QR codes for URLs, WiFi logins, and UPI links.", icon: "📱" },
+      { slug: "barcode-generator", name: "Barcode Generator (Code128)", desc: "Generate Code128, EAN, and UPC retail barcodes ready to print.", icon: "🏷️" }
+    ]
+  },
+  {
+    categoryId: "calc",
+    categoryTitle: "6. Everyday Smart Calculators",
+    tools: [
+      { slug: "gst-calculator", name: "GST Calculator (CGST / SGST)", desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", icon: "💰" },
+      { slug: "age-calculator", name: "Sarkari Job Age Calculator", desc: "Calculate exact age in years, months & days against cut-off eligibility dates.", icon: "🎂" },
+      { slug: "emi-calculator", name: "Loan EMI & Interest Calculator", desc: "Calculate monthly installments, interest breakdown for Home & Car loans.", icon: "💳" },
+      { slug: "discount-calculator", name: "Discount & Percentage Calculator", desc: "Calculate festive shopping discounts, profit/loss margins, and savings.", icon: "🏷️" },
+      { slug: "bmi-calculator", name: "BMI & Fitness Calculator", desc: "Check Body Mass Index, healthy weight range, and fitness category.", icon: "⚖️" },
+      { slug: "date-gap-calculator", name: "Date Gap & Working Days", desc: "Count exact total days, weeks, months, and exclude public holidays.", icon: "📅" },
+      { slug: "unit-converter", name: "Land & Unit Converter", desc: "Convert regional land units (Bigha, Sq Ft, Acre), length, and weights.", icon: "📐" },
+      { slug: "currency-converter", name: "Live Currency Converter", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", icon: "💱" }
     ]
   }
 ];
@@ -437,19 +690,37 @@ function renderTools() {
 
     filtered.forEach(tool => {
       const card = document.createElement('a');
-      card.className = 'tool-card';
+      card.className = `tool-card ${cat.isFeatured ? 'featured-card' : ''}`;
       card.href = `tools/${tool.slug}/index.html`;
 
-      card.innerHTML = `
-        <div class="tool-icon">${tool.icon}</div>
-        <div class="tool-info">
-          <div class="tool-title-row">
-            <div class="tool-name">${tool.name}</div>
-            <span class="badge active">ACTIVE</span>
+      if (cat.isFeatured) {
+        // Featured Design with Thumbnail Graphic & Green Status Dot (Matching Reference Image)
+        card.innerHTML = `
+          <div class="tool-icon">${tool.icon}</div>
+          <div class="tool-info">
+            <div class="tool-title-row">
+              <div class="tool-name">${tool.name}</div>
+              <span class="status-dot" title="Active"></span>
+            </div>
+            <div class="tool-desc">${tool.desc}</div>
           </div>
-          <div class="tool-desc">${tool.desc}</div>
-        </div>
-      `;
+          <div class="preview-thumb">
+            ${tool.thumbHtml || '<span style="font-size:16px;">📄</span>'}
+          </div>
+        `;
+      } else {
+        // Standard Modern Card
+        card.innerHTML = `
+          <div class="tool-icon">${tool.icon}</div>
+          <div class="tool-info">
+            <div class="tool-title-row">
+              <div class="tool-name">${tool.name}</div>
+              <span class="status-dot" title="Active"></span>
+            </div>
+            <div class="tool-desc">${tool.desc}</div>
+          </div>
+        `;
+      }
 
       grid.appendChild(card);
     });
