@@ -95,7 +95,7 @@
     }
     h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 800;
       background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
       -webkit-background-clip: text;
@@ -284,17 +284,14 @@
       flex-shrink: 0;
     }
 
-    /* Featured / Popular Custom Card Styling (Image 1 Style) */
+    /* Featured / Popular Custom Card Styling */
     .featured-card {
-      border: 1px solid rgba(245, 166, 35, 0.3);
+      border: 1px solid rgba(245, 166, 35, 0.35);
       background: linear-gradient(145deg, #18130e, #120e0b);
       padding: 12px 14px;
     }
-    .featured-card .tool-desc {
-      max-width: 82%;
-    }
 
-    /* Miniature Visual Thumbnail Graphic on Right (Same as Reference Image) */
+    /* Miniature Visual Thumbnail Graphic on Right */
     .preview-thumb {
       width: 44px;
       height: 44px;
@@ -306,36 +303,33 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
     }
 
-    /* Mini Mockups inside the preview thumbnail */
-    .thumb-a4-sheet {
+    .thumb-box-a4 {
       width: 24px;
       height: 30px;
       background: #fbf7ee;
       border-radius: 2px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
       display: flex;
       flex-direction: column;
       align-items: center;
       padding-top: 4px;
       gap: 3px;
     }
-    .thumb-card-box {
+    .thumb-box-a4 .sub-rect {
       width: 18px;
-      height: 10px;
+      height: 9px;
       background: #2a3b5c;
-      border-radius: 1.5px;
+      border-radius: 1px;
     }
-    .thumb-card-box.sub {
+    .thumb-box-a4 .sub-rect-2 {
+      width: 18px;
+      height: 6px;
       background: #7a8ba9;
-      height: 7px;
+      border-radius: 1px;
     }
-
-    .thumb-cutout {
+    .thumb-circle-cutout {
       width: 26px;
       height: 26px;
       border-radius: 50%;
@@ -343,73 +337,48 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 13px;
     }
-
-    .thumb-photo-grid {
+    .thumb-grid-pics {
       display: grid;
       grid-template-columns: repeat(2, 9px);
       gap: 2px;
     }
-    .thumb-mini-pic {
+    .thumb-grid-pics div {
       width: 9px;
       height: 12px;
       background: #e2d9cc;
       border-radius: 1px;
-      border: 0.5px solid #a0907e;
     }
-
-    .thumb-scanner {
-      width: 26px;
+    .thumb-scanner-wrap {
+      width: 24px;
       height: 28px;
       border: 1.5px solid var(--amber);
-      border-radius: 3px;
-      position: relative;
+      border-radius: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      position: relative;
     }
-    .thumb-scanner::after {
+    .thumb-scanner-wrap::after {
       content: '';
       position: absolute;
-      left: 0;
-      right: 0;
-      top: 50%;
+      left: 0; right: 0; top: 50%;
       height: 1.5px;
       background: #10b981;
-      box-shadow: 0 0 6px #10b981;
     }
-
-    .thumb-pdf-doc {
-      width: 22px;
+    .thumb-badge-tag {
+      width: 26px;
       height: 28px;
-      background: #e11d48;
-      border-radius: 2px;
-      position: relative;
+      border-radius: 3px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-size: 8px;
+      font-size: 9px;
       font-weight: 800;
     }
 
-    .thumb-calc {
-      width: 24px;
-      height: 28px;
-      background: #1e1914;
-      border: 1px solid var(--amber);
-      border-radius: 3px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: var(--amber);
-      font-weight: 800;
-    }
-
-    /* Footer */
     footer {
       text-align: center;
       margin-top: 36px;
@@ -424,7 +393,6 @@
 </head>
 <body>
 
-<!-- Full-Page Continuous Glass Shine Overlay -->
 <div class="global-shine-overlay"></div>
 
 <div class="container">
@@ -460,8 +428,7 @@
 </div>
 
 <script>
-// Catalog with Visual Thumbnail Types for Featured Section
-const TOOL_CATALOG = [
+var TOOL_CATALOG = [
   {
     categoryId: "popular",
     categoryTitle: "1. Featured Toolkits",
@@ -472,123 +439,56 @@ const TOOL_CATALOG = [
         name: "ID Card to A4 Print Maker", 
         desc: "Auto-crop front & back sides into clean, top-aligned A4 print-ready PDF.", 
         icon: "🪪",
-        thumbHtml: `<div class="thumb-a4-sheet"><div class="thumb-card-box"></div><div class="thumb-card-box sub"></div></div>`
+        thumb: '<div class="thumb-box-a4"><div class="sub-rect"></div><div class="sub-rect-2"></div></div>'
       },
       { 
         slug: "background-remover", 
         name: "AI Background Remover", 
         desc: "Make photo background white or transparent in 1-click for IDs & forms.", 
         icon: "🪄",
-        thumbHtml: `<div class="thumb-cutout">👤</div>`
+        thumb: '<div class="thumb-circle-cutout">👤</div>'
       },
       { 
         slug: "photo-sheet", 
         name: "Passport Photo Sheet (4x6 / A4)", 
         desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", 
         icon: "🖨️",
-        thumbHtml: `<div class="thumb-photo-grid"><div class="thumb-mini-pic"></div><div class="thumb-mini-pic"></div><div class="thumb-mini-pic"></div><div class="thumb-mini-pic"></div></div>`
+        thumb: '<div class="thumb-grid-pics"><div></div><div></div><div></div><div></div></div>'
       },
       { 
         slug: "document-scanner", 
         name: "HD Document Cam Scanner", 
         desc: "Scan certificates via mobile camera with auto black & white filter.", 
         icon: "📷",
-        thumbHtml: `<div class="thumb-scanner">📄</div>`
+        thumb: '<div class="thumb-scanner-wrap"><span style="font-size:10px;">📄</span></div>'
       },
       { 
         slug: "pdf-editor", 
         name: "Online PDF Editor & Markup", 
         desc: "Edit text, annotate, highlight and sign PDF files directly offline.", 
         icon: "📝",
-        thumbHtml: `<div class="thumb-pdf-doc">PDF</div>`
+        thumb: '<div class="thumb-badge-tag" style="background:#e11d48;">PDF</div>'
       },
       { 
         slug: "jpg-to-pdf", 
         name: "JPG to PDF Converter", 
         desc: "Convert multiple gallery images into a single printable high-res PDF.", 
         icon: "🖼️",
-        thumbHtml: `<div class="thumb-pdf-doc" style="background:#0284c7">JPG</div>`
+        thumb: '<div class="thumb-badge-tag" style="background:#0284c7;">JPG</div>'
       },
       { 
         slug: "gst-calculator", 
         name: "GST Calculator (CGST / SGST)", 
         desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", 
         icon: "💰",
-        thumbHtml: `<div class="thumb-calc">₹</div>`
+        thumb: '<div class="thumb-badge-tag" style="background:#d97706; font-size:12px;">₹</div>'
       },
       { 
         slug: "currency-converter", 
         name: "Live Currency Converter", 
         desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", 
         icon: "💱",
-        thumbHtml: `<div class="thumb-calc" style="color:#10b981; border-color:#10b981;">$</div>`
-      }
-    ]
-  },
-  {
-    categoryId: "govt",
-    categoryTitle: "2. Govt. & ID Utilities",
-    tools: [
-      { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print Maker", desc: "Auto-crop front & back sides into clean, top-aligned A4 print-ready PDF.", icon: "🪪" },
-      { slug: "signature-maker", name: "Digital Signature Draw Maker", desc: "Draw ultra-smooth signature on mobile/mouse and get transparent PNG.", icon: "🖊️" },
-      { slug: "passport-photo-maker", name: "Passport Size Photo Maker", desc: "Create single or multi-copy passport photos with plain white background.", icon: "👥" },
-      { slug: "photo-sign-card", name: "Photo + Signature Joiner", desc: "Merge photo & signature in a single standard box required for NTA/IBPS.", icon: "🔲" },
-      { slug: "photo-sheet", name: "Passport Photo Sheet (4x6 / A4)", desc: "Generate ready-to-print 6, 8 or 16 photo studio sheets in one click.", icon: "🖨️" },
-      { slug: "document-scanner", name: "HD Document Cam Scanner", desc: "Scan certificates via mobile camera with auto black & white filter.", icon: "📷" },
-      { slug: "govt-pdf-helper", name: "Sarkari PDF Compressor (Under 100KB)", desc: "Compress marksheet & caste certificate under 100KB/200KB upload limits.", icon: "📋" }
-    ]
-  },
-  {
-    categoryId: "pdf",
-    categoryTitle: "3. Advanced PDF Suite",
-    tools: [
-      { slug: "pdf-editor", name: "Online PDF Editor & Markup", desc: "Edit text, annotate, highlight and sign PDF files directly offline.", icon: "📝" },
-      { slug: "merge-pdf", name: "Merge PDF (Join Multiple Files)", desc: "Combine multiple PDF documents and marksheets into one single file.", icon: "🔗" },
-      { slug: "split-pdf", name: "Split & Extract PDF Pages", desc: "Extract custom pages or break large PDF books into separate files.", icon: "✂️" },
-      { slug: "jpg-to-pdf", name: "JPG to PDF Converter", desc: "Convert multiple gallery images into a single printable high-res PDF.", icon: "🖼️" },
-      { slug: "pdf-to-jpg", name: "PDF to JPG / Image Extractor", desc: "Extract high-resolution JPG pictures from each page of your PDF file.", icon: "📷" },
-      { slug: "pdf-organizer", name: "PDF Page Organizer", desc: "Drag-and-drop to reorder, delete or arrange pages in any PDF document.", icon: "📑" },
-      { slug: "add-watermark", name: "Add Watermark to PDF", desc: "Stamp confidential, custom text or logos across your PDF pages.", icon: "💧" }
-    ]
-  },
-  {
-    categoryId: "photo",
-    categoryTitle: "4. Photo & Image Optimization",
-    tools: [
-      { slug: "photo-resizer", name: "Photo Resizer (PX, CM, INCH)", desc: "Resize dimensions with custom DPI for online form upload requirements.", icon: "📐" },
-      { slug: "photo-compressor", name: "Photo Compressor (KB to MB)", desc: "Compress image file size up to 80% without losing quality or sharpness.", icon: "🗜️" },
-      { slug: "photo-cropper", name: "Photo Cropper (Custom Ratios)", desc: "Crop photos with custom aspect ratios (1:1, 3:4, 3.5x4.5cm) effortlessly.", icon: "✂️" },
-      { slug: "image-converter", name: "Image Format Converter", desc: "Instant lossless conversion between JPG, PNG, WEBP, and ICO formats.", icon: "🔄" },
-      { slug: "background-remover", name: "AI Background Remover", desc: "Make photo background white or transparent in 1-click for IDs & forms.", icon: "🪄" }
-    ]
-  },
-  {
-    categoryId: "text",
-    categoryTitle: "5. Text & Generator Utilities",
-    tools: [
-      { slug: "image-to-text", name: "Image to Text (OCR Extractor)", desc: "Extract printed or handwritten text from photos, scans & books instantly.", icon: "🔍" },
-      { slug: "text-cleaner", name: "Text Cleaner & Space Fixer", desc: "Remove weird duplicate spaces, line breaks, and messy formatting.", icon: "🧹" },
-      { slug: "case-converter", name: "Case Converter (UPPER/lower)", desc: "Quickly convert text into UPPERCASE, lowercase, Title Case or camelCase.", icon: "🔠" },
-      { slug: "word-counter", name: "Word & Character Counter", desc: "Real-time character count, word density, reading time and essay stats.", icon: "📊" },
-      { slug: "text-to-pdf", name: "Text to PDF Generator", desc: "Convert raw notes, code, and text snippets into formatted clean PDFs.", icon: "📄" },
-      { slug: "lorem-generator", name: "Lorem Ipsum Dummy Generator", desc: "Generate sample placeholder text and paragraphs for design wireframes.", icon: "📜" },
-      { slug: "qr-generator", name: "HD QR Code Generator", desc: "Create colored high-res QR codes for URLs, WiFi logins, and UPI links.", icon: "📱" },
-      { slug: "barcode-generator", name: "Barcode Generator (Code128)", desc: "Generate Code128, EAN, and UPC retail barcodes ready to print.", icon: "🏷️" }
-    ]
-  },
-  {
-    categoryId: "calc",
-    categoryTitle: "6. Everyday Smart Calculators",
-    tools: [
-      { slug: "gst-calculator", name: "GST Calculator (CGST / SGST)", desc: "Calculate GST Inclusive & Exclusive amounts with 5%, 12%, 18% & 28% slabs.", icon: "💰" },
-      thumbHtml: `<div class="thumb-calc">₹</div>`
-      },
-      { 
-        slug: "currency-converter", 
-        name: "Live Currency Converter", 
-        desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates.", 
-        icon: "💱",
-        thumbHtml: `<div class="thumb-calc" style="color:#10b981; border-color:#10b981;">$</div>`
+        thumb: '<div class="thumb-badge-tag" style="background:#059669; font-size:12px;">$</div>'
       }
     ]
   },
@@ -659,81 +559,75 @@ const TOOL_CATALOG = [
   }
 ];
 
-let activeCategory = 'all';
+var activeCategory = 'all';
 
 function renderTools() {
-  const container = document.getElementById('catalogContainer');
-  const query = document.getElementById('searchInput').value.toLowerCase().trim();
+  var container = document.getElementById('catalogContainer');
+  if (!container) return;
+  
+  var searchInput = document.getElementById('searchInput');
+  var query = searchInput ? searchInput.value.toLowerCase().trim() : '';
   container.innerHTML = '';
 
-  TOOL_CATALOG.forEach(cat => {
-    if (activeCategory !== 'all' && cat.categoryId !== activeCategory) return;
+  for (var c = 0; c < TOOL_CATALOG.length; c++) {
+    var cat = TOOL_CATALOG[c];
+    if (activeCategory !== 'all' && cat.categoryId !== activeCategory) continue;
 
-    const filtered = cat.tools.filter(t =>
-      t.name.toLowerCase().includes(query) || 
-      t.desc.toLowerCase().includes(query) ||
-      t.slug.toLowerCase().includes(query)
-    );
+    var filtered = [];
+    for (var t = 0; t < cat.tools.length; t++) {
+      var item = cat.tools[t];
+      if (item.name.toLowerCase().indexOf(query) !== -1 || 
+          item.desc.toLowerCase().indexOf(query) !== -1 ||
+          item.slug.toLowerCase().indexOf(query) !== -1) {
+        filtered.push(item);
+      }
+    }
 
-    if (filtered.length === 0) return;
+    if (filtered.length === 0) continue;
 
-    const section = document.createElement('div');
+    var section = document.createElement('div');
     section.className = 'category-section';
 
-    const title = document.createElement('div');
+    var title = document.createElement('div');
     title.className = 'cat-title';
-    title.innerText = cat.categoryTitle;
+    title.textContent = cat.categoryTitle;
     section.appendChild(title);
 
-    const grid = document.createElement('div');
+    var grid = document.createElement('div');
     grid.className = 'grid';
 
-    filtered.forEach(tool => {
-      const card = document.createElement('a');
-      card.className = `tool-card ${cat.isFeatured ? 'featured-card' : ''}`;
-      card.href = `tools/${tool.slug}/index.html`;
+    for (var i = 0; i < filtered.length; i++) {
+      var tool = filtered[i];
+      var card = document.createElement('a');
+      card.className = 'tool-card' + (cat.isFeatured ? ' featured-card' : '');
+      card.href = 'tools/' + tool.slug + '/index.html';
 
-      if (cat.isFeatured) {
-        // Featured Design with Thumbnail Graphic & Green Status Dot (Matching Reference Image)
-        card.innerHTML = `
-          <div class="tool-icon">${tool.icon}</div>
-          <div class="tool-info">
-            <div class="tool-title-row">
-              <div class="tool-name">${tool.name}</div>
-              <span class="status-dot" title="Active"></span>
-            </div>
-            <div class="tool-desc">${tool.desc}</div>
-          </div>
-          <div class="preview-thumb">
-            ${tool.thumbHtml || '<span style="font-size:16px;">📄</span>'}
-          </div>
-        `;
-      } else {
-        // Standard Modern Card
-        card.innerHTML = `
-          <div class="tool-icon">${tool.icon}</div>
-          <div class="tool-info">
-            <div class="tool-title-row">
-              <div class="tool-name">${tool.name}</div>
-              <span class="status-dot" title="Active"></span>
-            </div>
-            <div class="tool-desc">${tool.desc}</div>
-          </div>
-        `;
-      }
+      var thumbBlock = (cat.isFeatured && tool.thumb) ? '<div class="preview-thumb">' + tool.thumb + '</div>' : '';
+
+      card.innerHTML = 
+        '<div class="tool-icon">' + tool.icon + '</div>' +
+        '<div class="tool-info">' +
+          '<div class="tool-title-row">' +
+            '<div class="tool-name">' + tool.name + '</div>' +
+            '<span class="status-dot"></span>' +
+          '</div>' +
+          '<div class="tool-desc">' + tool.desc + '</div>' +
+        '</div>' +
+        thumbBlock;
 
       grid.appendChild(card);
-    });
+    }
 
     section.appendChild(grid);
     container.appendChild(section);
-  });
+  }
 }
 
 function selectCategory(catId, el) {
   activeCategory = catId;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
+  var chips = document.querySelectorAll('.chip');
+  for (var i = 0; i < chips.length; i++) chips[i].classList.remove('active');
+  if (el) el.classList.add('active');
   renderTools();
 }
 
@@ -741,8 +635,11 @@ function filterTools() {
   renderTools();
 }
 
-document.addEventListener('DOMContentLoaded', renderTools);
+// Direct Rendering Execution
 renderTools();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderTools);
+}
 </script>
 </body>
 </html>
