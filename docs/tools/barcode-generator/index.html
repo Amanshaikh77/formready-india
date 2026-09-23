@@ -1,347 +1,517 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Barcode Generator - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- JsBarcode Library -->
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-<style>
-:root {
-  --bg: #13100e;
-  --panel: #1c1815;
-  --line: #2e2620;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f3ede2;
-  --muted: #9e9080;
-  --card-bg: #16120f;
-  --success: #34d399;
-  --danger: #ef4444;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 16px 14px 50px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.wrapper { width: 100%; max-width: 540px; }
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 22px 18px;
-  border-radius: 12px;
-  width: 100%;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Barcode Generator & Product Scanner - FormReady India</title>
+  <meta name="description" content="Generate CODE128, EAN-13, UPC barcodes & scan retail product barcodes with live camera. 100% private, offline and instant download.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-/* HOW TO USE GUIDE */
-.how-to-box {
-  background: rgba(217, 154, 63, 0.05);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 18px;
-}
-.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
-.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+  <!-- JsBarcode Library for Barcode Creation -->
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <!-- Html5Qrcode Library for Live Camera & Image Barcode Scanning -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
-/* FORM ELEMENTS */
-.form-group { margin-bottom: 14px; }
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--paper);
-  margin-bottom: 6px;
-}
-input[type="text"], select, input[type="range"] {
-  width: 100%;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  font-size: 14px;
-  padding: 12px;
-  border-radius: 8px;
-  outline: none;
-  font-family: inherit;
-}
-input[type="text"]:focus, select:focus { border-color: var(--amber); }
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
 
-.format-hint {
-  font-size: 11.5px;
-  color: var(--muted);
-  margin-top: 5px;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.controls-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.control-subgroup label { font-size: 12px; }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-.checkbox-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
-  font-size: 13px;
-  color: var(--paper);
-  cursor: pointer;
-}
-.checkbox-group input {
-  accent-color: var(--amber);
-  width: 16px;
-  height: 16px;
-}
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-.btn {
-  background: var(--amber);
-  color: #13100e;
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 4px;
-  transition: opacity 0.2s;
-}
-.btn:hover { opacity: 0.9; }
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
 
-/* RESULT BOX */
-.result-card {
-  display: none;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 18px 14px;
-  margin-top: 20px;
-  text-align: center;
-}
-.barcode-preview-box {
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 8px;
-  display: inline-block;
-  max-width: 100%;
-  overflow-x: auto;
-  margin: 8px auto 14px;
-}
-.barcode-preview-box canvas {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-}
-.error-msg {
-  display: none;
-  color: var(--danger);
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 6px;
-}
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
 
-/* ADVERTISEMENT CONTAINER */
-.ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 22px;
-  min-height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.ad-tag {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  display: block;
-  text-transform: uppercase;
-}
-.ad-content {
-  font-size: 11.5px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-</style>
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Mode Switcher Tabs */
+    .mode-switch-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      padding: 12px 14px;
+      border-radius: 9px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .mode-btn.active {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.35);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Form Fields */
+    .field-group { margin-bottom: 16px; }
+    .field-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .input-control {
+      width: 100%;
+      background: #14100c;
+      border: 1px solid var(--line);
+      padding: 11px 14px;
+      border-radius: 9px;
+      color: var(--paper);
+      font-size: 13.5px;
+      outline: none;
+      font-family: inherit;
+    }
+    .input-control:focus { border-color: var(--amber); }
+
+    /* Slider Row */
+    .sliders-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 500px) {
+      .sliders-grid { grid-template-columns: 1fr; }
+    }
+    .slider-card {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 10px 14px;
+    }
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .slider-head b { color: var(--amber); }
+    .range-input { width: 100%; accent-color: var(--amber); cursor: pointer; }
+
+    /* Checkbox */
+    .check-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--paper);
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    .check-wrap input { width: 16px; height: 16px; accent-color: var(--amber); }
+
+    /* Action Buttons */
+    .btn-action-primary {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      font-size: 14.5px;
+      font-weight: 800;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-action-primary:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+    }
+
+    /* Barcode Output Preview Frame */
+    .barcode-display-frame {
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 24px 16px;
+      text-align: center;
+      margin-top: 22px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .barcode-paper {
+      display: inline-block;
+      background: #fff;
+      padding: 18px 24px;
+      border-radius: 8px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.6);
+      max-width: 100%;
+      overflow-x: auto;
+      margin-bottom: 14px;
+    }
+    #barcodeSvg {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+    .btn-download-barcode {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-download-barcode:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    /* SCANNER VIEWPORT STYLING */
+    .scanner-panel { display: none; }
+    .camera-stream-box {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      border: 2px solid var(--amber);
+      position: relative;
+    }
+    #reader { width: 100%; }
+
+    .scan-upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 22px 14px;
+      text-align: center;
+      border-radius: 10px;
+      cursor: pointer;
+      display: block;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+    .scan-upload-zone:hover { border-color: var(--amber); }
+
+    /* Scan Result Card */
+    .scan-result-card {
+      display: none;
+      background: #14100c;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+      text-align: center;
+    }
+    .scan-val-text {
+      font-family: 'Space Grotesk', monospace;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--green);
+      margin: 8px 0 12px;
+      word-break: break-all;
+    }
+    .btn-copy-scan {
+      padding: 10px 18px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--green);
+      color: var(--green);
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
-  <div class="card">
-    <h2>Barcode Generator</h2>
-    <div class="subtitle">Generate standard commercial and inventory barcodes instantly</div>
+<div class="global-shine-overlay"></div>
 
-    <!-- HOW TO USE -->
-    <div class="how-to-box">
-      <div class="how-to-title">📘 How to Use Barcode Generator</div>
-      <ol class="how-to-list">
-        <li>1. <span>Select Format:</span> Choose <b>CODE128</b> (alphanumeric) or <b>EAN-13</b> (retail).</li>
-        <li>2. <span>Enter Value:</span> Type text or numbers compliant with standard format.</li>
-        <li>3. <span>Download:</span> Save clear barcode image (PNG) for labels and packaging.</li>
-      </ol>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Barcode Studio & Product Scanner</h1>
+    <p>Generate retail barcodes or scan product codes live via camera & image offline</p>
+  </div>
+
+  <div class="main-card">
+    <!-- Mode Switcher Tabs -->
+    <div class="mode-switch-bar">
+      <button class="mode-btn active" id="btnModeGen" onclick="switchMode('gen')">
+        🏷️ Generate Barcode
+      </button>
+      <button class="mode-btn" id="btnModeScan" onclick="switchMode('scan')">
+        📷 Scan Product Barcode
+      </button>
     </div>
 
-    <!-- FORMAT SELECTION -->
-    <div class="form-group">
-      <label>1. Select Barcode Symbology</label>
-      <select id="barcodeFormat" onchange="onFormatChange()">
-        <option value="CODE128" selected>CODE 128 (Universal - Letters & Numbers)</option>
-        <option value="EAN13">EAN-13 (Standard Retail - 12 or 13 Digits)</option>
-        <option value="UPC">UPC-A (Product Codes - 11 or 12 Digits)</option>
-        <option value="CODE39">CODE 39 (Alphanumeric - Caps & Digits)</option>
-        <option value="ITF14">ITF-14 (Shipping Cartons - 14 Digits)</option>
-      </select>
-    </div>
-
-    <!-- BARCODE VALUE INPUT -->
-    <div class="form-group">
-      <label>2. Barcode Data / Value</label>
-      <input type="text" id="barcodeValue" placeholder="e.g. FR-IND-2026" value="FR-IND-2026">
-      <div class="format-hint" id="formatHint">Supports uppercase/lowercase letters, digits, and basic symbols.</div>
-      <div class="error-msg" id="errorMsg">Invalid value for selected format.</div>
-    </div>
-
-    <!-- ADJUSTMENT CONTROLS -->
-    <div class="controls-row">
-      <div class="control-subgroup">
-        <label>Height: <span id="heightVal" style="color:var(--amber);">70px</span></label>
-        <input type="range" id="barHeight" min="30" max="130" value="70" oninput="updateControls()">
+    <!-- MODE 1: GENERATE BARCODE -->
+    <div id="genSection">
+      <div class="instructions-box">
+        <h3>🏷️ How to Use Barcode Generator</h3>
+        <ol>
+          <li><b>Select Symbology:</b> Choose CODE128 (Universal) or EAN-13 / UPC for retail products.</li>
+          <li><b>Enter Value:</b> Type alphanumeric text or exact product digit code.</li>
+          <li><b>Download:</b> Export crisp, high-resolution barcode PNG for packaging & labels.</li>
+        </ol>
       </div>
-      <div class="control-subgroup">
-        <label>Bar Width: <span id="widthVal" style="color:var(--amber);">2x</span></label>
-        <input type="range" id="barWidth" min="1" max="4" value="2" oninput="updateControls()">
+
+      <div class="field-group">
+        <label class="field-label">1. Select Barcode Symbology:</label>
+        <select id="barcodeFormat" class="input-control" onchange="onFormatChange()">
+          <option value="CODE128" selected>CODE 128 (Universal - Letters & Numbers)</option>
+          <option value="EAN13">EAN-13 (Standard Retail Products - 12/13 Digits)</option>
+          <option value="UPC">UPC-A (US/International Retail - 11/12 Digits)</option>
+          <option value="CODE39">CODE 39 (Inventory & Badges)</option>
+          <option value="pharmacode">Pharmacode (Pharmaceutical Products)</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">2. Barcode Data / Value:</label>
+        <input type="text" id="barcodeValue" class="input-control" value="FR-IND-2026" oninput="renderBarcode()">
+        <span id="formatHint" style="font-size:11.5px; color:var(--muted); margin-top:4px; display:block;">Supports letters, numbers, and basic symbols.</span>
+      </div>
+
+      <div class="sliders-grid">
+        <div class="slider-card">
+          <div class="slider-head">
+            <span>Bar Height:</span>
+            <b id="valHeight">70px</b>
+          </div>
+          <input type="range" id="sliderHeight" class="range-input" min="30" max="150" value="70" oninput="onParamChange()">
+        </div>
+
+        <div class="slider-card">
+          <div class="slider-head">
+            <span>Bar Width (Density):</span>
+            <b id="valWidth">2x</b>
+          </div>
+          <input type="range" id="sliderWidth" class="range-input" min="1" max="4" value="2" oninput="onParamChange()">
+        </div>
+      </div>
+
+      <label class="check-wrap">
+        <input type="checkbox" id="checkShowText" checked onchange="renderBarcode()">
+        Show human-readable text below barcode
+      </label>
+
+      <button class="btn-action-primary" onclick="renderBarcode()">
+        ⚡ Generate Barcode
+      </button>
+
+      <!-- Barcode Output Viewport -->
+      <div class="barcode-display-frame" id="barcodeOutput">
+        <div class="barcode-paper">
+          <svg id="barcodeSvg"></svg>
+        </div>
+        <button class="btn-download-barcode" onclick="downloadBarcodePng()">
+          📥 Download Barcode (PNG)
+        </button>
       </div>
     </div>
 
-    <label class="checkbox-group">
-      <input type="checkbox" id="showLabel" checked>
-      Show human-readable text below barcode
-    </label>
-
-    <button class="btn" onclick="generateBarcode()">Generate Barcode</button>
-
-    <!-- RESULT OUTPUT -->
-    <div class="result-card" id="resultCard">
-      <div class="barcode-preview-box">
-        <canvas id="barcodeCanvas"></canvas>
+    <!-- MODE 2: SCAN PRODUCT BARCODE -->
+    <div id="scanSection" class="scanner-panel">
+      <div class="instructions-box">
+        <h3>📷 How to Scan Product Barcode</h3>
+        <ol>
+          <li><b>Live Camera:</b> Tap <b>Start Live Camera Scanner</b> and align barcode inside box.</li>
+          <li><b>Upload Photo:</b> Or upload a photo of any product barcode from gallery.</li>
+          <li><b>Instant Recognition:</b> Scanned barcode number will appear instantly with 1-click copy.</li>
+        </ol>
       </div>
-      <button class="btn" onclick="downloadBarcode()">⬇️ Download Barcode (PNG)</button>
-    </div>
 
-    <!-- ADVERTISEMENT CONTAINER -->
-    <div class="ad-card">
-      <span class="ad-tag">Sponsored Advertisement</span>
-      <div class="ad-content">
-        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      <!-- Live Camera Viewport -->
+      <div class="camera-stream-box" id="scannerViewportBox" style="display:none;">
+        <div id="reader"></div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+        <button class="btn-action-primary" id="btnToggleCam" onclick="toggleCameraScanner()">
+          🎥 Start Live Camera
+        </button>
+        <button class="btn-action-primary" style="background:var(--panel-inner); border:1px solid var(--line); color:var(--paper);" onclick="document.getElementById('barcodeImgInput').click()">
+          🖼️ Scan From Image
+        </button>
+      </div>
+      <input type="file" id="barcodeImgInput" accept="image/*" style="display:none;" onchange="scanBarcodeFromFile(this.files[0])">
+
+      <!-- Scan Result Card -->
+      <div class="scan-result-card" id="scanResultCard">
+        <span style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase;">Decoded Product Barcode:</span>
+        <div class="scan-val-text" id="scanValueDisplay">-</div>
+        <button class="btn-copy-scan" id="btnCopyScan" onclick="copyScannedBarcode()">
+          📋 Copy Barcode Number
+        </button>
       </div>
     </div>
   </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
-
-<script>
-const hints = {
-  CODE128: "Supports all standard letters, digits, and ASCII symbols.",
-  EAN13: "Requires exactly 12 or 13 digits (numeric only).",
-  UPC: "Requires exactly 11 or 12 digits (numeric only).",
-  CODE39: "Supports uppercase A-Z, 0-9, and symbols (- . $ / + % space).",
-  ITF14: "Requires exactly 14 numeric digits."
-};
-
-function onFormatChange() {
-  const format = document.getElementById('barcodeFormat').value;
-  document.getElementById('formatHint').innerText = hints[format] || "";
-
-  // Auto-fill a valid sample if format changes
-  const valInput = document.getElementById('barcodeValue');
-  if (format === 'EAN13') valInput.value = '890103099999';
-  else if (format === 'UPC') valInput.value = '012345678905';
-  else if (format === 'ITF14') valInput.value = '10012345678902';
-  else if (format === 'CODE39') valInput.value = 'FORMREADY123';
-  else valInput.value = 'FR-IND-2026';
-
-  document.getElementById('errorMsg').style.display = 'none';
-}
-
-function updateControls() {
-  document.getElementById('heightVal').innerText = document.getElementById('barHeight').value + 'px';
-  document.getElementById('widthVal').innerText = document.getElementById('barWidth').value + 'x';
-}
-
-function generateBarcode() {
-  const val = document.getElementById('barcodeValue').value.trim();
-  const format = document.getElementById('barcodeFormat').value;
-  const height = parseInt(document.getElementById('barHeight').value, 10);
-  const width = parseInt(document.getElementById('barWidth').value, 10);
-  const showText = document.getElementById('showLabel').checked;
-  const errEl = document.getElementById('errorMsg');
-  const resultCard = document.getElementById('resultCard');
-
-  if (!val) {
-    alert("Please enter a value to generate barcode.");
-    return;
-  }
-
-  errEl.style.display = 'none';
-
-  try {
-    JsBarcode("#barcodeCanvas", val, {
-      format: format,
-      lineColor: "#13100e",
-      width: width,
-      height: height,
-      displayValue: showText,
-      font: "Plus Jakarta Sans",
-      fontSize: 14,
-      textMargin: 5,
-      margin: 10,
-      background: "#ffffff"
-    });
-
-    resultCard.style.display = 'block';
-  } catch (err) {
-    resultCard.style.display = 'none';
-    errEl.innerText = "Error: Input format invalid for " + format + ". (" + err.message + ")";
-    errEl.style.display = 'block';
-  }
-}
-
-function downloadBarcode() {
-  const canvas = document.getElementById('barcodeCanvas');
-  const format = document.getElementById('barcodeFormat').value;
-  const link = document.createElement('a');
-  link.download = `formready_barcode_${format.toLowerCase()}_${Date.now()}.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-}
-</script>
-</body>
-</html>
