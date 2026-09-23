@@ -11,7 +11,7 @@
 
   <!-- PDF.js for rendering page thumbnails -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <!-- PDF-Lib for reassembling and saving final PDF -->
+  <!-- PDF-Lib for assembling and saving final PDF -->
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
   <style>
@@ -146,7 +146,6 @@
     .instructions-box li { margin-bottom: 3px; }
     .instructions-box li b { color: var(--paper); }
 
-    /* Upload Zone */
     .upload-zone {
       border: 2px dashed rgba(245, 166, 35, 0.35);
       background: var(--panel-inner);
@@ -169,7 +168,6 @@
     .upload-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
     .upload-desc b { color: var(--amber); }
 
-    /* Loading Progress */
     .loading-card {
       display: none;
       background: var(--panel-inner);
@@ -183,7 +181,6 @@
       margin-bottom: 20px;
     }
 
-    /* Workspace */
     .organizer-workspace {
       display: none;
       margin-bottom: 20px;
@@ -208,7 +205,6 @@
     }
     .meta-pages-badge b { color: var(--amber); }
 
-    /* Pages Grid */
     .pages-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -274,7 +270,6 @@
     .btn-page-ctrl:hover { border-color: var(--amber); color: var(--amber); }
     .btn-page-ctrl.del:hover { border-color: var(--danger); color: var(--danger); }
 
-    /* Primary Export Action */
     .btn-export-pdf {
       width: 100%;
       padding: 14px;
@@ -325,9 +320,9 @@
     <div class="instructions-box">
       <h3>📑 How to Use PDF Organizer</h3>
       <ol>
-        <li><b>Upload PDF:</b> Select your PDF file from local storage[span_4](start_span)[span_4](end_span).</li>
-        <li><b>Rearrange & Clean:</b> Use <b>◀ / ▶</b> to reorder pages, <b>🔄</b> to rotate 90°, or <b>🗑️</b> to delete[span_5](start_span)[span_5](end_span).</li>
-        <li><b>Export:</b> Tap <b>Save & Download PDF</b> to generate the newly ordered document offline[span_6](start_span)[span_6](end_span).</li>
+        <li><b>Upload PDF:</b> Select your PDF file from local storage.</li>
+        <li><b>Rearrange & Clean:</b> Use <b>◀ / ▶</b> to reorder pages, <b>🔄</b> to rotate 90°, or <b>🗑️</b> to delete.</li>
+        <li><b>Export:</b> Tap <b>Save & Download PDF</b> to generate the newly ordered document offline.</li>
       </ol>
     </div>
 
@@ -335,7 +330,7 @@
       <input type="file" id="pdfFileInput" accept="application/pdf" onchange="handlePdfUpload(this.files[0])">
       <div class="upload-icon">📑</div>
       <div class="upload-title">Tap here to select PDF document</div>
-      <div class="upload-desc">Supports multi-page documents • <b>100% Client-Side Private Processing</b>[span_7](start_span)[span_7](end_span)</div>
+      <div class="upload-desc">Supports multi-page documents • <b>100% Client-Side Private Processing</b></div>
     </label>
 
     <div class="loading-card" id="loadingCard">
@@ -364,159 +359,3 @@
     &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
   </footer>
 </div>
-
-<script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-let pdfDocInstance = null;
-let rawPdfBytes = null;
-let pagesList = []; // Array of { pageNum: 1, rotation: 0, canvas: HTMLCanvasElement }
-let originalFileName = "organized_document";
-
-const dropZone = document.getElementById("dropZone");
-const pdfFileInput = document.getElementById("pdfFileInput");
-const loadingCard = document.getElementById("loadingCard");
-const organizerWorkspace = document.getElementById("organizerWorkspace");
-const pagesGrid = document.getElementById("pagesGrid");
-const pagesCountBadge = document.getElementById("pagesCountBadge");
-const btnExport = document.getElementById("btnExport");
-
-async function handlePdfUpload(file) {
-  if (!file || file.type !== "application/pdf") {
-    alert("Please select a valid PDF file.");
-    return;
-  }
-
-  originalFileName = file.name.replace(/\.[^/.]+$/, "");
-  loadingCard.style.display = "block";
-  organizerWorkspace.style.display = "none";
-
-  const arrayBuffer = await file.arrayBuffer();
-  rawPdfBytes = arrayBuffer;
-
-  pdfDocInstance = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-  pagesList = [];
-
-  for (let i = 1; i <= pdfDocInstance.numPages; i++) {
-    const page = await pdfDocInstance.getPage(i);
-    const viewport = page.getViewport({ scale: 0.5 });
-    const canvas = document.createElement("canvas");
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    const ctx = canvas.getContext("2d");
-
-    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-
-    pagesList.push({
-      originalIndex: i - 1,
-      rotation: 0,
-      canvas: canvas
-    });
-  }
-
-  loadingCard.style.display = "none";
-  organizerWorkspace.style.display = "block";
-  organizerWorkspace.scrollIntoView({ behavior: 'smooth' });
-  renderPagesDOM();
-}
-
-function renderPagesDOM() {
-  pagesGrid.innerHTML = "";
-  pagesCountBadge.innerText = `${pagesList.length} Pages`;
-
-  pagesList.forEach((item, idx) => {
-    const card = document.createElement("div");
-    card.className = "page-thumb-card";
-
-    const wrap = document.createElement("div");
-    wrap.className = "thumb-preview-wrap";
-    item.canvas.style.transform = `rotate(${item.rotation}deg)`;
-    wrap.appendChild(item.canvas);
-
-    const tag = document.createElement("span");
-    tag.className = "page-index-tag";
-    tag.innerText = `Page ${idx + 1} (Orig #${item.originalIndex + 1})`;
-
-    const actions = document.createElement("div");
-    actions.className = "page-actions-bar";
-    actions.innerHTML = `
-      <button class="btn-page-ctrl" title="Move Left" onclick="movePage(${idx}, -1)">◀</button>
-      <button class="btn-page-ctrl" title="Rotate 90°" onclick="rotatePage(${idx})">🔄</button>
-      <button class="btn-page-ctrl del" title="Delete Page" onclick="deletePage(${idx})">🗑️</button>
-      <button class="btn-page-ctrl" title="Move Right" onclick="movePage(${idx}, 1)">▶</button>
-    `;
-
-    card.appendChild(wrap);
-    card.appendChild(tag);
-    card.appendChild(actions);
-    pagesGrid.appendChild(card);
-  });
-}
-
-function movePage(idx, dir) {
-  const target = idx + dir;
-  if (target < 0 || target >= pagesList.length) return;
-  const temp = pagesList[idx];
-  pagesList[idx] = pagesList[target];
-  pagesList[target] = temp;
-  renderPagesDOM();
-}
-
-function rotatePage(idx) {
-  pagesList[idx].rotation = (pagesList[idx].rotation + 90) % 360;
-  renderPagesDOM();
-}
-
-function deletePage(idx) {
-  if (pagesList.length <= 1) {
-    alert("Cannot delete the only remaining page.");
-    return;
-  }
-  pagesList.splice(idx, 1);
-  renderPagesDOM();
-}
-
-async function exportReorderedPdf() {
-  if (pagesList.length === 0) return;
-
-  btnExport.disabled = true;
-  btnExport.innerText = "⏳ Assembling & Saving PDF...";
-
-  try {
-    const srcDoc = await PDFLib.PDFDocument.load(rawPdfBytes);
-    const newDoc = await PDFLib.PDFDocument.create();
-
-    const pageIndices = pagesList.map(p => p.originalIndex);
-    const copiedPages = await newDoc.copyPages(srcDoc, pageIndices);
-
-    for (let i = 0; i < copiedPages.length; i++) {
-      const page = copiedPages[i];
-      const additionalRotation = pagesList[i].rotation;
-      const currentRot = page.getRotation().angle;
-      page.setRotation(PDFLib.degrees((currentRot + additionalRotation) % 360));
-      newDoc.addPage(page);
-    }
-
-    const pdfBytes = await newDoc.save();
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${originalFileName}_organized.pdf`;
-    link.click();
-    URL.revokeObjectURL(url);
-
-    btnExport.innerText = "✅ Successfully Downloaded!";
-    setTimeout(() => {
-      btnExport.disabled = false;
-      btnExport.innerText = "📥 Save & Download Reordered PDF";
-    }, 2500);
-  } catch (err) {
-    alert("Export error: " + err.message);
-    btnExport.disabled = false;
-    btnExport.innerText = "📥 Save & Download Reordered PDF";
-  }
-}
-</script>
-</body>
-</html>
