@@ -1,221 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Text to PDF / Image - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<!-- jsPDF & html2canvas for PDF and Image exports -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style>
-:root {
-  --bg: #13100e;
-  --panel: #1c1815;
-  --line: #2e2620;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f3ede2;
-  --muted: #9e9080;
-  --card-bg: #16120f;
-  --success: #34d399;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 16px 14px 50px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.wrapper { width: 100%; max-width: 580px; }
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 22px 18px;
-  border-radius: 12px;
-  width: 100%;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Text to PDF & Image Generator - FormReady India</title>
+  <meta name="description" content="Convert plain text notes, applications, letters & paperwork into clean printable A4 PDF documents & high-res images offline.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&family=Merriweather:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">
+  
+  <!-- PDF-Lib for crisp native PDF rendering -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
-/* HOW TO USE GUIDE */
-.how-to-box {
-  background: rgba(217, 154, 63, 0.05);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 18px;
-}
-.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
-.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
 
-/* FORM ELEMENTS */
-.form-group { margin-bottom: 14px; }
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--paper);
-  margin-bottom: 6px;
-}
-input[type="text"], select, textarea {
-  width: 100%;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  font-size: 14px;
-  padding: 12px;
-  border-radius: 8px;
-  outline: none;
-  font-family: inherit;
-}
-input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--amber); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-textarea {
-  height: 160px;
-  resize: vertical;
-  line-height: 1.5;
-}
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-/* STYLE PICKERS GRID */
-.options-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.options-grid label { font-size: 12px; }
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-/* SHEET PREVIEW CONTAINER */
-.sheet-preview-wrap {
-  margin: 18px 0 16px;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px dashed var(--line);
-  border-radius: 8px;
-  padding: 12px;
-  overflow-x: auto;
-}
-.sheet-paper {
-  background: #ffffff;
-  color: #111111;
-  width: 100%;
-  min-height: 380px;
-  padding: 26px 24px;
-  border-radius: 4px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  font-size: 14px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-.sheet-paper h3 {
-  font-size: 18px;
-  font-weight: 800;
-  color: #111111;
-  margin-bottom: 12px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid #222222;
-}
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
 
-/* EXPORT BUTTONS */
-.export-row {
-  display: flex;
-  gap: 8px;
-}
-.btn {
-  flex: 1;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  padding: 12px 8px;
-  border-radius: 8px;
-  font-size: 13.5px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-  transition: 0.15s;
-}
-.btn:hover { border-color: var(--amber); color: var(--amber); }
-.btn-primary {
-  background: var(--amber);
-  color: #13100e;
-  border-color: var(--amber);
-}
-.btn-primary:hover { opacity: 0.9; color: #13100e; }
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
 
-/* ADVERTISEMENT CONTAINER */
-.ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 22px;
-  min-height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.ad-tag {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  display: block;
-  text-transform: uppercase;
-}
-.ad-content {
-  font-size: 11.5px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-</style>
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Form Fields */
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .input-text {
+      width: 100%;
+      background: #14100c;
+      border: 1px solid var(--line);
+      padding: 11px 14px;
+      border-radius: 9px;
+      color: var(--paper);
+      font-size: 13.5px;
+      outline: none;
+      font-family: inherit;
+    }
+    .input-text:focus { border-color: var(--amber); }
+
+    .textarea-content {
+      width: 100%;
+      height: 170px;
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--paper);
+      font-size: 13.5px;
+      font-family: inherit;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+    }
+    .textarea-content:focus { border-color: var(--amber); }
+
+    /* Controls Grid (Typography & Styling) */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 540px) {
+      .controls-grid { grid-template-columns: 1fr; }
+    }
+    .select-field {
+      width: 100%;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--paper);
+      font-size: 12.5px;
+      font-weight: 600;
+      outline: none;
+    }
+    .select-field:focus { border-color: var(--amber); }
+
+    /* Document Paper Live Preview Container */
+    .preview-container {
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .preview-header-bar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .preview-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--amber);
+    }
+
+    /* Clean White A4 Paper Sheet Preview */
+    .paper-sheet {
+      width: 100%;
+      max-width: 480px;
+      min-height: 380px;
+      background: #FFFFFF;
+      color: #1a1a1a;
+      border-radius: 4px;
+      padding: 36px 32px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      word-wrap: break-word;
+      transition: all 0.2s;
+    }
+    .doc-preview-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #111;
+      border-bottom: 2px solid #eaeaea;
+      padding-bottom: 8px;
+      display: none;
+    }
+    .doc-preview-body {
+      white-space: pre-wrap;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Action Buttons */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 480px) {
+      .actions-grid { grid-template-columns: 1fr; }
+    }
+    .btn-export {
+      padding: 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-pdf {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.35);
+    }
+    .btn-pdf:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+    }
+    .btn-img {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-img:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
-  <div class="card">
-    <h2>Text to PDF / Image</h2>
-    <div class="subtitle">Convert plain text notes, letters & paperwork into printable documents</div>
+<div class="global-shine-overlay"></div>
 
-    <!-- HOW TO USE -->
-    <div class="how-to-box">
-      <div class="how-to-title">📘 How to Use Text to PDF / Image</div>
-      <ol class="how-to-list">
-        <li>1. <span>Document Title:</span> Enter optional header/subject.</li>
-        <li>2. <span>Write Content:</span> Paste or write body text, notices, or notes.</li>
-        <li>3. <span>Typography:</span> Customize font style (Sans, Serif, Mono) and font size.</li>
-        <li>4. <span>Export:</span> Download instantly as clean PDF or high-res PNG image.</li>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Text to PDF / Image Generator</h1>
+    <p>Convert plain text notes, applications & letters into printable documents</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📄 How to Use Text to PDF / Image</h3>
+      <ol>
+        <li><b>Document Title:</b> Enter optional header or subject (e.g. Official Application).</li>
+        <li><b>Write Content:</b> Paste or write your letter, application, or meeting notes.</li>
+        <li><b>Typography:</b> Customize font family, font size, and text alignment.</li>
+        <li><b>Export:</b> Download instantly as a crisp <b>A4 PDF</b> or high-res <b>PNG Image</b>.</li>
       </ol>
     </div>
 
-    <!-- INPUTS -->
+    <!-- 2. Inputs -->
     <div class="form-group">
-      <label>1. Document Title / Subject (Optional)</label>
-      <input type="text" id="docTitle" placeholder="e.g. Official Application / Meeting Notes" oninput="updateSheet()">
+      <label for="docTitle">1. Document Title / Subject (Optional):</label>
+      <input type="text" id="docTitle" class="input-text" placeholder="e.g. Official Application / Meeting Notes" oninput="updateLivePreview()">
     </div>
 
     <div class="form-group">
-      <label>2. Document Content</label>
-      <textarea id="docContent" placeholder="Enter or paste your text here..." oninput="updateSheet()">To The Authority,
+      <label for="docBody">2. Document Content:</label>
+      <textarea id="docBody" class="textarea-content" oninput="updateLivePreview()">To The Authority,
 
 This is a formal document created offline using FormReady India. All data is processed securely on-device without external server uploads.
 
@@ -223,110 +357,305 @@ Sincerely,
 Candidate</textarea>
     </div>
 
-    <!-- FORMATTING CONTROLS -->
-    <div class="options-grid">
-      <div class="form-group">
-        <label>Font Family</label>
-        <select id="fontFamily" onchange="updateSheet()">
-          <option value="'Plus Jakarta Sans', sans-serif">Clean (Sans-Serif)</option>
-          <option value="'Merriweather', serif">Formal (Serif)</option>
-          <option value="'JetBrains Mono', monospace">Monospace (Code/Draft)</option>
+    <!-- 3. Typography & Styling Settings -->
+    <div class="controls-grid">
+      <div>
+        <label style="font-size:11.5px; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">Font Family:</label>
+        <select id="fontFamilySelect" class="select-field" onchange="updateLivePreview()">
+          <option value="'Plus Jakarta Sans', sans-serif" selected>Clean (Sans-Serif)</option>
+          <option value="'Merriweather', serif">Formal (Serif / Times)</option>
+          <option value="'Space Mono', monospace">Courier (Monospace / Code)</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label>Font Size</label>
-        <select id="fontSize" onchange="updateSheet()">
+      <div>
+        <label style="font-size:11.5px; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">Font Size:</label>
+        <select id="fontSizeSelect" class="select-field" onchange="updateLivePreview()">
           <option value="12px">Compact (12px)</option>
           <option value="14px" selected>Standard (14px)</option>
           <option value="16px">Large (16px)</option>
           <option value="18px">Extra Large (18px)</option>
         </select>
       </div>
-    </div>
 
-    <!-- LIVE DOCUMENT SHEET PREVIEW -->
-    <div class="sheet-preview-wrap">
-      <div class="sheet-paper" id="sheetPaper">
-        <h3 id="sheetTitle">Official Application / Meeting Notes</h3>
-        <div id="sheetBody"></div>
+      <div>
+        <label style="font-size:11.5px; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">Text Alignment:</label>
+        <select id="alignSelect" class="select-field" onchange="updateLivePreview()">
+          <option value="left" selected>Left Align</option>
+          <option value="center">Center Align</option>
+          <option value="justify">Justify Both</option>
+        </select>
       </div>
     </div>
 
-    <!-- EXPORT ACTIONS -->
-    <div class="export-row">
-      <button class="btn btn-primary" onclick="exportPDF()">📄 Download PDF</button>
-      <button class="btn" onclick="exportImage()">🖼️ Download Image</button>
+    <!-- 4. Document Live Preview -->
+    <div class="preview-container">
+      <div class="preview-header-bar">
+        <span class="preview-title">👁️ Live Printable A4 Preview</span>
+        <span style="font-size:11px; color:var(--muted);">Updates in Real-Time</span>
+      </div>
+      <div class="paper-sheet" id="paperSheet">
+        <div class="doc-preview-title" id="previewTitle"></div>
+        <div class="doc-preview-body" id="previewBody"></div>
+      </div>
     </div>
 
-    <!-- ADVERTISEMENT CONTAINER -->
-    <div class="ad-card">
-      <span class="ad-tag">Sponsored Advertisement</span>
-      <div class="ad-content">
-        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
-      </div>
+    <!-- 5. Export Actions -->
+    <div class="actions-grid">
+      <button class="btn-export btn-pdf" id="btnPdf" onclick="downloadPdf()">
+        📄 Download PDF
+      </button>
+      <button class="btn-export btn-img" id="btnImg" onclick="downloadImage()">
+        🖼️ Download Image (PNG)
+      </button>
     </div>
   </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
 
 <script>
-function updateSheet() {
-  const title = document.getElementById('docTitle').value.trim();
-  const content = document.getElementById('docContent').value;
-  const fontFam = document.getElementById('fontFamily').value;
-  const fontSize = document.getElementById('fontSize').value;
+const docTitle = document.getElementById("docTitle");
+const docBody = document.getElementById("docBody");
+const fontFamilySelect = document.getElementById("fontFamilySelect");
+const fontSizeSelect = document.getElementById("fontSizeSelect");
+const alignSelect = document.getElementById("alignSelect");
+const previewTitle = document.getElementById("previewTitle");
+const previewBody = document.getElementById("previewBody");
+const paperSheet = document.getElementById("paperSheet");
+const btnPdf = document.getElementById("btnPdf");
+const btnImg = document.getElementById("btnImg");
 
-  const sheet = document.getElementById('sheetPaper');
-  const titleEl = document.getElementById('sheetTitle');
-  const bodyEl = document.getElementById('sheetBody');
-
-  sheet.style.fontFamily = fontFam;
-  sheet.style.fontSize = fontSize;
+function updateLivePreview() {
+  const title = docTitle.value.trim();
+  const body = docBody.value;
 
   if (title) {
-    titleEl.style.display = 'block';
-    titleEl.innerText = title;
+    previewTitle.style.display = "block";
+    previewTitle.innerText = title;
   } else {
-    titleEl.style.display = 'none';
+    previewTitle.style.display = "none";
   }
 
-  bodyEl.innerText = content || "(Your document content will appear here)";
+  previewBody.innerText = body || "Document content will appear here...";
+
+  // Apply typography styles
+  paperSheet.style.fontFamily = fontFamilySelect.value;
+  previewBody.style.fontSize = fontSizeSelect.value;
+  previewBody.style.textAlign = alignSelect.value;
+  previewTitle.style.textAlign = alignSelect.value === 'justify' ? 'left' : alignSelect.value;
 }
 
-// Initial preview rendering
-updateSheet();
-
-async function exportPDF() {
-  const sheet = document.getElementById('sheetPaper');
-  const { jsPDF } = window.jspdf;
+// 1. Lossless Native PDF Export via pdf-lib
+async function downloadPdf() {
+  btnPdf.disabled = true;
+  btnPdf.innerText = "⏳ Generating PDF...";
 
   try {
-    const canvas = await html2canvas(sheet, { scale: 2, backgroundColor: "#ffffff" });
-    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const pdfDoc = await PDFLib.PDFDocument.create();
+    let page = pdfDoc.addPage([595.28, 841.89]); // Standard A4 Dimensions in points
+    const { width, height } = page.getSize();
 
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    // Map font family
+    let font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+    let boldFont = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
 
-    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`formready_document_${Date.now()}.pdf`);
-  } catch (err) {
-    alert("Could not generate PDF: " + err.message);
-  }
-}
+    if (fontFamilySelect.value.includes('Merriweather')) {
+      font = await pdfDoc.embedFont(PDFLib.StandardFonts.TimesRoman);
+      boldFont = await pdfDoc.embedFont(PDFLib.StandardFonts.TimesRomanBold);
+    } else if (fontFamilySelect.value.includes('Space Mono')) {
+      font = await pdfDoc.embedFont(PDFLib.StandardFonts.Courier);
+      boldFont = await pdfDoc.embedFont(PDFLib.StandardFonts.CourierBold);
+    }
 
-async function exportImage() {
-  const sheet = document.getElementById('sheetPaper');
-  try {
-    const canvas = await html2canvas(sheet, { scale: 2, backgroundColor: "#ffffff" });
-    const link = document.createElement('a');
-    link.download = `formready_text_image_${Date.now()}.png`;
-    link.href = canvas.toDataURL('image/png');
+    const margin = 50;
+    const maxLineWidth = width - (margin * 2);
+    let cursorY = height - margin;
+
+    // Draw Title if provided
+    const titleText = docTitle.value.trim();
+    if (titleText) {
+      page.drawText(titleText, {
+        x: margin,
+        y: cursorY - 18,
+        size: 16,
+        font: boldFont,
+        color: PDFLib.rgb(0.1, 0.1, 0.1)
+      });
+      cursorY -= 36;
+
+      page.drawLine({
+        start: { x: margin, y: cursorY + 8 },
+        end: { x: width - margin, y: cursorY + 8 },
+        thickness: 1,
+        color: PDFLib.rgb(0.85, 0.85, 0.85)
+      });
+    }
+
+    // Word Wrap Body Text
+    const bodySize = parseInt(fontSizeSelect.value, 10) || 12;
+    const lineHeight = bodySize * 1.5;
+    const paragraphs = docBody.value.split(/\r?\n/);
+
+    for (let para of paragraphs) {
+      if (para.trim() === "") {
+        cursorY -= lineHeight;
+        continue;
+      }
+
+      const words = para.split(' ');
+      let currentLine = "";
+
+      for (let word of words) {
+        const testLine = currentLine ? `${currentLine} ${word}` : word;
+        const testWidth = font.widthOfTextAtSize(testLine, bodySize);
+
+        if (testWidth > maxLineWidth && currentLine !== "") {
+          if (cursorY - lineHeight < margin) {
+            page = pdfDoc.addPage([595.28, 841.89]);
+            cursorY = height - margin;
+          }
+
+          page.drawText(currentLine, {
+            x: margin,
+            y: cursorY,
+            size: bodySize,
+            font: font,
+            color: PDFLib.rgb(0.15, 0.15, 0.15)
+          });
+          cursorY -= lineHeight;
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      }
+
+      if (currentLine) {
+        if (cursorY - lineHeight < margin) {
+          page = pdfDoc.addPage([595.28, 841.89]);
+          cursorY = height - margin;
+        }
+
+        page.drawText(currentLine, {
+          x: margin,
+          y: cursorY,
+          size: bodySize,
+          font: font,
+          color: PDFLib.rgb(0.15, 0.15, 0.15)
+        });
+        cursorY -= lineHeight;
+      }
+    }
+
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${(titleText || "document").replace(/[^a-zA-Z0-9_-]/g, "_")}.pdf`;
     link.click();
+    URL.revokeObjectURL(url);
+
+    btnPdf.innerText = "✅ Downloaded PDF!";
+    setTimeout(() => {
+      btnPdf.disabled = false;
+      btnPdf.innerText = "📄 Download PDF";
+    }, 2500);
   } catch (err) {
-    alert("Could not export image: " + err.message);
+    alert("Error creating PDF: " + err.message);
+    btnPdf.disabled = false;
+    btnPdf.innerText = "📄 Download PDF";
   }
 }
+
+// 2. High-Resolution PNG Canvas Export
+function downloadImage() {
+  btnImg.disabled = true;
+  btnImg.innerText = "⏳ Rendering PNG...";
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  // Standard A4 aspect ratio at 150 DPI
+  const canvasW = 1240;
+  const canvasH = 1754;
+  canvas.width = canvasW;
+  canvas.height = canvasH;
+
+  // Background
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, canvasW, canvasH);
+
+  // Margins
+  const margin = 100;
+  const maxW = canvasW - (margin * 2);
+  let curY = margin;
+
+  const titleText = docTitle.value.trim();
+  const fontFam = fontFamilySelect.value.includes('Merriweather') ? 'Merriweather, serif' : 
+                  fontFamilySelect.value.includes('Space Mono') ? 'monospace' : 'sans-serif';
+
+  if (titleText) {
+    ctx.font = `bold 36px ${fontFam}`;
+    ctx.fillStyle = "#111111";
+    ctx.fillText(titleText, margin, curY + 36);
+    curY += 70;
+
+    ctx.strokeStyle = "#E5E5E5";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(margin, curY);
+    ctx.lineTo(canvasW - margin, curY);
+    ctx.stroke();
+    curY += 40;
+  }
+
+  const pSize = parseInt(fontSizeSelect.value, 10) * 1.8;
+  ctx.font = `${pSize}px ${fontFam}`;
+  ctx.fillStyle = "#222222";
+  const lineH = pSize * 1.6;
+
+  const paragraphs = docBody.value.split(/\r?\n/);
+  for (let para of paragraphs) {
+    if (para.trim() === "") {
+      curY += lineH;
+      continue;
+    }
+
+    const words = para.split(' ');
+    let line = "";
+    for (let w of words) {
+      const test = line ? `${line} ${w}` : w;
+      if (ctx.measureText(test).width > maxW && line !== "") {
+        ctx.fillText(line, margin, curY);
+        curY += lineH;
+        line = w;
+      } else {
+        line = test;
+      }
+    }
+    if (line) {
+      ctx.fillText(line, margin, curY);
+      curY += lineH;
+    }
+  }
+
+  const link = document.createElement("a");
+  link.download = `${(titleText || "document").replace(/[^a-zA-Z0-9_-]/g, "_")}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+
+  btnImg.innerText = "✅ Downloaded PNG!";
+  setTimeout(() => {
+    btnImg.disabled = false;
+    btnImg.innerText = "🖼️ Download Image (PNG)";
+  }, 2500);
+}
+
+// Initial preview load
+updateLivePreview();
 </script>
 </body>
 </html>
