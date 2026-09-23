@@ -1,346 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Image to Text (OCR) - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
-<style>
-:root {
-  --bg: #151210;
-  --panel: #1e1a17;
-  --line: #39322b;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f2ece2;
-  --muted: #a89a89;
-  --card-bg: #14110f;
-  --danger: #ef4444;
-  --success: #22c55e;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 14px 10px 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  touch-action: pan-y;
-}
-.wrapper { width: 100%; max-width: 580px; }
-@media (min-width: 768px) { .wrapper { max-width: 760px; } }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Image to Text (OCR Extractor) - FormReady India</title>
+  <meta name="description" content="Extract editable text from images, documents, screenshots and receipts online. 100% client-side offline OCR processing with instant copy and text export.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tesseract.js (Client-Side Private OCR Engine) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 18px 16px;
-  border-radius: 12px;
-  width: 100%;
-  margin-bottom: 14px;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 21px; text-align: center; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 16px; text-align: center; }
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
 
-/* How to Use Box */
-.how-to-box {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-}
-.how-to-title {
-  color: var(--amber);
-  font-size: 12.5px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.how-to-list {
-  list-style: none;
-  font-size: 11.5px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Upload Box */
-.upload-box {
-  border: 2px dashed var(--amber);
-  background: rgba(217, 154, 63, 0.04);
-  border-radius: 10px;
-  padding: 24px 14px;
-  text-align: center;
-  cursor: pointer;
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  transition: background 0.2s;
-}
-.upload-box:hover { background: rgba(217, 154, 63, 0.08); }
-.upload-box span { color: var(--amber); font-weight: 600; font-size: 13.5px; }
-.upload-box small { color: var(--muted); font-size: 11px; }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-.summary-pill {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #14110f;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 12.5px;
-  color: var(--amber);
-  font-weight: 600;
-  margin-bottom: 14px;
-}
-.mini-btn {
-  background: #2a2420;
-  color: var(--paper);
-  border: 1px solid var(--line);
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  cursor: pointer;
-}
-.mini-btn:hover { background: var(--amber); color: var(--bg); }
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-.preview-img {
-  width: 100%;
-  max-height: 200px;
-  object-fit: contain;
-  background: #000;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  margin-bottom: 14px;
-}
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
 
-.text-output-area {
-  width: 100%;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  min-height: 140px;
-  resize: vertical;
-  outline: none;
-  font-family: monospace;
-  margin-bottom: 12px;
-}
-.text-output-area:focus { border-color: var(--amber); }
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
 
-.btn {
-  background: var(--amber);
-  color: var(--bg);
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  text-align: center;
-  width: 100%;
-  transition: opacity 0.2s;
-}
-.btn:hover { opacity: 0.9; }
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
 
-.btn-sec {
-  background: #2a2420;
-  color: var(--paper);
-  border: 1px solid var(--line);
-}
-.btn-sec:hover { background: #38302b; }
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
 
-#status-message {
-  font-size: 12px;
-  color: var(--amber);
-  text-align: center;
-  margin-top: 10px;
-  display: none;
-}
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
 
-/* Standard Ad Banner Container */
-.ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 16px;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.ad-tag {
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  display: block;
-}
-.ad-content {
-  font-size: 11.5px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-</style>
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 32px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.18);
+    }
+    #imageInput { display: none; }
+    .upload-icon { font-size: 36px; margin-bottom: 8px; }
+    .upload-title { font-size: 14.5px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .upload-desc b { color: var(--amber); }
+
+    /* Progress & Status Indicator */
+    .ocr-progress-box {
+      display: none;
+      background: #14100c;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .progress-bar-wrap {
+      width: 100%;
+      height: 8px;
+      background: var(--panel-inner);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0;
+      border: 1px solid var(--line);
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f5a623, #10b981);
+      transition: width 0.2s ease;
+    }
+    .progress-status-text {
+      font-size: 12.5px;
+      color: var(--amber);
+      font-weight: 700;
+    }
+
+    /* Result Workspace */
+    .result-workspace {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    /* Source Preview and Text Layout */
+    .preview-thumbnail-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .thumb-img {
+      width: 45px;
+      height: 45px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+    }
+    .thumb-meta {
+      flex: 1;
+      font-size: 12.5px;
+    }
+    .thumb-meta b { color: var(--paper); display: block; margin-bottom: 2px; }
+    .thumb-meta span { color: var(--muted); font-size: 11px; }
+
+    /* Text Output Area */
+    .text-output-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .text-area {
+      width: 100%;
+      height: 220px;
+      background: #120e0b;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      color: var(--paper);
+      font-family: inherit;
+      font-size: 13.5px;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .text-area:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 14px rgba(245, 166, 35, 0.2);
+    }
+
+    /* Word / Char Counter Stats Bar */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 8px 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .stats-row b { color: var(--amber); }
+
+    /* Actions Grid */
+    .action-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 480px) {
+      .action-buttons-grid { grid-template-columns: 1fr; }
+    }
+    .btn-action {
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-copy {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-copy:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+    .btn-download {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+    }
+    .btn-download:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
-  <div class="card">
-    <h2>Image to Text (OCR)</h2>
-    <div class="subtitle">Extract editable text directly from any image, document, or screenshot</div>
+<div class="global-shine-overlay"></div>
 
-    <!-- How to Use Box -->
-    <div class="how-to-box">
-      <div class="how-to-title">📄 How to Use Image to Text (OCR)</div>
-      <ol class="how-to-list">
-        <li>1. <span>Upload Image:</span> Select any document photo, screenshot, or receipt.</li>
-        <li>2. <span>Scan Text:</span> Tap <strong>Extract Text</strong> to process characters via OCR engine.</li>
-        <li>3. <span>Copy / Save:</span> Instantly copy the scanned text or download as a text file.</li>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Image to Text (OCR Extractor)</h1>
+    <p>Extract editable text directly from any document photo, screenshot or book offline</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📄 How to Use Image to Text (OCR)</h3>
+      <ol>
+        <li><b>Upload Image:</b> Select any document photo, screenshot, notes or receipt.</li>
+        <li><b>Scan Text:</b> Character recognition runs automatically via client-side OCR engine.</li>
+        <li><b>Copy / Save:</b> Instantly copy editable text to clipboard or download as a .txt file.</li>
       </ol>
     </div>
 
-    <!-- Upload Box -->
-    <input type="file" id="img-input" accept="image/*" style="display:none">
-    <div class="upload-box" onclick="document.getElementById('img-input').click()">
-      <span>📁 Tap here to upload image for OCR</span>
-      <small>Supports JPG, PNG, WebP</small>
+    <!-- 2. Upload Zone -->
+    <label class="upload-zone" id="dropZone">
+      <input type="file" id="imageInput" accept="image/*" onchange="handleFileSelect(this.files[0])">
+      <div class="upload-icon">🔍</div>
+      <div class="upload-title">Tap here to upload image for OCR</div>
+      <div class="upload-desc">Document photos, bills, certificates • <b>Supports JPG, PNG, WebP</b></div>
+    </label>
+
+    <!-- 3. Progress State -->
+    <div class="ocr-progress-box" id="progressBox">
+      <div class="progress-status-text" id="statusText">Initializing OCR Engine...</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+      <span style="font-size:11px; color:var(--muted);">100% Client-Side Private Document Scanning</span>
     </div>
 
-    <!-- Stage Section -->
-    <div id="stage-section" style="display:none">
-      <div class="summary-pill">
-        <span id="file-name-tag">Image loaded</span>
-        <button type="button" class="mini-btn" onclick="document.getElementById('img-input').click()" style="color:var(--amber); border-color:var(--amber)">Change Image</button>
-      </div>
-
-      <img id="preview-img" class="preview-img" alt="Preview">
-
-      <button class="btn" id="extract-btn" style="margin-bottom:14px;">⚡ Extract Text (OCR)</button>
-      <div id="status-message"></div>
-
-      <div id="result-section" style="display:none">
-        <label class="input-label" style="font-size:12px; color:var(--muted); font-weight:600; margin-bottom:6px; display:block;">Extracted Result:</label>
-        <textarea id="result-textarea" class="text-output-area" placeholder="Extracted text will appear here..."></textarea>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-          <button class="btn btn-sec" id="copy-btn">📋 Copy Text</button>
-          <button class="btn" id="dl-txt-btn">⬇ Download TXT</button>
+    <!-- 4. Result Workspace -->
+    <div class="result-workspace" id="workspace">
+      <!-- Thumbnail Info Bar -->
+      <div class="preview-thumbnail-bar">
+        <img id="thumbImg" class="thumb-img" src="" alt="Thumbnail">
+        <div class="thumb-meta">
+          <b id="docName">Document.jpg</b>
+          <span id="docDimensions">Resolution: 0 × 0 px</span>
         </div>
+        <button class="back-btn" style="padding:4px 10px; font-size:11.5px;" onclick="document.getElementById('imageInput').click()">Change</button>
       </div>
-    </div>
 
-    <!-- Standard Ad Banner -->
-    <div class="ad-card">
-      <span class="ad-tag">SPONSORED ADVERTISEMENT</span>
-      <div class="ad-content">
-        <span>📢</span> Google AdSense / Responsive Banner Space (Optimized for Mobile & Desktop)
+      <!-- Editable Text Area -->
+      <div class="text-output-wrap">
+        <textarea id="extractedText" class="text-area" placeholder="Scanned text will appear here..." oninput="updateStats()"></textarea>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-row">
+        <span>Characters: <b id="charCount">0</b></span>
+        <span>Words: <b id="wordCount">0</b></span>
+        <span>Confidence: <b id="confidenceScore" style="color:var(--green);">0%</b></span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons-grid">
+        <button class="btn-action btn-copy" id="btnCopy" onclick="copyText()">
+          📋 Copy Extracted Text
+        </button>
+        <button class="btn-action btn-download" onclick="downloadTxtFile()">
+          📥 Download .TXT File
+        </button>
       </div>
     </div>
   </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
 
 <script>
-  let currentFile = null;
-  const imgInput = document.getElementById('img-input');
-  const stageSection = document.getElementById('stage-section');
-  const fileNameTag = document.getElementById('file-name-tag');
-  const previewImg = document.getElementById('preview-img');
-  const extractBtn = document.getElementById('extract-btn');
-  const statusMsg = document.getElementById('status-message');
-  const resultSection = document.getElementById('result-section');
-  const resultTextarea = document.getElementById('result-textarea');
-  const copyBtn = document.getElementById('copy-btn');
-  const dlTxtBtn = document.getElementById('dl-txt-btn');
+let currentFileName = "extracted_text";
 
-  imgInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    currentFile = file;
+const dropZone = document.getElementById("dropZone");
+const imageInput = document.getElementById("imageInput");
+const progressBox = document.getElementById("progressBox");
+const statusText = document.getElementById("statusText");
+const progressBar = document.getElementById("progressBar");
+const workspace = document.getElementById("workspace");
+const thumbImg = document.getElementById("thumbImg");
+const docName = document.getElementById("docName");
+const docDimensions = document.getElementById("docDimensions");
+const extractedText = document.getElementById("extractedText");
+const charCount = document.getElementById("charCount");
+const wordCount = document.getElementById("wordCount");
+const confidenceScore = document.getElementById("confidenceScore");
+const btnCopy = document.getElementById("btnCopy");
 
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      previewImg.src = ev.target.result;
-      fileNameTag.textContent = file.name.substring(0, 18) + '...';
-      stageSection.style.display = 'block';
-      resultSection.style.display = 'none';
-      statusMsg.style.display = 'none';
-      stageSection.scrollIntoView({ behavior: 'smooth' });
+// Drag & Drop Listeners
+['dragenter', 'dragover'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+});
+['dragleave', 'drop'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+  });
+});
+dropZone.addEventListener('drop', (e) => {
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    handleFileSelect(e.dataTransfer.files[0]);
+  }
+});
+
+function handleFileSelect(file) {
+  if (!file || !file.type.startsWith("image/")) {
+    alert("Please upload a valid image file (JPG, PNG, WebP).");
+    return;
+  }
+
+  currentFileName = file.name.replace(/\.[^/.]+$/, "");
+  docName.innerText = file.name.length > 24 ? file.name.substring(0, 22) + "..." : file.name;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const dataUrl = evt.target.result;
+    thumbImg.src = dataUrl;
+
+    const img = new Image();
+    img.onload = function() {
+      docDimensions.innerText = `${img.width} × ${img.height} px`;
+      runTesseractOcr(dataUrl);
     };
-    reader.readAsDataURL(file);
+    img.src = dataUrl;
+  };
+  reader.readAsDataURL(file);
+}
+
+// 100% Client-Side OCR Execution
+async function runTesseractOcr(imageUrl) {
+  progressBox.style.display = "block";
+  workspace.style.display = "none";
+  progressBar.style.width = "0%";
+  statusText.innerText = "Loading Recognition Engine...";
+
+  try {
+    const worker = await Tesseract.createWorker("eng", 1, {
+      logger: m => {
+        if (m.status === "recognizing text") {
+          const pct = Math.round(m.progress * 100);
+          progressBar.style.width = `${pct}%`;
+          statusText.innerText = `Scanning document text... ${pct}%`;
+        } else if (m.status === "loading tesseract core") {
+          statusText.innerText = "Loading OCR Core Engine...";
+        } else if (m.status === "loading language traineddata") {
+          statusText.innerText = "Loading language models...";
+        }
+      }
+    });
+
+    const ret = await worker.recognize(imageUrl);
+    await worker.terminate();
+
+    progressBox.style.display = "none";
+    workspace.style.display = "block";
+    workspace.scrollIntoView({ behavior: 'smooth' });
+
+    extractedText.value = ret.data.text.trim();
+    confidenceScore.innerText = `${Math.round(ret.data.confidence)}%`;
+    updateStats();
+  } catch (err) {
+    console.error(err);
+    alert("OCR extraction error: " + err.message);
+    progressBox.style.display = "none";
+  }
+}
+
+function updateStats() {
+  const text = extractedText.value;
+  charCount.innerText = text.length;
+
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  wordCount.innerText = words;
+}
+
+function copyText() {
+  const text = extractedText.value;
+  if (!text) return;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btnCopy.innerHTML;
+    btnCopy.innerHTML = "✅ Copied to Clipboard!";
+    setTimeout(() => { btnCopy.innerHTML = orig; }, 2000);
+  }).catch(() => {
+    alert("Copied text:\n" + text);
   });
+}
 
-  extractBtn.addEventListener('click', async () => {
-    if (!currentFile) return;
+function downloadTxtFile() {
+  const text = extractedText.value;
+  if (!text) {
+    alert("No text to download.");
+    return;
+  }
 
-    extractBtn.disabled = true;
-    extractBtn.textContent = 'Scanning Text (Tesseract)...';
-    statusMsg.style.display = 'block';
-    statusMsg.textContent = 'Running optical character recognition...';
-    resultSection.style.display = 'none';
-
-    try {
-      const worker = await Tesseract.createWorker('eng');
-      const ret = await worker.recognize(currentFile);
-      await worker.terminate();
-
-      resultTextarea.value = ret.data.text.trim() || 'No text detected in the image.';
-      resultSection.style.display = 'block';
-      statusMsg.textContent = 'Text extracted successfully!';
-      resultSection.scrollIntoView({ behavior: 'smooth' });
-    } catch (err) {
-      alert('OCR Error: ' + err.message);
-      statusMsg.style.display = 'none';
-    }
-
-    extractBtn.disabled = false;
-    extractBtn.textContent = '⚡ Extract Text (OCR)';
-  });
-
-  copyBtn.addEventListener('click', () => {
-    resultTextarea.select();
-    navigator.clipboard.writeText(resultTextarea.value);
-    copyBtn.textContent = '✅ Copied!';
-    setTimeout(() => { copyBtn.textContent = '📋 Copy Text'; }, 2000);
-  });
-
-  dlTxtBtn.addEventListener('click', () => {
-    const text = resultTextarea.value;
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'extracted_text.txt';
-    link.click();
-  });
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${currentFileName}_extracted.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 </script>
 </body>
 </html>
