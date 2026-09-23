@@ -1,376 +1,545 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>QR Code Generator - FormReady India</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-:root {
-  --bg: #13100e;
-  --panel: #1c1815;
-  --line: #2e2620;
-  --amber: #d99a3f;
-  --amber-hover: #c48733;
-  --paper: #f3ede2;
-  --muted: #9e9080;
-  --card-bg: #16120f;
-  --success: #34d399;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  padding: 16px 14px 50px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.wrapper { width: 100%; max-width: 540px; }
-.back-link {
-  color: var(--amber);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-block;
-  margin-bottom: 14px;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  padding: 22px 18px;
-  border-radius: 12px;
-  width: 100%;
-}
-h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
-.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HD QR Code Generator (UPI, URL, WiFi, Text) - FormReady India</title>
+  <meta name="description" content="Generate high-clarity QR codes for website URLs, UPI payments, WiFi passwords & text. 100% private, offline and instant PNG/SVG download.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-/* HOW TO USE GUIDE */
-.how-to-box {
-  background: rgba(217, 154, 63, 0.05);
-  border-left: 3px solid var(--amber);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 18px;
-}
-.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
-.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
-.how-to-list li span { color: var(--paper); font-weight: 600; }
+  <!-- QRCode.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-/* TYPE SWITCHER */
-.type-grid {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 16px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.type-grid::-webkit-scrollbar { display: none; }
-.type-btn {
-  flex: 1;
-  min-width: 80px;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--muted);
-  padding: 9px 4px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-  transition: 0.15s;
-  white-space: nowrap;
-}
-.type-btn.active {
-  background: var(--amber);
-  color: #13100e;
-  border-color: var(--amber);
-}
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
 
-/* FORM CONTROLS */
-.form-group { margin-bottom: 14px; }
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--paper);
-  margin-bottom: 6px;
-}
-input[type="text"], input[type="number"], select, textarea {
-  width: 100%;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  font-size: 14px;
-  padding: 12px;
-  border-radius: 8px;
-  outline: none;
-  font-family: inherit;
-}
-input:focus, select:focus, textarea:focus { border-color: var(--amber); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.btn {
-  background: var(--amber);
-  color: #13100e;
-  border: none;
-  padding: 13px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 6px;
-  transition: opacity 0.2s;
-}
-.btn:hover { opacity: 0.9; }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-/* RESULT BOX */
-.result-card {
-  display: none;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 18px 14px;
-  margin-top: 20px;
-  text-align: center;
-}
-.qr-container {
-  display: inline-block;
-  background: #ffffff;
-  padding: 14px;
-  border-radius: 10px;
-  margin: 10px auto 14px;
-}
-.qr-container img, .qr-container canvas {
-  display: block;
-  margin: 0 auto;
-}
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-/* ADVERTISEMENT CONTAINER */
-.ad-card {
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  margin-top: 22px;
-  min-height: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.ad-tag {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  display: block;
-  text-transform: uppercase;
-}
-.ad-content {
-  font-size: 11.5px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-</style>
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Category Switcher Tabs */
+    .type-switcher {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) {
+      .type-switcher { grid-template-columns: repeat(2, 1fr); }
+    }
+    .type-tab {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 10px 8px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .type-tab:hover { border-color: rgba(245, 166, 35, 0.5); color: var(--paper); }
+    .type-tab.active {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      border-color: var(--amber);
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.35);
+    }
+
+    /* Form Inputs */
+    .input-panel { margin-bottom: 20px; }
+    .input-group { margin-bottom: 12px; }
+    .input-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .form-input {
+      width: 100%;
+      background: #14100c;
+      border: 1px solid var(--line);
+      padding: 11px 14px;
+      border-radius: 9px;
+      color: var(--paper);
+      font-size: 13.5px;
+      outline: none;
+      font-family: inherit;
+    }
+    .form-input:focus { border-color: var(--amber); }
+
+    /* Custom Color & Sizing Controls */
+    .custom-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) {
+      .custom-row { grid-template-columns: 1fr; }
+    }
+    .color-picker-box {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .color-picker-box span { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .color-input {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    /* Generate Button */
+    .btn-generate {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      font-size: 14px;
+      font-weight: 800;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+      transition: all 0.2s;
+      margin-bottom: 20px;
+    }
+    .btn-generate:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+    }
+
+    /* Live Output Preview Viewport */
+    .qr-result-box {
+      display: none;
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
+    }
+    .qr-frame {
+      display: inline-block;
+      padding: 16px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      margin-bottom: 14px;
+    }
+    #qrcode img, #qrcode canvas {
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Action Buttons */
+    .btn-download-qr {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-download-qr:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="wrapper">
-  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
 
-  <div class="card">
-    <h2>QR Code Generator</h2>
-    <div class="subtitle">Generate high-clarity QR codes for links, UPI payments & Wi-Fi credentials</div>
+<div class="global-shine-overlay"></div>
 
-    <!-- HOW TO USE -->
-    <div class="how-to-box">
-      <div class="how-to-title">📘 How to Use QR Generator</div>
-      <ol class="how-to-list">
-        <li>1. <span>Select Format:</span> Pick Web Link, UPI Payment, Wi-Fi, or Text.</li>
-        <li>2. <span>Enter Details:</span> Fill in required address, ID, or text.</li>
-        <li>3. <span>Download:</span> Save high-res QR code PNG directly to your device.</li>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>HD QR Code Generator</h1>
+    <p>Generate high-clarity QR codes for links, UPI payments & Wi-Fi credentials</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📱 How to Use QR Generator</h3>
+      <ol>
+        <li><b>Select Format:</b> Pick Web Link, UPI Payment, Wi-Fi, or Text.</li>
+        <li><b>Enter Details:</b> Fill in the required URL, UPI ID, or network details.</li>
+        <li><b>Download:</b> Save high-res QR code PNG directly to your device.</li>
       </ol>
     </div>
 
-    <!-- TYPE SELECTOR -->
-    <div class="type-grid">
-      <button class="type-btn active" onclick="switchType('url', this)">🔗 URL</button>
-      <button class="type-btn" onclick="switchType('upi', this)">💳 UPI Pay</button>
-      <button class="type-btn" onclick="switchType('wifi', this)">📶 Wi-Fi</button>
-      <button class="type-btn" onclick="switchType('text', this)">📝 Text</button>
+    <!-- 2. Type Switcher -->
+    <div class="type-switcher">
+      <button class="type-tab active" id="tabUrl" onclick="switchType('url')">🔗 URL</button>
+      <button class="type-tab" id="tabUpi" onclick="switchType('upi')">💳 UPI Pay</button>
+      <button class="type-tab" id="tabWifi" onclick="switchType('wifi')">📶 Wi-Fi</button>
+      <button class="type-tab" id="tabText" onclick="switchType('text')">📝 Text</button>
     </div>
 
-    <!-- FIELDS: URL -->
-    <div id="fieldUrl">
-      <div class="form-group">
-        <label>Website / Link URL</label>
-        <input type="text" id="urlInput" placeholder="https://example.com" value="https://">
+    <!-- 3. Dynamic Inputs -->
+    <div class="input-panel">
+      <!-- URL Fields -->
+      <div id="panelUrl">
+        <div class="input-group">
+          <label class="input-label">Website / Link URL:</label>
+          <input type="url" id="urlInput" class="form-input" placeholder="https://example.com" value="https://">
+        </div>
+      </div>
+
+      <!-- UPI Fields -->
+      <div id="panelUpi" style="display: none;">
+        <div class="input-group">
+          <label class="input-label">UPI ID / VPA (e.g. name@upi / 9876543210@paytm):</label>
+          <input type="text" id="upiId" class="form-input" placeholder="receiver@okaxis">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Payee Name (Optional):</label>
+          <input type="text" id="upiName" class="form-input" placeholder="Store or Merchant Name">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Amount in INR (Optional):</label>
+          <input type="number" id="upiAmount" class="form-input" placeholder="e.g. 500" min="1">
+        </div>
+      </div>
+
+      <!-- Wi-Fi Fields -->
+      <div id="panelWifi" style="display: none;">
+        <div class="input-group">
+          <label class="input-label">Network Name (SSID):</label>
+          <input type="text" id="wifiSsid" class="form-input" placeholder="WiFi Router Name">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Wi-Fi Password:</label>
+          <input type="text" id="wifiPass" class="form-input" placeholder="Network Password">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Security Type:</label>
+          <select id="wifiType" class="form-input">
+            <option value="WPA">WPA / WPA2 (Recommended)</option>
+            <option value="WEP">WEP</option>
+            <option value="nopass">None (Open Network)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Text Fields -->
+      <div id="panelText" style="display: none;">
+        <div class="input-group">
+          <label class="input-label">Plain Text Content:</label>
+          <textarea id="plainText" class="form-input" style="height: 100px; resize: vertical;" placeholder="Type any secret note, address or text snippet..."></textarea>
+        </div>
       </div>
     </div>
 
-    <!-- FIELDS: UPI -->
-    <div id="fieldUpi" style="display:none;">
-      <div class="form-group">
-        <label>UPI ID (VPA)</label>
-        <input type="text" id="upiId" placeholder="e.g. yourname@okhdfcbank">
+    <!-- 4. Styling Colors -->
+    <div class="custom-row">
+      <div class="color-picker-box">
+        <span>QR Pattern Color</span>
+        <input type="color" id="qrDark" class="color-input" value="#000000">
       </div>
-      <div class="form-group">
-        <label>Payee Name</label>
-        <input type="text" id="upiName" placeholder="e.g. Aman Shaikh">
-      </div>
-      <div class="form-group">
-        <label>Amount (₹) (Optional)</label>
-        <input type="number" id="upiAmount" placeholder="Leave empty for open amount" inputmode="decimal">
+      <div class="color-picker-box">
+        <span>Background Color</span>
+        <input type="color" id="qrLight" class="color-input" value="#ffffff">
       </div>
     </div>
 
-    <!-- FIELDS: WIFI -->
-    <div id="fieldWifi" style="display:none;">
-      <div class="form-group">
-        <label>Network Name (SSID)</label>
-        <input type="text" id="wifiSsid" placeholder="e.g. Home_WiFi_5G">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="text" id="wifiPass" placeholder="Network password">
-      </div>
-      <div class="form-group">
-        <label>Security</label>
-        <select id="wifiType">
-          <option value="WPA">WPA / WPA2 (Default)</option>
-          <option value="WEP">WEP</option>
-          <option value="nopass">None (Open Network)</option>
-        </select>
-      </div>
-    </div>
+    <!-- 5. Generate Button -->
+    <button class="btn-generate" onclick="generateQrCode()">
+      ⚡ Generate QR Code
+    </button>
 
-    <!-- FIELDS: PLAIN TEXT -->
-    <div id="fieldText" style="display:none;">
-      <div class="form-group">
-        <label>Plain Text Content</label>
-        <textarea id="plainTextInput" rows="4" placeholder="Enter custom message or code..."></textarea>
+    <!-- 6. Result Viewport -->
+    <div class="qr-result-box" id="qrResultBox">
+      <div class="qr-frame" id="qrFrame">
+        <div id="qrcode"></div>
       </div>
-    </div>
-
-    <button class="btn" onclick="generateQR()">Generate QR Code</button>
-
-    <!-- RESULT OUTPUT -->
-    <div class="result-card" id="resultCard">
-      <div class="qr-container" id="qrTarget"></div>
-      <button class="btn" onclick="downloadQR()">⬇️ Download QR Code (PNG)</button>
-    </div>
-
-    <!-- ADVERTISEMENT CONTAINER -->
-    <div class="ad-card">
-      <span class="ad-tag">Sponsored Advertisement</span>
-      <div class="ad-content">
-        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
-      </div>
+      <button class="btn-download-qr" onclick="downloadQrPng()">
+        📥 Download HD QR Code (PNG)
+      </button>
     </div>
   </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
 
 <script>
 let currentMode = 'url';
 let qrInstance = null;
 
-function switchType(mode, btn) {
+function switchType(mode) {
   currentMode = mode;
-  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  document.querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
+  
+  document.getElementById('panelUrl').style.display = mode === 'url' ? 'block' : 'none';
+  document.getElementById('panelUpi').style.display = mode === 'upi' ? 'block' : 'none';
+  document.getElementById('panelWifi').style.display = mode === 'wifi' ? 'block' : 'none';
+  document.getElementById('panelText').style.display = mode === 'text' ? 'block' : 'none';
 
-  document.getElementById('fieldUrl').style.display = (mode === 'url') ? 'block' : 'none';
-  document.getElementById('fieldUpi').style.display = (mode === 'upi') ? 'block' : 'none';
-  document.getElementById('fieldWifi').style.display = (mode === 'wifi') ? 'block' : 'none';
-  document.getElementById('fieldText').style.display = (mode === 'text') ? 'block' : 'none';
-  document.getElementById('resultCard').style.display = 'none';
+  if (mode === 'url') document.getElementById('tabUrl').classList.add('active');
+  if (mode === 'upi') document.getElementById('tabUpi').classList.add('active');
+  if (mode === 'wifi') document.getElementById('tabWifi').classList.add('active');
+  if (mode === 'text') document.getElementById('tabText').classList.add('active');
 }
 
-function getQRPayload() {
+function getPayload() {
   if (currentMode === 'url') {
-    const u = document.getElementById('urlInput').value.trim();
-    return u || 'https://';
+    const val = document.getElementById('urlInput').value.trim();
+    return val && val !== 'https://' ? val : 'https://formready-india.onrender.com';
   } else if (currentMode === 'upi') {
-    const vpa = document.getElementById('upiId').value.trim();
-    const name = document.getElementById('upiName').value.trim() || 'Merchant';
-    const amount = document.getElementById('upiAmount').value.trim();
-    if (!vpa) {
-      alert("Please enter a valid UPI ID.");
+    const upiId = document.getElementById('upiId').value.trim();
+    if (!upiId) {
+      alert("Please enter a valid UPI ID / VPA.");
       return null;
     }
-    let upiUri = `upi://pay?pa=${encodeURIComponent(vpa)}&pn=${encodeURIComponent(name)}&cu=INR`;
-    if (amount && parseFloat(amount) > 0) {
-      upiUri += `&am=${encodeURIComponent(amount)}`;
-    }
-    return upiUri;
+    const name = encodeURIComponent(document.getElementById('upiName').value.trim() || 'Merchant');
+    const amt = document.getElementById('upiAmount').value.trim();
+    let payload = `upi://pay?pa=${upiId}&pn=${name}&cu=INR`;
+    if (amt && parseFloat(amt) > 0) payload += `&am=${amt}`;
+    return payload;
   } else if (currentMode === 'wifi') {
     const ssid = document.getElementById('wifiSsid').value.trim();
+    if (!ssid) {
+      alert("Please enter a Wi-Fi SSID (Network Name).");
+      return null;
+    }
     const pass = document.getElementById('wifiPass').value;
     const type = document.getElementById('wifiType').value;
-    if (!ssid) {
-      alert("Please enter Wi-Fi network name (SSID).");
-      return null;
-    }
     return `WIFI:T:${type};S:${ssid};P:${pass};;`;
   } else if (currentMode === 'text') {
-    const t = document.getElementById('plainTextInput').value.trim();
-    if (!t) {
-      alert("Please enter some text.");
+    const text = document.getElementById('plainText').value.trim();
+    if (!text) {
+      alert("Please enter text content.");
       return null;
     }
-    return t;
+    return text;
   }
-  return '';
+  return null;
 }
 
-function generateQR() {
-  const payload = getQRPayload();
+function generateQrCode() {
+  const payload = getPayload();
   if (!payload) return;
 
-  const target = document.getElementById('qrTarget');
-  target.innerHTML = '';
+  const qrContainer = document.getElementById('qrcode');
+  qrContainer.innerHTML = '';
 
-  qrInstance = new QRCode(target, {
+  const darkColor = document.getElementById('qrDark').value;
+  const lightColor = document.getElementById('qrLight').value;
+  document.getElementById('qrFrame').style.background = lightColor;
+
+  qrInstance = new QRCode(qrContainer, {
     text: payload,
-    width: 220,
-    height: 220,
-    colorDark: "#13100e",
-    colorLight: "#ffffff",
+    width: 256,
+    height: 256,
+    colorDark: darkColor,
+    colorLight: lightColor,
     correctLevel: QRCode.CorrectLevel.H
   });
 
-  document.getElementById('resultCard').style.display = 'block';
+  const resBox = document.getElementById('qrResultBox');
+  resBox.style.display = 'block';
+  resBox.scrollIntoView({ behavior: 'smooth' });
 }
 
-function downloadQR() {
-  const target = document.getElementById('qrTarget');
-  const img = target.querySelector('img');
-  const canvas = target.querySelector('canvas');
+function downloadQrPng() {
+  const qrContainer = document.getElementById('qrcode');
+  const img = qrContainer.querySelector('img');
+  const canvas = qrContainer.querySelector('canvas');
 
   let dataUrl = '';
-  if (img && img.src) {
+  if (canvas) {
+    dataUrl = canvas.toDataURL('image/png');
+  } else if (img && img.src) {
     dataUrl = img.src;
-  } else if (canvas) {
-    dataUrl = canvas.toDataURL("image/png");
-  }
-
-  if (!dataUrl) {
-    alert("Please generate QR code first.");
+  } else {
+    alert("Unable to export QR code.");
     return;
   }
 
   const link = document.createElement('a');
-  link.download = `formready_qr_${Date.now()}.png`;
+  link.download = `QRCode_${currentMode.toUpperCase()}.png`;
   link.href = dataUrl;
   link.click();
 }
+
+// Default initial render on load
+window.addEventListener('DOMContentLoaded', () => {
+  generateQrCode();
+});
 </script>
 </body>
 </html>
