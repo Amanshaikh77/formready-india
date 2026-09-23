@@ -1,318 +1,766 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Photo Cropper - FormReady India</title>
-<meta name="description" content="Crop photos easily with precise manual controls, aspect ratio presets and exact area selection. Supports JPG and PNG images with simple crop and download. Fast, private and mobile &amp; desktop-friendly.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<!-- Cropper.js CSS & JS for Interactive Manual Cropping -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-<style>
-:root {
-  --bg: #151210;
-  --panel: #1e1a17;
-  --panel-2: #262019;
-  --line: #39322b;
-  --amber: #d99a3f;
-  --amber-bright: #f0b158;
-  --paper: #f2ece2;
-  --muted: #a89a89;
-  --green: #2ea043;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Inter', sans-serif;
-  padding: 16px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.nav-bar { max-width: 650px; margin: 0 auto 20px; width: 100%; }
-.back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-.header { text-align: center; margin-bottom: 20px; }
-.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
-.header p { font-size: 13px; color: var(--muted); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Photo Cropper (Custom Aspect Ratios) - FormReady India</title>
+  <meta name="description" content="Crop photos online with custom aspect ratios, passport 3.5x4.5cm framing, rotate and flip. 100% private & client-side offline processing.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
 
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 24px;
-  max-width: 650px;
-  margin: 0 auto 24px;
-  width: 100%;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-}
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
 
-/* Instructions Manual Box */
-.instructions-box {
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--amber);
-  border-radius: 8px;
-  padding: 14px 16px;
-  margin-bottom: 18px;
-}
-.instructions-box h3 {
-  font-size: 13.5px;
-  color: var(--amber);
-  font-family: 'Space Grotesk', sans-serif;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.instructions-box ol {
-  padding-left: 18px;
-  font-size: 12.5px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-.instructions-box li {
-  margin-bottom: 3px;
-}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-.upload-zone {
-  border: 2px dashed var(--line);
-  padding: 28px 16px;
-  text-align: center;
-  border-radius: 10px;
-  cursor: pointer;
-  background: var(--panel-2);
-  transition: border-color 0.2s;
-  margin-bottom: 20px;
-  display: block;
-  width: 100%;
-}
-.upload-zone:hover { border-color: var(--amber); }
-#fileInput { display: none; }
-.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; pointer-events: none; }
-.upload-text b { color: var(--amber); }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-.editor-container {
-  display: none;
-  margin-bottom: 20px;
-}
-.img-wrap {
-  max-height: 380px;
-  width: 100%;
-  background: #000;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  margin-bottom: 16px;
-}
-.img-wrap img {
-  display: block;
-  max-width: 100%;
-}
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
 
-.options-group { margin-bottom: 16px; }
-.options-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-.input-select {
-  width: 100%;
-  padding: 12px 14px;
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  color: var(--paper);
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-}
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
 
-.btn {
-  background: var(--amber);
-  color: #151210;
-  border: none;
-  width: 100%;
-  padding: 14px;
-  border-radius: 9px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn:hover { background: var(--amber-bright); }
-.btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-download { background: var(--green); color: #fff; margin-top: 12px; display: none; }
-.btn-download:hover { background: #3fb950; }
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
 
-/* Advertisement Box */
-.ad-container {
-  margin-top: 24px;
-  background: var(--panel-2);
-  border: 1px dashed var(--line);
-  border-radius: 10px;
-  padding: 16px;
-  text-align: center;
-}
-.ad-label {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-.ad-banner {
-  font-size: 12.5px;
-  color: var(--muted);
-  padding: 10px;
-}
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 12px;
-  color: var(--muted);
-  border-top: 1px solid var(--line);
-  margin-top: auto;
-}
-</style>
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 32px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.18);
+    }
+    #imageInput { display: none; }
+    .upload-icon { font-size: 36px; margin-bottom: 8px; }
+    .upload-title { font-size: 14.5px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .upload-desc b { color: var(--amber); }
+
+    /* Workspace */
+    .crop-workspace {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    /* Ratio Chips Bar */
+    .ratio-section {
+      margin-bottom: 16px;
+    }
+    .section-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ratio-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .ratio-chips::-webkit-scrollbar { display: none; }
+    .ratio-chip {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .ratio-chip:hover { border-color: rgba(245, 166, 35, 0.5); color: var(--paper); }
+    .ratio-chip.active {
+      background: var(--amber);
+      color: #0c0a08;
+      border-color: var(--amber);
+      box-shadow: 0 0 10px rgba(245, 166, 35, 0.35);
+    }
+
+    /* Transform Toolbar (Rotate / Flip / Reset) */
+    .toolbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .btn-tool {
+      background: #14100c;
+      border: 1px solid var(--line);
+      color: var(--paper);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .btn-tool:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* Crop Viewport Box */
+    .crop-viewport {
+      position: relative;
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: inset 0 0 24px rgba(0,0,0,0.8);
+      user-select: none;
+      touch-action: none;
+    }
+    .canvas-container {
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+    }
+    #imageCanvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      max-height: 480px;
+    }
+
+    /* Interactive Crop Overlay Frame */
+    .crop-box {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 2px solid var(--amber);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.65);
+      cursor: move;
+      touch-action: none;
+    }
+    /* Rule of thirds grid lines */
+    .crop-box::before, .crop-box::after {
+      content: '';
+      position: absolute;
+      pointer-events: none;
+    }
+    .crop-box::before {
+      top: 33.33%;
+      bottom: 33.33%;
+      left: 0;
+      right: 0;
+      border-top: 1px dashed rgba(255, 255, 255, 0.35);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.35);
+    }
+    .crop-box::after {
+      left: 33.33%;
+      right: 33.33%;
+      top: 0;
+      bottom: 0;
+      border-left: 1px dashed rgba(255, 255, 255, 0.35);
+      border-right: 1px dashed rgba(255, 255, 255, 0.35);
+    }
+
+    /* 4 Corner Resize Handles */
+    .handle {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: var(--amber);
+      border: 2px solid #000;
+      border-radius: 3px;
+    }
+    .handle-nw { top: -7px; left: -7px; cursor: nwse-resize; }
+    .handle-ne { top: -7px; right: -7px; cursor: nesw-resize; }
+    .handle-sw { bottom: -7px; left: -7px; cursor: nesw-resize; }
+    .handle-se { bottom: -7px; right: -7px; cursor: nwse-resize; }
+
+    /* Live Output Stats */
+    .stats-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #14100c;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      font-size: 12.5px;
+    }
+    .stats-dim { font-weight: 700; color: var(--amber); }
+
+    /* Format & Actions */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 10px;
+    }
+    @media (max-width: 480px) {
+      .actions-grid { grid-template-columns: 1fr; }
+    }
+    .format-select {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      outline: none;
+    }
+    .btn-crop-download {
+      padding: 14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-crop-download:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
 </head>
 <body>
 
-<div class="nav-bar">
-  <a href="../../" class="back-btn">← Back to Dashboard</a>
-</div>
+<div class="global-shine-overlay"></div>
 
-<div class="header">
-  <h1>Photo Cropper</h1>
-  <p>Manually crop, drag lines, and select exact area to keep</p>
-</div>
-
-<div class="card">
-  <!-- How to Use Instructions Manual -->
-  <div class="instructions-box">
-    <h3>📖 How to Use Photo Cropper</h3>
-    <ol>
-      <li>Tap the upload zone below to select your image (JPG, PNG).</li>
-      <li>Drag the crop lines and corner handles to cover only the exact area you want to keep.</li>
-      <li>Choose an aspect ratio preset if needed, then tap <b>Crop &amp; Save Image</b> to download.</li>
-    </ol>
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
   </div>
 
-  <label class="upload-zone" id="uploadZone">
-    <input type="file" id="fileInput" accept="image/*">
-    <div class="upload-text">📁 Tap here to upload image<br><b>JPG, PNG supported</b></div>
-  </label>
+  <div class="header">
+    <h1>Photo Cropper & Frame Editor</h1>
+    <p>Crop images with custom aspect ratios, passport ratios & rule-of-thirds precision</p>
+  </div>
 
-  <div class="editor-container" id="editorContainer">
-    <div class="img-wrap">
-      <img id="imageToCrop" alt="Source">
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📖 How to Use Photo Cropper</h3>
+      <ol>
+        <li><b>Upload Image:</b> Tap below to upload any photo (JPG, PNG, WebP)[span_5](start_span)[span_5](end_span).</li>
+        <li><b>Select Aspect Ratio:</b> Choose <b>Free</b>, <b>Passport (3.5:4.5)</b>, <b>Square (1:1)</b> or custom ratios[span_6](start_span)[span_6](end_span).</li>
+        <li><b>Drag to Frame:</b> Move the crop box and drag the corner handles to select your area[span_7](start_span)[span_7](end_span).</li>
+        <li><b>Download:</b> Tap <b>Crop & Save Image</b> to download your framed image[span_8](start_span)[span_8](end_span).</li>
+      </ol>
     </div>
 
-    <div class="options-group">
-      <label>Aspect Ratio Preset:</label>
-      <select id="aspectRatioSelect" class="input-select">
-        <option value="free">Freehand (Manual Drag)</option>
-        <option value="1">Square (1:1)</option>
-        <option value="1.3333">4:3 Landscape</option>
-        <option value="0.75">3:4 Portrait</option>
-        <option value="1.7777">16:9 Widescreen</option>
-      </select>
+    <!-- 2. Upload Zone -->
+    <label class="upload-zone" id="dropZone">
+      <input type="file" id="imageInput" accept="image/*" onchange="handleFile(this.files[0])">
+      <div class="upload-icon">✂️</div>
+      <div class="upload-title">Tap here to upload image or drag here</div>
+      <div class="upload-desc">JPG, PNG, WebP supported • <b>100% Offline & Private Processing</b>[span_9](start_span)[span_9](end_span)</div>
+    </label>
+
+    <!-- 3. Interactive Crop Workspace -->
+    <div class="crop-workspace" id="cropWorkspace">
+      <!-- Aspect Ratio Chips -->
+      <div class="ratio-section">
+        <span class="section-label">Select Aspect Ratio Preset:</span>
+        <div class="ratio-chips">
+          <button class="ratio-chip active" onclick="setRatio('free', this)">Free (Custom)</button>
+          <button class="ratio-chip" onclick="setRatio(1, this)">1:1 (Square / DP)</button>
+          <button class="ratio-chip" onclick="setRatio(3.5/4.5, this)">3.5:4.5 (Passport)</button>
+          <button class="ratio-chip" onclick="setRatio(7/2, this)">7:2 (Sign Box)</button>
+          <button class="ratio-chip" onclick="setRatio(4/3, this)">4:3 (Photo)</button>
+          <button class="ratio-chip" onclick="setRatio(16/9, this)">16:9 (Landscape)</button>
+        </div>
+      </div>
+
+      <!-- Quick Transform Toolbar -->
+      <div class="toolbar-row">
+        <button class="btn-tool" onclick="rotateImage(90)">🔄 Rotate 90°</button>
+        <button class="btn-tool" onclick="flipImage()">🔁 Flip Horizontal</button>
+        <button class="btn-tool" onclick="resetCropBox()">↺ Reset Crop Box</button>
+      </div>
+
+      <!-- Interactive Canvas & Crop Box Overlay -->
+      <div class="crop-viewport">
+        <div class="canvas-container" id="canvasContainer">
+          <canvas id="imageCanvas"></canvas>
+          <div class="crop-box" id="cropBox">
+            <div class="handle handle-nw" data-handle="nw"></div>
+            <div class="handle handle-ne" data-handle="ne"></div>
+            <div class="handle handle-sw" data-handle="sw"></div>
+            <div class="handle handle-se" data-handle="se"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Crop Stats -->
+      <div class="stats-bar">
+        <span>Selected Area:</span>
+        <span class="stats-dim" id="statsDimension">0 × 0 px</span>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions-grid">
+        <select id="formatSelect" class="format-select">
+          <option value="jpeg" selected>JPG (Standard)</option>
+          <option value="png">PNG (Lossless)</option>
+        </select>
+        <button class="btn-crop-download" onclick="exportCroppedImage()">
+          ✂️ Crop & Save Image
+        </button>
+      </div>
     </div>
-
-    <button class="btn" id="cropBtn">✂️ Crop &amp; Save Image</button>
   </div>
 
-  <a id="downloadLink" style="text-decoration:none;"><button class="btn btn-download" id="downloadBtn">📥 Download Cropped Image</button></a>
-
-  <!-- Advertisement Placeholder Box -->
-  <div class="ad-container">
-    <div class="ad-label">Sponsored Advertisement</div>
-    <div class="ad-banner">📢 Advertisement Space (Google AdSense / Banner Placeholder)</div>
-  </div>
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
 </div>
-
-<footer>
-  &copy; 2026 FormReady India. 100% Secure Client-Side Processing.
-</footer>
 
 <script>
-const fileInput = document.getElementById("fileInput");
-const uploadZone = document.getElementById("uploadZone");
-const editorContainer = document.getElementById("editorContainer");
-const imageToCrop = document.getElementById("imageToCrop");
-const aspectRatioSelect = document.getElementById("aspectRatioSelect");
-const cropBtn = document.getElementById("cropBtn");
-const downloadBtn = document.getElementById("downloadBtn");
-const downloadLink = document.getElementById("downloadLink");
+let originalImg = null;
+let currentRotation = 0;
+let isFlipped = false;
+let currentRatio = 'free'; // 'free' or number (w / h)
+let rawFileName = "cropped_photo";
 
-let cropper = null;
-let originalName = "";
+const dropZone = document.getElementById("dropZone");
+const imageInput = document.getElementById("imageInput");
+const cropWorkspace = document.getElementById("cropWorkspace");
+const canvas = document.getElementById("imageCanvas");
+const ctx = canvas.getContext("2d");
+const container = document.getElementById("canvasContainer");
+const cropBox = document.getElementById("cropBox");
+const statsDimension = document.getElementById("statsDimension");
 
-fileInput.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  originalName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
-
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    imageToCrop.src = event.target.result;
-    uploadZone.style.display = "none";
-    editorContainer.style.display = "block";
-    downloadBtn.style.display = "none";
-
-    if (cropper) {
-      cropper.destroy();
-    }
-
-    cropper = new Cropper(imageToCrop, {
-      aspectRatio: NaN,
-      viewMode: 1,
-      autoCropArea: 0.9,
-      responsive: true,
-      guides: true,
-      center: true,
-      highlight: false,
-      cropBoxMovable: true,
-      cropBoxResizable: true,
-      toggleDragModeOnDblclick: false,
-    });
-  };
-  reader.readAsDataURL(file);
-  fileInput.value = "";
+// Drag & drop
+['dragenter', 'dragover'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
 });
-
-aspectRatioSelect.addEventListener("change", (e) => {
-  if (!cropper) return;
-  const val = e.target.value;
-  if (val === "free") {
-    cropper.setAspectRatio(NaN);
-  } else {
-    cropper.setAspectRatio(parseFloat(val));
+['dragleave', 'drop'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+  });
+});
+dropZone.addEventListener('drop', (e) => {
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    handleFile(e.dataTransfer.files[0]);
   }
 });
 
-cropBtn.addEventListener("click", () => {
-  if (!cropper) return;
+function handleFile(file) {
+  if (!file || !file.type.startsWith("image/")) return;
 
-  const canvas = cropper.getCroppedCanvas({
-    imageSmoothingEnabled: true,
-    imageSmoothingQuality: 'high',
-  });
+  rawFileName = file.name.replace(/\.[^/.]+$/, "");
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    originalImg = new Image();
+    originalImg.onload = function() {
+      currentRotation = 0;
+      isFlipped = false;
+      renderBaseCanvas();
+      cropWorkspace.style.display = "block";
+      cropWorkspace.scrollIntoView({ behavior: 'smooth' });
+    };
+    originalImg.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
 
-  if (!canvas) {
-    alert("Could not crop image.");
+// Draw base image onto canvas with rotation & flip
+function renderBaseCanvas() {
+  if (!originalImg) return;
+
+  const isRotated = currentRotation === 90 || currentRotation === 270;
+  const w = isRotated ? originalImg.height : originalImg.width;
+  const h = isRotated ? originalImg.width : originalImg.height;
+
+  canvas.width = w;
+  canvas.height = h;
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.save();
+  ctx.translate(w / 2, h / 2);
+  ctx.rotate((currentRotation * Math.PI) / 180);
+  if (isFlipped) ctx.scale(-1, 1);
+  ctx.drawImage(originalImg, -originalImg.width / 2, -originalImg.height / 2);
+  ctx.restore();
+
+  resetCropBox();
+}
+
+function rotateImage(deg) {
+  currentRotation = (currentRotation + deg) % 360;
+  renderBaseCanvas();
+}
+
+function flipImage() {
+  isFlipped = !isFlipped;
+  renderBaseCanvas();
+}
+
+function setRatio(ratio, btn) {
+  currentRatio = ratio;
+  document.querySelectorAll(".ratio-chip").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  resetCropBox();
+}
+
+// Crop Box Geometry & State (values stored in container rendered pixels)
+let cropState = { x: 0, y: 0, w: 100, h: 100 };
+
+function resetCropBox() {
+  const containerW = canvas.clientWidth;
+  const containerH = canvas.clientHeight;
+
+  let w = containerW * 0.8;
+  let h = containerH * 0.8;
+
+  if (currentRatio !== 'free') {
+    if (w / h > currentRatio) {
+      w = h * currentRatio;
+    } else {
+      h = w / currentRatio;
+    }
+  }
+
+  cropState.w = w;
+  cropState.h = h;
+  cropState.x = (containerW - w) / 2;
+  cropState.y = (containerH - h) / 2;
+
+  updateCropBoxDOM();
+}
+
+function updateCropBoxDOM() {
+  cropBox.style.left = `${cropState.x}px`;
+  cropBox.style.top = `${cropState.y}px`;
+  cropBox.style.width = `${cropState.w}px`;
+  cropBox.style.height = `${cropState.h}px`;
+
+  // Calculate actual pixel dimensions on the underlying canvas
+  const scale = canvas.width / canvas.clientWidth;
+  const actualW = Math.round(cropState.w * scale);
+  const actualH = Math.round(cropState.h * scale);
+  statsDimension.innerText = `${actualW} × ${actualH} px`;
+}
+
+// Touch & Mouse Dragging / Resizing Logic
+let activeDrag = null; // 'move' or handle name ('nw', 'ne', 'sw', 'se')
+let dragStart = { x: 0, y: 0 };
+let initialCrop = { x: 0, y: 0, w: 0, h: 0 };
+
+function getPointerPos(e) {
+  const touch = e.touches ? e.touches[0] : e;
+  return { x: touch.clientX, y: touch.clientY };
+}
+
+function onDragStart(e) {
+  const target = e.target;
+  const pos = getPointerPos(e);
+
+  if (target.dataset.handle) {
+    activeDrag = target.dataset.handle;
+  } else if (target === cropBox) {
+    activeDrag = 'move';
+  } else {
     return;
   }
 
-  canvas.toBlob((blob) => {
-    const url = URL.createObjectURL(blob);
-    downloadLink.href = url;
-    downloadLink.download = `${originalName}-cropped.jpg`;
-    downloadBtn.style.display = "block";
-    downloadBtn.textContent = `📥 Download Cropped Image (${Math.round(blob.size / 1024)} KB)`;
-    
-    downloadBtn.scrollIntoView({ behavior: 'smooth' });
-  }, "image/jpeg", 0.95);
+  dragStart = pos;
+  initialCrop = { ...cropState };
+  if (e.cancelable) e.preventDefault();
+}
+
+function onDragMove(e) {
+  if (!activeDrag) return;
+  if (e.cancelable) e.preventDefault();
+
+  const pos = getPointerPos(e);
+  const dx = pos.x - dragStart.x;
+  const dy = pos.y - dragStart.y;
+
+  const maxW = canvas.clientWidth;
+  const maxH = canvas.clientHeight;
+  const minDim = 30;
+
+  if (activeDrag === 'move') {
+    let newX = initialCrop.x + dx;
+    let newY = initialCrop.y + dy;
+
+    newX = Math.max(0, Math.min(newX, maxW - initialCrop.w));
+    newY = Math.max(0, Math.min(newY, maxH - initialCrop.h));
+
+    cropState.x = newX;
+    cropState.y = newY;
+  } else {
+    // Corner Handle Resizing
+    let newW = initialCrop.w;
+    let newH = initialCrop.h;
+    let newX = initialCrop.x;
+    let newY = initialCrop.y;
+
+    if (activeDrag === 'se') {
+      newW = Math.max(minDim, Math.min(initialCrop.w + dx, maxW - initialCrop.x));
+      newH = currentRatio === 'free' ? Math.max(minDim, Math.min(initialCrop.h + dy, maxH - initialCrop.y)) : newW / currentRatio;
+      if (newY + newH > maxH) {
+        newH = maxH - newY;
+        if (currentRatio !== 'free') newW = newH * currentRatio;
+      }
+    } else if (activeDrag === 'sw') {
+      newW = Math.max(minDim, initialCrop.w - dx);
+      if (initialCrop.x + initialCrop.w - newW < 0) newW = initialCrop.x + initialCrop.w;
+      newX = initialCrop.x + initialCrop.w - newW;
+      newH = currentRatio === 'free' ? Math.max(minDim, Math.min(initialCrop.h + dy, maxH - initialCrop.y)) : newW / currentRatio;
+      if (newY + newH > maxH) {
+        newH = maxH - newY;
+        if (currentRatio !== 'free') {
+          newW = newH * currentRatio;
+          newX = initialCrop.x + initialCrop.w - newW;
+        }
+      }
+    } else if (activeDrag === 'ne') {
+      newW = Math.max(minDim, Math.min(initialCrop.w + dx, maxW - initialCrop.x));
+      newH = currentRatio === 'free' ? Math.max(minDim, initialCrop.h - dy) : newW / currentRatio;
+      if (initialCrop.y + initialCrop.h - newH < 0) newH = initialCrop.y + initialCrop.h;
+      newY = initialCrop.y + initialCrop.h - newH;
+      if (currentRatio !== 'free') newW = newH * currentRatio;
+    } else if (activeDrag === 'nw') {
+      newW = Math.max(minDim, initialCrop.w - dx);
+      if (initialCrop.x + initialCrop.w - newW < 0) newW = initialCrop.x + initialCrop.w;
+      newX = initialCrop.x + initialCrop.w - newW;
+      newH = currentRatio === 'free' ? Math.max(minDim, initialCrop.h - dy) : newW / currentRatio;
+      if (initialCrop.y + initialCrop.h - newH < 0) newH = initialCrop.y + initialCrop.h;
+      newY = initialCrop.y + initialCrop.h - newH;
+      if (currentRatio !== 'free') {
+        newW = newH * currentRatio;
+        newX = initialCrop.x + initialCrop.w - newW;
+      }
+    }
+
+    cropState.x = newX;
+    cropState.y = newY;
+    cropState.w = newW;
+    cropState.h = newH;
+  }
+
+  updateCropBoxDOM();
+}
+
+function onDragEnd() {
+  activeDrag = null;
+}
+
+// Listeners for mouse & touch
+cropBox.addEventListener("mousedown", onDragStart);
+window.addEventListener("mousemove", onDragMove);
+window.addEventListener("mouseup", onDragEnd);
+
+cropBox.addEventListener("touchstart", onDragStart, { passive: false });
+window.addEventListener("touchmove", onDragMove, { passive: false });
+window.addEventListener("touchend", onDragEnd);
+
+window.addEventListener("resize", () => {
+  if (originalImg) updateCropBoxDOM();
 });
+
+// Lossless Final Export
+function exportCroppedImage() {
+  if (!originalImg) return;
+
+  const scale = canvas.width / canvas.clientWidth;
+  const sx = Math.max(0, Math.round(cropState.x * scale));
+  const sy = Math.max(0, Math.round(cropState.y * scale));
+  const sw = Math.min(canvas.width - sx, Math.round(cropState.w * scale));
+  const sh = Math.min(canvas.height - sy, Math.round(cropState.h * scale));
+
+  const outCanvas = document.createElement("canvas");
+  outCanvas.width = sw;
+  outCanvas.height = sh;
+  const outCtx = outCanvas.getContext("2d");
+
+  const format = document.getElementById("formatSelect").value;
+  if (format === "jpeg") {
+    outCtx.fillStyle = "#FFFFFF";
+    outCtx.fillRect(0, 0, sw, sh);
+  }
+
+  outCtx.drawImage(canvas, sx, sy, sw, sh, 0, 0, sw, sh);
+
+  const ext = format === "jpeg" ? "jpg" : "png";
+  const link = document.createElement("a");
+  link.href = outCanvas.toDataURL(`image/${format}`, 0.95);
+  link.download = `${rawFileName}_cropped.${ext}`;
+  link.click();
+}
 </script>
 </body>
 </html>
