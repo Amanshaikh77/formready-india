@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Land & Unit Converter (Indian Land, Length, Weight) - FormReady India</title>
+  <meta name="description" content="Fast conversion for Indian regional land units (Bigha, Guntha, Acre, Gaj, Sq Ft), Length, Weight, Temperature. 100% private & offline.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Category Selector Chips */
+    .cat-chips-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .cat-chips-row::-webkit-scrollbar { display: none; }
+    .cat-chip {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 9px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .cat-chip:hover { border-color: rgba(245, 166, 35, 0.5); color: var(--paper); }
+    .cat-chip.active {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      border-color: var(--amber);
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.35);
+    }
+
+    /* Form Fields */
+    .field-group { margin-bottom: 16px; }
+    .field-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .input-box {
+      width: 100%;
+      background: #14100c;
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      border-radius: 9px;
+      color: var(--paper);
+      font-size: 15px;
+      font-weight: 700;
+      outline: none;
+      font-family: inherit;
+    }
+    .input-box:focus { border-color: var(--amber); }
+
+    /* From / To Unit Selectors Grid */
+    .conversion-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: flex-end;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .select-unit {
+      width: 100%;
+      background: #14100c;
+      border: 1px solid var(--line);
+      padding: 12px 10px;
+      border-radius: 9px;
+      color: var(--paper);
+      font-size: 13.5px;
+      font-weight: 700;
+      outline: none;
+    }
+    .select-unit:focus { border-color: var(--amber); }
+
+    .btn-swap {
+      width: 44px;
+      height: 44px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--amber);
+      border-radius: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    .btn-swap:hover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.1);
+      transform: rotate(180deg);
+    }
+
+    /* Big Hero Result Card */
+    .result-hero-card {
+      background: linear-gradient(145deg, #1c1610, #100d09);
+      border: 1px solid rgba(245, 166, 35, 0.4);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+    .res-hero-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .res-hero-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--amber);
+      line-height: 1.2;
+      word-break: break-all;
+    }
+    .res-hero-formula {
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    /* Multi-Unit Quick Equivalent Reference Grid */
+    .equivalents-box {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+    .equiv-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .equiv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 480px) {
+      .equiv-grid { grid-template-columns: 1fr; }
+    }
+    .equiv-item {
+      display: flex;
+      justify-content: space-between;
+      background: #14100c;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .equiv-item span { color: var(--muted); }
+    .equiv-item b { color: var(--paper); }
+
+    /* Copy Button */
+    .btn-copy-unit {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-copy-unit:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Land & Universal Unit Converter</h1>
+    <p>Fast conversions for Indian regional land measurements, length, weight & temperature</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📐 How to Use Unit Converter</h3>
+      <ol>
+        <li><b>Select Category:</b> Pick Indian Land Area, Length, Weight, or Temperature.</li>
+        <li><b>Units:</b> Choose standard From and To measurement units.</li>
+        <li><b>Enter Value:</b> Type the quantity to see instantaneous accurate conversions.</li>
+      </ol>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="cat-chips-row">
+      <button class="cat-chip active" id="tabLand" onclick="switchCategory('land')">🌾 Indian Land Area</button>
+      <button class="cat-chip" id="tabLength" onclick="switchCategory('length')">📏 Length</button>
+      <button class="cat-chip" id="tabWeight" onclick="switchCategory('weight')">⚖️ Weight</button>
+      <button class="cat-chip" id="tabTemp" onclick="switchCategory('temp')">🌡️ Temperature</button>
+    </div>
+
+    <!-- Value Input -->
+    <div class="field-group">
+      <label class="field-label" for="valInput">Enter Value to Convert:</label>
+      <input type="number" id="valInput" class="input-box" placeholder="e.g. 1" value="1" step="any" oninput="runConversion()">
+    </div>
+
+    <!-- From / To Unit Controls -->
+    <div class="conversion-grid">
+      <div>
+        <label class="field-label" for="fromUnit">From:</label>
+        <select id="fromUnit" class="select-unit" onchange="runConversion()"></select>
+      </div>
+
+      <button class="btn-swap" onclick="swapUnits()" title="Swap Units">⇄</button>
+
+      <div>
+        <label class="field-label" for="toUnit">To:</label>
+        <select id="toUnit" class="select-unit" onchange="runConversion()"></select>
+      </div>
+    </div>
+
+    <!-- Result Hero Card -->
+    <div class="result-hero-card">
+      <div class="res-hero-label" id="resHeroTitle">Converted Value</div>
+      <div class="res-hero-value" id="resHeroVal">0</div>
+      <div class="res-hero-formula" id="resFormula">1 Acre = 43,560 Square Feet</div>
+    </div>
+
+    <!-- Quick Equivalents Matrix -->
+    <div class="equivalents-box">
+      <div class="equiv-title" id="equivTitle">Equivalent Common Measurements</div>
+      <div class="equiv-grid" id="equivGrid"></div>
+    </div>
+
+    <!-- Copy Action -->
+    <button class="btn-copy-unit" id="btnCopyUnit" onclick="copyResult()">
+      📋 Copy Converted Result
+    </button>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
+</div>
+
+<script>
+// Base reference units:
+// Land Area: Base = Square Meter (sqm)
+// Length: Base = Meter (m)
+// Weight: Base = Kilogram (kg)
+const UNITS_DATA = {
+  land: {
+    title: "Common Land Equivalents",
+    defaultFrom: "acre",
+    defaultTo: "sqft",
+    units: {
+      sqft: { name: "Square Feet (sq ft)", factor: 0.092903 },
+      sqmeter: { name: "Square Meter (sq m)", factor: 1.0 },
+      sqyard: { name: "Gaj / Square Yard", factor: 0.836127 },
+      acre: { name: "Acre", factor: 4046.856422 },
+      hectare: { name: "Hectare", factor: 10000.0 },
+      guntha: { name: "Guntha (Maharashtra/Guj/Kar)", factor: 101.1714 },
+      bigha_std: { name: "Bigha (Standard - 27,225 sq ft)", factor: 2529.285 },
+      bigha_up: { name: "Bigha (UP/West Bengal - ~27,000 sq ft)", factor: 2508.38 },
+      biswa: { name: "Biswa (1/20 Bigha)", factor: 126.46 }
+    }
+  },
+  length: {
+    title: "Common Length Equivalents",
+    defaultFrom: "meter",
+    defaultTo: "foot",
+    units: {
+      meter: { name: "Meter (m)", factor: 1.0 },
+      centimeter: { name: "Centimeter (cm)", factor: 0.01 },
+      millimeter: { name: "Millimeter (mm)", factor: 0.001 },
+      kilometer: { name: "Kilometer (km)", factor: 1000.0 },
+      inch: { name: "Inch (in)", factor: 0.0254 },
+      foot: { name: "Foot (ft)", factor: 0.3048 },
+      yard: { name: "Yard (yd)", factor: 0.9144 },
+      mile: { name: "Mile (mi)", factor: 1609.344 }
+    }
+  },
+  weight: {
+    title: "Common Weight Equivalents",
+    defaultFrom: "kg",
+    defaultTo: "pound",
+    units: {
+      kg: { name: "Kilogram (kg)", factor: 1.0 },
+      gram: { name: "Gram (g)", factor: 0.001 },
+      milligram: { name: "Milligram (mg)", factor: 0.000001 },
+      quintal: { name: "Quintal (100 kg)", factor: 100.0 },
+      ton: { name: "Metric Ton (1,000 kg)", factor: 1000.0 },
+      pound: { name: "Pound (lb)", factor: 0.45359237 },
+      ounce: { name: "Ounce (oz)", factor: 0.0283495 }
+    }
+  },
+  temp: {
+    title: "Temperature Scale Equivalents",
+    defaultFrom: "celsius",
+    defaultTo: "fahrenheit",
+    units: {
+      celsius: { name: "Celsius (°C)" },
+      fahrenheit: { name: "Fahrenheit (°F)" },
+      kelvin: { name: "Kelvin (K)" }
+    }
+  }
+};
+
+let currentCategory = 'land';
+
+const valInput = document.getElementById("valInput");
+const fromUnitSelect = document.getElementById("fromUnit");
+const toUnitSelect = document.getElementById("toUnit");
+const resHeroVal = document.getElementById("resHeroVal");
+const resFormula = document.getElementById("resFormula");
+const equivGrid = document.getElementById("equivGrid");
+const equivTitle = document.getElementById("equivTitle");
+const btnCopyUnit = document.getElementById("btnCopyUnit");
+
+function switchCategory(cat) {
+  currentCategory = cat;
+  document.querySelectorAll(".cat-chip").forEach(b => b.classList.remove("active"));
+  
+  if (cat === 'land') document.getElementById("tabLand").classList.add("active");
+  if (cat === 'length') document.getElementById("tabLength").classList.add("active");
+  if (cat === 'weight') document.getElementById("tabWeight").classList.add("active");
+  if (cat === 'temp') document.getElementById("tabTemp").classList.add("active");
+
+  populateUnitDropdowns();
+  runConversion();
+}
+
+function populateUnitDropdowns() {
+  const catData = UNITS_DATA[currentCategory];
+  fromUnitSelect.innerHTML = "";
+  toUnitSelect.innerHTML = "";
+
+  Object.entries(catData.units).forEach(([key, obj]) => {
+    const optFrom = document.createElement("option");
+    optFrom.value = key;
+    optFrom.textContent = obj.name;
+    fromUnitSelect.appendChild(optFrom);
+
+    const optTo = document.createElement("option");
+    optTo.value = key;
+    optTo.textContent = obj.name;
+    toUnitSelect.appendChild(optTo);
+  });
+
+  fromUnitSelect.value = catData.defaultFrom;
+  toUnitSelect.value = catData.defaultTo;
+  equivTitle.innerText = catData.title;
+}
+
+function swapUnits() {
+  const tmp = fromUnitSelect.value;
+  fromUnitSelect.value = toUnitSelect.value;
+  toUnitSelect.value = tmp;
+  runConversion();
+}
+
+function formatResult(val) {
+  if (Math.abs(val) < 0.000001 && val !== 0) return val.toExponential(4);
+  if (Number.isInteger(val)) return val.toLocaleString("en-IN");
+  return parseFloat(val.toFixed(4)).toLocaleString("en-IN", { maximumFractionDigits: 4 });
+}
+
+function runConversion() {
+  const inputVal = parseFloat(valInput.value);
+  if (isNaN(inputVal)) {
+    resHeroVal.innerText = "0";
+    resFormula.innerText = "Please enter a valid numeric value";
+    equivGrid.innerHTML = "";
+    return;
+  }
+
+  const from = fromUnitSelect.value;
+  const to = toUnitSelect.value;
+  let finalVal = 0;
+
+  if (currentCategory === 'temp') {
+    // Temperature conversion
+    let c = inputVal;
+    if (from === 'fahrenheit') c = (inputVal - 32) * (5 / 9);
+    if (from === 'kelvin') c = inputVal - 273.15;
+
+    if (to === 'celsius') finalVal = c;
+    if (to === 'fahrenheit') finalVal = (c * (9 / 5)) + 32;
+    if (to === 'kelvin') finalVal = c + 273.15;
+
+    resHeroVal.innerText = `${formatResult(finalVal)} ${getTempSymbol(to)}`;
+    resFormula.innerText = `${inputVal} ${getTempSymbol(from)} = ${formatResult(finalVal)} ${getTempSymbol(to)}`;
+    renderTempEquivalents(c);
+  } else {
+    // Proportional factor conversions
+    const catData = UNITS_DATA[currentCategory];
+    const fromFactor = catData.units[from].factor;
+    const toFactor = catData.units[to].factor;
+
+    const baseVal = inputVal * fromFactor;
+    finalVal = baseVal / toFactor;
+
+    resHeroVal.innerText = `${formatResult(finalVal)} ${getUnitShort(to)}`;
+    resFormula.innerText = `1 ${catData.units[from].name} ≈ ${formatResult(fromFactor / toFactor)} ${catData.units[to].name}`;
+    renderFactorEquivalents(baseVal);
+  }
+}
+
+function getTempSymbol(key) {
+  if (key === 'celsius') return '°C';
+  if (key === 'fahrenheit') return '°F';
+  return 'K';
+}
+
+function getUnitShort(key) {
+  const shorts = {
+    sqft: 'sq ft', sqmeter: 'sq m', sqyard: 'Gaj', acre: 'Acres', hectare: 'ha',
+    guntha: 'Guntha', bigha_std: 'Bigha', biswa: 'Biswa',
+    meter: 'm', centimeter: 'cm', millimeter: 'mm', kilometer: 'km',
+    inch: 'in', foot: 'ft', yard: 'yd', mile: 'mi',
+    kg: 'kg', gram: 'g', milligram: 'mg', quintal: 'Quintal', ton: 'Tons',
+    pound: 'lb', ounce: 'oz'
+  };
+  return shorts[key] || '';
+}
+
+function renderFactorEquivalents(baseVal) {
+  const catData = UNITS_DATA[currentCategory];
+  equivGrid.innerHTML = "";
+
+  Object.entries(catData.units).slice(0, 6).forEach(([key, obj]) => {
+    const val = baseVal / obj.factor;
+    const div = document.createElement("div");
+    div.className = "equiv-item";
+    div.innerHTML = `<span>${obj.name.split('(')[0].trim()}:</span><b>${formatResult(val)}</b>`;
+    equivGrid.appendChild(div);
+  });
+}
+
+function renderTempEquivalents(celsius) {
+  equivGrid.innerHTML = "";
+  const list = [
+    { label: "Celsius", val: `${formatResult(celsius)} °C` },
+    { label: "Fahrenheit", val: `${formatResult((celsius * (9/5)) + 32)} °F` },
+    { label: "Kelvin", val: `${formatResult(celsius + 273.15)} K` }
+  ];
+  list.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "equiv-item";
+    div.innerHTML = `<span>${item.label}:</span><b>${item.val}</b>`;
+    equivGrid.appendChild(div);
+  });
+}
+
+function copyResult() {
+  const fromName = fromUnitSelect.options[fromUnitSelect.selectedIndex].text;
+  const toName = toUnitSelect.options[toUnitSelect.selectedIndex].text;
+  const val = valInput.value;
+  const res = resHeroVal.innerText;
+
+  const text = `Unit Conversion Result:
+${val} ${fromName} = ${res}
+${resFormula.innerText}
+Calculated via FormReady India`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btnCopyUnit.innerHTML;
+    btnCopyUnit.innerHTML = "✅ Copied to Clipboard!";
+    setTimeout(() => { btnCopyUnit.innerHTML = orig; }, 2000);
+  });
+}
+
+// Initial setup on load
+window.addEventListener("DOMContentLoaded", () => {
+  populateUnitDropdowns();
+  runConversion();
+});
+</script>
+</body>
+</html>

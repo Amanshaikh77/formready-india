@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Smart PDF Editor - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+:root {
+  --bg: #110d0a;
+  --panel: #1a1410;
+  --card-bg: #140f0c;
+  --line: #2b211a;
+  --amber: #e59d3e;
+  --amber-glow: rgba(229, 157, 62, 0.4);
+  --paper: #f5eedf;
+  --muted: #968677;
+  --green: #10b981;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-nav {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(17, 13, 10, 0.95);
+  backdrop-filter: blur(8px);
+}
+.nav-home-btn {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+.badge-pill {
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 8px 14px 40px 14px;
+}
+
+.tool-card {
+  position: relative;
+  background: linear-gradient(165deg, #1f1813 0%, #15100c 100%);
+  border: 1px solid rgba(229, 157, 62, 0.22);
+  border-radius: 20px;
+  padding: 24px 18px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.04) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.04) 60%,
+    transparent 80%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+  animation: whiteSheetSweep 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  z-index: 1;
+}
+@keyframes whiteSheetSweep {
+  0% { left: -150%; }
+  35%, 100% { left: 200%; }
+}
+
+.tool-title {
+  color: var(--amber);
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 5px;
+  letter-spacing: -0.2px;
+  text-shadow: 0 2px 10px rgba(229, 157, 62, 0.3);
+}
+.tool-subtitle {
+  color: var(--muted);
+  font-size: 11.5px;
+  text-align: center;
+  margin-bottom: 18px;
+  line-height: 1.45;
+}
+
+.how-to-use-box {
+  background: #211914;
+  border-left: 3.5px solid var(--amber);
+  border-radius: 10px;
+  padding: 14px 15px;
+  margin-bottom: 22px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.how-to-use-title {
+  color: var(--amber);
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.how-step {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #d1c5b4;
+  margin-bottom: 6px;
+}
+.how-step b { color: #f5eedf; }
+.how-step:last-child { margin-bottom: 0; }
+
+.stepper-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin: 0 20px 24px 20px;
+}
+.stepper-wrap::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background: var(--line);
+  z-index: 1;
+}
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  gap: 5px;
+}
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  transition: all 0.25s;
+}
+.step-item.active .step-circle {
+  background: linear-gradient(135deg, #f5b04c, #e59d3e);
+  border-color: #f5b04c;
+  color: #120e0b;
+  box-shadow: 0 0 16px rgba(229, 157, 62, 0.6), 0 4px 8px rgba(0,0,0,0.5);
+}
+.step-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+.step-item.active .step-label { color: var(--amber); }
+
+.upload-drop-card {
+  position: relative;
+  background: linear-gradient(180deg, #18120e 0%, #120e0b 100%);
+  border: 1.5px dashed rgba(229, 157, 62, 0.35);
+  border-radius: 16px;
+  padding: 38px 18px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+  transform: translateY(0);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: hidden;
+}
+.upload-drop-card:hover {
+  border-color: var(--amber);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.75), 0 0 20px rgba(229, 157, 62, 0.2);
+}
+.upload-drop-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -130%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  transform: skewX(-25deg);
+  animation: innerSheen 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.2s;
+  pointer-events: none;
+}
+@keyframes innerSheen {
+  0% { left: -130%; }
+  40%, 100% { left: 200%; }
+}
+.upload-doc-icon {
+  font-size: 42px;
+  margin-bottom: 12px;
+  animation: floatDoc 3s ease-in-out infinite alternate;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));
+}
+@keyframes floatDoc {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-7px) scale(1.05); }
+}
+.upload-main-text {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--paper);
+  margin-bottom: 5px;
+  letter-spacing: -0.2px;
+}
+.upload-sub-text {
+  font-size: 11px;
+  color: var(--muted);
+}
+.editor-wrap-view {
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+}
+.editor-top-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+.action-left-group {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.tool-btn {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+.tool-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+.btn-save-3d {
+  position: relative;
+  background: linear-gradient(135deg, #f5b04c 0%, #e59d3e 50%, #c57d23 100%);
+  color: #120e0b;
+  font-size: 12px;
+  font-weight: 850;
+  padding: 8.5px 16px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 230, 185, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4.5px 0 #874e11, 0 8px 20px rgba(229, 157, 62, 0.45);
+  transform: translateY(0);
+  transition: all 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: hidden;
+  letter-spacing: 0.3px;
+}
+.btn-save-3d:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5.5px 0 #874e11, 0 12px 24px rgba(229, 157, 62, 0.6);
+}
+.btn-save-3d:active {
+  transform: translateY(3.5px);
+  box-shadow: 0 1px 0 #874e11, 0 4px 10px rgba(229, 157, 62, 0.35);
+}
+.btn-save-3d::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -70%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transform: rotate(25deg);
+  animation: holoSweep 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes holoSweep {
+  0% { left: -70%; }
+  35%, 100% { left: 160%; }
+}
+
+.pages-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  width: 100%;
+}
+.page-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.page-header-mark { margin-bottom: 7px; }
+.page-num-pill {
+  background: rgba(229, 157, 62, 0.12);
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.6px;
+}
+.pdf-page-container {
+  position: relative;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+  border-radius: 4px;
+  user-select: none;
+  margin: 0 auto;
+}
+.pdf-page-container canvas { display: block; width: 100%; height: 100%; }
+.word-overlay-layer { position: absolute; inset: 0; pointer-events: auto; }
+
+.word-box {
+  position: absolute;
+  cursor: pointer;
+  border-radius: 3px;
+  background: rgba(52, 211, 153, 0.16);
+  border: 1px solid rgba(52, 211, 153, 0.45);
+  transform: translateZ(0);
+  transition: background 0.12s, border-color 0.12s;
+}
+.word-box:hover {
+  background: rgba(52, 211, 153, 0.45) !important;
+  border-color: #34d399 !important;
+}
+.word-box.smooth-reveal {
+  animation: fastReveal 0.35s ease-out forwards;
+}
+@keyframes fastReveal {
+  0% { opacity: 0; transform: scale(0.92) translateZ(0); background: rgba(56, 189, 248, 0.4); }
+  50% { opacity: 1; transform: scale(1.04) translateZ(0); background: rgba(52, 211, 153, 0.4); }
+  100% { opacity: 1; transform: scale(1) translateZ(0); background: rgba(52, 211, 153, 0.16); }
+}
+
+.scan-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  display: none;
+  z-index: 50;
+  transform: translateZ(0);
+}
+.scan-laser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--green) 30%, #fff 50%, var(--amber) 70%, transparent);
+  box-shadow: 0 0 10px rgba(52,211,153,0.8);
+  will-change: transform;
+}
+.scan-trail {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(180deg, rgba(52,211,153,0.18) 0%, transparent 100%);
+  top: -50px;
+}
+
+.edit-popover {
+  position: absolute;
+  z-index: 120;
+  background: var(--panel);
+  border: 1px solid var(--amber);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.85);
+  border-radius: 10px;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  width: 260px;
+}
+.edit-popover input[type="text"] {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 7px 9px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+}
+.edit-popover input[type="text"]:focus { border-color: var(--amber); }
+.pop-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.font-stepper {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.step-btn {
+  background: transparent;
+  border: none;
+  color: var(--paper);
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.step-btn:hover { background: rgba(229,157,62,0.2); color: var(--amber); }
+.step-val { font-size: 11px; font-weight: 700; color: var(--amber); padding: 0 4px; }
+.weight-btn, .case-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.weight-btn.active, .case-btn.active {
+  background: var(--amber);
+  color: #120e0b;
+  border-color: var(--amber);
+}
+.edit-pop-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.btn-sm {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-sm.save { background: var(--amber); color: #120e0b; }
+.btn-sm.cancel { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+
+.status-pill {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(27, 22, 18, 0.95); border: 1px solid var(--amber);
+  padding: 8px 16px; border-radius: 30px; font-size: 11.5px; font-weight: 700;
+  color: var(--paper); display: none; align-items: center; gap: 8px; z-index: 200;
+}
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.active { display: flex; }
+.modal-box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; width: 100%; max-width: 330px; }
+.modal-title { font-size: 15px; font-weight: 800; color: var(--amber); margin-bottom: 4px; }
+.modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.modal-box input[type="password"] {
+  width: 100%; background: var(--card-bg); border: 1px solid var(--line); color: var(--paper);
+  padding: 10px; border-radius: 8px; font-size: 14px; outline: none; margin-bottom: 8px;
+}
+.btn { background: var(--amber); color: #120e0b; border: none; padding: 10px; border-radius: 7px; font-weight: 800; font-size: 13px; cursor: pointer; width: 100%; }
+.btn-sec { background: transparent; color: var(--amber); border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<header class="top-nav">
+  <a href="../../index.html" class="nav-home-btn" id="homeNavBtn">← Home</a>
+  <div class="badge-pill">
+    <span class="badge-dot"></span>
+    100% Client-Side · Private &amp; Secure
+  </div>
+</header>
+
+<main class="main-content">
+  <div class="tool-card">
+    <h1 class="tool-title">Smart PDF Editor</h1>
+    <p class="tool-subtitle">Instant text edit · Auto typography match · Multi-page export</p>
+
+    <div class="how-to-use-box">
+      <div class="how-to-use-title">📘 How to Use</div>
+      <div class="how-step">1. <b>Upload Document:</b> Select any Digital, Scanned or Photo PDF.</div>
+      <div class="how-step">2. <b>Auto-Scan:</b> Text fields are automatically detected and highlighted in green.</div>
+      <div class="how-step">3. <b>Click &amp; Edit:</b> Tap any word to edit with matching font, size &amp; weight.</div>
+      <div class="how-step">4. <b>Save PDF:</b> Click "Save PDF" to download your clean, updated document.</div>
+    </div>
+
+    <div class="stepper-wrap">
+      <div class="step-item active" id="step1Item">
+        <div class="step-circle">1</div>
+        <div class="step-label">UPLOAD</div>
+      </div>
+      <div class="step-item" id="step2Item">
+        <div class="step-circle">2</div>
+        <div class="step-label">EDIT</div>
+      </div>
+      <div class="step-item" id="step3Item">
+        <div class="step-circle">3</div>
+        <div class="step-label">DOWNLOAD</div>
+      </div>
+    </div>
+
+    <div id="uploadViewSection">
+      <div class="upload-drop-card" id="dropzone">
+        <div class="upload-doc-icon">📄</div>
+        <div class="upload-main-text">Tap to Upload File (PDF)</div>
+        <div class="upload-sub-text">Single PDF or Multi-page document · Offline</div>
+        <input type="file" id="pdfFileInput" accept="application/pdf" style="display:none;">
+      </div>
+    </div>
+
+    <div class="editor-wrap-view" id="editorViewSection">
+      <div class="editor-top-actions">
+        <div class="action-left-group">
+          <button class="tool-btn" id="toolScanDoc">⚡ Scan</button>
+          <button class="tool-btn" id="toolResetPage">↺ Reset</button>
+          <button class="tool-btn" id="openNewBtn">📂 New</button>
+        </div>
+        <button class="btn-save-3d" id="exportBtn">
+          <span>⬇ Save PDF</span>
+        </button>
+      </div>
+
+      <div class="pages-wrapper" id="pagesWrapper"></div>
+    </div>
+  </div>
+</main>
+
+<div class="edit-popover" id="editPopover">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-size:11px; color:var(--muted); font-weight:700;">Edit Text &amp; Style:</span>
+    <span id="inkColorDot" style="width:11px; height:11px; border-radius:50%; background:#111; border:1.5px solid #fff;"></span>
+  </div>
+  <input type="text" id="popoverInput" autocomplete="off">
+  <div class="pop-row">
+    <div style="display:flex; align-items:center; gap:6px;">
+      <span style="font-size:11px; color:var(--muted); font-weight:700;">Size:</span>
+      <div class="font-stepper">
+        <button class="step-btn" id="fontDecBtn">−</button>
+        <span class="step-val" id="fontSizeVal">14px</span>
+        <button class="step-btn" id="fontIncBtn">+</button>
+      </div>
+    </div>
+    <button class="weight-btn" id="weightToggleBtn">BOLD</button>
+    <button class="case-btn" id="caseToggleBtn">AA</button>
+  </div>
+  <div class="edit-pop-actions">
+    <button class="btn-sm cancel" id="popoverCancel">Cancel</button>
+    <button class="btn-sm save" id="popoverApply">Apply &amp; Shift</button>
+  </div>
+</div>
+
+<div class="status-pill" id="statusPill">⟳ Processing...</div>
+<div class="modal-overlay" id="pdfPasswordModal">
+  <div class="modal-box">
+    <div class="modal-title">🔒 Password Protected PDF</div>
+    <div class="modal-sub">This document requires a password to open.</div>
+    <input type="password" id="pdfPasswordInput" placeholder="Enter password" autocomplete="off">
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-sec" id="pdfPasswordCancel">Cancel</button>
+      <button class="btn" id="pdfPasswordSubmit">Unlock</button>
+    </div>
+  </div>
+</div>
+<script>
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+const step1Item = document.getElementById('step1Item');
+const step2Item = document.getElementById('step2Item');
+const step3Item = document.getElementById('step3Item');
+const uploadViewSection = document.getElementById('uploadViewSection');
+const editorViewSection = document.getElementById('editorViewSection');
+
+const dropzone = document.getElementById('dropzone');
+const pdfFileInput = document.getElementById('pdfFileInput');
+const pagesWrapper = document.getElementById('pagesWrapper');
+const editPopover = document.getElementById('editPopover');
+const popoverInput = document.getElementById('popoverInput');
+const fontSizeVal = document.getElementById('fontSizeVal');
+const fontDecBtn = document.getElementById('fontDecBtn');
+const fontIncBtn = document.getElementById('fontIncBtn');
+const weightToggleBtn = document.getElementById('weightToggleBtn');
+const caseToggleBtn = document.getElementById('caseToggleBtn');
+const inkColorDot = document.getElementById('inkColorDot');
+const popoverApply = document.getElementById('popoverApply');
+const popoverCancel = document.getElementById('popoverCancel');
+const exportBtn = document.getElementById('exportBtn');
+const openNewBtn = document.getElementById('openNewBtn');
+const statusPill = document.getElementById('statusPill');
+const toolScanDoc = document.getElementById('toolScanDoc');
+const toolResetPage = document.getElementById('toolResetPage');
+const pdfPasswordModal = document.getElementById('pdfPasswordModal');
+const pdfPasswordInput = document.getElementById('pdfPasswordInput');
+const pdfPasswordSubmit = document.getElementById('pdfPasswordSubmit');
+const pdfPasswordCancel = document.getElementById('pdfPasswordCancel');
+
+let currentPdfDoc = null;
+let currentPdfBytes = null;
+let originalFileName = 'edited_document.pdf';
+let totalPages = 1;
+let pagesData = {};
+let activeEdit = { pageNum: null, wordIndex: null };
+let baseRenderScale = 2.0;
+
+function showStatus(msg, persistent) {
+  statusPill.textContent = msg;
+  statusPill.style.display = 'flex';
+  if (!persistent) setTimeout(() => statusPill.style.display = 'none', 3000);
+}
+
+dropzone.onclick = () => pdfFileInput.click();
+openNewBtn.onclick = () => pdfFileInput.click();
+pdfFileInput.onchange = (e) => {
+  if (e.target.files[0]) {
+    originalFileName = e.target.files[0].name || 'document.pdf';
+    loadPdfFile(e.target.files[0]);
+  }
+};
+
+function loadPdfWithPassword(buf) {
+  return new Promise((resolve, reject) => {
+    const loadingTask = pdfjsLib.getDocument({ data: buf });
+    loadingTask.onPassword = (updatePassword) => {
+      pdfPasswordModal.classList.add('active');
+      pdfPasswordInput.value = '';
+      setTimeout(() => pdfPasswordInput.focus(), 50);
+      pdfPasswordSubmit.onclick = () => {
+        if (!pdfPasswordInput.value) return;
+        pdfPasswordModal.classList.remove('active');
+        updatePassword(pdfPasswordInput.value);
+      };
+      pdfPasswordCancel.onclick = () => {
+        pdfPasswordModal.classList.remove('active');
+        loadingTask.destroy();
+        reject(new Error('CANCELLED'));
+      };
+    };
+    loadingTask.promise.then(resolve).catch(reject);
+  });
+}
+
+async function loadPdfFile(file) {
+  try {
+    showStatus('Loading PDF file...', true);
+    currentPdfBytes = await file.arrayBuffer();
+    currentPdfDoc = await loadPdfWithPassword(currentPdfBytes.slice(0));
+    totalPages = currentPdfDoc.numPages;
+
+    uploadViewSection.style.display = 'none';
+    editorViewSection.style.display = 'flex';
+    step1Item.classList.remove('active');
+    step2Item.classList.add('active');
+    step3Item.classList.remove('active');
+
+    pagesWrapper.innerHTML = '';
+    pagesData = {};
+
+    await renderAllDocumentPages();
+  } catch (err) {
+    if (err.message !== 'CANCELLED') alert('Could not load PDF: ' + err.message);
+    statusPill.style.display = 'none';
+  }
+}
+
+async function renderAllDocumentPages() {
+  if (document.fonts) await document.fonts.ready;
+  showStatus(`Rendering ${totalPages} pages...`, true);
+
+  for (let p = 1; p <= totalPages; p++) {
+    const pageCard = document.createElement('div');
+    pageCard.className = 'page-card';
+
+    const headerMark = document.createElement('div');
+    headerMark.className = 'page-header-mark';
+    headerMark.innerHTML = `<span class="page-num-pill">PAGE ${p} OF ${totalPages}</span>`;
+
+    const pageContainer = document.createElement('div');
+    pageContainer.className = 'pdf-page-container';
+
+    const canvas = document.createElement('canvas');
+    const wordLayer = document.createElement('div');
+    wordLayer.className = 'word-overlay-layer';
+
+    const scanOverlay = document.createElement('div');
+    scanOverlay.className = 'scan-overlay';
+    scanOverlay.innerHTML = `<div class="scan-laser"><div class="scan-trail"></div></div>`;
+
+    pageContainer.appendChild(canvas);
+    pageContainer.appendChild(wordLayer);
+    pageContainer.appendChild(scanOverlay);
+    pageCard.appendChild(headerMark);
+    pageCard.appendChild(pageContainer);
+    pagesWrapper.appendChild(pageCard);
+
+    const page = await currentPdfDoc.getPage(p);
+    const unscaledVp = page.getViewport({ scale: 1.0 });
+    const viewport = page.getViewport({ scale: baseRenderScale });
+
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const ctx = canvas.getContext('2d');
+    await page.render({ canvasContext: ctx, viewport }).promise;
+
+    const origCanvas = document.createElement('canvas');
+    origCanvas.width = canvas.width;
+    origCanvas.height = canvas.height;
+    origCanvas.getContext('2d').drawImage(canvas, 0, 0);
+
+    pagesData[p] = {
+      pageNum: p,
+      nativeW: unscaledVp.width,
+      nativeH: unscaledVp.height,
+      canvas: canvas,
+      origCanvas: origCanvas,
+      container: pageContainer,
+      wordLayer: wordLayer,
+      scanOverlay: scanOverlay,
+      scanLaser: scanOverlay.querySelector('.scan-laser'),
+      words: [],
+      isModified: false
+    };
+
+    const textContent = await page.getTextContent();
+    if (textContent.items.length > 5) {
+      extractWordsForPage(textContent, viewport, p);
+    }
+  }
+
+  applyResponsiveAutoFit();
+  triggerUltraSmoothScan();
+}
+
+function triggerUltraSmoothScan() {
+  showStatus('⚡ Scanning document...', true);
+
+  for (let p = 1; p <= totalPages; p++) {
+    const pData = pagesData[p];
+    if (!pData) continue;
+
+    pData.scanOverlay.style.display = 'block';
+    const laser = pData.scanLaser;
+    const containerH = pData.canvas.height;
+
+    laser.style.transition = 'none';
+    laser.style.transform = 'translate3d(0, 0, 0)';
+
+    setTimeout(() => {
+      laser.style.transition = 'transform 1.1s cubic-bezier(0.25, 1, 0.5, 1)';
+      laser.style.transform = `translate3d(0, ${containerH}px, 0)`;
+      buildOverlayForPage(p, true);
+    }, 50);
+
+    setTimeout(() => {
+      pData.scanOverlay.style.display = 'none';
+    }, 1250);
+  }
+
+  setTimeout(() => {
+    showStatus(`✨ Ready! All pages scanned & clickable.`, false);
+  }, 1300);
+}
+
+toolScanDoc.onclick = () => {
+  triggerUltraSmoothScan();
+};
+function sampleInkForPage(origCanvas, x, y, w, h) {
+  try {
+    if (!origCanvas) return '#0f172a';
+    const ctx = origCanvas.getContext('2d');
+    let minBrightness = 765;
+    let bestR = 15, bestG = 23, bestB = 42;
+    for (let sx = 1; sx <= 3; sx++) {
+      for (let sy = 1; sy <= 3; sy++) {
+        const px = Math.round(x + (w * sx) / 4);
+        const py = Math.round(y + (h * sy) / 4);
+        if (px >= 0 && px < origCanvas.width && py >= 0 && py < origCanvas.height) {
+          const p = ctx.getImageData(px, py, 1, 1).data;
+          const brightness = p[0] + p[1] + p[2];
+          if (brightness < minBrightness) {
+            minBrightness = brightness;
+            bestR = p[0]; bestG = p[1]; bestB = p[2];
+          }
+        }
+      }
+    }
+    if (minBrightness < 680) return `rgb(${bestR}, ${bestG}, ${bestB})`;
+    return '#0f172a';
+  } catch (e) {
+    return '#0f172a';
+  }
+}
+
+function extractWordsForPage(textContent, viewport, pNum) {
+  const pData = pagesData[pNum];
+  pData.words = [];
+  const ctx = pData.canvas.getContext('2d');
+
+  textContent.items.forEach(item => {
+    if (Math.abs(item.transform[1]) > 0.05 || Math.abs(item.transform[2]) > 0.05) return;
+
+    const tx = pdfjsLib.Util.transform(viewport.transform, item.transform);
+    let visualFontSize = Math.round(Math.abs(tx[3]));
+    if (!visualFontSize || visualFontSize < 7) visualFontSize = Math.round((item.height || 12) * baseRenderScale);
+
+    const rawFontName = (item.fontName || '').toLowerCase();
+    const cleanFontName = rawFontName.replace(/^[a-z]{6}\+/, '');
+
+    let fontWeight = 400;
+    if (/black|heavy|extra|ultra|800|900/i.test(cleanFontName)) fontWeight = 800;
+    else if (/bold|b7|b8|700/i.test(cleanFontName) || visualFontSize >= 22) fontWeight = 700;
+    else if (/semi|demi|b6|600/i.test(cleanFontName)) fontWeight = 600;
+    else if (/medium|b5|500/i.test(cleanFontName)) fontWeight = 500;
+
+    let fontFamily = "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, Roboto, sans-serif";
+    if (/times|serif|georgia|garamond|roman/i.test(cleanFontName)) fontFamily = "Georgia, 'Times New Roman', serif";
+    else if (/courier|mono|consolas/i.test(cleanFontName)) fontFamily = "'Courier New', Courier, monospace";
+
+    ctx.font = `${fontWeight} ${visualFontSize}px ${fontFamily}`;
+    const spaceW = ctx.measureText(' ').width || (visualFontSize * 0.28);
+
+    const words = item.str.split(/(\s+)/);
+    let curX = tx[4];
+    const baselineY = tx[5];
+
+    words.forEach(w => {
+      if (!w || !w.trim()) {
+        curX += (w.length * spaceW);
+        return;
+      }
+      ctx.font = `${fontWeight} ${visualFontSize}px ${fontFamily}`;
+      const wWidth = ctx.measureText(w).width;
+      const boxTop = baselineY - (visualFontSize * 0.85);
+      const boxH = visualFontSize * 1.15;
+      const inkColor = sampleInkForPage(pData.origCanvas, curX, boxTop, wWidth, boxH);
+      const isUpper = w === w.toUpperCase() && w !== w.toLowerCase();
+
+      pData.words.push({
+        text: w, x: curX, baselineY: baselineY, y: boxTop, w: wWidth, h: boxH,
+        fontSize: visualFontSize, fontFamily: fontFamily, fontWeight: fontWeight,
+        color: inkColor, isUpper: isUpper, originalText: w
+      });
+      curX += wWidth;
+    });
+  });
+}
+
+function applyResponsiveAutoFit() {
+  const availW = pagesWrapper.clientWidth || 340;
+  for (let p = 1; p <= totalPages; p++) {
+    const pData = pagesData[p];
+    if (!pData) continue;
+    const fitWidth = Math.min(availW, pData.nativeW);
+    const displayW = Math.round(fitWidth);
+    const displayH = Math.round((pData.nativeH / pData.nativeW) * displayW);
+    pData.container.style.width = displayW + 'px';
+    pData.container.style.height = displayH + 'px';
+    buildOverlayForPage(p, false);
+  }
+}
+window.addEventListener('resize', () => applyResponsiveAutoFit());
+
+function buildOverlayForPage(pNum, animateWave = false) {
+  const pData = pagesData[pNum];
+  if (!pData || !pData.container.clientWidth) return;
+  pData.wordLayer.innerHTML = '';
+  const displayScale = pData.container.clientWidth / pData.canvas.width;
+
+  pData.words.forEach((word, idx) => {
+    const el = document.createElement('div');
+    el.className = 'word-box' + (animateWave ? ' smooth-reveal' : '');
+    if (animateWave) {
+      const progress = Math.max(0, Math.min(1, word.y / (pData.canvas.height || 1)));
+      el.style.animationDelay = `${(progress * 0.85).toFixed(2)}s`;
+    }
+    el.style.left = (word.x * displayScale) + 'px';
+    el.style.top = (word.y * displayScale) + 'px';
+    el.style.width = Math.max(8, word.w * displayScale) + 'px';
+    el.style.height = (word.h * displayScale) + 'px';
+    el.title = `Page ${pNum} - Edit: "${word.text}"`;
+    el.onclick = (e) => { e.stopPropagation(); openPopoverForPageWord(pNum, idx, el); };
+    pData.wordLayer.appendChild(el);
+  });
+}
+
+function openPopoverForPageWord(pNum, idx, boxEl) {
+  activeEdit = { pageNum: pNum, wordIndex: idx };
+  const pData = pagesData[pNum];
+  const word = pData.words[idx];
+
+  popoverInput.value = word.text;
+  fontSizeVal.textContent = Math.round(word.fontSize / baseRenderScale) + 'px';
+  inkColorDot.style.background = word.color;
+  updateWeightButton(word.fontWeight);
+  caseToggleBtn.classList.toggle('active', !!word.isUpper);
+
+  editPopover.style.display = 'flex';
+  const boxRect = boxEl.getBoundingClientRect();
+  const parentRect = pData.container.getBoundingClientRect();
+
+  let leftPos = boxRect.left - parentRect.left;
+  if (leftPos + 265 > parentRect.width) leftPos = Math.max(10, parentRect.width - 275);
+  let topPos = boxRect.bottom - parentRect.top + 6;
+
+  editPopover.style.left = leftPos + 'px';
+  editPopover.style.top = topPos + 'px';
+  pData.container.appendChild(editPopover);
+  popoverInput.focus();
+  popoverInput.select();
+}
+
+function updateWeightButton(weight) {
+  weightToggleBtn.textContent = weight >= 800 ? 'BLACK' : (weight >= 600 ? 'BOLD' : 'REGULAR');
+  weightToggleBtn.classList.toggle('active', weight >= 600);
+}
+weightToggleBtn.onclick = () => {
+  if (activeEdit.pageNum === null) return;
+  const word = pagesData[activeEdit.pageNum].words[activeEdit.wordIndex];
+  if (word.fontWeight === 400) word.fontWeight = 700;
+  else if (word.fontWeight === 700) word.fontWeight = 800;
+  else word.fontWeight = 400;
+  updateWeightButton(word.fontWeight);
+};
+caseToggleBtn.onclick = () => {
+  if (activeEdit.pageNum === null) return;
+  const word = pagesData[activeEdit.pageNum].words[activeEdit.wordIndex];
+  word.isUpper = !word.isUpper;
+  caseToggleBtn.classList.toggle('active', word.isUpper);
+  if (word.isUpper) popoverInput.value = popoverInput.value.toUpperCase();
+};
+fontIncBtn.onclick = () => {
+  if (activeEdit.pageNum === null) return;
+  const word = pagesData[activeEdit.pageNum].words[activeEdit.wordIndex];
+  word.fontSize += Math.round(baseRenderScale);
+  fontSizeVal.textContent = Math.round(word.fontSize / baseRenderScale) + 'px';
+};
+fontDecBtn.onclick = () => {
+  if (activeEdit.pageNum === null) return;
+  const word = pagesData[activeEdit.pageNum].words[activeEdit.wordIndex];
+  word.fontSize = Math.max(6, word.fontSize - Math.round(baseRenderScale));
+  fontSizeVal.textContent = Math.round(word.fontSize / baseRenderScale) + 'px';
+};
+popoverCancel.onclick = () => { editPopover.style.display = 'none'; };
+
+popoverApply.onclick = () => {
+  if (activeEdit.pageNum === null) return;
+  const { pageNum, wordIndex } = activeEdit;
+  const pData = pagesData[pageNum];
+  let newText = popoverInput.value.trim();
+  if (!newText) return;
+
+  const currentWord = pData.words[wordIndex];
+  if (currentWord.isUpper) newText = newText.toUpperCase();
+  const oldText = currentWord.text;
+  const ctx = pData.canvas.getContext('2d');
+
+  ctx.font = `${currentWord.fontWeight} ${currentWord.fontSize}px ${currentWord.fontFamily}`;
+  const oldRight = currentWord.x + currentWord.w;
+
+  eraseWordOnPage(pData, currentWord);
+
+  currentWord.text = newText;
+  currentWord.w = ctx.measureText(newText).width;
+  drawWordOnPage(pData, currentWord);
+  pData.isModified = true;
+
+  let lastOldRight = oldRight;
+  let lastNewRight = currentWord.x + currentWord.w;
+
+  for (let i = wordIndex + 1; i < pData.words.length; i++) {
+    const nextWord = pData.words[i];
+    if (Math.abs(nextWord.baselineY - currentWord.baselineY) < 6) {
+      const originalGap = nextWord.x - lastOldRight;
+      if (originalGap >= -2 && originalGap < (currentWord.fontSize * 1.5)) {
+        eraseWordOnPage(pData, nextWord);
+        lastOldRight = nextWord.x + nextWord.w;
+        nextWord.x = lastNewRight + Math.max(3, originalGap);
+        nextWord.baselineY = currentWord.baselineY;
+        nextWord.y = currentWord.baselineY - (currentWord.fontSize * 0.85);
+        nextWord.fontSize = currentWord.fontSize;
+        nextWord.fontWeight = currentWord.fontWeight;
+        nextWord.fontFamily = currentWord.fontFamily;
+        drawWordOnPage(pData, nextWord);
+        lastNewRight = nextWord.x + nextWord.w;
+      } else break;
+    }
+  }
+
+  editPopover.style.display = 'none';
+  buildOverlayForPage(pageNum, false);
+  showStatus(`Updated "${oldText}" ➔ "${newText}"`, false);
+};
+
+function eraseWordOnPage(pData, wObj) {
+  const ctx = pData.canvas.getContext('2d');
+  const sampleX = Math.max(0, Math.min(pData.canvas.width - 1, Math.round(wObj.x - 4)));
+  const sampleY = Math.max(0, Math.min(pData.canvas.height - 1, Math.round(wObj.y - 4)));
+  const p = pData.origCanvas.getContext('2d').getImageData(sampleX, sampleY, 1, 1).data;
+  ctx.fillStyle = `rgb(${p[0]}, ${p[1]}, ${p[2]})`;
+  ctx.fillRect(wObj.x - 2, wObj.y - 2, wObj.w + 6, wObj.h + 5);
+}
+function drawWordOnPage(pData, wObj) {
+  const ctx = pData.canvas.getContext('2d');
+  ctx.fillStyle = wObj.color || '#0f172a';
+  ctx.font = `${wObj.fontWeight} ${wObj.fontSize}px ${wObj.fontFamily}`;
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(wObj.text, wObj.x, wObj.baselineY);
+}
+
+toolResetPage.onclick = () => {
+  for (let p = 1; p <= totalPages; p++) {
+    const pData = pagesData[p];
+    if (!pData) continue;
+    pData.canvas.getContext('2d').drawImage(pData.origCanvas, 0, 0);
+    pData.isModified = false;
+    buildOverlayForPage(p, false);
+  }
+  showStatus('All pages reset to original.', false);
+};
+
+exportBtn.onclick = async () => {
+  if (!currentPdfBytes) return;
+  showStatus('Generating multi-page PDF...', true);
+  step2Item.classList.remove('active');
+  step3Item.classList.add('active');
+
+  try {
+    const { PDFDocument } = PDFLib;
+    let pdfDoc;
+    try {
+      pdfDoc = await PDFDocument.load(currentPdfBytes.slice(0), { ignoreEncryption: true });
+    } catch (loadErr) {
+      pdfDoc = await PDFDocument.create();
+      for (let p = 1; p <= totalPages; p++) {
+        const pData = pagesData[p];
+        pdfDoc.addPage([pData.nativeW, pData.nativeH]);
+      }
+    }
+
+    for (let p = 1; p <= totalPages; p++) {
+      const pData = pagesData[p];
+      if (!pData || !pData.isModified) continue;
+
+      const targetPage = pdfDoc.getPage(p - 1);
+      const { width, height } = targetPage.getSize();
+      const imgBlob = await new Promise(res => pData.canvas.toBlob(res, 'image/jpeg', 0.95));
+      const imgBuffer = await imgBlob.arrayBuffer();
+      const embeddedImg = await pdfDoc.embedJpg(new Uint8Array(imgBuffer));
+      targetPage.drawImage(embeddedImg, { x: 0, y: 0, width: width, height: height });
+    }
+
+    const pdfBytes = await pdfDoc.save({ useObjectStreams: false });
+    const cleanBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(cleanBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = originalFileName;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { a.remove(); URL.revokeObjectURL(url); }, 60000);
+    showStatus('PDF Downloaded successfully!', false);
+  } catch (err) {
+    alert('Export error: ' + err.message);
+  }
+};
+</script>
+</body>
+</html>

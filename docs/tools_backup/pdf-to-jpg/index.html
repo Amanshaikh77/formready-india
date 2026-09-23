@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PDF to JPG Converter - FormReady India</title>
+  <meta name="description" content="Convert PDF pages into high-resolution JPG images offline in seconds. Free, private and secure client-side document processing.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- PDF.js library & JSZip -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Full-Screen Continuous Glass Shine Overlay */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 760px; position: relative; z-index: 1; }
+
+    /* Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 32px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.18);
+    }
+    #pdfInput { display: none; }
+    .upload-icon { font-size: 36px; margin-bottom: 8px; }
+    .upload-title { font-size: 14.5px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .upload-desc b { color: var(--amber); }
+
+    /* Settings & Summary Bar */
+    .toolbar-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #14100c;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+    }
+    .doc-meta {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--paper);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .doc-badge {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--green);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 800;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .quality-select {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+    }
+    .quality-select:focus { border-color: var(--amber); }
+
+    /* Bulk Download Grid */
+    .bulk-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 500px) {
+      .bulk-actions-grid { grid-template-columns: 1fr; }
+    }
+    .btn-bulk {
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-zip {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-zip:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+    .btn-all-separate {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+    }
+    .btn-all-separate:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+    }
+
+    /* Pages Grid */
+    .pages-header {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 480px) {
+      .pages-grid { grid-template-columns: 1fr; }
+    }
+
+    .page-card {
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .page-card:hover {
+      border-color: rgba(245, 166, 35, 0.45);
+      transform: translateY(-2px);
+    }
+    .page-preview-box {
+      width: 100%;
+      height: 240px;
+      background: #000;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .page-preview-box canvas {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      background: #fff;
+    }
+    .page-card-footer {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .page-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--paper);
+    }
+    .btn-download-single {
+      background: rgba(245, 166, 35, 0.12);
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      color: var(--amber);
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-download-single:hover {
+      background: var(--amber);
+      color: #0c0a08;
+    }
+
+    /* Loading Spinner Indicator */
+    .rendering-loader {
+      display: none;
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>PDF to JPG Converter</h1>
+    <p>Convert PDF pages into high-resolution JPG images with 100% offline privacy</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use -->
+    <div class="instructions-box">
+      <h3>📘 How to Convert PDF to JPG</h3>
+      <ol>
+        <li><b>Upload Document:</b> Tap or drag your PDF file into the upload box.</li>
+        <li><b>Select Resolution:</b> Choose standard HD (Fast) or Ultra 300 DPI for crystal clear document text.</li>
+        <li><b>Instant View:</b> Each page renders automatically with individual download buttons.</li>
+        <li><b>Download All:</b> Tap <b>Download All (ZIP)</b> to save all pages in 1 click.</li>
+      </ol>
+    </div>
+
+    <!-- 2. Upload Zone -->
+    <label class="upload-zone" id="dropZone">
+      <input type="file" id="pdfInput" accept="application/pdf" onchange="handleFileSelect(this.files[0])">
+      <div class="upload-icon">📷</div>
+      <div class="upload-title" id="uploadTitle">Tap here to upload PDF or drag file here</div>
+      <div class="upload-desc" id="uploadDesc">Supports single or multi-page PDF documents • <b>100% Local Processing</b></div>
+    </label>
+
+    <!-- Rendering State -->
+    <div class="rendering-loader" id="loader">
+      ⏳ Rendering high-resolution PDF pages... Please wait.
+    </div>
+
+    <!-- 3. Results & Actions Area -->
+    <div id="resultsStage" style="display: none;">
+      <!-- Toolbar & Quality -->
+      <div class="toolbar-bar">
+        <div class="doc-meta">
+          <span id="docFileName">document.pdf</span>
+          <span class="doc-badge" id="docPageBadge">0 Pages</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size:12px; color:var(--muted); font-weight:600;">Clarity:</span>
+          <select id="qualityScale" class="quality-select" onchange="reRenderCurrentPdf()">
+            <option value="1.5" selected>HD Crisp (Fast)</option>
+            <option value="2.5">Ultra 300 DPI (Studio Text)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Bulk Download Buttons -->
+      <div class="bulk-actions-grid">
+        <button class="btn-bulk btn-zip" id="btnZipAll" onclick="downloadAllZip()">
+          📦 Download All Pages (ZIP Archive)
+        </button>
+        <button class="btn-bulk btn-all-separate" id="btnSeparateAll" onclick="downloadAllSeparate()">
+          ⚡ Download All JPGs (Separate)
+        </button>
+      </div>
+
+      <!-- Pages Grid Header -->
+      <div class="pages-header">
+        <span>📄 Converted Page Images:</span>
+        <span style="font-size: 11.5px; color: var(--muted);" id="pagesCountNote">Tap download for specific page</span>
+      </div>
+
+      <!-- Pages Display Grid -->
+      <div class="pages-grid" id="pagesGrid"></div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
+</div>
+
+<script>
+// Configure pdf.js worker
+if (typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+let activePdfDoc = null;
+let currentFileName = 'document';
+let renderedCanvases = [];
+
+const dropZone = document.getElementById("dropZone");
+const pdfInput = document.getElementById("pdfInput");
+const loader = document.getElementById("loader");
+const resultsStage = document.getElementById("resultsStage");
+const docFileName = document.getElementById("docFileName");
+const docPageBadge = document.getElementById("docPageBadge");
+const pagesGrid = document.getElementById("pagesGrid");
+
+// Drag & drop support
+['dragenter', 'dragover'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+});
+['dragleave', 'drop'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+  });
+});
+dropZone.addEventListener('drop', (e) => {
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    handleFileSelect(e.dataTransfer.files[0]);
+  }
+});
+
+async function handleFileSelect(file) {
+  if (!file || file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+    alert("Please select a valid PDF file.");
+    return;
+  }
+
+  currentFileName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_");
+  docFileName.innerText = file.name.length > 22 ? file.name.substring(0, 20) + "..." : file.name;
+
+  try {
+    loader.style.display = "block";
+    resultsStage.style.display = "none";
+
+    const arrayBuffer = await file.arrayBuffer();
+    activePdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+    docPageBadge.innerText = `${activePdfDoc.numPages} Page${activePdfDoc.numPages > 1 ? 's' : ''}`;
+    await renderAllPages();
+  } catch (err) {
+    console.error(err);
+    alert("Error reading PDF: " + err.message);
+  } finally {
+    loader.style.display = "none";
+  }
+}
+
+async function renderAllPages() {
+  if (!activePdfDoc) return;
+
+  loader.style.display = "block";
+  pagesGrid.innerHTML = "";
+  renderedCanvases = [];
+
+  const scale = parseFloat(document.getElementById("qualityScale").value) || 1.5;
+
+  for (let pageNum = 1; pageNum <= activePdfDoc.numPages; pageNum++) {
+    const page = await activePdfDoc.getPage(pageNum);
+    const viewport = page.getViewport({ scale: scale });
+
+    const canvas = document.createElement("canvas");
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const ctx = canvas.getContext("2d");
+
+    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+    renderedCanvases.push(canvas);
+
+    // Build Page Preview Card
+    const card = document.createElement("div");
+    card.className = "page-card";
+
+    const previewBox = document.createElement("div");
+    previewBox.className = "page-preview-box";
+    previewBox.appendChild(canvas);
+
+    const footer = document.createElement("div");
+    footer.className = "page-card-footer";
+    footer.innerHTML = `
+      <span class="page-title">Page ${pageNum}</span>
+      <button class="btn-download-single" onclick="downloadSinglePage(${pageNum - 1})">
+        📥 Save JPG
+      </button>
+    `;
+
+    card.appendChild(previewBox);
+    card.appendChild(footer);
+    pagesGrid.appendChild(card);
+  }
+
+  loader.style.display = "none";
+  resultsStage.style.display = "block";
+  resultsStage.scrollIntoView({ behavior: 'smooth' });
+}
+
+function reRenderCurrentPdf() {
+  if (activePdfDoc) {
+    renderAllPages();
+  }
+}
+
+// Download Individual Page as JPG
+function downloadSinglePage(index) {
+  const canvas = renderedCanvases[index];
+  if (!canvas) return;
+
+  const link = document.createElement("a");
+  link.download = `${currentFileName}_Page_${index + 1}.jpg`;
+  link.href = canvas.toDataURL("image/jpeg", 0.92);
+  link.click();
+}
+
+// Download All Pages in 1 ZIP Archive
+async function downloadAllZip() {
+  if (renderedCanvases.length === 0) return;
+
+  const btn = document.getElementById("btnZipAll");
+  btn.disabled = true;
+  btn.innerText = "⏳ Compiling ZIP Archive...";
+
+  try {
+    const zip = new JSZip();
+
+    renderedCanvases.forEach((canvas, idx) => {
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+      const base64Data = dataUrl.replace(/^data:image\/jpeg;base64,/, "");
+      const pad = String(idx + 1).padStart(2, '0');
+      zip.file(`${currentFileName}_Page_${pad}.jpg`, base64Data, { base64: true });
+    });
+
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(zipBlob);
+    link.download = `${currentFileName}_All_Pages_JPG.zip`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+
+    btn.innerText = "✅ ZIP Downloaded Successfully!";
+    setTimeout(() => {
+      btn.innerText = "📦 Download All Pages (ZIP Archive)";
+      btn.disabled = false;
+    }, 2500);
+  } catch (err) {
+    alert("Error creating ZIP: " + err.message);
+    btn.innerText = "📦 Download All Pages (ZIP Archive)";
+    btn.disabled = false;
+  }
+}
+
+// Download All Pages Sequentially
+async function downloadAllSeparate() {
+  if (renderedCanvases.length === 0) return;
+
+  const btn = document.getElementById("btnSeparateAll");
+  btn.disabled = true;
+
+  for (let i = 0; i < renderedCanvases.length; i++) {
+    btn.innerText = `Downloading Page ${i + 1}/${renderedCanvases.length}...`;
+    downloadSinglePage(i);
+    await new Promise(r => setTimeout(r, 450));
+  }
+
+  btn.innerText = "✅ All JPGs Downloaded!";
+  setTimeout(() => {
+    btn.innerText = "⚡ Download All JPGs (Separate)";
+    btn.disabled = false;
+  }, 2500);
+}
+</script>
+</body>
+</html>

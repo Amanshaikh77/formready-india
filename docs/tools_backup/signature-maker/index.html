@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Digital Signature Draw Maker - FormReady India</title>
+  <meta name="description" content="Draw ultra-smooth digital signatures online. Download transparent PNG or white background JPG ready for exam portals, PDFs, and legal forms.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 680px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Customization Toolbar */
+    .pad-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .tool-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tool-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    /* Color Swatches */
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.active {
+      border-color: var(--amber);
+      box-shadow: 0 0 10px rgba(245, 166, 35, 0.4);
+      transform: scale(1.1);
+    }
+    .swatch-black { background: #000000; border: 2px solid #555; }
+    .swatch-blue { background: #0038a8; }
+
+    /* Pen Thickness Chips */
+    .stroke-btn {
+      background: #14100c;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .stroke-btn.active {
+      background: rgba(245, 166, 35, 0.15);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    /* White Drawing Pad Container */
+    .canvas-wrapper {
+      position: relative;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      touch-action: none; /* Prevents screen scrolling while drawing */
+      cursor: crosshair;
+    }
+    #signatureCanvas {
+      display: block;
+      width: 100%;
+      height: 260px;
+      touch-action: none;
+    }
+
+    /* Pad Watermark Guide */
+    .canvas-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      font-weight: 600;
+      color: #c4bbb0;
+      pointer-events: none;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+
+    /* Pad Action Controls */
+    .canvas-actions-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      margin-bottom: 22px;
+    }
+    .action-btn-small {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .action-btn-small:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+    .action-btn-danger:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    /* Download Action Buttons */
+    .download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 500px) {
+      .download-grid { grid-template-columns: 1fr; }
+    }
+    .btn-download {
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-png {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-png:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+    .btn-jpg {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+    }
+    .btn-jpg:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Digital Signature Draw Pad</h1>
+    <p>Sign smoothly on white sheet & download as transparent PNG or white JPG</p>
+  </div>
+
+  <div class="main-card">
+    <!-- Toolbar -->
+    <div class="pad-toolbar">
+      <!-- Ink Color -->
+      <div class="tool-section">
+        <span class="tool-label">Ink:</span>
+        <button class="color-swatch swatch-black active" onclick="setPenColor('#000000', this)" title="Black Ink"></button>
+        <button class="color-swatch swatch-blue" onclick="setPenColor('#0038a8', this)" title="Official Blue Ink"></button>
+      </div>
+
+      <!-- Stroke Thickness -->
+      <div class="tool-section">
+        <span class="tool-label">Stroke:</span>
+        <button class="stroke-btn" onclick="setPenWidth(2, this)">Fine (2px)</button>
+        <button class="stroke-btn active" onclick="setPenWidth(3.5, this)">Regular (3.5px)</button>
+        <button class="stroke-btn" onclick="setPenWidth(5, this)">Bold (5px)</button>
+      </div>
+    </div>
+
+    <!-- White Signature Canvas Area -->
+    <div class="canvas-wrapper">
+      <div class="canvas-watermark" id="watermarkHint">
+        ✍️ Draw your signature here
+      </div>
+      <canvas id="signatureCanvas"></canvas>
+    </div>
+
+    <!-- Action Tools -->
+    <div class="canvas-actions-row">
+      <button class="action-btn-small" onclick="undoLastStroke()">
+        ↶ Undo Stroke
+      </button>
+      <button class="action-btn-small action-btn-danger" onclick="clearCanvas()">
+        🗑️ Clear Pad
+      </button>
+    </div>
+
+    <!-- Download Options -->
+    <div class="download-grid">
+      <button class="btn-download btn-png" onclick="downloadSignature('png')">
+        ✨ Download Transparent PNG
+      </button>
+      <button class="btn-download btn-jpg" onclick="downloadSignature('jpg')">
+        📄 Download White JPG (Form Ready)
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Private Client-Side Canvas Processing
+  </footer>
+</div>
+
+<script>
+const canvas = document.getElementById("signatureCanvas");
+const ctx = canvas.getContext("2d");
+const watermark = document.getElementById("watermarkHint");
+
+let isDrawing = false;
+let currentPenColor = "#000000";
+let currentPenWidth = 3.5;
+let strokeHistory = [];
+let currentStroke = [];
+let hasDrawn = false;
+
+// Setup High-DPI Retina Canvas
+function initCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+
+  ctx.scale(dpr, dpr);
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  redrawHistory();
+}
+
+window.addEventListener("resize", () => {
+  initCanvas();
+});
+
+// Pen Settings
+function setPenColor(color, btn) {
+  currentPenColor = color;
+  document.querySelectorAll(".color-swatch").forEach(s => s.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+function setPenWidth(w, btn) {
+  currentPenWidth = w;
+  document.querySelectorAll(".stroke-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+// Drawing Logic
+function getCoords(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  };
+}
+
+function startDrawing(e) {
+  if (e.cancelable) e.preventDefault();
+  isDrawing = true;
+  watermark.style.opacity = "0";
+
+  const pt = getCoords(e);
+  currentStroke = {
+    color: currentPenColor,
+    width: currentPenWidth,
+    points: [pt]
+  };
+
+  ctx.strokeStyle = currentPenColor;
+  ctx.lineWidth = currentPenWidth;
+  ctx.beginPath();
+  ctx.moveTo(pt.x, pt.y);
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  if (e.cancelable) e.preventDefault();
+
+  const pt = getCoords(e);
+  currentStroke.points.push(pt);
+
+  ctx.strokeStyle = currentStroke.color;
+  ctx.lineWidth = currentStroke.width;
+
+  // Smooth quadratic curve interpolation
+  const pts = currentStroke.points;
+  if (pts.length > 2) {
+    const xc = (pts[pts.length - 1].x + pts[pts.length - 2].x) / 2;
+    const yc = (pts[pts.length - 1].y + pts[pts.length - 2].y) / 2;
+    ctx.quadraticCurveTo(pts[pts.length - 2].x, pts[pts.length - 2].y, xc, yc);
+    ctx.stroke();
+  } else {
+    ctx.lineTo(pt.x, pt.y);
+    ctx.stroke();
+  }
+
+  hasDrawn = true;
+}
+
+function stopDrawing() {
+  if (!isDrawing) return;
+  isDrawing = false;
+  if (currentStroke.points.length > 0) {
+    strokeHistory.push(currentStroke);
+  }
+}
+
+// Canvas Touch & Mouse Listeners
+canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mousemove", draw);
+window.addEventListener("mouseup", stopDrawing);
+
+canvas.addEventListener("touchstart", startDrawing, { passive: false });
+canvas.addEventListener("touchmove", draw, { passive: false });
+window.addEventListener("touchend", stopDrawing);
+
+// Redraw all strokes from memory
+function redrawHistory() {
+  const rect = canvas.getBoundingClientRect();
+  ctx.clearRect(0, 0, rect.width, rect.height);
+
+  strokeHistory.forEach(stroke => {
+    ctx.strokeStyle = stroke.color;
+    ctx.lineWidth = stroke.width;
+    ctx.beginPath();
+
+    const pts = stroke.points;
+    if (pts.length === 0) return;
+    ctx.moveTo(pts[0].x, pts[0].y);
+
+    for (let i = 1; i < pts.length - 1; i++) {
+      const xc = (pts[i].x + pts[i + 1].x) / 2;
+      const yc = (pts[i].y + pts[i + 1].y) / 2;
+      ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
+    }
+    if (pts.length > 1) {
+      ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+    }
+    ctx.stroke();
+  });
+
+  if (strokeHistory.length === 0) {
+    watermark.style.opacity = "1";
+    hasDrawn = false;
+  }
+}
+
+function undoLastStroke() {
+  if (strokeHistory.length > 0) {
+    strokeHistory.pop();
+    redrawHistory();
+  }
+}
+
+function clearCanvas() {
+  strokeHistory = [];
+  redrawHistory();
+}
+
+// Export Signatures (Trim auto white padding around signature)
+function downloadSignature(format) {
+  if (strokeHistory.length === 0) {
+    alert("Please draw your signature before downloading.");
+    return;
+  }
+
+  // Find bounding box of signature strokes
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  strokeHistory.forEach(stroke => {
+    stroke.points.forEach(pt => {
+      minX = Math.min(minX, pt.x);
+      minY = Math.min(minY, pt.y);
+      maxX = Math.max(maxX, pt.x);
+      maxY = Math.max(maxY, pt.y);
+    });
+  });
+
+  // Add 16px safety padding
+  const padding = 18;
+  const dpr = window.devicePixelRatio || 1;
+  const cropX = Math.max(0, (minX - padding) * dpr);
+  const cropY = Math.max(0, (minY - padding) * dpr);
+  const cropW = Math.min(canvas.width - cropX, (maxX - minX + padding * 2) * dpr);
+  const cropH = Math.min(canvas.height - cropY, (maxY - minY + padding * 2) * dpr);
+
+  const outCanvas = document.createElement("canvas");
+  outCanvas.width = cropW;
+  outCanvas.height = cropH;
+  const outCtx = outCanvas.getContext("2d");
+
+  if (format === "jpg") {
+    // Fill pure white paper background
+    outCtx.fillStyle = "#FFFFFF";
+    outCtx.fillRect(0, 0, cropW, cropH);
+  }
+
+  outCtx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+
+  const link = document.createElement("a");
+  if (format === "png") {
+    link.download = "digital_signature_transparent.png";
+    link.href = outCanvas.toDataURL("image/png");
+  } else {
+    link.download = "exam_signature_white.jpg";
+    link.href = outCanvas.toDataURL("image/jpeg", 0.95);
+  }
+  link.click();
+}
+
+// Init
+initCanvas();
+</script>
+</body>
+</html>

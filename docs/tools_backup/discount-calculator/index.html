@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Percentage & Discount Calculator - FormReady India</title>
+  <meta name="description" content="Calculate shopping discounts, final price, savings, and general percentages instantly offline. 100% private.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Mode Switcher Tabs */
+    .mode-switch-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      padding: 11px 14px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .mode-btn.active {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.35);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Form Fields */
+    .field-group { margin-bottom: 18px; }
+    .field-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .input-field-wrap {
+      display: flex;
+      align-items: center;
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 4px 12px;
+    }
+    .input-field-wrap:focus-within { border-color: var(--amber); }
+    .input-symbol { font-size: 14px; font-weight: 700; color: var(--amber); }
+    .input-control {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--paper);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 9px 8px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    /* Percentage Quick Chips */
+    .pct-chips-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 480px) {
+      .pct-chips-row { grid-template-columns: repeat(3, 1fr); }
+    }
+    .pct-chip {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 9px 6px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .pct-chip:hover { border-color: rgba(245, 166, 35, 0.5); color: var(--paper); }
+    .pct-chip.active {
+      background: var(--amber);
+      color: #0c0a08;
+      border-color: var(--amber);
+      box-shadow: 0 0 10px rgba(245, 166, 35, 0.35);
+    }
+
+    /* Primary Result Hero Cards */
+    .result-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .res-card {
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .res-card.pay { border-color: rgba(16, 185, 129, 0.4); background: linear-gradient(145deg, #121915, #0c120f); }
+    .res-card.saved { border-color: rgba(245, 166, 35, 0.4); background: linear-gradient(145deg, #1b160f, #120e0a); }
+    .res-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .res-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+    }
+    .res-card.pay .res-val { color: var(--green); }
+    .res-card.saved .res-val { color: var(--amber); }
+
+    /* Summary Bar */
+    .summary-badge-bar {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .summary-badge-bar b { color: var(--paper); }
+
+    /* Action Copy Button */
+    .btn-copy-disc {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-copy-disc:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    /* GENERAL PERCENTAGE SECTION */
+    .gen-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--paper);
+    }
+    .mini-input {
+      width: 90px;
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--amber);
+      font-weight: 700;
+      font-size: 14px;
+      outline: none;
+    }
+    .mini-input:focus { border-color: var(--amber); }
+    .gen-result-pill {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--green);
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 8px;
+      margin-left: auto;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Percentage & Discount Calculator</h1>
+    <p>Calculate final payable price, money saved and general percentage math</p>
+  </div>
+
+  <div class="main-card">
+    <!-- Mode Switcher Tabs -->
+    <div class="mode-switch-bar">
+      <button class="mode-btn active" id="btnTabDisc" onclick="switchTab('disc')">
+        🏷️ Shopping Discount
+      </button>
+      <button class="mode-btn" id="btnTabGen" onclick="switchTab('gen')">
+        🔢 Percentage Math
+      </button>
+    </div>
+
+    <!-- TAB 1: SHOPPING DISCOUNT CALCULATOR -->
+    <div id="sectionDisc">
+      <div class="instructions-box">
+        <h3>🛍️ How to Use Discount Calculator</h3>
+        <ol>
+          <li><b>Original Price:</b> Enter sticker or MRP retail price in ₹[span_2](start_span)[span_2](end_span).</li>
+          <li><b>Discount %:</b> Pick a preset percentage or choose custom[span_3](start_span)[span_3](end_span).</li>
+          <li><b>Instant Breakdown:</b> View exact money saved and final payable price[span_4](start_span)[span_4](end_span).</li>
+        </ol>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="origPrice">1. Original MRP / Retail Price (₹):</label>
+        <div class="input-field-wrap">
+          <span class="input-symbol">₹</span>
+          <input type="number" id="origPrice" class="input-control" placeholder="e.g. 1999" value="1999" min="0" oninput="calculateDiscount()">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">2. Discount Percentage (%):</label>
+        <div class="pct-chips-row">
+          <button class="pct-chip" onclick="setDiscountPct(10, this)">10%</button>
+          <button class="pct-chip active" onclick="setDiscountPct(20, this)">20%</button>
+          <button class="pct-chip" onclick="setDiscountPct(30, this)">30%</button>
+          <button class="pct-chip" onclick="setDiscountPct(50, this)">50%</button>
+          <button class="pct-chip" onclick="enableCustomDiscount(this)">Custom</button>
+        </div>
+
+        <div class="input-field-wrap" id="customPctWrap" style="display:none; margin-top:8px;">
+          <input type="number" id="customPctInput" class="input-control" placeholder="Enter custom % (e.g. 25)" min="0" max="100" oninput="onCustomPctChange(this.value)">
+          <span class="input-symbol">%</span>
+        </div>
+      </div>
+
+      <!-- Result Cards Grid -->
+      <div class="result-cards-grid">
+        <div class="res-card pay">
+          <div class="res-label">Final Payable Price</div>
+          <div class="res-val" id="valFinalPrice">₹1,599</div>
+        </div>
+        <div class="res-card saved">
+          <div class="res-label">Total Money Saved</div>
+          <div class="res-val" id="valSaved">₹400</div>
+        </div>
+      </div>
+
+      <!-- Breakdown Details Bar -->
+      <div class="summary-badge-bar">
+        <span>Discount Applied: <b id="valSummaryPct">20% OFF</b></span>
+        <span>Original MRP: <b id="valSummaryMrp">₹1,999</b></span>
+      </div>
+
+      <button class="btn-copy-disc" id="btnCopyDisc" onclick="copyDiscountSummary()">
+        📋 Copy Discount Breakdown
+      </button>
+    </div>
+
+    <!-- TAB 2: GENERAL PERCENTAGE TOOLS -->
+    <div id="sectionGen" style="display:none;">
+      <div class="instructions-box">
+        <h3>🔢 Everyday Percentage Quick Math</h3>
+        <ol>
+          <li>Find what is X% of any amount.</li>
+          <li>Calculate what percentage number A is of number B.</li>
+          <li>Check percentage increase or discount reduction easily.</li>
+        </ol>
+      </div>
+
+      <div class="field-group" style="background:var(--panel-inner); border:1px solid var(--line); border-radius:10px; padding:14px;">
+        <div class="gen-row">
+          <span>What is</span>
+          <input type="number" id="genP1" class="mini-input" value="15" oninput="calcGen1()">
+          <span>% of</span>
+          <input type="number" id="genV1" class="mini-input" value="500" oninput="calcGen1()">
+          <span>?</span>
+          <div class="gen-result-pill" id="genRes1">= 75</div>
+        </div>
+      </div>
+
+      <div class="field-group" style="background:var(--panel-inner); border:1px solid var(--line); border-radius:10px; padding:14px;">
+        <div class="gen-row">
+          <input type="number" id="genV2" class="mini-input" value="450" oninput="calcGen2()">
+          <span>is what % of</span>
+          <input type="number" id="genTotal2" class="mini-input" value="600" oninput="calcGen2()">
+          <span>?</span>
+          <div class="gen-result-pill" id="genRes2">= 75%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
+</div>
+
+<script>
+let activeDiscountPct = 20;
+
+const origPriceInput = document.getElementById("origPrice");
+const customPctWrap = document.getElementById("customPctWrap");
+const customPctInput = document.getElementById("customPctInput");
+const valFinalPrice = document.getElementById("valFinalPrice");
+const valSaved = document.getElementById("valSaved");
+const valSummaryPct = document.getElementById("valSummaryPct");
+const valSummaryMrp = document.getElementById("valSummaryMrp");
+const btnCopyDisc = document.getElementById("btnCopyDisc");
+
+function switchTab(mode) {
+  document.getElementById("btnTabDisc").classList.toggle("active", mode === "disc");
+  document.getElementById("btnTabGen").classList.toggle("active", mode === "gen");
+  document.getElementById("sectionDisc").style.display = mode === "disc" ? "block" : "none";
+  document.getElementById("sectionGen").style.display = mode === "gen" ? "block" : "none";
+}
+
+function setDiscountPct(pct, btn) {
+  activeDiscountPct = pct;
+  customPctWrap.style.display = "none";
+  document.querySelectorAll(".pct-chip").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  calculateDiscount();
+}
+
+function enableCustomDiscount(btn) {
+  document.querySelectorAll(".pct-chip").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  customPctWrap.style.display = "flex";
+  customPctInput.focus();
+  activeDiscountPct = parseFloat(customPctInput.value) || 0;
+  calculateDiscount();
+}
+
+function onCustomPctChange(val) {
+  activeDiscountPct = parseFloat(val) || 0;
+  calculateDiscount();
+}
+
+function calculateDiscount() {
+  const mrp = parseFloat(origPriceInput.value) || 0;
+  const pct = Math.max(0, Math.min(100, activeDiscountPct));
+
+  const savedAmount = (mrp * pct) / 100;
+  const finalPrice = Math.max(0, mrp - savedAmount);
+
+  valFinalPrice.innerText = "₹" + Math.round(finalPrice).toLocaleString("en-IN");
+  valSaved.innerText = "₹" + Math.round(savedAmount).toLocaleString("en-IN");
+  valSummaryPct.innerText = `${pct}% OFF`;
+  valSummaryMrp.innerText = "₹" + mrp.toLocaleString("en-IN");
+}
+
+function copyDiscountSummary() {
+  const mrp = valSummaryMrp.innerText;
+  const off = valSummaryPct.innerText;
+  const pay = valFinalPrice.innerText;
+  const save = valSaved.innerText;
+
+  const text = `Shopping Discount Breakdown:
+Original MRP: ${mrp}
+Discount: ${off}
+Final Payable: ${pay}
+Total Money Saved: ${save}
+Calculated via FormReady India`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btnCopyDisc.innerHTML;
+    btnCopyDisc.innerHTML = "✅ Copied to Clipboard!";
+    setTimeout(() => { btnCopyDisc.innerHTML = orig; }, 2000);
+  });
+}
+
+// ----------------- GENERAL PERCENTAGE CALCULATIONS -----------------
+function calcGen1() {
+  const p = parseFloat(document.getElementById("genP1").value) || 0;
+  const v = parseFloat(document.getElementById("genV1").value) || 0;
+  const res = (p * v) / 100;
+  document.getElementById("genRes1").innerText = `= ${Number.isInteger(res) ? res : res.toFixed(2)}`;
+}
+
+function calcGen2() {
+  const v = parseFloat(document.getElementById("genV2").value) || 0;
+  const total = parseFloat(document.getElementById("genTotal2").value) || 0;
+  if (total === 0) {
+    document.getElementById("genRes2").innerText = "= 0%";
+    return;
+  }
+  const pct = (v / total) * 100;
+  document.getElementById("genRes2").innerText = `= ${Number.isInteger(pct) ? pct : pct.toFixed(2)}%`;
+}
+
+// Initial calculation
+window.addEventListener("DOMContentLoaded", () => {
+  calculateDiscount();
+  calcGen1();
+  calcGen2();
+});
+</script>
+</body>
+</html>

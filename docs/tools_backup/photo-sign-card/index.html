@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Passport Photo + Sign Card Maker - FormReady India</title>
+  <meta name="description" content="Merge passport photo and signature into a single unified official exam slip with candidate name and date. 100% offline & secure.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 720px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Dual Upload Grid */
+    .upload-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 500px) {
+      .upload-grid { grid-template-columns: 1fr; }
+    }
+
+    .upload-box {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 20px 14px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+      min-height: 140px;
+    }
+    .upload-box:hover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      transform: translateY(-2px);
+    }
+    .upload-box.uploaded {
+      border-color: var(--green);
+      background: rgba(16, 185, 129, 0.06);
+    }
+    .upload-icon { font-size: 28px; }
+    .upload-title { font-size: 13px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 11px; color: var(--muted); }
+    .upload-status { font-size: 11px; color: var(--green); font-weight: 700; display: none; }
+    input[type="file"] { display: none; }
+
+    /* Form Fields Grid */
+    .fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 500px) {
+      .fields-grid { grid-template-columns: 1fr; }
+    }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 11px 13px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      border-radius: 9px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-field:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 10px rgba(245, 166, 35, 0.2);
+    }
+
+    /* Live Preview Section */
+    .preview-wrapper {
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 22px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .preview-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--amber);
+    }
+    .preview-badge {
+      font-size: 10.5px;
+      background: rgba(245, 166, 35, 0.12);
+      color: var(--amber);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .canvas-viewport {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0806;
+      border-radius: 8px;
+      padding: 14px;
+      overflow: hidden;
+    }
+    #cardCanvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      max-height: 420px;
+      border-radius: 4px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+      background: #fff;
+    }
+
+    /* Download Actions */
+    .download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 500px) {
+      .download-grid { grid-template-columns: 1fr; }
+    }
+    .btn-download {
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-jpg {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+    }
+    .btn-jpg:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+    }
+    .btn-png {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-png:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Photo + Signature Joiner</h1>
+    <p>Merge passport photo & signature into a single official exam card</p>
+  </div>
+
+  <div class="main-card">
+    <!-- Dual Upload Section -->
+    <div class="upload-grid">
+      <!-- Photo Upload -->
+      <label class="upload-box" id="photoBox">
+        <input type="file" id="photoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+        <div class="upload-icon">📷</div>
+        <div class="upload-title">Upload Passport Photo</div>
+        <div class="upload-desc">JPG, PNG supported</div>
+        <div class="upload-status" id="photoStatus">✅ Photo Loaded</div>
+      </label>
+
+      <!-- Signature Upload -->
+      <label class="upload-box" id="signBox">
+        <input type="file" id="signInput" accept="image/*" onchange="handleSignUpload(event)">
+        <div class="upload-icon">✍️</div>
+        <div class="upload-title">Upload Signature</div>
+        <div class="upload-desc">On plain white paper</div>
+        <div class="upload-status" id="signStatus">✅ Sign Loaded</div>
+      </label>
+    </div>
+
+    <!-- Candidate Name & Date Details -->
+    <div class="fields-grid">
+      <div class="form-group">
+        <label>Candidate Name (Optional):</label>
+        <input type="text" id="candidateName" class="input-field" placeholder="e.g. AMAN SHAIKH" oninput="renderCard()">
+      </div>
+      <div class="form-group">
+        <label>Date of Photo (DOP) / Date (Optional):</label>
+        <input type="text" id="photoDate" class="input-field" placeholder="e.g. DOP: 15/09/2026" oninput="renderCard()">
+      </div>
+    </div>
+
+    <!-- Live Preview Card -->
+    <div class="preview-wrapper">
+      <div class="preview-header">
+        <div class="preview-title">Live Unified Card Preview</div>
+        <div class="preview-badge">Official Standard Ratio</div>
+      </div>
+      <div class="canvas-viewport">
+        <canvas id="cardCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Download Buttons -->
+    <div class="download-grid">
+      <button class="btn-download btn-jpg" onclick="downloadCard('jpg')">
+        📥 Download Slip (JPG)
+      </button>
+      <button class="btn-download btn-png" onclick="downloadCard('png')">
+        ✨ Download Slip (PNG)
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Form Processing
+  </footer>
+</div>
+
+<script>
+const cardCanvas = document.getElementById("cardCanvas");
+const ctx = cardCanvas.getContext("2d");
+
+let photoImg = null;
+let signImg = null;
+
+// Standard Portal Dimensions: 400px width x 560px height
+const CARD_WIDTH = 400;
+const CARD_HEIGHT = 560;
+
+function handlePhotoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const img = new Image();
+    img.onload = function() {
+      photoImg = img;
+      document.getElementById("photoBox").classList.add("uploaded");
+      document.getElementById("photoStatus").style.display = "block";
+      renderCard();
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleSignUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const img = new Image();
+    img.onload = function() {
+      signImg = img;
+      document.getElementById("signBox").classList.add("uploaded");
+      document.getElementById("signStatus").style.display = "block";
+      renderCard();
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderCard() {
+  cardCanvas.width = CARD_WIDTH;
+  cardCanvas.height = CARD_HEIGHT;
+
+  // Background - Pure White Paper
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+
+  const padding = 16;
+  const contentWidth = CARD_WIDTH - (padding * 2);
+
+  // Layout Heights
+  const nameVal = document.getElementById("candidateName").value.trim();
+  const dateVal = document.getElementById("photoDate").value.trim();
+  const hasText = nameVal.length > 0 || dateVal.length > 0;
+
+  let textBlockHeight = 0;
+  if (hasText) {
+    textBlockHeight = (nameVal && dateVal) ? 44 : 26;
+  }
+
+  const signHeight = 110;
+  const photoHeight = CARD_HEIGHT - (padding * 2) - signHeight - (hasText ? textBlockHeight + 10 : 8);
+
+  // 1. Draw Passport Photo Area
+  const photoY = padding;
+  if (photoImg) {
+    ctx.drawImage(photoImg, padding, photoY, contentWidth, photoHeight);
+  } else {
+    // Placeholder Photo Silhouette
+    ctx.fillStyle = "#f5f0eb";
+    ctx.fillRect(padding, photoY, contentWidth, photoHeight);
+    ctx.fillStyle = "#a89a89";
+    ctx.font = "600 14px 'Plus Jakarta Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("📷 Passport Photo Area", CARD_WIDTH / 2, photoY + (photoHeight / 2));
+  }
+
+  // Inner Photo Border
+  ctx.strokeStyle = "#444444";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(padding, photoY, contentWidth, photoHeight);
+
+  // 2. Optional Name & Date Bar
+  let currentY = photoY + photoHeight + 8;
+  if (hasText) {
+    ctx.fillStyle = "#111111";
+    ctx.textAlign = "center";
+
+    if (nameVal) {
+      ctx.font = "800 13.5px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillText(nameVal.toUpperCase(), CARD_WIDTH / 2, currentY + 14);
+      currentY += 18;
+    }
+    if (dateVal) {
+      ctx.font = "600 11.5px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillStyle = "#444444";
+      ctx.fillText(dateVal, CARD_WIDTH / 2, currentY + 12);
+      currentY += 18;
+    }
+    currentY += 4;
+  }
+
+  // 3. Draw Signature Area
+  const signY = currentY;
+  if (signImg) {
+    // Maintain signature aspect ratio centered in signature box
+    const imgRatio = signImg.width / signImg.height;
+    let sDrawW = contentWidth - 16;
+    let sDrawH = sDrawW / imgRatio;
+
+    if (sDrawH > signHeight - 12) {
+      sDrawH = signHeight - 12;
+      sDrawW = sDrawH * imgRatio;
+    }
+
+    const sPosX = padding + (contentWidth - sDrawW) / 2;
+    const sPosY = signY + (signHeight - sDrawH) / 2;
+
+    ctx.drawImage(signImg, sPosX, sPosY, sDrawW, sDrawH);
+  } else {
+    // Placeholder Signature
+    ctx.fillStyle = "#faf7f2";
+    ctx.fillRect(padding, signY, contentWidth, signHeight);
+    ctx.fillStyle = "#a89a89";
+    ctx.font = "600 13px 'Plus Jakarta Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("✍️ Signature Area", CARD_WIDTH / 2, signY + (signHeight / 2));
+  }
+
+  // Signature Box Border
+  ctx.strokeStyle = "#444444";
+  ctx.lineWidth = 1;
+  ctx.strokeRect(padding, signY, contentWidth, signHeight);
+
+  // Outer Slip Border
+  ctx.strokeStyle = "#222222";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(4, 4, CARD_WIDTH - 8, CARD_HEIGHT - 8);
+}
+
+function downloadCard(format) {
+  if (!photoImg && !signImg) {
+    alert("Please upload at least a photo or signature.");
+    return;
+  }
+
+  const link = document.createElement("a");
+  if (format === "png") {
+    link.download = "passport_photo_signature_card.png";
+    link.href = cardCanvas.toDataURL("image/png");
+  } else {
+    link.download = "passport_photo_signature_card.jpg";
+    link.href = cardCanvas.toDataURL("image/jpeg", 0.92);
+  }
+  link.click();
+}
+
+// Initial draw placeholder
+renderCard();
+</script>
+</body>
+</html>

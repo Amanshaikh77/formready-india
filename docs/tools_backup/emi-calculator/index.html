@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Loan EMI & Interest Calculator - FormReady India</title>
+  <meta name="description" content="Calculate monthly installments (EMI), total interest and visual payment breakdown for Home, Car and Personal loans offline. 100% private.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Loan Preset Pills */
+    .presets-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .presets-row::-webkit-scrollbar { display: none; }
+    .preset-pill {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .preset-pill:hover { border-color: rgba(245, 166, 35, 0.5); color: var(--paper); }
+    .preset-pill.active {
+      background: var(--amber);
+      color: #0c0a08;
+      border-color: var(--amber);
+    }
+
+    /* Form Groups with Linked Sliders */
+    .field-group { margin-bottom: 18px; }
+    .field-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+    }
+    .field-input-wrap {
+      display: flex;
+      align-items: center;
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 4px 12px;
+      margin-bottom: 8px;
+    }
+    .field-input-wrap:focus-within { border-color: var(--amber); }
+    .field-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--paper);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 8px 4px;
+      outline: none;
+      font-family: inherit;
+    }
+    .field-unit { font-size: 13px; font-weight: 700; color: var(--amber); }
+    .slider-input {
+      width: 100%;
+      accent-color: var(--amber);
+      cursor: pointer;
+    }
+
+    /* Tenure Split Row */
+    .tenure-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+    }
+    .select-tenure-type {
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--paper);
+      padding: 10px 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      outline: none;
+    }
+    .select-tenure-type:focus { border-color: var(--amber); }
+
+    /* Big Hero Result EMI Card */
+    .emi-hero-card {
+      background: linear-gradient(145deg, #1f1810, #130f0a);
+      border: 1px solid rgba(245, 166, 35, 0.4);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+    .emi-hero-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .emi-hero-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .emi-hero-sub { font-size: 12px; color: var(--green); font-weight: 600; }
+
+    /* Breakdown 2-Column Cards */
+    .breakdown-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .break-card {
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+    .break-card.interest { border-color: rgba(245, 166, 35, 0.25); }
+    .break-card.total { border-color: rgba(16, 185, 129, 0.25); }
+    .break-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 4px;
+      color: var(--paper);
+    }
+    .break-card.interest .break-val { color: var(--amber); }
+    .break-card.total .break-val { color: var(--green); }
+    .break-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+
+    /* Visual Proportion Bar (Principal vs Interest) */
+    .proportion-bar-wrap {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+    .proportion-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .bar-track {
+      height: 12px;
+      width: 100%;
+      background: #2563eb; /* Principal Color */
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+    }
+    .bar-fill-interest {
+      background: var(--amber); /* Interest Color */
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    /* Copy Breakdown Action */
+    .btn-copy-emi {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-copy-emi:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Loan EMI & Interest Calculator</h1>
+    <p>Calculate monthly installments, interest breakdown and gross loan payment</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>💳 How to Use EMI Calculator</h3>
+      <ol>
+        <li><b>Loan Amount:</b> Enter total principal amount or adjust slider[span_2](start_span)[span_2](end_span).</li>
+        <li><b>Interest Rate:</b> Enter annual interest percentage (e.g. 8.5%)[span_3](start_span)[span_3](end_span).</li>
+        <li><b>Tenure:</b> Select loan period in Years or Months to view instant EMI[span_4](start_span)[span_4](end_span).</li>
+      </ol>
+    </div>
+
+    <!-- Quick Presets -->
+    <div class="presets-row">
+      <button class="preset-pill active" onclick="applyPreset(500000, 8.5, 5, 'years', this)">🚗 Car Loan (5L, 8.5%, 5Y)</button>
+      <button class="preset-pill" onclick="applyPreset(3000000, 8.75, 20, 'years', this)">🏠 Home Loan (30L, 8.75%, 20Y)</button>
+      <button class="preset-pill" onclick="applyPreset(200000, 12.0, 3, 'years', this)">💼 Personal (2L, 12%, 3Y)</button>
+    </div>
+
+    <!-- 1. Loan Amount -->
+    <div class="field-group">
+      <div class="field-head">
+        <span>1. Loan Principal Amount (₹):</span>
+        <span id="labelAmountWord" style="color:var(--muted); font-size:11.5px;">5 Lakhs</span>
+      </div>
+      <div class="field-input-wrap">
+        <span class="field-unit">₹</span>
+        <input type="number" id="inputAmount" class="field-input" value="500000" min="1000" max="100000000" step="5000" oninput="syncFromInput('amount')">
+      </div>
+      <input type="range" id="sliderAmount" class="slider-input" min="50000" max="10000000" step="10000" value="500000" oninput="syncFromSlider('amount')">
+    </div>
+
+    <!-- 2. Annual Interest Rate -->
+    <div class="field-group">
+      <div class="field-head">
+        <span>2. Annual Interest Rate (% p.a.):</span>
+        <span id="labelRate" style="color:var(--amber); font-size:11.5px;">8.5%</span>
+      </div>
+      <div class="field-input-wrap">
+        <input type="number" id="inputRate" class="field-input" value="8.5" min="1" max="36" step="0.1" oninput="syncFromInput('rate')">
+        <span class="field-unit">%</span>
+      </div>
+      <input type="range" id="sliderRate" class="slider-input" min="4" max="24" step="0.1" value="8.5" oninput="syncFromSlider('rate')">
+    </div>
+
+    <!-- 3. Loan Tenure -->
+    <div class="field-group">
+      <div class="field-head">
+        <span>3. Loan Duration / Tenure:</span>
+        <span id="labelTenure" style="color:var(--muted); font-size:11.5px;">60 Months</span>
+      </div>
+      <div class="tenure-grid">
+        <div class="field-input-wrap" style="margin-bottom:0;">
+          <input type="number" id="inputTenure" class="field-input" value="5" min="1" max="40" oninput="syncFromInput('tenure')">
+        </div>
+        <select id="selectTenureType" class="select-tenure-type" onchange="onTenureTypeChange()">
+          <option value="years" selected>Years</option>
+          <option value="months">Months</option>
+        </select>
+      </div>
+      <input type="range" id="sliderTenure" class="slider-input" style="margin-top:8px;" min="1" max="30" value="5" oninput="syncFromSlider('tenure')">
+    </div>
+
+    <!-- 4. Big Monthly EMI Display Card -->
+    <div class="emi-hero-card">
+      <div class="emi-hero-label">Monthly Loan EMI</div>
+      <div class="emi-hero-value" id="valMonthlyEmi">₹0</div>
+      <div class="emi-hero-sub" id="valEmiNote">Payable every month</div>
+    </div>
+
+    <!-- 5. Breakdown Cards -->
+    <div class="breakdown-row">
+      <div class="break-card interest">
+        <div class="break-label">Total Interest Amount</div>
+        <div class="break-val" id="valTotalInterest">₹0</div>
+      </div>
+      <div class="break-card total">
+        <div class="break-label">Total Payment (Principal + Int)</div>
+        <div class="break-val" id="valTotalPayment">₹0</div>
+      </div>
+    </div>
+
+    <!-- 6. Proportion Visual Bar -->
+    <div class="proportion-bar-wrap">
+      <div class="proportion-labels">
+        <span style="color:#60a5fa;">● Principal: <b id="pctPrincipal">0%</b></span>
+        <span style="color:var(--amber);">● Total Interest: <b id="pctInterest">0%</b></span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill-interest" id="barInterestFill" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- 7. Copy Action -->
+    <button class="btn-copy-emi" id="btnCopyEmi" onclick="copyEmiSummary()">
+      📋 Copy Loan EMI Breakdown
+    </button>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
+</div>
+
+<script>
+const inputAmount = document.getElementById("inputAmount");
+const sliderAmount = document.getElementById("sliderAmount");
+const labelAmountWord = document.getElementById("labelAmountWord");
+
+const inputRate = document.getElementById("inputRate");
+const sliderRate = document.getElementById("sliderRate");
+const labelRate = document.getElementById("labelRate");
+
+const inputTenure = document.getElementById("inputTenure");
+const sliderTenure = document.getElementById("sliderTenure");
+const selectTenureType = document.getElementById("selectTenureType");
+const labelTenure = document.getElementById("labelTenure");
+
+const valMonthlyEmi = document.getElementById("valMonthlyEmi");
+const valTotalInterest = document.getElementById("valTotalInterest");
+const valTotalPayment = document.getElementById("valTotalPayment");
+const pctPrincipal = document.getElementById("pctPrincipal");
+const pctInterest = document.getElementById("pctInterest");
+const barInterestFill = document.getElementById("barInterestFill");
+const btnCopyEmi = document.getElementById("btnCopyEmi");
+
+function formatINR(val) {
+  return "₹" + Math.round(val).toLocaleString("en-IN");
+}
+
+function formatLakhs(num) {
+  if (num >= 10000000) return (num / 10000000).toFixed(2) + " Crore";
+  if (num >= 100000) return (num / 100000).toFixed(2) + " Lakhs";
+  if (num >= 1000) return (num / 1000).toFixed(1) + " K";
+  return num.toString();
+}
+
+function syncFromInput(type) {
+  if (type === 'amount') {
+    sliderAmount.value = inputAmount.value;
+  } else if (type === 'rate') {
+    sliderRate.value = inputRate.value;
+  } else if (type === 'tenure') {
+    sliderTenure.value = inputTenure.value;
+  }
+  calculateEMI();
+}
+
+function syncFromSlider(type) {
+  if (type === 'amount') {
+    inputAmount.value = sliderAmount.value;
+  } else if (type === 'rate') {
+    inputRate.value = sliderRate.value;
+  } else if (type === 'tenure') {
+    inputTenure.value = sliderTenure.value;
+  }
+  calculateEMI();
+}
+
+function onTenureTypeChange() {
+  const isYears = selectTenureType.value === "years";
+  sliderTenure.max = isYears ? 35 : 420;
+  sliderTenure.min = 1;
+  calculateEMI();
+}
+
+function applyPreset(p, r, t, tenureType, btn) {
+  document.querySelectorAll(".preset-pill").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  inputAmount.value = p;
+  sliderAmount.value = p;
+  inputRate.value = r;
+  sliderRate.value = r;
+  selectTenureType.value = tenureType;
+  inputTenure.value = t;
+  sliderTenure.value = t;
+
+  onTenureTypeChange();
+  calculateEMI();
+}
+
+// Exact Standard Financial EMI Formula: E = P * r * (1 + r)^n / ((1 + r)^n - 1)
+function calculateEMI() {
+  const P = parseFloat(inputAmount.value) || 0;
+  const annualR = parseFloat(inputRate.value) || 0;
+  const tenureVal = parseFloat(inputTenure.value) || 0;
+  const isYears = selectTenureType.value === "years";
+
+  const totalMonths = isYears ? Math.round(tenureVal * 12) : Math.round(tenureVal);
+
+  labelAmountWord.innerText = formatLakhs(P);
+  labelRate.innerText = `${annualR}%`;
+  labelTenure.innerText = `${totalMonths} Months (${(totalMonths / 12).toFixed(1)} Yrs)`;
+
+  if (P <= 0 || annualR <= 0 || totalMonths <= 0) {
+    valMonthlyEmi.innerText = "₹0";
+    valTotalInterest.innerText = "₹0";
+    valTotalPayment.innerText = "₹0";
+    return;
+  }
+
+  const r = (annualR / 12) / 100; // Monthly interest rate
+  const emi = (P * r * Math.pow(1 + r, totalMonths)) / (Math.pow(1 + r, totalMonths) - 1);
+  const totalPayment = emi * totalMonths;
+  const totalInterest = totalPayment - P;
+
+  valMonthlyEmi.innerText = formatINR(emi);
+  valTotalInterest.innerText = formatINR(totalInterest);
+  valTotalPayment.innerText = formatINR(totalPayment);
+
+  // Proportions
+  const intPct = Math.round((totalInterest / totalPayment) * 100);
+  const prinPct = 100 - intPct;
+
+  pctPrincipal.innerText = `${prinPct}%`;
+  pctInterest.innerText = `${intPct}%`;
+  barInterestFill.style.width = `${intPct}%`;
+}
+
+function copyEmiSummary() {
+  const P = formatINR(inputAmount.value);
+  const rate = inputRate.value + "%";
+  const tenure = labelTenure.innerText;
+  const emi = valMonthlyEmi.innerText;
+  const interest = valTotalInterest.innerText;
+  const total = valTotalPayment.innerText;
+
+  const text = `Loan EMI Calculation Breakdown:
+Principal: ${P}
+Interest Rate: ${rate}
+Tenure: ${tenure}
+Monthly EMI: ${emi}
+Total Interest: ${interest}
+Total Payable: ${total}
+Calculated via FormReady India`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btnCopyEmi.innerHTML;
+    btnCopyEmi.innerHTML = "✅ Copied to Clipboard!";
+    setTimeout(() => { btnCopyEmi.innerHTML = orig; }, 2000);
+  });
+}
+
+// Initial calculation on load
+window.addEventListener('DOMContentLoaded', () => {
+  calculateEMI();
+});
+</script>
+</body>
+</html>

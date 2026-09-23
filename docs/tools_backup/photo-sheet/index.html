@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Passport Photo Sheet Maker (4x6 / A4) - FormReady India</title>
+  <meta name="description" content="Create printable passport photo sheets on A4, A5, or 4x6 paper. Auto-centered layout with sharp 300 DPI print quality.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- jsPDF for direct PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Full-Screen Continuous Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 780px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 18px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    .header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Tool Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Instructions Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 2px; }
+
+    /* Modern Glowing Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 30px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.04);
+      box-shadow: 0 0 18px rgba(245, 166, 35, 0.18);
+    }
+    #fileInput { display: none; }
+    .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-text { font-size: 13.5px; color: var(--muted); line-height: 1.4; }
+    .upload-text b { color: var(--amber); }
+
+    /* Controls Alignment Grid */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 520px) {
+      .controls-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    }
+    .options-group { display: flex; flex-direction: column; }
+    .options-group label {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .input-field, .input-select {
+      width: 100%;
+      padding: 11px 13px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      border-radius: 9px;
+      font-size: 13.5px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field:focus, .input-select:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.2);
+    }
+
+    /* Checkbox */
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--paper);
+      cursor: pointer;
+      margin: 8px 0 20px;
+    }
+    .checkbox-wrap input {
+      accent-color: var(--amber);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* Clean Framed Canvas Preview Container */
+    .preview-wrapper {
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 22px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .preview-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      color: var(--amber);
+      font-weight: 700;
+    }
+    .preview-hint { font-size: 11px; color: var(--muted); }
+
+    .canvas-viewport {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0806;
+      border-radius: 8px;
+      padding: 12px;
+      overflow: hidden;
+    }
+    #sheetCanvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+      background: #fff;
+    }
+
+    /* Action Download Buttons */
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px) {
+      .action-row { grid-template-columns: 1fr; }
+    }
+    .btn {
+      padding: 13px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-jpg {
+      background: linear-gradient(135deg, #f5a623, #d98218);
+      color: #0c0a08;
+      box-shadow: 0 4px 14px rgba(245, 166, 35, 0.3);
+    }
+    .btn-jpg:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(245, 166, 35, 0.45);
+    }
+    .btn-pdf {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-pdf:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Full-Screen Shining Overlay -->
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Photo Sheet Maker</h1>
+    <p>Arrange passport photos onto printable A4, A5 or 4x6 studio sheets</p>
+  </div>
+
+  <div class="main-card">
+    <div class="instructions-box">
+      <h3>📖 How to Use Photo Sheet Maker</h3>
+      <ol>
+        <li>Upload your passport photo (JPG, PNG or WEBP).</li>
+        <li>Choose Sheet Size (A4, A5 or 4×6) and Orientation.</li>
+        <li>Set photo dimensions in mm, copies count, and spacing between photos.</li>
+        <li>Check the live preview and download as print-ready high-resolution JPG or PDF.</li>
+      </ol>
+    </div>
+
+    <label class="upload-zone">
+      <input type="file" id="fileInput" accept="image/*">
+      <div class="upload-icon">📷</div>
+      <div class="upload-text">Tap here to select passport photo<br><b>JPG, PNG, WEBP supported</b></div>
+    </label>
+
+    <div class="controls-grid">
+      <div class="options-group">
+        <label>Sheet Size:</label>
+        <select id="sheetSize" class="input-select">
+          <option value="a4" selected>A4 Sheet (210 × 297 mm)</option>
+          <option value="4x6">4×6 Inch Studio (102 × 152 mm)</option>
+          <option value="a5">A5 Sheet (148 × 210 mm)</option>
+        </select>
+      </div>
+      <div class="options-group">
+        <label>Orientation:</label>
+        <select id="orientation" class="input-select">
+          <option value="portrait">Portrait</option>
+          <option value="landscape">Landscape</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="controls-grid">
+      <div class="options-group">
+        <label>Photo Width (mm):</label>
+        <input type="number" id="photoWidthMm" class="input-field" value="35" min="10" max="150">
+      </div>
+      <div class="options-group">
+        <label>Photo Height (mm):</label>
+        <input type="number" id="photoHeightMm" class="input-field" value="45" min="10" max="150">
+      </div>
+    </div>
+
+    <div class="controls-grid">
+      <div class="options-group">
+        <label>Number of Photos (Copies):</label>
+        <input type="number" id="photoCountInput" class="input-field" value="8" min="1" max="100">
+      </div>
+      <div class="options-group">
+        <label>Spacing Between Photos (mm):</label>
+        <input type="number" id="spacingMm" class="input-field" value="4" min="0" max="30">
+      </div>
+    </div>
+
+    <label class="checkbox-wrap">
+      <input type="checkbox" id="showCutLines" checked> Show Cut Lines / Border around photos
+    </label>
+
+    <!-- Canvas Preview Box -->
+    <div class="preview-wrapper">
+      <div class="preview-header">
+        <h3>Live Sheet Preview</h3>
+        <span class="preview-hint">300 DPI Studio Quality • Auto Centered</span>
+      </div>
+      <div class="canvas-viewport">
+        <canvas id="sheetCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Download Buttons -->
+    <div class="action-row">
+      <button class="btn btn-jpg" id="downloadJpgBtn">📥 Download Sheet (JPG)</button>
+      <button class="btn btn-pdf" id="downloadPdfBtn">📄 Download Sheet (PDF)</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Secure Client-Side Processing
+  </footer>
+</div>
+
+<script>
+const fileInput = document.getElementById("fileInput");
+const sheetSizeSelect = document.getElementById("sheetSize");
+const orientationSelect = document.getElementById("orientation");
+const photoWidthMmInput = document.getElementById("photoWidthMm");
+const photoHeightMmInput = document.getElementById("photoHeightMm");
+const photoCountInput = document.getElementById("photoCountInput");
+const spacingMmInput = document.getElementById("spacingMm");
+const showCutLinesCheck = document.getElementById("showCutLines");
+const sheetCanvas = document.getElementById("sheetCanvas");
+const downloadJpgBtn = document.getElementById("downloadJpgBtn");
+const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+
+let loadedImg = null;
+
+const DPI = 300;
+const MM_TO_PX = DPI / 25.4;
+
+fileInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => {
+      loadedImg = img;
+      renderSheet();
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+[sheetSizeSelect, orientationSelect, photoWidthMmInput, photoHeightMmInput, photoCountInput, spacingMmInput, showCutLinesCheck].forEach(elem => {
+  elem.addEventListener("input", renderSheet);
+  elem.addEventListener("change", renderSheet);
+});
+
+function getSheetDimensionsMm() {
+  const sheetSize = sheetSizeSelect.value;
+  const isPortrait = orientationSelect.value === "portrait";
+
+  let w = 210;
+  let h = 297;
+
+  if (sheetSize === "4x6") {
+    w = 102;
+    h = 152;
+  } else if (sheetSize === "a5") {
+    w = 148;
+    h = 210;
+  }
+
+  if (!isPortrait) {
+    const temp = w;
+    w = h;
+    h = temp;
+  }
+  return { w, h };
+}
+
+function renderSheet() {
+  const { w: sheetWidthMm, h: sheetHeightMm } = getSheetDimensionsMm();
+  const sheetWidthPx = Math.round(sheetWidthMm * MM_TO_PX);
+  const sheetHeightPx = Math.round(sheetHeightMm * MM_TO_PX);
+
+  sheetCanvas.width = sheetWidthPx;
+  sheetCanvas.height = sheetHeightPx;
+  const ctx = sheetCanvas.getContext("2d");
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, sheetWidthPx, sheetHeightPx);
+
+  if (!loadedImg) {
+    ctx.fillStyle = "#a89a89";
+    ctx.font = "24px 'Plus Jakarta Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("Upload a photo above to generate sheet preview", sheetCanvas.width / 2, sheetCanvas.height / 2);
+    return;
+  }
+
+  const pWidthMm = parseFloat(photoWidthMmInput.value) || 35;
+  const pHeightMm = parseFloat(photoHeightMmInput.value) || 45;
+  const inputGap = parseFloat(spacingMmInput.value);
+  const gapMm = isNaN(inputGap) ? 4 : inputGap;
+  const targetCount = parseInt(photoCountInput.value, 10) || 1;
+
+  // Safe minimal printable edge (5mm)
+  const minEdgeMm = 5;
+
+  // Calculate maximum columns that comfortably fit across the paper
+  let maxCols = Math.floor((sheetWidthMm - (2 * minEdgeMm) + gapMm) / (pWidthMm + gapMm));
+  if (maxCols < 1) maxCols = 1;
+
+  // Total grid width for these columns
+  const gridWidthMm = (maxCols * pWidthMm) + ((maxCols - 1) * gapMm);
+
+  // Auto-center grid horizontally (equal left & right margins)
+  const startX_Mm = Math.max(minEdgeMm, (sheetWidthMm - gridWidthMm) / 2);
+  const startY_Mm = Math.max(minEdgeMm, 8); // Clean 8mm top margin
+
+  const pWidthPx = Math.round(pWidthMm * MM_TO_PX);
+  const pHeightPx = Math.round(pHeightMm * MM_TO_PX);
+  const gapPx = Math.round(gapMm * MM_TO_PX);
+  const startXPx = Math.round(startX_Mm * MM_TO_PX);
+  const startYPx = Math.round(startY_Mm * MM_TO_PX);
+
+  let col = 0;
+  let row = 0;
+
+  for (let i = 0; i < targetCount; i++) {
+    const posX = startXPx + (col * (pWidthPx + gapPx));
+    const posY = startYPx + (row * (pHeightPx + gapPx));
+
+    // Stop if photo crosses bottom edge
+    if (posY + pHeightPx > sheetHeightPx - Math.round(minEdgeMm * MM_TO_PX)) {
+      break;
+    }
+
+    ctx.drawImage(loadedImg, posX, posY, pWidthPx, pHeightPx);
+
+    if (showCutLinesCheck.checked) {
+      ctx.strokeStyle = "#444444";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(posX, posY, pWidthPx, pHeightPx);
+    }
+
+    col++;
+    if (col >= maxCols) {
+      col = 0;
+      row++;
+    }
+  }
+}
+
+renderSheet();
+
+downloadJpgBtn.addEventListener("click", () => {
+  if (!loadedImg) {
+    alert("Please upload a photo first.");
+    return;
+  }
+  const link = document.createElement("a");
+  link.download = "passport-photo-sheet.jpg";
+  link.href = sheetCanvas.toDataURL("image/jpeg", 0.95);
+  link.click();
+});
+
+downloadPdfBtn.addEventListener("click", () => {
+  if (!loadedImg) {
+    alert("Please upload a photo first.");
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const { w: sheetWidthMm, h: sheetHeightMm } = getSheetDimensionsMm();
+  const isPortrait = orientationSelect.value === "portrait";
+
+  const pdf = new jsPDF({
+    orientation: isPortrait ? "portrait" : "landscape",
+    unit: "mm",
+    format: [sheetWidthMm, sheetHeightMm]
+  });
+
+  const imgData = sheetCanvas.toDataURL("image/jpeg", 0.95);
+  pdf.addImage(imgData, 'JPEG', 0, 0, sheetWidthMm, sheetHeightMm);
+  pdf.save("passport-photo-sheet.pdf");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Lorem Ipsum Generator - FormReady India</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #13100e;
+  --panel: #1c1815;
+  --line: #2e2620;
+  --amber: #d99a3f;
+  --amber-hover: #c48733;
+  --paper: #f3ede2;
+  --muted: #9e9080;
+  --card-bg: #16120f;
+  --success: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 16px 14px 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper { width: 100%; max-width: 580px; }
+.back-link {
+  color: var(--amber);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  padding: 22px 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+h2 { color: var(--amber); margin-bottom: 4px; font-size: 20px; text-align: center; font-weight: 800; }
+.subtitle { color: var(--muted); font-size: 12px; margin-bottom: 18px; text-align: center; }
+
+/* HOW TO USE GUIDE */
+.how-to-box {
+  background: rgba(217, 154, 63, 0.05);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+.how-to-title { color: var(--amber); font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+.how-to-list { list-style: none; font-size: 12px; color: var(--muted); line-height: 1.6; }
+.how-to-list li span { color: var(--paper); font-weight: 600; }
+
+/* CONTROLS ROW */
+.controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+  margin-bottom: 6px;
+}
+select, input[type="number"] {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 14px;
+  padding: 11px 12px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+select:focus, input:focus { border-color: var(--amber); }
+
+.checkbox-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--paper);
+  cursor: pointer;
+}
+.checkbox-item input {
+  accent-color: var(--amber);
+  width: 16px;
+  height: 16px;
+}
+
+.btn {
+  background: var(--amber);
+  color: #13100e;
+  border: none;
+  padding: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+/* OUTPUT PREVIEW */
+.output-wrap {
+  margin-top: 18px;
+}
+.output-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+.output-meta span { color: var(--paper); font-weight: 700; }
+
+textarea {
+  width: 100%;
+  height: 200px;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 13.5px;
+  padding: 14px;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.55;
+}
+textarea:focus { border-color: var(--amber); }
+
+.copy-btn {
+  background: rgba(217, 154, 63, 0.15);
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  padding: 11px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: 0.15s;
+}
+.copy-btn:hover {
+  background: var(--amber);
+  color: #13100e;
+}
+
+/* ADVERTISEMENT CONTAINER */
+.ad-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin-top: 22px;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ad-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  display: block;
+  text-transform: uppercase;
+}
+.ad-content {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a href="../../index.html" class="back-link">&larr; Back to Dashboard</a>
+
+  <div class="card">
+    <h2>Lorem Ipsum Generator</h2>
+    <div class="subtitle">Generate standard placeholder copy for mockups, prototypes & form testing</div>
+
+    <!-- HOW TO USE -->
+    <div class="how-to-box">
+      <div class="how-to-title">📘 How to Use Lorem Generator</div>
+      <ol class="how-to-list">
+        <li>1. <span>Select Unit:</span> Choose Paragraphs, Sentences, or Words.</li>
+        <li>2. <span>Quantity:</span> Enter the required number of items.</li>
+        <li>3. <span>Format:</span> Optionally add HTML markup (`&lt;p&gt;` tags) and copy.</li>
+      </ol>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls-grid">
+      <div>
+        <label>Quantity</label>
+        <input type="number" id="countInput" value="3" min="1" max="100">
+      </div>
+      <div>
+        <label>Generate Type</label>
+        <select id="typeSelect">
+          <option value="paragraphs" selected>Paragraphs</option>
+          <option value="sentences">Sentences</option>
+          <option value="words">Words</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="checkbox-row">
+      <label class="checkbox-item">
+        <input type="checkbox" id="startWithLorem" checked>
+        Start with standard "Lorem ipsum dolor sit amet..."
+      </label>
+      <label class="checkbox-item">
+        <input type="checkbox" id="wrapHtml">
+        Wrap in HTML tags (&lt;p&gt;...&lt;/p&gt;)
+      </label>
+    </div>
+
+    <button class="btn" onclick="generateText()">Generate Placeholder Text</button>
+
+    <!-- OUTPUT -->
+    <div class="output-wrap">
+      <div class="output-meta">
+        <div>Words: <span id="outWords">0</span></div>
+        <div>Characters: <span id="outChars">0</span></div>
+      </div>
+      <textarea id="resultText" readonly></textarea>
+      <button class="copy-btn" onclick="copyResult()">📋 Copy Generated Text</button>
+    </div>
+
+    <!-- ADVERTISEMENT CONTAINER -->
+    <div class="ad-card">
+      <span class="ad-tag">Sponsored Advertisement</span>
+      <div class="ad-content">
+        <span>📢</span> Advertisement Space (Google AdSense / Banner Placeholder)
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const VOCAB = [
+  "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
+  "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore",
+  "magna", "aliqua", "enim", "ad", "minim", "veniam", "quis", "nostrud", "exercitation",
+  "ullamco", "laboris", "nisi", "aliquip", "ex", "ea", "commodo", "consequat", "duis",
+  "aute", "irure", "in", "reprehenderit", "voluptate", "velit", "esse", "cillum",
+  "fugiat", "nulla", "pariatur", "excepteur", "sint", "occaecat", "cupidatat", "non",
+  "proident", "sunt", "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id",
+  "est", "laborum", "at", "vero", "eos", "accusamus", "iusto", "odio", "dignissimos",
+  "ducimus", "blanditiis", "praesentium", "voluptatum", "deleniti", "atque", "corrupti"
+];
+
+function getRandomWord() {
+  return VOCAB[Math.floor(Math.random() * VOCAB.length)];
+}
+
+function generateSentence(isFirst = false) {
+  const len = Math.floor(Math.random() * 8) + 8; // 8 - 15 words
+  let words = [];
+  if (isFirst) {
+    words = ["Lorem", "ipsum", "dolor", "sit", "amet,", "consectetur", "adipiscing", "elit."];
+  } else {
+    for (let i = 0; i < len; i++) {
+      words.push(getRandomWord());
+    }
+    words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+    words[words.length - 1] += ".";
+  }
+  return words.join(" ");
+}
+
+function generateParagraph(isFirst = false) {
+  const sCount = Math.floor(Math.random() * 3) + 4; // 4 - 6 sentences
+  let sentences = [];
+  for (let i = 0; i < sCount; i++) {
+    sentences.push(generateSentence(isFirst && i === 0));
+  }
+  return sentences.join(" ");
+}
+
+function generateText() {
+  const count = parseInt(document.getElementById('countInput').value, 10) || 1;
+  const type = document.getElementById('typeSelect').value;
+  const startLorem = document.getElementById('startWithLorem').checked;
+  const wrapTags = document.getElementById('wrapHtml').checked;
+
+  let result = [];
+
+  if (type === 'words') {
+    let words = [];
+    if (startLorem) {
+      const starter = ["Lorem", "ipsum", "dolor", "sit", "amet"];
+      words = starter.slice(0, Math.min(count, starter.length));
+    }
+    while (words.length < count) {
+      words.push(getRandomWord());
+    }
+    result = [words.join(" ")];
+  } else if (type === 'sentences') {
+    for (let i = 0; i < count; i++) {
+      result.push(generateSentence(startLorem && i === 0));
+    }
+  } else {
+    // paragraphs
+    for (let i = 0; i < count; i++) {
+      result.push(generateParagraph(startLorem && i === 0));
+    }
+  }
+
+  let finalString = "";
+  if (wrapTags) {
+    finalString = result.map(item => `<p>${item}</p>`).join("\n\n");
+  } else {
+    finalString = result.join(type === 'paragraphs' ? "\n\n" : " ");
+  }
+
+  const outArea = document.getElementById('resultText');
+  outArea.value = finalString;
+
+  // Stats
+  const wordsCount = finalString.trim() ? finalString.trim().split(/\s+/).filter(Boolean).length : 0;
+  document.getElementById('outWords').innerText = wordsCount.toLocaleString();
+  document.getElementById('outChars').innerText = finalString.length.toLocaleString();
+}
+
+function copyResult() {
+  const txt = document.getElementById('resultText').value;
+  if (!txt) return;
+  navigator.clipboard.writeText(txt).then(() => {
+    alert("Lorem text copied to clipboard!");
+  });
+}
+
+// Generate default preview on load
+generateText();
+</script>
+</body>
+</html>

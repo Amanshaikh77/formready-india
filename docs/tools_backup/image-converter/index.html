@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Image Format Converter (JPG, PNG, WebP, ICO) - FormReady India</title>
+  <meta name="description" content="Convert images between JPG, PNG, WebP, ICO and BMP offline in seconds. Lossless quality, batch conversion & instant ZIP download.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 32px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.18);
+    }
+    #imageInput { display: none; }
+    .upload-icon { font-size: 36px; margin-bottom: 8px; }
+    .upload-title { font-size: 14.5px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .upload-desc b { color: var(--amber); }
+
+    /* Workspace */
+    .converter-workspace {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    /* Target Format Selector Grid */
+    .section-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .format-pills {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 500px) {
+      .format-pills { grid-template-columns: repeat(2, 1fr); }
+    }
+    .format-chip {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 10px 8px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .format-chip:hover { border-color: rgba(245, 166, 35, 0.5); color: var(--paper); }
+    .format-chip.active {
+      background: var(--amber);
+      color: #0c0a08;
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.35);
+    }
+
+    /* Quality Slider Row */
+    .quality-box {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+    }
+    .quality-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+    }
+    .range-slider {
+      width: 100%;
+      accent-color: var(--amber);
+      cursor: pointer;
+    }
+
+    /* File Queue List */
+    .queue-box {
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .queue-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .queue-files-list {
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .queue-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 12.5px;
+    }
+    .queue-item:last-child { border-bottom: none; }
+    .badge-curr {
+      background: rgba(245, 166, 35, 0.12);
+      color: var(--amber);
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    /* Action Buttons */
+    .btn-action-primary {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14.5px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-action-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+    .btn-action-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Image Format Converter</h1>
+    <p>Convert images between JPG, PNG, WebP & ICO formats instantly offline</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📖 How to Use Image Converter</h3>
+      <ol>
+        <li><b>Upload Images:</b> Select one or multiple images (JPG, PNG, WebP)[span_2](start_span)[span_2](end_span).</li>
+        <li><b>Choose Target Format:</b> Pick <b>JPG</b>, <b>PNG</b>, <b>WebP</b>, or <b>ICO</b>[span_3](start_span)[span_3](end_span).</li>
+        <li><b>Adjust Quality:</b> Adjust image quality compression if needed[span_4](start_span)[span_4](end_span).</li>
+        <li><b>Download:</b> Save converted image or batch download as a <b>ZIP Archive</b>[span_5](start_span)[span_5](end_span).</li>
+      </ol>
+    </div>
+
+    <!-- 2. Upload Zone -->
+    <label class="upload-zone" id="dropZone">
+      <input type="file" id="imageInput" accept="image/*" multiple onchange="handleFiles(this.files)">
+      <div class="upload-icon">🔄</div>
+      <div class="upload-title">Tap here to upload images or drag here</div>
+      <div class="upload-desc">Single or multiple files • <b>JPG, PNG, WebP supported</b>[span_6](start_span)[span_6](end_span)</div>
+    </label>
+
+    <!-- 3. Converter Workspace -->
+    <div class="converter-workspace" id="converterWorkspace">
+      <!-- Target Format Selector -->
+      <span class="section-label">Convert To Format:</span>
+      <div class="format-pills">
+        <button class="format-chip active" onclick="setTargetFormat('jpeg', 'jpg', this)">JPEG (.jpg)</button>
+        <button class="format-chip" onclick="setTargetFormat('png', 'png', this)">PNG (.png)</button>
+        <button class="format-chip" onclick="setTargetFormat('webp', 'webp', this)">WebP (.webp)</button>
+        <button class="format-chip" onclick="setTargetFormat('ico', 'ico', this)">Favicon (.ico)</button>
+      </div>
+
+      <!-- Quality Control -->
+      <div class="quality-box" id="qualityBox">
+        <div class="quality-header">
+          <span>Output Quality:</span>
+          <span id="qualityVal" style="color:var(--amber);">90%</span>
+        </div>
+        <input type="range" id="qualitySlider" class="range-slider" min="10" max="100" value="90" oninput="updateQuality(this.value)">
+      </div>
+
+      <!-- Queue Box -->
+      <div class="queue-box">
+        <div class="queue-title">
+          <span id="queueCount">📁 0 Images Ready</span>
+          <span style="font-size:11px; color:var(--muted);">100% Offline Processing</span>
+        </div>
+        <div class="queue-files-list" id="queueList"></div>
+      </div>
+
+      <!-- Convert & Download Action Button -->
+      <button class="btn-action-primary" id="btnConvert" onclick="convertAndDownload()">
+        ⚡ Convert & Download Images
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
+</div>
+
+<script>
+let selectedFiles = [];
+let targetMime = "jpeg"; // 'jpeg' | 'png' | 'webp' | 'ico'
+let targetExt = "jpg";
+let quality = 0.90;
+
+const dropZone = document.getElementById("dropZone");
+const imageInput = document.getElementById("imageInput");
+const converterWorkspace = document.getElementById("converterWorkspace");
+const qualityBox = document.getElementById("qualityBox");
+const qualityVal = document.getElementById("qualityVal");
+const queueCount = document.getElementById("queueCount");
+const queueList = document.getElementById("queueList");
+const btnConvert = document.getElementById("btnConvert");
+
+// Drag & drop
+['dragenter', 'dragover'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+});
+['dragleave', 'drop'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+  });
+});
+dropZone.addEventListener('drop', (e) => {
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    handleFiles(e.dataTransfer.files);
+  }
+});
+
+function handleFiles(files) {
+  if (!files || files.length === 0) return;
+
+  selectedFiles = Array.from(files).filter(f => f.type.startsWith("image/"));
+  if (selectedFiles.length === 0) return;
+
+  queueList.innerHTML = "";
+  selectedFiles.forEach(f => {
+    const origExt = f.name.split('.').pop() || 'IMG';
+    const div = document.createElement("div");
+    div.className = "queue-item";
+    div.innerHTML = `
+      <span>${f.name.substring(0, 26)}</span>
+      <span class="badge-curr">${origExt}</span>
+    `;
+    queueList.appendChild(div);
+  });
+
+  queueCount.innerText = `📁 ${selectedFiles.length} Image${selectedFiles.length > 1 ? 's' : ''} Selected`;
+  converterWorkspace.style.display = "block";
+  converterWorkspace.scrollIntoView({ behavior: 'smooth' });
+
+  updateButtonLabel();
+}
+
+function setTargetFormat(mime, ext, btn) {
+  targetMime = mime;
+  targetExt = ext;
+  document.querySelectorAll(".format-chip").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  // PNG does not use quality compression
+  qualityBox.style.display = (targetMime === "png" || targetMime === "ico") ? "none" : "block";
+  updateButtonLabel();
+}
+
+function updateQuality(val) {
+  quality = parseInt(val, 10) / 100;
+  qualityVal.innerText = `${val}%`;
+}
+
+function updateButtonLabel() {
+  if (selectedFiles.length === 1) {
+    btnConvert.innerHTML = `⚡ Convert & Download .${targetExt}`;
+  } else {
+    btnConvert.innerHTML = `📦 Convert & Download All (${selectedFiles.length} Images as ZIP)`;
+  }
+}
+
+// Client-Side Canvas Image Conversion Engine
+async function convertFile(file, mime, ext, q) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement("canvas");
+        let w = img.width;
+        let h = img.height;
+
+        // Favicon ICO generation standard (128x128 max)
+        if (ext === "ico") {
+          w = Math.min(128, w);
+          h = Math.min(128, h);
+        }
+
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+
+        // White background for JPEG if transparent PNG source
+        if (mime === "jpeg") {
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(0, 0, w, h);
+        }
+
+        ctx.drawImage(img, 0, 0, w, h);
+
+        const outMime = ext === "ico" ? "image/png" : `image/${mime}`;
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, outMime, q);
+      };
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function convertAndDownload() {
+  if (selectedFiles.length === 0) return;
+
+  btnConvert.disabled = true;
+  btnConvert.innerText = "⏳ Converting Images...";
+
+  try {
+    if (selectedFiles.length === 1) {
+      const file = selectedFiles[0];
+      const blob = await convertFile(file, targetMime, targetExt, quality);
+      const baseName = file.name.replace(/\.[^/.]+$/, "");
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${baseName}.${targetExt}`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    } else {
+      btnConvert.innerText = "📦 Packing ZIP Archive...";
+      const zip = new JSZip();
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        btnConvert.innerText = `Converting (${i + 1}/${selectedFiles.length})...`;
+        const blob = await convertFile(file, targetMime, targetExt, quality);
+        const baseName = file.name.replace(/\.[^/.]+$/, "");
+        zip.file(`${baseName}.${targetExt}`, blob);
+      }
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(zipBlob);
+      link.download = `Converted_Images_${targetExt.toUpperCase()}.zip`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    btnConvert.innerText = "✅ Conversion Complete!";
+    setTimeout(() => {
+      btnConvert.disabled = false;
+      updateButtonLabel();
+    }, 2500);
+  } catch (err) {
+    alert("Conversion error: " + err.message);
+    btnConvert.disabled = false;
+    updateButtonLabel();
+  }
+}
+</script>
+</body>
+</html>

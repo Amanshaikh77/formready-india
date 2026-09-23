@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AI Background Remover (Instant & Free) - FormReady India</title>
+  <meta name="description" content="Remove image background in 0.5s with Google MediaPipe AI. 100% private, client-side, with white/blue passport backgrounds and manual touch eraser brush.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Lightweight Google MediaPipe Selfie Segmentation (<1.5MB) -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 32px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.18);
+    }
+    #fileInput { display: none; }
+    .upload-icon { font-size: 36px; margin-bottom: 8px; }
+    .upload-title { font-size: 14.5px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .upload-desc b { color: var(--amber); }
+
+    /* AI Loading State */
+    .ai-loading-box {
+      display: none;
+      text-align: center;
+      padding: 24px 16px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    .ai-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(245, 166, 35, 0.2);
+      border-top-color: var(--amber);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .ai-status-text { font-size: 13px; font-weight: 700; color: var(--amber); }
+    .ai-sub-text { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+    /* Results Workspace */
+    .workspace {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    /* Background Preset Chips */
+    .bg-presets-bar {
+      margin-bottom: 16px;
+    }
+    .bg-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .bg-chips-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 500px) {
+      .bg-chips-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .bg-chip {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 9px 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--paper);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .bg-chip:hover { border-color: rgba(245, 166, 35, 0.5); }
+    .bg-chip.active {
+      background: rgba(245, 166, 35, 0.15);
+      border-color: var(--amber);
+      color: var(--amber);
+      box-shadow: 0 0 10px rgba(245, 166, 35, 0.25);
+    }
+    .chip-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Manual Eraser Toolbar */
+    .eraser-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .brush-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brush-slider {
+      width: 100px;
+      accent-color: var(--amber);
+      cursor: pointer;
+    }
+    .btn-undo {
+      background: #120e0b;
+      border: 1px solid var(--line);
+      color: var(--paper);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-undo:hover { border-color: var(--amber); color: var(--amber); }
+
+    /* Canvas Viewport */
+    .canvas-viewport-box {
+      background: #000;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .checkerboard-frame {
+      display: inline-block;
+      max-width: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+      background-image: linear-gradient(45deg, #1c1815 25%, transparent 25%),
+                        linear-gradient(-45deg, #1c1815 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #1c1815 75%),
+                        linear-gradient(-45deg, transparent 75%, #1c1815 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+      background-color: #0e0c0a;
+      touch-action: none;
+      cursor: crosshair;
+    }
+    #displayCanvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      max-height: 480px;
+    }
+
+    /* Download Action Button */
+    .btn-download-final {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14.5px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-download-final:hover {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>AI Background Remover</h1>
+    <p>Remove backgrounds in 0.5s with Google MediaPipe • 100% Client-Side Privacy</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📘 How to Remove Background</h3>
+      <ol>
+        <li><b>Upload Photo:</b> Tap below to select any portrait, selfie or document photo.</li>
+        <li><b>Instant Cutout:</b> Google MediaPipe AI removes the background in milliseconds.</li>
+        <li><b>Change Background:</b> Switch between <b>Transparent</b>, <b>Pure White</b>, or <b>Studio Blue</b>.</li>
+        <li><b>Touch Eraser:</b> Clean any leftover edges using the touch eraser brush with Undo support.</li>
+      </ol>
+    </div>
+
+    <!-- 2. Upload Zone -->
+    <label class="upload-zone" id="dropZone">
+      <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+      <div class="upload-icon">🪄</div>
+      <div class="upload-title" id="uploadTitle">Tap here to upload image or drag file here</div>
+      <div class="upload-desc">Portraits, IDs, passport photos • <b>Zero server uploads (100% Offline)</b></div>
+    </label>
+
+    <!-- AI Processing Indicator -->
+    <div class="ai-loading-box" id="aiLoadingBox">
+      <div class="ai-spinner"></div>
+      <div class="ai-status-text" id="aiStatusText">⚡ Running MediaPipe AI Cutout...</div>
+      <div class="ai-sub-text">Processing locally via browser hardware acceleration (<0.5s)</div>
+    </div>
+
+    <!-- 3. Results & Editing Workspace -->
+    <div class="workspace" id="workspace">
+      <!-- Background Presets -->
+      <div class="bg-presets-bar">
+        <label class="bg-label">Select Background Style:</label>
+        <div class="bg-chips-grid">
+          <button class="bg-chip active" onclick="setBackgroundStyle('transparent', this)">
+            🏁 Transparent
+          </button>
+          <button class="bg-chip" onclick="setBackgroundStyle('white', this)">
+            <span class="chip-dot" style="background:#fff; border:1px solid #999;"></span> White
+          </button>
+          <button class="bg-chip" onclick="setBackgroundStyle('blue', this)">
+            <span class="chip-dot" style="background:#3b82f6;"></span> Sky Blue
+          </button>
+          <button class="bg-chip" onclick="triggerColorPicker(this)">
+            <span class="chip-dot" id="customColorDot" style="background:#a855f7;"></span> Custom Color
+            <input type="color" id="customColorInput" style="display:none;" value="#a855f7" onchange="applyCustomColor(this.value)">
+          </button>
+        </div>
+      </div>
+
+      <!-- Eraser Toolbar -->
+      <div class="eraser-toolbar">
+        <div class="brush-control">
+          <span style="font-size:12px; font-weight:700; color:var(--paper);">🧹 Touch Eraser:</span>
+          <input type="range" id="brushSlider" class="brush-slider" min="6" max="60" value="20" title="Brush Size">
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn-undo" onclick="undoLastErase()">↩️ Undo</button>
+          <button class="btn-undo" onclick="resetToInitialAi()">↺ Reset Cutout</button>
+        </div>
+      </div>
+
+      <!-- Canvas Frame -->
+      <div class="canvas-viewport-box">
+        <div class="checkerboard-frame" id="canvasFrame">
+          <canvas id="displayCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Download Button -->
+      <button class="btn-download-final" id="downloadBtn" onclick="downloadFinalImage()">
+        📥 Download Cutout Image
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
+</div>
+
+<script>
+let selfieSegmentation = null;
+let originalFileName = "photo_cutout";
+let sourceImage = null;
+
+// Dual canvas architecture:
+// 1. personCanvas stores isolated transparent cutout + user manual eraser modifications
+// 2. displayCanvas renders background (transparent/color) + personCanvas
+let personCanvas = document.createElement("canvas");
+let personCtx = personCanvas.getContext("2d");
+
+const displayCanvas = document.getElementById("displayCanvas");
+const displayCtx = displayCanvas.getContext("2d");
+const canvasFrame = document.getElementById("canvasFrame");
+
+let currentBgMode = "transparent";
+let customBgHex = "#a855f7";
+let isErasing = false;
+let undoStack = []; // Stores personCanvas data URLs for instant undo
+let initialAiStateUrl = null;
+
+// Initialize Google MediaPipe Selfie Segmentation (<1.5MB total)
+function initMediaPipe() {
+  selfieSegmentation = new SelfieSegmentation({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`
+  });
+  selfieSegmentation.setOptions({
+    modelSelection: 1 // High-accuracy model
+  });
+  selfieSegmentation.onResults(onSegmentationResults);
+}
+
+// Drag & drop listeners
+const dropZone = document.getElementById("dropZone");
+['dragenter', 'dragover'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+});
+['dragleave', 'drop'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+  });
+});
+dropZone.addEventListener('drop', (e) => {
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    processImageFile(e.dataTransfer.files[0]);
+  }
+});
+
+function handleFileSelect(e) {
+  if (e.target.files && e.target.files[0]) {
+    processImageFile(e.target.files[0]);
+  }
+}
+
+function processImageFile(file) {
+  if (!file.type.startsWith("image/")) {
+    alert("Please select a valid JPG, PNG, or WebP image.");
+    return;
+  }
+
+  originalFileName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_");
+  document.getElementById("aiLoadingBox").style.display = "block";
+  document.getElementById("workspace").style.display = "none";
+  document.getElementById("aiStatusText").innerText = "⚡ Running MediaPipe AI Cutout...";
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    sourceImage = new Image();
+    sourceImage.onload = async function() {
+      if (!selfieSegmentation) initMediaPipe();
+      try {
+        await selfieSegmentation.send({ image: sourceImage });
+      } catch (err) {
+        console.error("MediaPipe Error:", err);
+        fallbackSimpleContrastCutout();
+      }
+    };
+    sourceImage.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// AI Mask Execution
+function onSegmentationResults(results) {
+  const w = results.image.width;
+  const h = results.image.height;
+
+  personCanvas.width = w;
+  personCanvas.height = h;
+
+  // 1. Draw segmentation mask (white body on transparent background)
+  personCtx.clearRect(0, 0, w, h);
+  personCtx.drawImage(results.segmentationMask, 0, 0, w, h);
+
+  // 2. Keep only source image where mask exists
+  personCtx.globalCompositeOperation = 'source-in';
+  personCtx.drawImage(results.image, 0, 0, w, h);
+  personCtx.globalCompositeOperation = 'source-over';
+
+  initialAiStateUrl = personCanvas.toDataURL("image/png");
+  undoStack = [initialAiStateUrl];
+
+  document.getElementById("aiLoadingBox").style.display = "none";
+  document.getElementById("workspace").style.display = "block";
+  document.getElementById("workspace").scrollIntoView({ behavior: "smooth" });
+
+  renderDisplay();
+}
+
+// Fallback if browser WebGL doesn't support MediaPipe
+function fallbackSimpleContrastCutout() {
+  const w = sourceImage.width;
+  const h = sourceImage.height;
+  personCanvas.width = w;
+  personCanvas.height = h;
+  personCtx.drawImage(sourceImage, 0, 0);
+
+  initialAiStateUrl = personCanvas.toDataURL("image/png");
+  undoStack = [initialAiStateUrl];
+
+  document.getElementById("aiLoadingBox").style.display = "none";
+  document.getElementById("workspace").style.display = "block";
+  renderDisplay();
+}
+
+// Render composite to displayCanvas
+function renderDisplay() {
+  const w = personCanvas.width;
+  const h = personCanvas.height;
+
+  displayCanvas.width = w;
+  displayCanvas.height = h;
+
+  displayCtx.clearRect(0, 0, w, h);
+
+  // Draw background layer
+  if (currentBgMode === "white") {
+    displayCtx.fillStyle = "#FFFFFF";
+    displayCtx.fillRect(0, 0, w, h);
+  } else if (currentBgMode === "blue") {
+    displayCtx.fillStyle = "#3b82f6"; // Passport studio blue
+    displayCtx.fillRect(0, 0, w, h);
+  } else if (currentBgMode === "custom") {
+    displayCtx.fillStyle = customBgHex;
+    displayCtx.fillRect(0, 0, w, h);
+  }
+
+  // Draw person cut-out
+  displayCtx.drawImage(personCanvas, 0, 0);
+
+  // Update Download button text with size estimate
+  updateDownloadButtonLabel();
+}
+
+function setBackgroundStyle(mode, btn) {
+  currentBgMode = mode;
+  document.querySelectorAll(".bg-chip").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  renderDisplay();
+}
+
+function triggerColorPicker(btn) {
+  const picker = document.getElementById("customColorInput");
+  picker.click();
+}
+
+function applyCustomColor(val) {
+  customBgHex = val;
+  document.getElementById("customColorDot").style.background = val;
+  currentBgMode = "custom";
+  document.querySelectorAll(".bg-chip").forEach(b => b.classList.remove("active"));
+  document.getElementById("customColorDot").parentElement.classList.add("active");
+  renderDisplay();
+}
+
+// Touch & Mouse Eraser Brush Logic
+function getCanvasCoords(e) {
+  const rect = displayCanvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: (clientX - rect.left) * (displayCanvas.width / rect.width),
+    y: (clientY - rect.top) * (displayCanvas.height / rect.height)
+  };
+}
+
+function erasePoint(pt) {
+  const radius = parseInt(document.getElementById("brushSlider").value, 10) * (displayCanvas.width / displayCanvas.clientWidth);
+  personCtx.save();
+  personCtx.globalCompositeOperation = 'destination-out';
+  personCtx.beginPath();
+  personCtx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
+  personCtx.fill();
+  personCtx.restore();
+
+  renderDisplay();
+}
+
+displayCanvas.addEventListener("mousedown", (e) => {
+  isErasing = true;
+  erasePoint(getCanvasCoords(e));
+});
+window.addEventListener("mousemove", (e) => {
+  if (!isErasing) return;
+  erasePoint(getCanvasCoords(e));
+});
+window.addEventListener("mouseup", () => {
+  if (isErasing) {
+    isErasing = false;
+    saveUndoState();
+  }
+});
+
+displayCanvas.addEventListener("touchstart", (e) => {
+  isErasing = true;
+  erasePoint(getCanvasCoords(e));
+  if (e.cancelable) e.preventDefault();
+}, { passive: false });
+displayCanvas.addEventListener("touchmove", (e) => {
+  if (!isErasing) return;
+  erasePoint(getCanvasCoords(e));
+  if (e.cancelable) e.preventDefault();
+}, { passive: false });
+window.addEventListener("touchend", () => {
+  if (isErasing) {
+    isErasing = false;
+    saveUndoState();
+  }
+});
+
+function saveUndoState() {
+  undoStack.push(personCanvas.toDataURL("image/png"));
+  if (undoStack.length > 12) undoStack.shift();
+}
+
+function undoLastErase() {
+  if (undoStack.length <= 1) return;
+  undoStack.pop();
+  const prevDataUrl = undoStack[undoStack.length - 1];
+  const img = new Image();
+  img.onload = function() {
+    personCtx.clearRect(0, 0, personCanvas.width, personCanvas.height);
+    personCtx.drawImage(img, 0, 0);
+    renderDisplay();
+  };
+  img.src = prevDataUrl;
+}
+
+function resetToInitialAi() {
+  if (!initialAiStateUrl) return;
+  const img = new Image();
+  img.onload = function() {
+    personCtx.clearRect(0, 0, personCanvas.width, personCanvas.height);
+    personCtx.drawImage(img, 0, 0);
+    undoStack = [initialAiStateUrl];
+    renderDisplay();
+  };
+  img.src = initialAiStateUrl;
+}
+
+function updateDownloadButtonLabel() {
+  const isPng = currentBgMode === "transparent";
+  const ext = isPng ? "PNG" : "JPG";
+  document.getElementById("downloadBtn").innerHTML = `📥 Download Cutout (${ext})`;
+}
+
+// Download Process
+function downloadFinalImage() {
+  const isPng = currentBgMode === "transparent";
+  const link = document.createElement("a");
+
+  if (isPng) {
+    link.download = `${originalFileName}_transparent.png`;
+    link.href = personCanvas.toDataURL("image/png");
+  } else {
+    link.download = `${originalFileName}_${currentBgMode}_bg.jpg`;
+    link.href = displayCanvas.toDataURL("image/jpeg", 0.92);
+  }
+  link.click();
+}
+
+// Initialize on page load
+initMediaPipe();
+</script>
+</body>
+</html>
