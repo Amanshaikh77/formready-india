@@ -1,421 +1,810 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Photo Resizer - FormReady India</title>
-<meta name="description" content="Resize JPG, PNG and WebP images by custom width and height, percentage scaling or portal presets. Adjust image quality and optional target KB size, resize multiple images and download them easily. Fast, private and mobile &amp; desktop-friendly.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #151210;
-  --panel: #1e1a17;
-  --panel-2: #262019;
-  --line: #39322b;
-  --amber: #d99a3f;
-  --amber-bright: #f0b158;
-  --paper: #f2ece2;
-  --muted: #a89a89;
-  --green: #2ea043;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--paper);
-  font-family: 'Inter', sans-serif;
-  padding: 16px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.nav-bar { max-width: 700px; margin: 0 auto 20px; width: 100%; }
-.back-btn { color: var(--amber); text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
-.header { text-align: center; margin-bottom: 20px; }
-.header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: var(--amber); margin-bottom: 6px; }
-.header p { font-size: 13px; color: var(--muted); }
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 24px;
-  max-width: 700px;
-  margin: 0 auto 24px;
-  width: 100%;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-}
-.instructions-box {
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--amber);
-  border-radius: 8px;
-  padding: 14px 16px;
-  margin-bottom: 18px;
-}
-.instructions-box h3 {
-  font-size: 13.5px;
-  color: var(--amber);
-  font-family: 'Space Grotesk', sans-serif;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.instructions-box ol { padding-left: 18px; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
-.instructions-box li { margin-bottom: 3px; }
-.upload-zone {
-  border: 2px dashed var(--line);
-  padding: 28px 16px;
-  text-align: center;
-  border-radius: 10px;
-  cursor: pointer;
-  background: var(--panel-2);
-  transition: border-color 0.2s;
-  margin-bottom: 20px;
-  display: block;
-  width: 100%;
-}
-.upload-zone:hover { border-color: var(--amber); }
-#fileInput { display: none; }
-.upload-text { font-size: 14px; color: var(--muted); line-height: 1.5; pointer-events: none; }
-.upload-text b { color: var(--amber); }
-.controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-@media(max-width: 500px) { .controls-grid { grid-template-columns: 1fr; } }
-.options-group { margin-bottom: 16px; }
-.options-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-.input-field, .input-select, .range-input {
-  width: 100%; padding: 12px 14px; background: var(--panel-2); border: 1px solid var(--line); color: var(--paper); border-radius: 8px; font-size: 14px; outline: none;
-}
-.range-input { padding: 4px 0; accent-color: var(--amber); cursor: pointer; }
-.checkbox-wrap { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--paper); cursor: pointer; margin-top: 6px; }
-.checkbox-wrap input { accent-color: var(--amber); width: 16px; height: 16px; cursor: pointer; }
-.action-row { display: flex; gap: 10px; margin-bottom: 24px; }
-.btn { background: var(--amber); color: #151210; border: none; flex: 1; padding: 14px; border-radius: 9px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; }
-.btn:hover { background: var(--amber-bright); }
-.btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-secondary { background: var(--panel-2); color: var(--paper); border: 1px solid var(--line); }
-.btn-secondary:hover { border-color: var(--amber); }
-.btn-danger { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-.file-list-header { font-size: 14px; color: var(--paper); font-weight: 600; margin-bottom: 10px; }
-.file-list { max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.file-item { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.file-thumb { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; border: 1px solid var(--line); background: #fff; flex-shrink: 0; }
-.file-info { flex: 1; min-width: 140px; }
-.file-name { font-size: 13px; color: var(--paper); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
-.file-meta { font-size: 11px; color: var(--muted); line-height: 1.4; }
-.file-status { font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
-.status-ready { color: var(--muted); background: var(--line); }
-.status-resizing { color: var(--amber); background: rgba(217, 154, 63, 0.15); }
-.status-done { color: #3fb950; background: rgba(46, 160, 67, 0.15); }
-.btn-item-download { background: var(--green); color: #fff; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; display: none; text-align: center; width: 100%; margin-top: 6px; }
-.btn-item-download:hover { background: #3fb950; }
-.ad-container { margin-top: 24px; background: var(--panel-2); border: 1px dashed var(--line); border-radius: 10px; padding: 16px; text-align: center; }
-.ad-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
-.ad-banner { font-size: 12.5px; color: var(--muted); padding: 10px; }
-footer { text-align: center; padding: 20px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); margin-top: auto; }
-</style>
-</head>
-<body>
-<div class="nav-bar"><a href="../../" class="back-btn">← Back to Dashboard</a></div>
-<div class="header"><h1>Photo Resizer</h1><p>Resize dimensions, reduce KB size, and scale images in bulk</p></div>
-<div class="card">
-  <div class="instructions-box">
-    <h3>📖 How to Use Photo Resizer</h3>
-    <ol>
-      <li>Upload one or multiple image files (JPG, PNG, WebP).</li>
-      <li>Choose resize mode: Custom Dimensions, Percentage Scaling, or Portal Presets.</li>
-      <li>Set aspect ratio lock, output format, or optional target file size in KB.</li>
-      <li>Tap <b>Resize Images</b> and download each resized file directly.</li>
-    </ol>
-  </div>
-  <label class="upload-zone">
-    <input type="file" id="fileInput" accept="image/*" multiple>
-    <div class="upload-text">📁 Tap here to upload images or drag here<br><b>Supports multiple files</b></div>
-  </label>
-  <div class="options-group">
-    <label>Resize Mode:</label>
-    <select id="resizeMode" class="input-select">
-      <option value="custom">Custom Width &amp; Height (Pixels)</option>
-      <option value="percent">Percentage Scaling (%)</option>
-      <option value="preset">Standard Portal Presets</option>
-    </select>
-  </div>
-  <div id="customModeGroup" class="controls-grid">
-    <div class="options-group"><label>Width (px):</label><input type="number" id="widthInput" class="input-field" value="800" min="10"></div>
-    <div class="options-group"><label>Height (px):</label><input type="number" id="heightInput" class="input-field" value="600" min="10"></div>
-  </div>
-  <div id="percentModeGroup" class="options-group" style="display:none;">
-    <label>Scale Percentage:</label>
-    <select id="percentSelect" class="input-select">
-      <option value="25">25% (Quarter Size)</option>
-      <option value="50" selected>50% (Half Size)</option>
-      <option value="75">75% (Three-Fourth)</option>
-      <option value="100">100% (Original)</option>
-      <option value="200">200% (Double Size)</option>
-    </select>
-  </div>
-  <div id="presetModeGroup" class="options-group" style="display:none;">
-    <label>Select Preset:</label>
-    <select id="presetSelect" class="input-select">
-      <option value="200,230">PAN Card Photo (200 x 230 px)</option>
-      <option value="100,120">SSC Exam Photo (100 x 120 px)</option>
-      <option value="140,60">Digital Signature (140 x 60 px)</option>
-      <option value="800,600">Standard Web Photo (800 x 600 px)</option>
-      <option value="1200,1200">Social Media Square (1200 x 1200 px)</option>
-    </select>
-  </div>
-  <div class="options-group"><label class="checkbox-wrap"><input type="checkbox" id="lockAspect" checked> Lock Aspect Ratio (Maintain Proportions)</label></div>
-  <div class="controls-grid">
-    <div class="options-group">
-      <label>Output Format:</label>
-      <select id="targetFormat" class="input-select">
-        <option value="image/jpeg">JPEG (.jpg)</option>
-        <option value="image/png">PNG (.png)</option>
-        <option value="image/webp">WebP (.webp)</option>
-      </select>
-    </div>
-    <div class="options-group" id="qualityGroup">
-      <label>Quality (<span id="qualityVal">90</span>%):</label>
-      <input type="range" id="qualitySlider" class="range-input" min="10" max="100" value="90">
-    </div>
-  </div>
-  <div class="options-group"><label>Target File Size Limit (Optional KB):</label><input type="number" id="targetKbInput" class="input-field" placeholder="e.g. 50 KB (leave blank for standard quality)"></div>
-  <div class="action-row">
-    <button class="btn" id="resizeBtn" disabled>Resize Images</button>
-    <button class="btn btn-secondary btn-danger" id="clearBtn" style="display:none;">Clear All</button>
-  </div>
-  <div id="queueSection" style="display:none;">
-    <div class="file-list-header"><span>File Queue (<span id="fileCount">0</span>)</span></div>
-    <div class="file-list" id="fileList"></div>
-  </div>
-  <div class="ad-container"><div class="ad-label">Sponsored Advertisement</div><div class="ad-banner">📢 Advertisement Space (Google AdSense / Banner Placeholder)</div></div>
-</div>
-<footer>&copy; 2026 FormReady India. 100% Secure Client-Side Processing.</footer>
-<script>
-const fileInput = document.getElementById("fileInput");
-const resizeMode = document.getElementById("resizeMode");
-const customModeGroup = document.getElementById("customModeGroup");
-const percentModeGroup = document.getElementById("percentModeGroup");
-const presetModeGroup = document.getElementById("presetModeGroup");
-const widthInput = document.getElementById("widthInput");
-const heightInput = document.getElementById("heightInput");
-const percentSelect = document.getElementById("percentSelect");
-const presetSelect = document.getElementById("presetSelect");
-const lockAspect = document.getElementById("lockAspect");
-const targetFormat = document.getElementById("targetFormat");
-const qualitySlider = document.getElementById("qualitySlider");
-const qualityVal = document.getElementById("qualityVal");
-const qualityGroup = document.getElementById("qualityGroup");
-const targetKbInput = document.getElementById("targetKbInput");
-const resizeBtn = document.getElementById("resizeBtn");
-const clearBtn = document.getElementById("clearBtn");
-const queueSection = document.getElementById("queueSection");
-const fileList = document.getElementById("fileList");
-const fileCount = document.getElementById("fileCount");
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Photo Resizer (PX, CM, INCH, DPI) - FormReady India</title>
+  <meta name="description" content="Resize dimensions in Pixels, Centimeters, Inches with custom DPI and target KB compression for SSC, UPSC, and online exam forms. 100% offline & private.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-let fileQueue = [];
-let activeAspectRatio = 1;
-
-resizeMode.addEventListener("change", (e) => {
-  const mode = e.target.value;
-  customModeGroup.style.display = mode === "custom" ? "grid" : "none";
-  percentModeGroup.style.display = mode === "percent" ? "block" : "none";
-  presetModeGroup.style.display = mode === "preset" ? "block" : "none";
-});
-
-qualitySlider.addEventListener("input", (e) => { qualityVal.textContent = e.target.value; });
-
-targetFormat.addEventListener("change", (e) => {
-  if (e.target.value === "image/png") {
-    qualityGroup.style.opacity = "0.4";
-    qualitySlider.disabled = true;
-  } else {
-    qualityGroup.style.opacity = "1";
-    qualitySlider.disabled = false;
-  }
-});
-
-fileInput.addEventListener("change", (e) => {
-  const files = Array.from(e.target.files);
-  if (files.length === 0) return;
-
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const img = new Image();
-      img.onload = () => {
-        if (fileQueue.length === 0) {
-          widthInput.value = img.width;
-          heightInput.value = img.height;
-          activeAspectRatio = img.width / img.height;
-        }
-        fileQueue.push({
-          id: Math.random().toString(36).substring(2),
-          file: file,
-          name: file.name.substring(0, file.name.lastIndexOf('.')) || file.name,
-          img: img,
-          originalWidth: img.width,
-          originalHeight: img.height,
-          originalSize: file.size,
-          status: "ready",
-          resizedBlob: null,
-          resizedSize: 0,
-          finalW: img.width,
-          finalH: img.height,
-          downloadUrl: null
-        });
-        updateQueueUI();
-      };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-  fileInput.value = "";
-});
-
-widthInput.addEventListener("input", () => {
-  if (lockAspect.checked && activeAspectRatio) {
-    const w = parseInt(widthInput.value, 10);
-    if (w > 0) heightInput.value = Math.round(w / activeAspectRatio);
-  }
-});
-
-heightInput.addEventListener("input", () => {
-  if (lockAspect.checked && activeAspectRatio) {
-    const h = parseInt(heightInput.value, 10);
-    if (h > 0) widthInput.value = Math.round(h * activeAspectRatio);
-  }
-});
-
-function updateQueueUI() {
-  if (fileQueue.length > 0) {
-    queueSection.style.display = "block";
-    clearBtn.style.display = "block";
-    resizeBtn.disabled = false;
-  } else {
-    queueSection.style.display = "none";
-    clearBtn.style.display = "none";
-    resizeBtn.disabled = true;
-  }
-
-  fileCount.textContent = fileQueue.length;
-  fileList.innerHTML = fileQueue.map(item => `
-    <div class="file-item">
-      <img src="${item.img.src}" class="file-thumb" alt="Thumb">
-      <div class="file-info">
-        <div class="file-name" title="${item.file.name}">${item.file.name}</div>
-        <div class="file-meta">
-          Original: ${item.originalWidth}x${item.originalHeight}px (${Math.round(item.originalSize / 1024)} KB)<br>
-          ${item.status === 'done' ? `Resized: ${item.finalW}x${item.finalH}px (${Math.round(item.resizedSize / 1024)} KB)` : ''}
-        </div>
-      </div>
-      <span class="file-status ${item.status === 'done' ? 'status-done' : (item.status === 'resizing' ? 'status-resizing' : 'status-ready')}">
-        ${item.status === 'done' ? 'Done' : (item.status === 'resizing' ? 'Resizing...' : 'Ready')}
-      </span>
-      ${item.status === 'done' ? `<a href="${item.downloadUrl}" download="${item.name}-resized.${getExtension()}" class="btn-item-download" style="display:block;">📥 Download Resized Image</a>` : ''}
-    </div>
-  `).join("");
-}
-
-function getExtension() {
-  const mime = targetFormat.value;
-  if (mime === "image/jpeg") return "jpg";
-  if (mime === "image/png") return "png";
-  if (mime === "image/webp") return "webp";
-  return "jpg";
-}
-
-resizeBtn.addEventListener("click", async () => {
-  resizeBtn.disabled = true;
-  clearBtn.disabled = true;
-
-  const mode = resizeMode.value;
-  const mime = targetFormat.value;
-  let baseQuality = mime === "image/png" ? 1.0 : parseInt(qualitySlider.value, 10) / 100;
-  const targetBytes = targetKbInput.value ? parseInt(targetKbInput.value, 10) * 1024 : null;
-  const ext = getExtension();
-
-  for (let item of fileQueue) {
-    item.status = "resizing";
-    updateQueueUI();
-
-    let targetW = item.originalWidth;
-    let targetH = item.originalHeight;
-
-    if (mode === "custom") {
-      targetW = parseInt(widthInput.value, 10) || item.originalWidth;
-      targetH = parseInt(heightInput.value, 10) || item.originalHeight;
-    } else if (mode === "percent") {
-      const pct = parseInt(percentSelect.value, 10) / 100;
-      targetW = Math.round(item.originalWidth * pct);
-      targetH = Math.round(item.originalHeight * pct);
-    } else if (mode === "preset") {
-      const parts = presetSelect.value.split(",");
-      targetW = parseInt(parts[0], 10);
-      targetH = parseInt(parts[1], 10);
+  <style>
+    :root {
+      --bg: #0c0a08;
+      --card-bg: rgba(22, 18, 14, 0.88);
+      --card-border: rgba(217, 154, 63, 0.22);
+      --amber: #f5a623;
+      --amber-hover: #ffb84d;
+      --paper: #f8f4ec;
+      --muted: #a0907e;
+      --green: #10b981;
+      --panel-inner: #1a1511;
+      --line: #2e241b;
+      --danger: #ef4444;
     }
 
-    item.finalW = targetW;
-    item.finalH = targetH;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    await new Promise((resolve) => {
-      setTimeout(async () => {
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #261a0f 0%, #0c0a08 75%);
+      color: var(--paper);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 20px 14px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Continuous Full-Screen Glass Shine */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.04) 43%,
+        rgba(255, 255, 255, 0.24) 48%,
+        rgba(255, 255, 255, 0.38) 50%,
+        rgba(255, 255, 255, 0.24) 52%,
+        rgba(255, 255, 255, 0.04) 57%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    .container { width: 100%; max-width: 740px; position: relative; z-index: 1; }
+
+    /* Top Navigation */
+    .nav-bar { margin-bottom: 16px; }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover {
+      background: rgba(245, 166, 35, 0.18);
+      border-color: var(--amber);
+      transform: translateX(-2px);
+    }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 22px; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff7eb 20%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p { font-size: 13px; color: var(--muted); }
+
+    /* Main Card */
+    .main-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+    }
+
+    /* How to Use Box */
+    .instructions-box {
+      background: rgba(245, 166, 35, 0.06);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      border-left: 4px solid var(--amber);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .instructions-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13.5px;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .instructions-box ol { padding-left: 18px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .instructions-box li { margin-bottom: 3px; }
+    .instructions-box li b { color: var(--paper); }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed rgba(245, 166, 35, 0.35);
+      background: var(--panel-inner);
+      padding: 30px 16px;
+      text-align: center;
+      border-radius: 12px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--amber);
+      background: rgba(245, 166, 35, 0.05);
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.18);
+    }
+    #imageInput { display: none; }
+    .upload-icon { font-size: 34px; margin-bottom: 8px; }
+    .upload-title { font-size: 14.5px; font-weight: 700; color: var(--paper); }
+    .upload-desc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .upload-desc b { color: var(--amber); }
+
+    /* Workspace */
+    .resizer-workspace {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    /* Preset Chips */
+    .presets-bar {
+      margin-bottom: 18px;
+    }
+    .section-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--paper);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 560px) {
+      .presets-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .preset-card-btn {
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 9px 8px;
+      border-radius: 9px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .preset-card-btn:hover { border-color: rgba(245, 166, 35, 0.5); }
+    .preset-card-btn.active {
+      background: rgba(245, 166, 35, 0.12);
+      border-color: var(--amber);
+    }
+    .preset-name { font-size: 12px; font-weight: 700; color: var(--paper); display: block; }
+    .preset-detail { font-size: 10.5px; color: var(--amber); }
+
+    /* Unit Segmented Switch (PX / CM / INCH) */
+    .unit-switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .unit-pills {
+      display: flex;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 3px;
+      gap: 4px;
+    }
+    .unit-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .unit-btn.active {
+      background: var(--amber);
+      color: #0c0a08;
+    }
+
+    /* Dimensions Inputs */
+    .dims-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .dim-input-group label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .dim-input {
+      width: 100%;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 11px 12px;
+      border-radius: 9px;
+      color: var(--paper);
+      font-size: 14px;
+      font-weight: 700;
+      outline: none;
+    }
+    .dim-input:focus { border-color: var(--amber); }
+
+    .ratio-lock-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 18px;
+      transition: all 0.2s;
+    }
+    .ratio-lock-btn.locked {
+      color: var(--amber);
+      border-color: rgba(245, 166, 35, 0.4);
+      background: rgba(245, 166, 35, 0.1);
+    }
+
+    /* Advanced Settings (KB Limit & DPI & Format) */
+    .advanced-settings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 540px) {
+      .advanced-settings-grid { grid-template-columns: 1fr; }
+    }
+    .select-field, .number-field {
+      width: 100%;
+      background: var(--panel-inner);
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--paper);
+      font-size: 13px;
+      outline: none;
+    }
+    .select-field:focus, .number-field:focus { border-color: var(--amber); }
+
+    /* Summary / File Queue */
+    .queue-box {
+      background: #14100c;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .queue-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .queue-files-list {
+      max-height: 160px;
+      overflow-y: auto;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .queue-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding-bottom: 4px;
+    }
+
+    /* Action Buttons */
+    .btn-action-primary {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 14.5px;
+      font-weight: 700;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-action-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      transform: translateY(-2px);
+    }
+    .btn-action-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="global-shine-overlay"></div>
+
+<div class="container">
+  <div class="nav-bar">
+    <a href="../../" class="back-btn">← Back to Dashboard</a>
+  </div>
+
+  <div class="header">
+    <h1>Photo Resizer & Dimension Converter</h1>
+    <p>Convert dimensions in PX, CM, INCH, set DPI, and cap file size in KB</p>
+  </div>
+
+  <div class="main-card">
+    <!-- 1. How to Use Box -->
+    <div class="instructions-box">
+      <h3>📖 How to Use Photo Resizer</h3>
+      <ol>
+        <li><b>Upload Images:</b> Tap below to upload one or multiple photos (JPG, PNG, WebP).</li>
+        <li><b>Select Preset or Unit:</b> Pick official exam presets (SSC, UPSC, NTA) or switch between <b>PX, CM, INCH</b>.</li>
+        <li><b>Target KB / DPI:</b> Optionally set DPI (e.g. 300 DPI) and maximum KB file limit.</li>
+        <li><b>Download:</b> Tap <b>Resize & Download Images</b> to save individual files or a ZIP archive.</li>
+      </ol>
+    </div>
+
+    <!-- 2. Upload Zone -->
+    <label class="upload-zone" id="dropZone">
+      <input type="file" id="imageInput" accept="image/*" multiple onchange="handleImageSelection(this.files)">
+      <div class="upload-icon">📐</div>
+      <div class="upload-title">Tap here to upload images or drag here</div>
+      <div class="upload-desc">Single or multiple files • <b>Supports JPG, PNG, WebP • 100% Offline & Private</b></div>
+    </label>
+
+    <!-- 3. Resizer Workspace -->
+    <div class="resizer-workspace" id="resizerWorkspace">
+      <!-- Govt Exam Presets -->
+      <div class="presets-bar">
+        <span class="section-label">⚡ Official Sarkari Portal Presets:</span>
+        <div class="presets-grid">
+          <div class="preset-card-btn" onclick="applyPreset(3.5, 4.5, 'cm', 50, 300, this)">
+            <span class="preset-name">SSC / UPSC Photo</span>
+            <span class="preset-detail">3.5 × 4.5 cm (≤50 KB)</span>
+          </div>
+          <div class="preset-card-btn" onclick="applyPreset(3.5, 1.5, 'cm', 20, 300, this)">
+            <span class="preset-name">Exam Signature</span>
+            <span class="preset-detail">3.5 × 1.5 cm (≤20 KB)</span>
+          </div>
+          <div class="preset-card-btn" onclick="applyPreset(200, 230, 'px', 50, 200, this)">
+            <span class="preset-name">IBPS / Bank Photo</span>
+            <span class="preset-detail">200 × 230 px (≤50 KB)</span>
+          </div>
+          <div class="preset-card-btn" onclick="applyPreset(2, 2, 'inch', 240, 300, this)">
+            <span class="preset-name">Passport (2x2 In)</span>
+            <span class="preset-detail">2 × 2 Inch (300 DPI)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unit Selector Header -->
+      <div class="unit-switch-row">
+        <span class="section-label" style="margin-bottom:0;">Dimensions:</span>
+        <div class="unit-pills">
+          <button class="unit-btn active" id="btnUnitPx" onclick="setUnit('px')">PX</button>
+          <button class="unit-btn" id="btnUnitCm" onclick="setUnit('cm')">CM</button>
+          <button class="unit-btn" id="btnUnitInch" onclick="setUnit('inch')">INCH</button>
+        </div>
+      </div>
+
+      <!-- Dimensions Inputs (Width / Height / Aspect Ratio Lock) -->
+      <div class="dims-grid">
+        <div class="dim-input-group">
+          <label id="widthLabel">Width (px):</label>
+          <input type="number" id="inputWidth" class="dim-input" value="350" min="1" step="any" oninput="onWidthChange()">
+        </div>
+
+        <button class="ratio-lock-btn locked" id="lockRatioBtn" onclick="toggleAspectLock()" title="Lock / Unlock Aspect Ratio">🔗</button>
+
+        <div class="dim-input-group">
+          <label id="heightLabel">Height (px):</label>
+          <input type="number" id="inputHeight" class="dim-input" value="450" min="1" step="any" oninput="onHeightChange()">
+        </div>
+      </div>
+
+      <!-- Advanced Settings: Target KB, DPI, Format -->
+      <div class="advanced-settings-grid">
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">Target Max Size (KB):</label>
+          <input type="number" id="targetKb" class="number-field" placeholder="Optional (e.g. 50)" min="5" max="5000">
+        </div>
+
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">DPI / Resolution:</label>
+          <select id="dpiSelect" class="select-field" onchange="onDpiChange()">
+            <option value="96">96 DPI (Web Standard)</option>
+            <option value="200">200 DPI (Exam Scanning)</option>
+            <option value="300" selected>300 DPI (Studio Print)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11.5px; font-weight:600; color:var(--muted); display:block; margin-bottom:6px;">Output Format:</label>
+          <select id="formatSelect" class="select-field">
+            <option value="jpeg" selected>JPG / JPEG</option>
+            <option value="png">PNG</option>
+            <option value="webp">WebP</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Loaded Queue Information -->
+      <div class="queue-box">
+        <div class="queue-title">
+          <span id="queueSummaryText">📁 0 Images Selected</span>
+          <span style="color:var(--muted); font-size:11px;">Client-side batch processing</span>
+        </div>
+        <div class="queue-files-list" id="queueFilesList"></div>
+      </div>
+
+      <!-- Action Button -->
+      <button class="btn-action-primary" id="btnResize" onclick="processAndDownload()">
+        ⚡ Resize & Download Images
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 FormReady India • 100% Client-Side Private Document Processing
+  </footer>
+</div>
+
+<script>
+let selectedFiles = [];
+let currentUnit = 'px'; // 'px' | 'cm' | 'inch'
+let isRatioLocked = true;
+let primaryAspectRatio = 350 / 450;
+
+const dropZone = document.getElementById("dropZone");
+const imageInput = document.getElementById("imageInput");
+const resizerWorkspace = document.getElementById("resizerWorkspace");
+const inputWidth = document.getElementById("inputWidth");
+const inputHeight = document.getElementById("inputHeight");
+const widthLabel = document.getElementById("widthLabel");
+const heightLabel = document.getElementById("heightLabel");
+const lockRatioBtn = document.getElementById("lockRatioBtn");
+const queueSummaryText = document.getElementById("queueSummaryText");
+const queueFilesList = document.getElementById("queueFilesList");
+const btnResize = document.getElementById("btnResize");
+
+// Drag & drop support
+['dragenter', 'dragover'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+  });
+});
+['dragleave', 'drop'].forEach(name => {
+  dropZone.addEventListener(name, (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+  });
+});
+dropZone.addEventListener('drop', (e) => {
+  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    handleImageSelection(e.dataTransfer.files);
+  }
+});
+
+function handleImageSelection(files) {
+  if (!files || files.length === 0) return;
+
+  selectedFiles = [];
+  queueFilesList.innerHTML = "";
+
+  for (let file of Array.from(files)) {
+    if (file.type.startsWith("image/")) {
+      selectedFiles.push(file);
+      const row = document.createElement("div");
+      row.className = "queue-item";
+      row.innerHTML = `
+        <span>${file.name.substring(0, 24)}</span>
+        <span>${(file.size / 1024).toFixed(1)} KB</span>
+      `;
+      queueFilesList.appendChild(row);
+    }
+  }
+
+  if (selectedFiles.length === 0) return;
+
+  // Auto detect initial dimensions from 1st image
+  const first = selectedFiles[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      primaryAspectRatio = img.width / img.height;
+      if (currentUnit === 'px') {
+        inputWidth.value = img.width;
+        inputHeight.value = img.height;
+      } else {
+        convertAndSetUnitDimensions(img.width, img.height);
+      }
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(first);
+
+  queueSummaryText.innerText = `📁 ${selectedFiles.length} Image${selectedFiles.length > 1 ? 's' : ''} Ready to Resize`;
+  resizerWorkspace.style.display = "block";
+  resizerWorkspace.scrollIntoView({ behavior: 'smooth' });
+}
+
+function setUnit(unit) {
+  currentUnit = unit;
+  document.getElementById("btnUnitPx").classList.toggle("active", unit === 'px');
+  document.getElementById("btnUnitCm").classList.toggle("active", unit === 'cm');
+  document.getElementById("btnUnitInch").classList.toggle("active", unit === 'inch');
+
+  widthLabel.innerText = `Width (${unit}):`;
+  heightLabel.innerText = `Height (${unit}):`;
+
+  if (unit === 'cm') {
+    inputWidth.value = (3.5).toFixed(1);
+    inputHeight.value = (4.5).toFixed(1);
+  } else if (unit === 'inch') {
+    inputWidth.value = (2).toFixed(1);
+    inputHeight.value = (2).toFixed(1);
+  } else {
+    inputWidth.value = 350;
+    inputHeight.value = 450;
+  }
+}
+
+function convertAndSetUnitDimensions(pxW, pxH) {
+  const dpi = parseFloat(document.getElementById("dpiSelect").value) || 300;
+  if (currentUnit === 'cm') {
+    inputWidth.value = ((pxW / dpi) * 2.54).toFixed(2);
+    inputHeight.value = ((pxH / dpi) * 2.54).toFixed(2);
+  } else if (currentUnit === 'inch') {
+    inputWidth.value = (pxW / dpi).toFixed(2);
+    inputHeight.value = (pxH / dpi).toFixed(2);
+  }
+}
+
+function toggleAspectLock() {
+  isRatioLocked = !isRatioLocked;
+  lockRatioBtn.classList.toggle("locked", isRatioLocked);
+  lockRatioBtn.innerHTML = isRatioLocked ? "🔗" : "🔓";
+  if (isRatioLocked) {
+    const w = parseFloat(inputWidth.value) || 1;
+    const h = parseFloat(inputHeight.value) || 1;
+    primaryAspectRatio = w / h;
+  }
+}
+
+function onWidthChange() {
+  if (!isRatioLocked) return;
+  const w = parseFloat(inputWidth.value) || 0;
+  inputHeight.value = (w / primaryAspectRatio).toFixed(currentUnit === 'px' ? 0 : 2);
+}
+
+function onHeightChange() {
+  if (!isRatioLocked) return;
+  const h = parseFloat(inputHeight.value) || 0;
+  inputWidth.value = (h * primaryAspectRatio).toFixed(currentUnit === 'px' ? 0 : 2);
+}
+
+function onDpiChange() {
+  if (currentUnit !== 'px') {
+    // Keep physical size constant
+    onWidthChange();
+  }
+}
+
+function applyPreset(w, h, unit, kb, dpi, el) {
+  document.querySelectorAll(".preset-card-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+
+  setUnit(unit);
+  inputWidth.value = w;
+  inputHeight.value = h;
+  primaryAspectRatio = w / h;
+
+  if (kb) document.getElementById("targetKb").value = kb;
+  if (dpi) document.getElementById("dpiSelect").value = dpi;
+}
+
+// Convert user inputs into target pixel dimensions
+function getTargetPixelDimensions() {
+  const dpi = parseFloat(document.getElementById("dpiSelect").value) || 300;
+  const rawW = parseFloat(inputWidth.value) || 100;
+  const rawH = parseFloat(inputHeight.value) || 100;
+
+  if (currentUnit === 'cm') {
+    return {
+      width: Math.round((rawW / 2.54) * dpi),
+      height: Math.round((rawH / 2.54) * dpi)
+    };
+  } else if (currentUnit === 'inch') {
+    return {
+      width: Math.round(rawW * dpi),
+      height: Math.round(rawH * dpi)
+    };
+  }
+  return {
+    width: Math.round(rawW),
+    height: Math.round(rawH)
+  };
+}
+
+// Client-Side Canvas Resize + Target KB Iterative Binary Quality Search
+async function resizeSingleImage(file, targetW, targetH, format, targetKb) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = async function() {
         const canvas = document.createElement("canvas");
         canvas.width = targetW;
         canvas.height = targetH;
         const ctx = canvas.getContext("2d");
 
-        if (mime === "image/jpeg") {
+        // High quality bicubic rendering
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+
+        // White background for JPG if transparent PNG source
+        if (format === "jpeg") {
           ctx.fillStyle = "#FFFFFF";
           ctx.fillRect(0, 0, targetW, targetH);
         }
 
-        ctx.drawImage(item.img, 0, 0, targetW, targetH);
+        ctx.drawImage(img, 0, 0, targetW, targetH);
 
-        let currentQuality = baseQuality;
-        let blob = await new Promise(res => canvas.toBlob(res, mime, currentQuality));
+        const mime = `image/${format}`;
 
-        if (targetBytes && mime !== "image/png") {
-          let scaleStep = 1.0;
-          while (blob.size > targetBytes && currentQuality > 0.1) {
-            currentQuality -= 0.15;
-            blob = await new Promise(res => canvas.toBlob(res, mime, Math.max(currentQuality, 0.1)));
-            if (currentQuality <= 0.2 && blob.size > targetBytes && scaleStep > 0.4) {
-              scaleStep -= 0.2;
-              let tempW = Math.round(targetW * scaleStep);
-              let tempH = Math.round(targetH * scaleStep);
-              canvas.width = tempW;
-              canvas.height = tempH;
-              if (mime === "image/jpeg") { ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, tempW, tempH); }
-              ctx.drawImage(item.img, 0, 0, tempW, tempH);
-              item.finalW = tempW;
-              item.finalH = tempH;
-              blob = await new Promise(res => canvas.toBlob(res, mime, 0.5));
-            }
+        if (!targetKb || format === "png") {
+          canvas.toBlob((blob) => {
+            resolve(blob);
+          }, mime, 0.92);
+          return;
+        }
+
+        // Binary search for target KB limit
+        const targetBytes = targetKb * 1024;
+        let minQ = 0.15;
+        let maxQ = 0.95;
+        let bestBlob = null;
+
+        for (let i = 0; i < 6; i++) {
+          const midQ = (minQ + maxQ) / 2;
+          const currentBlob = await new Promise(res => canvas.toBlob(res, mime, midQ));
+
+          if (currentBlob.size <= targetBytes) {
+            bestBlob = currentBlob;
+            minQ = midQ; // try to get better quality
+          } else {
+            maxQ = midQ; // reduce quality
           }
         }
 
-        item.resizedBlob = blob;
-        item.resizedSize = blob.size;
-        if (item.downloadUrl) URL.revokeObjectURL(item.downloadUrl);
-        item.downloadUrl = URL.createObjectURL(blob);
-        item.status = "done";
-        resolve();
-      }, 50);
-    });
-    updateQueueUI();
+        resolve(bestBlob || await new Promise(res => canvas.toBlob(res, mime, 0.3)));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function processAndDownload() {
+  if (selectedFiles.length === 0) return;
+
+  btnResize.disabled = true;
+  btnResize.innerText = "⏳ Resizing Images...";
+
+  const { width, height } = getTargetPixelDimensions();
+  const format = document.getElementById("formatSelect").value;
+  const targetKb = parseFloat(document.getElementById("targetKb").value) || null;
+
+  try {
+    if (selectedFiles.length === 1) {
+      // Single download
+      const file = selectedFiles[0];
+      const blob = await resizeSingleImage(file, width, height, format, targetKb);
+      const ext = format === "jpeg" ? "jpg" : format;
+      const baseName = file.name.replace(/\.[^/.]+$/, "");
+
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${baseName}_resized_${width}x${height}.${ext}`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    } else {
+      // Multiple files - pack into clean ZIP
+      btnResize.innerText = "📦 Packing ZIP Archive...";
+      const zip = new JSZip();
+      const ext = format === "jpeg" ? "jpg" : format;
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        btnResize.innerText = `Processing (${i + 1}/${selectedFiles.length})...`;
+        const blob = await resizeSingleImage(file, width, height, format, targetKb);
+        const baseName = file.name.replace(/\.[^/.]+$/, "");
+        zip.file(`${baseName}_${width}x${height}.${ext}`, blob);
+      }
+
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(zipBlob);
+      link.download = `Resized_Photos_${width}x${height}.zip`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    btnResize.innerText = "✅ Successfully Resized & Downloaded!";
+    setTimeout(() => {
+      btnResize.disabled = false;
+      btnResize.innerText = "⚡ Resize & Download Images";
+    }, 2500);
+  } catch (err) {
+    alert("Resize error: " + err.message);
+    btnResize.disabled = false;
+    btnResize.innerText = "⚡ Resize & Download Images";
   }
-
-  resizeBtn.disabled = false;
-  clearBtn.disabled = false;
-});
-
-clearBtn.addEventListener("click", () => {
-  fileQueue.forEach(i => { if (i.downloadUrl) URL.revokeObjectURL(i.downloadUrl); });
-  fileQueue = [];
-  updateQueueUI();
-});
+}
 </script>
 </body>
 </html>
