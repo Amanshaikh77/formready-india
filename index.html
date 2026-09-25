@@ -967,5 +967,130 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', renderTools);
 }
 </script>
+<script>
+
+// --- HIGH-PERFORMANCE CONTINUOUS INERTIA SCROLL ENGINE ---
+(function() {
+  let currentIndex = 0;
+  let targetIndex = 0;
+  let isDragging = false;
+  let startX = 0;
+  let currentX = 0;
+  let velocity = 0;
+  let lastX = 0;
+  let lastTime = 0;
+  let animFrame = null;
+  const friction = 0.94; // Ultra smooth gliding
+  const totalCards = 24;
+
+  function renderDeckSmooth(progress) {
+    if (typeof window.renderDeckAtProgress === 'function') {
+      window.renderDeckAtProgress(progress);
+      return;
+    }
+    const cards = document.querySelectorAll('.spatial-card, .deck-card, .card-node');
+    if (!cards || cards.length === 0) return;
+
+    cards.forEach((card, i) => {
+      let offset = i - progress;
+      // Loop or clamp boundary
+      let absOffset = Math.abs(offset);
+      let zDist = -absOffset * 180;
+      let xDist = offset * 210;
+      let rotateY = offset * -18;
+      let opacity = Math.max(0.18, 1 - absOffset * 0.38);
+
+      card.style.transform = `translate3d(${xDist}px, 0, ${zDist}px) rotateY(${rotateY}deg)`;
+      card.style.opacity = opacity;
+      card.style.zIndex = Math.round(100 - absOffset * 10);
+      card.style.transition = isDragging ? 'none' : 'transform 0.12s ease-out, opacity 0.12s ease-out';
+    });
+
+    if (typeof window.updateActiveBadge === 'function') {
+      window.updateActiveBadge(Math.round(progress));
+    }
+  }
+
+  function updatePhysics() {
+    if (!isDragging) {
+      targetIndex -= velocity;
+      velocity *= friction;
+
+      // Elastic bounds clamp
+      if (targetIndex < 0) {
+        targetIndex += (0 - targetIndex) * 0.2;
+        velocity = 0;
+      } else if (targetIndex > totalCards - 1) {
+        targetIndex += ((totalCards - 1) - targetIndex) * 0.2;
+        velocity = 0;
+      }
+
+      // Smooth lerp to target
+      currentIndex += (targetIndex - currentIndex) * 0.18;
+
+      renderDeckSmooth(currentIndex);
+
+      if (Math.abs(velocity) > 0.001 || Math.abs(targetIndex - currentIndex) > 0.001) {
+        animFrame = requestAnimationFrame(updatePhysics);
+      } else {
+        currentIndex = Math.round(targetIndex);
+        renderDeckSmooth(currentIndex);
+        cancelAnimationFrame(animFrame);
+        animFrame = null;
+      }
+    }
+  }
+
+  // Pointer & Touch Listeners with Hardware Touch Action
+  const container = document.querySelector('.deck-container, #deckViewport, .deck-stage, body');
+  if (container) {
+    container.style.touchAction = 'pan-y';
+
+    window.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      lastX = startX;
+      lastTime = performance.now();
+      velocity = 0;
+      if (animFrame) cancelAnimationFrame(animFrame);
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const x = e.touches[0].clientX;
+      const delta = x - lastX;
+      lastX = x;
+      const now = performance.now();
+      const dt = Math.max(1, now - lastTime);
+      lastTime = now;
+
+      // Sensitivity factor: Fast responsive glide
+      const moveStep = delta / 220;
+      targetIndex -= moveStep;
+      currentIndex = targetIndex;
+
+      velocity = (delta / dt) * 0.42;
+      renderDeckSmooth(currentIndex);
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      isDragging = false;
+      // Throw physics calculation based on release velocity
+      targetIndex -= velocity * 6.5;
+      targetIndex = Math.max(0, Math.min(totalCards - 1, Math.round(targetIndex)));
+      animFrame = requestAnimationFrame(updatePhysics);
+    }, { passive: true });
+
+    // Wheel support for laptops/mouse
+    window.addEventListener('wheel', (e) => {
+      targetIndex += (e.deltaY > 0 ? 0.35 : -0.35);
+      targetIndex = Math.max(0, Math.min(totalCards - 1, targetIndex));
+      if (!animFrame) animFrame = requestAnimationFrame(updatePhysics);
+    }, { passive: true });
+  }
+})();
+// --- END HIGH-PERFORMANCE CONTINUOUS INERTIA SCROLL ENGINE ---
+
+</script>
 </body>
 </html>
