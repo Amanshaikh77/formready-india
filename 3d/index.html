@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>FormReady India - 3D Vertical Spatial Wheel</title>
-  <meta name="description" content="Next-gen 3D spatial vertical wheel for FormReady India tools.">
+  <title>FormReady India - 3D Spatial Deck</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Grotesk:wght@700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #080604;
+      --bg: #040302;
       --amber: #f5a623;
-      --card-bg: #140f0a;
-      --card-border: rgba(245, 166, 35, 0.4);
+      --amber-bright: #ffbe53;
+      --amber-glow: rgba(245, 166, 35, 0.6);
+      --cyan: #38bdf8;
       --paper: #f8f4ec;
       --muted: #a0907e;
     }
@@ -22,36 +22,39 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
       background-color: var(--bg);
-      background-image: radial-gradient(circle at 50% 50%, #221508 0%, #080604 85%);
+      background-image: 
+        radial-gradient(circle at 50% 38%, #201306 0%, #040302 78%),
+        linear-gradient(rgba(245, 166, 35, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245, 166, 35, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 36px 36px, 36px 36px;
       color: var(--paper);
       font-family: 'Plus Jakarta Sans', sans-serif;
       user-select: none;
       -webkit-user-select: none;
+      position: relative;
     }
 
-    /* Top Navigation */
+    /* Top HUD Navigation Bar */
     .top-header {
-      position: absolute;
+      position: fixed;
       top: 14px;
       left: 0;
-      right: 0;
+      width: 100vw;
       z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 16px;
-      max-width: 1100px;
-      margin: 0 auto;
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       text-decoration: none;
     }
     .brand-badge {
@@ -64,225 +67,330 @@
       align-items: center;
       justify-content: center;
       font-size: 18px;
-      box-shadow: 0 0 12px rgba(245, 166, 35, 0.35);
+      box-shadow: 0 0 16px var(--amber-glow);
     }
     .brand-text {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       color: #fff;
     }
     .brand-text span { color: var(--amber); }
 
     .switch-btn {
-      background: #17110c;
+      background: rgba(20, 15, 10, 0.9);
       border: 1.5px solid rgba(245, 166, 35, 0.5);
       color: var(--amber);
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       padding: 7px 16px;
       border-radius: 999px;
       text-decoration: none;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      white-space: nowrap;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.8);
+      transition: background 0.2s ease;
     }
     .switch-btn:active {
       background: var(--amber);
       color: #000;
     }
 
-    /* Stage */
+    /* 3D Viewport Chamber */
     .stage-3d {
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 1000px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .wheel-wrapper {
-      position: relative;
-      width: 280px;
-      height: 330px;
-      transform-style: preserve-3d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    @media (min-width: 480px) {
-      .wheel-wrapper {
-        width: 320px;
-        height: 360px;
-      }
-    }
-
-    /* Vertical Cards */
-    .vertical-card {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 22px;
-      padding: 22px 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.95);
-      cursor: pointer;
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease, border-color 0.3s ease;
-      will-change: transform, opacity;
-      backface-visibility: hidden;
-      overflow: hidden;
-    }
-
-    .card-indicator {
-      font-size: 10px;
-      font-weight: 800;
-      color: var(--amber);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-    }
-
-    .card-icon-box {
-      width: 58px;
-      height: 58px;
-      border-radius: 16px;
-      background: rgba(245, 166, 35, 0.1);
-      border: 1.5px solid rgba(245, 166, 35, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      margin-bottom: 10px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      flex-shrink: 0;
-    }
-
-    .card-category {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--amber);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 6px;
-    }
-
-    .card-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 19px;
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1.2;
-      margin-bottom: 10px;
-    }
-
-    .card-desc {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.45;
-      margin-bottom: auto;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .card-meta-count {
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(245, 166, 35, 0.6);
-      margin-top: 6px;
-    }
-
-    /* Active Highlight */
-    .vertical-card.is-center {
-      border-color: var(--amber);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 32px rgba(245, 166, 35, 0.45);
+      position: fixed;
+      top: 41%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      width: min(85vw, 320px);
+      height: 370px;
+      perspective: 1100px;
+      perspective-origin: center center;
       z-index: 10;
     }
 
-    /* Circle Open Button on Right of Center Card */
-    .circle-open-btn {
+    .deck-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out;
+    }
+
+    /* 3D Extruded Spatial Card */
+    .spatial-card {
       position: absolute;
-      right: -32px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #ffb84d, #f5a623 60%, #b86e06 100%);
-      border: 3px solid #fff;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, rgba(32, 22, 13, 0.96) 0%, rgba(12, 8, 4, 0.98) 100%);
+      border: 2px solid rgba(245, 166, 35, 0.35);
+      border-radius: 28px;
+      padding: 26px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-decoration: none;
-      color: #080604;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 800;
-      font-size: 10.5px;
-      line-height: 1.1;
-      letter-spacing: 0.5px;
-      box-shadow: 0 0 25px rgba(245, 166, 35, 0.8), 0 8px 25px rgba(0,0,0,0.8);
-      z-index: 20;
+      text-align: center;
+      transform-style: preserve-3d;
+      box-shadow: 0 25px 55px rgba(0, 0, 0, 0.95), inset 0 1px 1px rgba(255, 255, 255, 0.15);
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      animation: pulseBtn 2s infinite alternate;
-    }
-    @media (max-width: 360px) {
-      .circle-open-btn { right: -20px; width: 56px; height: 56px; font-size: 9.5px; }
-    }
-    .circle-open-btn:active {
-      transform: translateY(-50%) scale(0.92);
-    }
-    .circle-open-btn span { font-size: 15px; margin-bottom: 1px; }
-
-    @keyframes pulseBtn {
-      0% { box-shadow: 0 0 16px rgba(245, 166, 35, 0.6); }
-      100% { box-shadow: 0 0 30px rgba(255, 184, 77, 0.95), 0 0 10px rgba(255,255,255,0.8); }
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.25, 1.15),
+                  opacity 0.32s ease,
+                  border-color 0.25s ease,
+                  box-shadow 0.25s ease;
     }
 
-    /* Vertical Quick Arrows */
-    .vertical-controls {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
+    /* True 3D Spatial Positions */
+    .spatial-card.center {
+      transform: translate3d(0, 0, 90px) rotateY(0deg) scale(1);
+      opacity: 1;
+      border-color: #ffbe53;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95), 0 0 45px rgba(245, 166, 35, 0.65), inset 0 0 20px rgba(245, 166, 35, 0.15);
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .spatial-card.left {
+      transform: translate3d(-78%, 14px, -120px) rotateY(36deg) scale(0.76);
+      opacity: 0.4;
+      border-color: rgba(245, 166, 35, 0.2);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85);
+      z-index: 5;
+      pointer-events: auto;
+    }
+
+    .spatial-card.right {
+      transform: translate3d(78%, 14px, -120px) rotateY(-36deg) scale(0.76);
+      opacity: 0.4;
+      border-color: rgba(245, 166, 35, 0.2);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85);
+      z-index: 5;
+      pointer-events: auto;
+    }
+
+    .spatial-card.far-left {
+      transform: translate3d(-150%, 28px, -260px) rotateY(55deg) scale(0.45);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .spatial-card.far-right {
+      transform: translate3d(150%, 28px, -260px) rotateY(-55deg) scale(0.45);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 3D Floating Elements */
+    .pod-icon-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: radial-gradient(circle at 35% 35%, rgba(245, 166, 35, 0.25), rgba(0, 0, 0, 0.85));
+      border: 1.5px solid rgba(245, 166, 35, 0.6);
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 30;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      margin-bottom: 12px;
+      transform: translateZ(50px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.9), 0 0 20px rgba(245, 166, 35, 0.35);
+      flex-shrink: 0;
     }
-    .v-arrow-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: #17110c;
-      border: 1.5px solid rgba(245, 166, 35, 0.4);
+
+    .pod-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
       color: var(--amber);
-      font-size: 16px;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+      transform: translateZ(25px);
+    }
+
+    .pod-category {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      transform: translateZ(30px);
+    }
+
+    .pod-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(17px, 4.6vw, 21px);
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      transform: translateZ(40px);
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+    }
+
+    .pod-desc {
+      font-size: clamp(11px, 2.8vw, 12px);
+      color: var(--muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      max-width: 90%;
+      transform: translateZ(20px);
+    }
+
+    .pod-counter {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(245, 166, 35, 0.75);
+      margin-top: 10px;
+      transform: translateZ(25px);
+    }
+
+    /* Single Scrollable Number + Tool Name Strip */
+    .tools-nav-track-box {
+      position: fixed;
+      bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      width: 94%;
+      max-width: 440px;
+      z-index: 100;
+    }
+
+    .numbers-scroll-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      overflow-x: auto;
+      padding: 6px 12px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    }
+    .numbers-scroll-bar::-webkit-scrollbar { display: none; }
+
+    .tool-num-btn {
+      flex-shrink: 0;
+      height: 32px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(22, 16, 10, 0.88);
+      border: 1px solid rgba(245, 166, 35, 0.28);
+      color: var(--muted);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .tool-num-btn .pill-num {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--amber);
+      font-weight: 800;
+      font-size: 11px;
+    }
+    .tool-num-btn.active {
+      background: var(--amber);
+      color: #040302;
+      border-color: #ffbe53;
+      font-weight: 800;
+      box-shadow: 0 0 14px var(--amber-glow);
+      transform: scale(1.06);
+    }
+    .tool-num-btn.active .pill-num {
+      color: #040302;
+    }
+
+    /* Bottom Controller Console */
+    .bottom-hud-bar {
+      position: fixed;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 390px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      z-index: 100;
+    }
+
+    .hud-arrow-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(20, 15, 10, 0.92);
+      border: 1.5px solid rgba(245, 166, 35, 0.45);
+      color: var(--amber);
+      font-size: 18px;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.8);
+      flex-shrink: 0;
+      transition: transform 0.15s ease;
     }
-    .v-arrow-btn:active {
+    .hud-arrow-btn:active {
       background: var(--amber);
       color: #000;
       transform: scale(0.92);
+    }
+
+    .btn-launch-center {
+      flex: 1;
+      height: 50px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ffc875 0%, #f5a623 55%, #d97706 100%);
+      border: 2px solid #ffffff;
+      color: #050403;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.8px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 0 25px rgba(245, 166, 35, 0.7), 0 8px 25px rgba(0,0,0,0.8);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .btn-launch-center:active {
+      transform: scale(0.96);
+    }
+
+    .telemetry-hint {
+      position: fixed;
+      bottom: 6px;
+      left: 0;
+      width: 100vw;
+      text-align: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9.5px;
+      color: rgba(245, 166, 35, 0.45);
+      letter-spacing: 1px;
+      pointer-events: none;
+      z-index: 50;
     }
   </style>
 </head>
@@ -294,28 +402,33 @@
       <div class="brand-badge">⚡</div>
       <div class="brand-text">FormReady <span>3D</span></div>
     </a>
-    <a href="../" class="switch-btn" onclick="window.location.href='../'; return false;">
-      ◀ 2D Dashboard
-    </a>
+    <a href="../" class="switch-btn">◀ 2D Dashboard</a>
   </div>
 
-  <div class="stage-3d" id="stage">
-    <!-- Quick Vertical Switch Arrows -->
-    <div class="vertical-controls">
-      <button class="v-arrow-btn" onclick="moveWheel(-1)" title="Next Tool">▲</button>
-      <button class="v-arrow-btn" onclick="moveWheel(1)" title="Previous Tool">▼</button>
-    </div>
-
-    <!-- 3D Wheel Container -->
-    <div class="wheel-wrapper" id="wheelWrapper">
+  <!-- 3D Spatial Deck Stage -->
+  <div class="stage-3d">
+    <div class="deck-container" id="deckContainer">
       <div id="deck"></div>
-
-      <!-- Circle Open Button on Right of Center Tool -->
-      <a href="#" class="circle-open-btn" id="circleOpenBtn">
-        <span>⚡</span>
-        OPEN
-      </a>
     </div>
+  </div>
+
+  <!-- Single Number + Tool Name Interactive Strip -->
+  <div class="tools-nav-track-box">
+    <div class="numbers-scroll-bar" id="numScrollBar"></div>
+  </div>
+
+  <!-- Bottom Console -->
+  <div class="bottom-hud-bar">
+    <button class="hud-arrow-btn" onclick="stepSlide(-1)" title="Previous Tool">◀</button>
+    <a href="#" class="btn-launch-center" id="launchBtn">
+      <span>⚡</span>
+      OPEN TOOL
+    </a>
+    <button class="hud-arrow-btn" onclick="stepSlide(1)" title="Next Tool">▶</button>
+  </div>
+
+  <div class="telemetry-hint">
+    [ 60 FPS ULTRA-LIGHT // SWIPE OR TAP TO SWITCH ]
   </div>
 
 <script>
@@ -323,7 +436,7 @@ const TOOLS = [
   { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print", icon: "🪪", cat: "Govt Utility", desc: "Auto-crop front & back sides into clean top-aligned A4 print-ready PDF." },
   { slug: "background-remover", name: "AI Background Remover", icon: "🪄", cat: "Photo AI", desc: "Make photo background white or transparent in 1-click for exam forms." },
   { slug: "photo-sheet", name: "Passport Photo Sheet", icon: "🖨️", cat: "Photo Suite", desc: "Generate 6, 8, or 16 photo studio passport sheets ready to print." },
-  { slug: "document-scanner", name: "HD Document Cam Scanner", icon: "📷", cat: "Govt Utility", desc: "Scan certificates via mobile camera with auto black & white filter." },
+  { slug: "document-scanner", name: "HD Cam Scanner", icon: "📷", cat: "Govt Utility", desc: "Scan certificates via mobile camera with auto black & white filter." },
   { slug: "pdf-editor", name: "PDF Editor & Markup", icon: "📝", cat: "PDF Suite", desc: "Annotate, highlight, draw signatures and modify PDF pages offline." },
   { slug: "photo-compressor", name: "Photo Compressor (KB)", icon: "🗜️", cat: "Optimization", desc: "Compress image file size up to 80% without losing sharpness." },
   { slug: "photo-cropper", name: "Photo Cropper Ratios", icon: "✂️", cat: "Optimization", desc: "Crop photos with custom aspect ratios (1:1, 3.5x4.5cm) effortlessly." },
@@ -331,9 +444,9 @@ const TOOLS = [
   { slug: "barcode-generator", name: "Barcode Studio & Scan", icon: "🏷️", cat: "Text & Utilities", desc: "Generate Code128 barcodes or scan codes live with camera." },
   { slug: "qr-generator", name: "HD QR Code Generator", icon: "📱", cat: "Text & Utilities", desc: "Create high-res QR codes for URLs, WiFi logins, and UPI links." },
   { slug: "pdf-organizer", name: "PDF Page Organizer", icon: "📑", cat: "PDF Suite", desc: "Drag-and-drop to reorder, rotate or delete pages in any PDF document." },
-  { slug: "age-calculator", name: "Govt Form Age Calculator", icon: "🎂", cat: "Smart Calculator", desc: "Calculate exact age on cut-off eligibility dates in Years, Months, Days." },
+  { slug: "age-calculator", name: "Sarkari Age Calculator", icon: "🎂", cat: "Smart Calculator", desc: "Calculate exact age on cut-off eligibility dates in Years, Months, Days." },
   { slug: "emi-calculator", name: "Loan EMI & Interest", icon: "💳", cat: "Smart Calculator", desc: "Calculate monthly installments and visual payment proportions." },
-  { slug: "discount-calculator", name: "Percentage & Discount", icon: "🏷️", cat: "Smart Calculator", desc: "Calculate festive shopping discounts, money saved and final price." },
+  { slug: "discount-calculator", name: "Discount & Percentage", icon: "🏷️", cat: "Smart Calculator", desc: "Calculate festive shopping discounts, money saved and final price." },
   { slug: "bmi-calculator", name: "BMI & Health Status", icon: "⚖️", cat: "Smart Calculator", desc: "Calculate Body Mass Index with gradient meter and healthy weight target." },
   { slug: "date-gap-calculator", name: "Date Gap & Working Days", icon: "📅", cat: "Smart Calculator", desc: "Count total days between dates and exclude weekends automatically." },
   { slug: "unit-converter", name: "Land & Unit Converter", icon: "🌾", cat: "Smart Calculator", desc: "Convert Indian land units (Bigha, Guntha, Acre, Gaj) and metrics." },
@@ -346,133 +459,149 @@ const TOOLS = [
   { slug: "currency-converter", name: "Live Currency Converter", icon: "💱", cat: "Smart Calculator", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates." }
 ];
 
-let currentIndex = 0;
+let currentIndex = 16; // Land & Unit Converter
 const deck = document.getElementById("deck");
-const circleOpenBtn = document.getElementById("circleOpenBtn");
-let isScrolling = false;
+const launchBtn = document.getElementById("launchBtn");
+const numScrollBar = document.getElementById("numScrollBar");
+const deckContainer = document.getElementById("deckContainer");
 
-function buildCards() {
+const total = TOOLS.length;
+let cardEls = [];
+let pillEls = [];
+
+function initDeck() {
   deck.innerHTML = "";
-  TOOLS.forEach((tool, i) => {
-    const card = document.createElement("div");
-    card.className = "vertical-card";
-    card.id = `v-card-${i}`;
-    card.innerHTML = `
-      <div class="card-indicator" id="tag-${i}">CURRENT TOOL</div>
-      <div class="card-icon-box">${tool.icon}</div>
-      <div class="card-category">${tool.cat}</div>
-      <div class="card-title">${tool.name}</div>
-      <div class="card-desc">${tool.desc}</div>
-      <div class="card-meta-count">${i + 1} of ${TOOLS.length}</div>
-    `;
+  numScrollBar.innerHTML = "";
 
-    card.addEventListener("click", () => {
+  TOOLS.forEach((tool, i) => {
+    // 3D Card
+    const card = document.createElement("div");
+    card.className = "spatial-card";
+    card.id = `card-${i}`;
+    card.innerHTML = `
+      <div class="pod-tag">// SPATIAL NODE</div>
+      <div class="pod-icon-box">${tool.icon}</div>
+      <div class="pod-category">${tool.cat}</div>
+      <div class="pod-title">${tool.name}</div>
+      <div class="pod-desc">${tool.desc}</div>
+      <div class="pod-counter">[ ${i + 1} / ${total} ]</div>
+    `;
+    card.onclick = () => {
       if (currentIndex === i) {
         window.location.href = `../tools/${tool.slug}/index.html`;
       } else {
         currentIndex = i;
-        updateWheel();
+        renderState();
       }
-    });
-
+    };
     deck.appendChild(card);
+    cardEls.push(card);
+
+    // Number + Name Pill
+    const btn = document.createElement("button");
+    btn.className = "tool-num-btn";
+    btn.innerHTML = `<span class="pill-num">#${i + 1}</span> ${tool.name}`;
+    btn.onclick = () => {
+      currentIndex = i;
+      renderState();
+    };
+    numScrollBar.appendChild(btn);
+    pillEls.push(btn);
   });
-  updateWheel();
+
+  renderState();
 }
 
-function updateWheel() {
-  const total = TOOLS.length;
-
+function renderState() {
   for (let i = 0; i < total; i++) {
-    const card = document.getElementById(`v-card-${i}`);
-    const tag = document.getElementById(`tag-${i}`);
+    const card = cardEls[i];
+    const pill = pillEls[i];
     let offset = i - currentIndex;
 
     if (offset > total / 2) offset -= total;
     if (offset < -total / 2) offset += total;
 
-    card.classList.toggle("is-center", offset === 0);
+    card.className = "spatial-card";
 
     if (offset === 0) {
-      // Current Tool (Center)
-      card.style.display = "flex";
-      card.style.transform = "translate3d(0, 0, 0) rotateX(0deg) scale(1)";
-      card.style.opacity = "1";
-      card.style.zIndex = "10";
-      tag.innerText = "CURRENT TOOL";
-      tag.style.color = "var(--amber)";
-      card.style.pointerEvents = "auto";
+      card.classList.add("center");
+      pill.className = "tool-num-btn active";
+      // Auto center active pill in scroll strip
+      const pLeft = pill.offsetLeft;
+      const pWidth = pill.offsetWidth;
+      const sWidth = numScrollBar.clientWidth;
+      numScrollBar.scrollTo({ left: pLeft - (sWidth / 2) + (pWidth / 2), behavior: "smooth" });
     } else if (offset === -1) {
-      // Next Tool (Top Tilt)
-      card.style.display = "flex";
-      card.style.transform = "translate3d(0, -185px, -110px) rotateX(32deg) scale(0.85)";
-      card.style.opacity = "0.5";
-      card.style.zIndex = "5";
-      tag.innerText = "NEXT TOOL ▲";
-      tag.style.color = "#a0907e";
-      card.style.pointerEvents = "auto";
+      card.classList.add("left");
+      pill.className = "tool-num-btn";
     } else if (offset === 1) {
-      // Previous Tool (Bottom Tilt)
-      card.style.display = "flex";
-      card.style.transform = "translate3d(0, 185px, -110px) rotateX(-32deg) scale(0.85)";
-      card.style.opacity = "0.5";
-      card.style.zIndex = "5";
-      tag.innerText = "PREVIOUS TOOL ▼";
-      tag.style.color = "#a0907e";
-      card.style.pointerEvents = "auto";
+      card.classList.add("right");
+      pill.className = "tool-num-btn";
+    } else if (offset < -1) {
+      card.classList.add("far-left");
+      pill.className = "tool-num-btn";
     } else {
-      // Hide all other cards for zero lag and zero overlap
-      card.style.display = "none";
-      card.style.opacity = "0";
-      card.style.pointerEvents = "none";
+      card.classList.add("far-right");
+      pill.className = "tool-num-btn";
     }
   }
 
-  // Update Circle Open Button
-  const activeTool = TOOLS[currentIndex];
-  circleOpenBtn.href = `../tools/${activeTool.slug}/index.html`;
+  const active = TOOLS[currentIndex];
+  launchBtn.href = `../tools/${active.slug}/index.html`;
 }
 
-function moveWheel(dir) {
-  currentIndex = (currentIndex + dir + TOOLS.length) % TOOLS.length;
-  updateWheel();
+let isSliding = false;
+function stepSlide(dir) {
+  if (isSliding) return;
+  isSliding = true;
+
+  currentIndex = (currentIndex + dir + total) % total;
+  renderState();
+
+  setTimeout(() => { isSliding = false; }, 200);
 }
 
-// Wheel Scroll (Center Vertical Snapping)
-window.addEventListener("wheel", (e) => {
-  e.preventDefault();
-  if (isScrolling) return;
-  isScrolling = true;
-
-  if (e.deltaY > 0) moveWheel(1);
-  else moveWheel(-1);
-
-  setTimeout(() => { isScrolling = false; }, 240);
-}, { passive: false });
-
-// Touch Swipe Up/Down
+// Mobile Touch Swipe
+let touchStartX = 0;
 let touchStartY = 0;
+
 window.addEventListener("touchstart", (e) => {
+  touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
 window.addEventListener("touchend", (e) => {
+  const diffX = e.changedTouches[0].clientX - touchStartX;
   const diffY = e.changedTouches[0].clientY - touchStartY;
-  if (Math.abs(diffY) > 35) {
-    moveWheel(diffY < 0 ? 1 : -1);
+
+  if (Math.abs(diffX) > 28 && Math.abs(diffX) > Math.abs(diffY)) {
+    stepSlide(diffX < 0 ? 1 : -1);
   }
 }, { passive: true });
 
-// Keyboard Navigation
+// Mouse Wheel
+window.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  stepSlide(delta > 0 ? 1 : -1);
+}, { passive: false });
+
+// Desktop Mouse Parallax
+window.addEventListener("mousemove", (e) => {
+  const tiltY = (e.clientX / window.innerWidth - 0.5) * 16;
+  const tiltX = (e.clientY / window.innerHeight - 0.5) * -12;
+  deckContainer.style.transform = `rotateY(${tiltY}deg) rotateX(${tiltX}deg)`;
+});
+
 window.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowDown") moveWheel(1);
-  if (e.key === "ArrowUp") moveWheel(-1);
+  if (e.key === "ArrowRight") stepSlide(1);
+  if (e.key === "ArrowLeft") stepSlide(-1);
   if (e.key === "Enter") {
     window.location.href = `../tools/${TOOLS[currentIndex].slug}/index.html`;
   }
 });
 
-buildCards();
+initDeck();
 </script>
 </body>
 </html>
