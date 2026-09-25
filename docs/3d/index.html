@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>FormReady India - 3D Spatial Deck</title>
-  <meta name="description" content="Next-gen 3D spatial interactive deck for FormReady India tools.">
+  <title>FormReady India - 3D Vertical Spatial Wheel</title>
+  <meta name="description" content="Next-gen 3D spatial vertical wheel for FormReady India tools.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #090705;
+      --bg: #080604;
       --amber: #f5a623;
       --card-bg: #140f0a;
       --card-border: rgba(245, 166, 35, 0.4);
@@ -26,7 +26,7 @@
       height: 100%;
       overflow: hidden;
       background-color: var(--bg);
-      background-image: radial-gradient(circle at 50% 30%, #201408 0%, #090705 85%);
+      background-image: radial-gradient(circle at 50% 50%, #221508 0%, #080604 85%);
       color: var(--paper);
       font-family: 'Plus Jakarta Sans', sans-serif;
       user-select: none;
@@ -74,7 +74,6 @@
     }
     .brand-text span { color: var(--amber); }
 
-    /* Reliable 2D Back Button */
     .switch-btn {
       background: #17110c;
       border: 1.5px solid rgba(245, 166, 35, 0.5);
@@ -82,7 +81,7 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 12.5px;
       font-weight: 700;
-      padding: 8px 16px;
+      padding: 7px 16px;
       border-radius: 999px;
       text-decoration: none;
       box-shadow: 0 4px 15px rgba(0,0,0,0.6);
@@ -90,88 +89,82 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      z-index: 120;
     }
     .switch-btn:active {
       background: var(--amber);
       color: #000;
     }
 
-    /* 3D Stage */
+    /* Stage */
     .stage-3d {
       width: 100vw;
       height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      perspective: 900px;
+      perspective: 1000px;
       position: relative;
       overflow: hidden;
-      padding-bottom: 90px; /* Space for elevated bottom controls */
     }
 
-    .scroll-guide {
-      position: absolute;
-      top: 64px;
-      font-size: 11px;
-      color: var(--muted);
-      background: rgba(245, 166, 35, 0.08);
-      border: 1px solid rgba(245, 166, 35, 0.25);
-      padding: 4px 12px;
-      border-radius: 999px;
-      z-index: 10;
-    }
-
-    /* Deck Container */
-    .deck-container {
+    .wheel-wrapper {
       position: relative;
-      width: 270px;
-      height: 350px;
+      width: 280px;
+      height: 330px;
       transform-style: preserve-3d;
-      margin-top: -10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     @media (min-width: 480px) {
-      .deck-container {
+      .wheel-wrapper {
         width: 320px;
-        height: 390px;
+        height: 360px;
       }
     }
 
-    .deck-card {
+    /* Vertical Cards */
+    .vertical-card {
       position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 22px 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.95);
       cursor: pointer;
-      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease, border-color 0.25s ease;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease, border-color 0.3s ease;
       will-change: transform, opacity;
       backface-visibility: hidden;
       overflow: hidden;
     }
 
+    .card-indicator {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
     .card-icon-box {
-      width: 60px;
-      height: 60px;
+      width: 58px;
+      height: 58px;
       border-radius: 16px;
       background: rgba(245, 166, 35, 0.1);
       border: 1.5px solid rgba(245, 166, 35, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
-      margin-bottom: 12px;
+      font-size: 28px;
+      margin-bottom: 10px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
       flex-shrink: 0;
     }
@@ -192,7 +185,6 @@
       color: #ffffff;
       line-height: 1.2;
       margin-bottom: 10px;
-      word-break: break-word;
     }
 
     .card-desc {
@@ -210,35 +202,74 @@
       font-size: 11px;
       font-weight: 700;
       color: rgba(245, 166, 35, 0.6);
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
-    .deck-card.active-center {
+    /* Active Highlight */
+    .vertical-card.is-center {
       border-color: var(--amber);
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 32px rgba(245, 166, 35, 0.45);
       z-index: 10;
     }
 
-    /* Fixed Elevated Bottom Controller (Above Android Navigation bar) */
-    .bottom-bar {
+    /* Circle Open Button on Right of Center Card */
+    .circle-open-btn {
       position: absolute;
-      bottom: calc(34px + env(safe-area-inset-bottom, 0px));
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 420px;
+      right: -32px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffb84d, #f5a623 60%, #b86e06 100%);
+      border: 3px solid #fff;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
-      z-index: 100;
+      justify-content: center;
+      text-decoration: none;
+      color: #080604;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 10.5px;
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 25px rgba(245, 166, 35, 0.8), 0 8px 25px rgba(0,0,0,0.8);
+      z-index: 20;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: pulseBtn 2s infinite alternate;
+    }
+    @media (max-width: 360px) {
+      .circle-open-btn { right: -20px; width: 56px; height: 56px; font-size: 9.5px; }
+    }
+    .circle-open-btn:active {
+      transform: translateY(-50%) scale(0.92);
+    }
+    .circle-open-btn span { font-size: 15px; margin-bottom: 1px; }
+
+    @keyframes pulseBtn {
+      0% { box-shadow: 0 0 16px rgba(245, 166, 35, 0.6); }
+      100% { box-shadow: 0 0 30px rgba(255, 184, 77, 0.95), 0 0 10px rgba(255,255,255,0.8); }
     }
 
-    .nav-arrow {
-      width: 48px;
-      height: 48px;
+    /* Vertical Quick Arrows */
+    .vertical-controls {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 30;
+    }
+    .v-arrow-btn {
+      width: 42px;
+      height: 42px;
       border-radius: 12px;
-      background: #18120c;
-      border: 1.5px solid rgba(245, 166, 35, 0.45);
+      background: #17110c;
+      border: 1.5px solid rgba(245, 166, 35, 0.4);
       color: var(--amber);
       font-size: 16px;
       font-weight: 800;
@@ -246,39 +277,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
       transition: all 0.2s;
     }
-    .nav-arrow:active {
-      transform: scale(0.92);
+    .v-arrow-btn:active {
       background: var(--amber);
       color: #000;
-    }
-
-    .btn-launch {
-      flex: 1;
-      height: 48px;
-      background: linear-gradient(135deg, #f5a623, #d97706);
-      color: #0c0a08;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 14.5px;
-      font-weight: 800;
-      border-radius: 12px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 6px 20px rgba(245, 166, 35, 0.4);
-      transition: transform 0.2s;
-    }
-    .btn-launch:active {
-      transform: scale(0.97);
+      transform: scale(0.92);
     }
   </style>
 </head>
 <body>
 
+  <!-- Top Navigation -->
   <div class="top-header">
     <a href="../" class="brand-group">
       <div class="brand-badge">⚡</div>
@@ -290,13 +300,21 @@
   </div>
 
   <div class="stage-3d" id="stage">
-    <div class="scroll-guide">Swipe or Scroll Wheel • 1-by-1 Flow</div>
-    <div class="deck-container" id="deck"></div>
+    <!-- Quick Vertical Switch Arrows -->
+    <div class="vertical-controls">
+      <button class="v-arrow-btn" onclick="moveWheel(-1)" title="Next Tool">▲</button>
+      <button class="v-arrow-btn" onclick="moveWheel(1)" title="Previous Tool">▼</button>
+    </div>
 
-    <div class="bottom-bar">
-      <button class="nav-arrow" onclick="moveSlide(-1)">◀</button>
-      <a href="#" class="btn-launch" id="launchBtn">⚡ Launch Tool</a>
-      <button class="nav-arrow" onclick="moveSlide(1)">▶</button>
+    <!-- 3D Wheel Container -->
+    <div class="wheel-wrapper" id="wheelWrapper">
+      <div id="deck"></div>
+
+      <!-- Circle Open Button on Right of Center Tool -->
+      <a href="#" class="circle-open-btn" id="circleOpenBtn">
+        <span>⚡</span>
+        OPEN
+      </a>
     </div>
   </div>
 
@@ -330,16 +348,17 @@ const TOOLS = [
 
 let currentIndex = 0;
 const deck = document.getElementById("deck");
-const launchBtn = document.getElementById("launchBtn");
+const circleOpenBtn = document.getElementById("circleOpenBtn");
 let isScrolling = false;
 
 function buildCards() {
   deck.innerHTML = "";
   TOOLS.forEach((tool, i) => {
     const card = document.createElement("div");
-    card.className = "deck-card";
-    card.id = `card-${i}`;
+    card.className = "vertical-card";
+    card.id = `v-card-${i}`;
     card.innerHTML = `
+      <div class="card-indicator" id="tag-${i}">CURRENT TOOL</div>
       <div class="card-icon-box">${tool.icon}</div>
       <div class="card-category">${tool.cat}</div>
       <div class="card-title">${tool.name}</div>
@@ -352,94 +371,102 @@ function buildCards() {
         window.location.href = `../tools/${tool.slug}/index.html`;
       } else {
         currentIndex = i;
-        updateDeck();
+        updateWheel();
       }
     });
 
     deck.appendChild(card);
   });
-  updateDeck();
+  updateWheel();
 }
 
-function updateDeck() {
+function updateWheel() {
   const total = TOOLS.length;
 
   for (let i = 0; i < total; i++) {
-    const card = document.getElementById(`card-${i}`);
+    const card = document.getElementById(`v-card-${i}`);
+    const tag = document.getElementById(`tag-${i}`);
     let offset = i - currentIndex;
 
     if (offset > total / 2) offset -= total;
     if (offset < -total / 2) offset += total;
 
-    card.classList.toggle("active-center", offset === 0);
+    card.classList.toggle("is-center", offset === 0);
 
     if (offset === 0) {
+      // Current Tool (Center)
       card.style.display = "flex";
-      card.style.transform = "translate3d(0, 0, 0) scale(1)";
+      card.style.transform = "translate3d(0, 0, 0) rotateX(0deg) scale(1)";
       card.style.opacity = "1";
       card.style.zIndex = "10";
+      tag.innerText = "CURRENT TOOL";
+      tag.style.color = "var(--amber)";
       card.style.pointerEvents = "auto";
-    } else if (Math.abs(offset) === 1) {
-      const dir = offset > 0 ? 1 : -1;
+    } else if (offset === -1) {
+      // Next Tool (Top Tilt)
       card.style.display = "flex";
-      card.style.transform = `translate3d(${dir * 150}px, 0, -120px) rotateY(${-dir * 35}deg) scale(0.88)`;
+      card.style.transform = "translate3d(0, -185px, -110px) rotateX(32deg) scale(0.85)";
       card.style.opacity = "0.5";
       card.style.zIndex = "5";
+      tag.innerText = "NEXT TOOL ▲";
+      tag.style.color = "#a0907e";
       card.style.pointerEvents = "auto";
-    } else if (Math.abs(offset) === 2) {
-      const dir = offset > 0 ? 1 : -1;
+    } else if (offset === 1) {
+      // Previous Tool (Bottom Tilt)
       card.style.display = "flex";
-      card.style.transform = `translate3d(${dir * 220}px, 0, -220px) rotateY(${-dir * 45}deg) scale(0.74)`;
-      card.style.opacity = "0.2";
-      card.style.zIndex = "2";
-      card.style.pointerEvents = "none";
+      card.style.transform = "translate3d(0, 185px, -110px) rotateX(-32deg) scale(0.85)";
+      card.style.opacity = "0.5";
+      card.style.zIndex = "5";
+      tag.innerText = "PREVIOUS TOOL ▼";
+      tag.style.color = "#a0907e";
+      card.style.pointerEvents = "auto";
     } else {
+      // Hide all other cards for zero lag and zero overlap
       card.style.display = "none";
       card.style.opacity = "0";
       card.style.pointerEvents = "none";
     }
   }
 
+  // Update Circle Open Button
   const activeTool = TOOLS[currentIndex];
-  launchBtn.href = `../tools/${activeTool.slug}/index.html`;
+  circleOpenBtn.href = `../tools/${activeTool.slug}/index.html`;
 }
 
-function moveSlide(dir) {
+function moveWheel(dir) {
   currentIndex = (currentIndex + dir + TOOLS.length) % TOOLS.length;
-  updateDeck();
+  updateWheel();
 }
 
+// Wheel Scroll (Center Vertical Snapping)
 window.addEventListener("wheel", (e) => {
   e.preventDefault();
   if (isScrolling) return;
   isScrolling = true;
 
-  if (e.deltaY > 0) moveSlide(1);
-  else moveSlide(-1);
+  if (e.deltaY > 0) moveWheel(1);
+  else moveWheel(-1);
 
-  setTimeout(() => { isScrolling = false; }, 260);
+  setTimeout(() => { isScrolling = false; }, 240);
 }, { passive: false });
 
-let startX = 0;
-let startY = 0;
-
+// Touch Swipe Up/Down
+let touchStartY = 0;
 window.addEventListener("touchstart", (e) => {
-  startX = e.touches[0].clientX;
-  startY = e.touches[0].clientY;
+  touchStartY = e.touches[0].clientY;
 }, { passive: true });
 
 window.addEventListener("touchend", (e) => {
-  const diffX = e.changedTouches[0].clientX - startX;
-  const diffY = e.changedTouches[0].clientY - startY;
-
-  if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
-    moveSlide(diffX < 0 ? 1 : -1);
+  const diffY = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(diffY) > 35) {
+    moveWheel(diffY < 0 ? 1 : -1);
   }
 }, { passive: true });
 
+// Keyboard Navigation
 window.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight" || e.key === "ArrowDown") moveSlide(1);
-  if (e.key === "ArrowLeft" || e.key === "ArrowUp") moveSlide(-1);
+  if (e.key === "ArrowDown") moveWheel(1);
+  if (e.key === "ArrowUp") moveWheel(-1);
   if (e.key === "Enter") {
     window.location.href = `../tools/${TOOLS[currentIndex].slug}/index.html`;
   }
