@@ -3,21 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FormReady India - 3D Circular Spatial Carousel</title>
-  <meta name="description" content="Immersive 3D Circular Carousel Experience for FormReady India tools.">
+  <title>FormReady India - 3D Spatial Deck</title>
+  <meta name="description" content="Next-gen 3D spatial interactive deck for FormReady India tools.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #070503;
+      --bg: #090705;
       --amber: #f5a623;
-      --amber-hover: #ffb84d;
-      --card-border: rgba(245, 166, 35, 0.35);
+      --card-bg: #140f0a;
+      --card-border: rgba(245, 166, 35, 0.4);
       --paper: #f8f4ec;
       --muted: #a0907e;
-      --panel-inner: rgba(18, 14, 10, 0.85);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,62 +26,25 @@
       height: 100%;
       overflow: hidden;
       background-color: var(--bg);
-      background-image: radial-gradient(circle at 50% 35%, #24170a 0%, #070503 80%);
+      background-image: radial-gradient(circle at 50% 30%, #201408 0%, #090705 85%);
       color: var(--paper);
       font-family: 'Plus Jakarta Sans', sans-serif;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    /* Continuous Global Glass Shine Sweep */
-    .global-shine-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 999;
-      overflow: hidden;
-    }
-    .global-shine-overlay::after {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: -100%;
-      width: 300%;
-      height: 300%;
-      background: linear-gradient(
-        125deg,
-        rgba(255, 255, 255, 0) 35%,
-        rgba(255, 255, 255, 0.03) 44%,
-        rgba(255, 255, 255, 0.22) 48%,
-        rgba(255, 255, 255, 0.35) 50%,
-        rgba(255, 255, 255, 0.22) 52%,
-        rgba(255, 255, 255, 0.03) 56%,
-        rgba(255, 255, 255, 0) 65%
-      );
-      transform: translate3d(-55%, -55%, 0);
-      animation: continuousGlassSweep 4.8s linear infinite;
-      will-change: transform;
-    }
-    @keyframes continuousGlassSweep {
-      0% { transform: translate3d(-55%, -55%, 0); }
-      100% { transform: translate3d(55%, 55%, 0); }
-    }
-
-    /* Top Navigation Bar */
+    /* Top Navigation */
     .top-header {
       position: absolute;
-      top: 16px;
+      top: 14px;
       left: 0;
       right: 0;
-      z-index: 100;
+      z-index: 50;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
-      max-width: 1200px;
+      padding: 0 16px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
@@ -93,284 +55,246 @@
       text-decoration: none;
     }
     .brand-badge {
-      width: 38px;
-      height: 38px;
-      background: rgba(245, 166, 35, 0.12);
-      border: 1px solid var(--amber);
+      width: 36px;
+      height: 36px;
+      background: rgba(245, 166, 35, 0.15);
+      border: 1.5px solid var(--amber);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 0 15px rgba(245, 166, 35, 0.35);
+      font-size: 18px;
+      box-shadow: 0 0 12px rgba(245, 166, 35, 0.35);
     }
     .brand-text {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 800;
       color: #fff;
-      line-height: 1;
     }
     .brand-text span { color: var(--amber); }
 
-    .switch-mode-btn {
-      background: rgba(20, 16, 12, 0.85);
-      border: 1px solid rgba(245, 166, 35, 0.4);
+    .switch-btn {
+      background: #17110c;
+      border: 1px solid rgba(245, 166, 35, 0.45);
       color: var(--amber);
       font-family: 'Space Grotesk', sans-serif;
       font-size: 12px;
       font-weight: 700;
-      padding: 8px 16px;
+      padding: 7px 14px;
       border-radius: 999px;
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      transition: all 0.2s;
     }
-    .switch-mode-btn:hover {
+    .switch-btn:hover {
       background: var(--amber);
       color: #000;
-      box-shadow: 0 0 16px rgba(245, 166, 35, 0.6);
     }
 
-    /* 3D Carousel Stage */
-    .viewport-3d {
+    /* 3D Stage */
+    .stage-3d {
       width: 100vw;
       height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      perspective: 1100px;
+      perspective: 900px;
+      position: relative;
       overflow: hidden;
-      position: relative;
     }
 
-    .carousel-ring {
+    .scroll-guide {
+      position: absolute;
+      top: 68px;
+      font-size: 11.5px;
+      color: var(--muted);
+      background: rgba(245, 166, 35, 0.08);
+      border: 1px solid rgba(245, 166, 35, 0.25);
+      padding: 4px 14px;
+      border-radius: 999px;
+      z-index: 10;
+    }
+
+    /* Cover Flow Cards Container */
+    .deck-container {
+      position: relative;
       width: 280px;
-      height: 300px;
-      position: relative;
+      height: 380px;
       transform-style: preserve-3d;
-      transition: transform 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.15);
-      margin-top: -60px;
+      margin-top: -20px;
     }
 
-    .tool-spatial-node {
+    @media (min-width: 480px) {
+      .deck-container {
+        width: 320px;
+        height: 400px;
+      }
+    }
+
+    .deck-card {
       position: absolute;
       top: 0;
       left: 0;
-      width: 280px;
-      height: 290px;
-      background: var(--panel-inner);
+      width: 100%;
+      height: 100%;
+      background: var(--card-bg);
       border: 1.5px solid var(--card-border);
-      border-radius: 20px;
-      padding: 24px 18px;
+      border-radius: 22px;
+      padding: 26px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 166, 35, 0.12);
-      transform-style: preserve-3d;
-      backface-visibility: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
       cursor: pointer;
-      transition: border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
-      opacity: 0.35;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease, border-color 0.3s ease;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+      overflow: hidden;
     }
 
-    .tool-spatial-node.is-active {
-      opacity: 1;
-      border-color: var(--amber);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 166, 35, 0.5);
-    }
-
-    .node-icon-box {
-      width: 64px;
-      height: 64px;
-      border-radius: 16px;
-      background: rgba(245, 166, 35, 0.12);
-      border: 1px solid rgba(245, 166, 35, 0.45);
+    .card-icon-box {
+      width: 70px;
+      height: 70px;
+      border-radius: 18px;
+      background: rgba(245, 166, 35, 0.1);
+      border: 1.5px solid rgba(245, 166, 35, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
-      margin-bottom: 14px;
-      transform: translateZ(24px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      font-size: 34px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      flex-shrink: 0;
     }
 
-    .node-category {
+    .card-category {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--amber);
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 6px;
-      transform: translateZ(16px);
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
     }
 
-    .node-title {
+    .card-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 19px;
+      font-size: 21px;
       font-weight: 800;
-      color: #fff;
-      line-height: 1.25;
-      margin-bottom: 10px;
-      transform: translateZ(20px);
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      word-break: break-word;
     }
 
-    .node-desc {
-      font-size: 12px;
+    .card-desc {
+      font-size: 13px;
       color: var(--muted);
       line-height: 1.5;
+      margin-bottom: auto;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      transform: translateZ(14px);
     }
 
-    /* Bottom Showcase Details & Action Bar */
-    .bottom-hero-panel {
+    .card-meta-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(245, 166, 35, 0.6);
+      margin-top: 10px;
+    }
+
+    /* Fixed Active Highlight */
+    .deck-card.active-center {
+      border-color: var(--amber);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 166, 35, 0.45);
+      z-index: 10;
+    }
+
+    /* Bottom Controller & Direct Launch */
+    .bottom-bar {
       position: absolute;
-      bottom: 24px;
+      bottom: 22px;
       left: 50%;
       transform: translateX(-50%);
-      width: 90%;
-      max-width: 580px;
-      background: rgba(18, 14, 10, 0.9);
-      border: 1px solid rgba(245, 166, 35, 0.4);
-      border-radius: 16px;
-      padding: 16px 20px;
-      text-align: center;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(245, 166, 35, 0.15);
+      width: 92%;
+      max-width: 440px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       gap: 12px;
-      z-index: 100;
+      z-index: 50;
     }
 
-    .active-tool-desc-preview {
-      font-size: 13px;
-      color: var(--paper);
-      line-height: 1.45;
-      max-width: 94%;
-    }
-    .active-tool-desc-preview b { color: var(--amber); }
-
-    .action-controls-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      width: 100%;
-    }
-
-    .nav-arrow-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: rgba(245, 166, 35, 0.1);
-      border: 1px solid rgba(245, 166, 35, 0.35);
+    .nav-arrow {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: #17110c;
+      border: 1px solid rgba(245, 166, 35, 0.4);
       color: var(--amber);
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
       transition: all 0.2s;
     }
-    .nav-arrow-btn:hover {
+    .nav-arrow:active {
+      transform: scale(0.92);
       background: var(--amber);
       color: #000;
-      transform: scale(1.06);
     }
 
-    .btn-launch-tool {
+    .btn-launch {
       flex: 1;
-      padding: 12px 20px;
+      height: 46px;
       background: linear-gradient(135deg, #f5a623, #d97706);
       color: #0c0a08;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 800;
-      border-radius: 10px;
+      border-radius: 12px;
       text-decoration: none;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 18px rgba(245, 166, 35, 0.4);
-      transition: all 0.25s ease;
+      box-shadow: 0 6px 20px rgba(245, 166, 35, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .btn-launch-tool:hover {
-      background: linear-gradient(135deg, #ffb84d, #e68d20);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(245, 166, 35, 0.6);
-    }
-
-    /* Wheel Hint on Top */
-    .scroll-hint {
-      position: absolute;
-      top: 80px;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.5px;
-      background: rgba(245, 166, 35, 0.07);
-      border: 1px solid rgba(245, 166, 35, 0.22);
-      padding: 5px 14px;
-      border-radius: 999px;
-      pointer-events: none;
-      z-index: 10;
+    .btn-launch:active {
+      transform: scale(0.97);
     }
   </style>
 </head>
 <body>
 
-<div class="global-shine-overlay"></div>
+  <div class="top-header">
+    <a href="../" class="brand-group">
+      <div class="brand-badge">⚡</div>
+      <div class="brand-text">FormReady <span>3D</span></div>
+    </a>
+    <a href="../" class="switch-btn">◀ 2D Dashboard</a>
+  </div>
 
-<!-- Top Navigation -->
-<div class="top-header">
-  <a href="../" class="brand-group">
-    <div class="brand-badge">⚡</div>
-    <div class="brand-text">FormReady <span>3D</span></div>
-  </a>
-  <a href="../" class="switch-mode-btn">
-    ◀ Switch to 2D
-  </a>
-</div>
+  <div class="stage-3d" id="stage">
+    <div class="scroll-guide">Swipe or Scroll Wheel • 1-by-1 Flow</div>
+    <div class="deck-container" id="deck"></div>
 
-<!-- 3D Viewport & Circle Carousel -->
-<div class="viewport-3d" id="viewport">
-  <div class="scroll-hint">🖱️ Scroll Wheel or Swipe to Rotate One-by-One</div>
-  
-  <div class="carousel-ring" id="carouselRing"></div>
-
-  <!-- Bottom Interactive Launch Bar -->
-  <div class="bottom-hero-panel">
-    <div class="active-tool-desc-preview" id="activeToolDesc">
-      Loading spatial tool preview...
-    </div>
-
-    <div class="action-controls-row">
-      <button class="nav-arrow-btn" onclick="rotateCarousel(-1)" title="Previous Tool">◀</button>
-      <a href="#" class="btn-launch-tool" id="btnLaunchActive">
-        ⚡ Launch Tool
-      </a>
-      <button class="nav-arrow-btn" onclick="rotateCarousel(1)" title="Next Tool">▶</button>
+    <div class="bottom-bar">
+      <button class="nav-arrow" onclick="moveSlide(-1)">◀</button>
+      <a href="#" class="btn-launch" id="launchBtn">⚡ Launch Tool</a>
+      <button class="nav-arrow" onclick="moveSlide(1)">▶</button>
     </div>
   </div>
-</div>
 
 <script>
-// Catalog of all tools
-const TOOLS_3D_CATALOG = [
+const TOOLS = [
   { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print", icon: "🪪", cat: "Govt Utility", desc: "Auto-crop front & back sides into clean top-aligned A4 print-ready PDF." },
   { slug: "background-remover", name: "AI Background Remover", icon: "🪄", cat: "Photo AI", desc: "Make photo background white or transparent in 1-click for exam forms." },
   { slug: "photo-sheet", name: "Passport Photo Sheet", icon: "🖨️", cat: "Photo Suite", desc: "Generate 6, 8, or 16 photo studio passport sheets ready to print." },
@@ -397,130 +321,135 @@ const TOOLS_3D_CATALOG = [
   { slug: "currency-converter", name: "Live Currency Converter", icon: "💱", cat: "Smart Calculator", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates." }
 ];
 
-const totalItems = TOOLS_3D_CATALOG.length;
-const angleStep = 360 / totalItems;
-const radius = 540; // 3D Circular Ring Radius in pixels
-
-const carouselRing = document.getElementById("carouselRing");
-const activeToolDesc = document.getElementById("activeToolDesc");
-const btnLaunchActive = document.getElementById("btnLaunchActive");
-const viewport = document.getElementById("viewport");
-
 let currentIndex = 0;
-let isThrottled = false;
+const deck = document.getElementById("deck");
+const launchBtn = document.getElementById("launchBtn");
+let isScrolling = false;
 
-// 1. Build Circular 3D Nodes
-function initSpatialCarousel() {
-  carouselRing.innerHTML = "";
-
-  TOOLS_3D_CATALOG.forEach((tool, i) => {
-    const angle = i * angleStep;
+// 1. Initial Render
+function buildCards() {
+  deck.innerHTML = "";
+  TOOLS.forEach((tool, i) => {
     const card = document.createElement("div");
-    card.className = "tool-spatial-node";
-    card.id = `node-${i}`;
-
-    // Place card along the 3D circle
-    card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
-
+    card.className = "deck-card";
+    card.id = `card-${i}`;
     card.innerHTML = `
-      <div class="node-icon-box">${tool.icon}</div>
-      <div class="node-category">${tool.cat}</div>
-      <div class="node-title">${tool.name}</div>
-      <div class="node-desc">${tool.desc}</div>
+      <div class="card-icon-box">${tool.icon}</div>
+      <div class="card-category">${tool.cat}</div>
+      <div class="card-title">${tool.name}</div>
+      <div class="card-desc">${tool.desc}</div>
+      <div class="card-meta-count">${i + 1} of ${TOOLS.length}</div>
     `;
 
-    card.onclick = () => {
+    card.addEventListener("click", () => {
       if (currentIndex === i) {
         window.location.href = `../tools/${tool.slug}/index.html`;
       } else {
-        goToIndex(i);
+        currentIndex = i;
+        updateDeck();
       }
-    };
+    });
 
-    carouselRing.appendChild(card);
+    deck.appendChild(card);
   });
-
-  updateCenterFocus();
+  updateDeck();
 }
 
-function updateCenterFocus() {
-  // Rotate the ring so current item faces front (0 deg)
-  const targetRotation = -currentIndex * angleStep;
-  carouselRing.style.transform = `rotateY(${targetRotation}deg)`;
+// 2. High-Performance Spatial Math (Only renders visible cards, hides distant ones)
+function updateDeck() {
+  const total = TOOLS.length;
 
-  // Update styles for active node
-  TOOLS_3D_CATALOG.forEach((_, i) => {
-    const el = document.getElementById(`node-${i}`);
-    if (el) el.classList.toggle("is-active", i === currentIndex);
-  });
+  for (let i = 0; i < total; i++) {
+    const card = document.getElementById(`card-${i}`);
+    let offset = i - currentIndex;
 
-  // Update launch bar
-  const activeTool = TOOLS_3D_CATALOG[currentIndex];
-  activeToolDesc.innerHTML = `<b>${activeTool.name}</b> (${activeTool.cat}) — ${activeTool.desc}`;
-  btnLaunchActive.href = `../tools/${activeTool.slug}/index.html`;
-}
+    // Handle wrap-around loop
+    if (offset > total / 2) offset -= total;
+    if (offset < -total / 2) offset += total;
 
-function rotateCarousel(dir) {
-  currentIndex = (currentIndex + dir + totalItems) % totalItems;
-  updateCenterFocus();
-}
+    card.classList.toggle("active-center", offset === 0);
 
-function goToIndex(idx) {
-  currentIndex = idx;
-  updateCenterFocus();
-}
-
-// 2. One Scroll = One Tool (Wheel Snapping with Throttle)
-window.addEventListener("wheel", (e) => {
-  e.preventDefault();
-  if (isThrottled) return;
-  isThrottled = true;
-
-  if (e.deltaY > 0) {
-    rotateCarousel(1);
-  } else {
-    rotateCarousel(-1);
-  }
-
-  setTimeout(() => {
-    isThrottled = false;
-  }, 280);
-}, { passive: false });
-
-// 3. Touch Swipe Snapping for Mobile Screens
-let touchStartX = 0;
-let touchStartY = 0;
-
-viewport.addEventListener("touchstart", (e) => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-viewport.addEventListener("touchend", (e) => {
-  const diffX = e.changedTouches[0].clientX - touchStartX;
-  const diffY = e.changedTouches[0].clientY - touchStartY;
-
-  // Horizontal or vertical swipe detection
-  if (Math.abs(diffX) > 40 || Math.abs(diffY) > 40) {
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-      rotateCarousel(diffX < 0 ? 1 : -1);
+    if (offset === 0) {
+      // Center focused card
+      card.style.display = "flex";
+      card.style.transform = "translate3d(0, 0, 0) scale(1)";
+      card.style.opacity = "1";
+      card.style.zIndex = "10";
+      card.style.pointerEvents = "auto";
+    } else if (Math.abs(offset) === 1) {
+      // Immediate adjacent cards (Left & Right)
+      const dir = offset > 0 ? 1 : -1;
+      card.style.display = "flex";
+      card.style.transform = `translate3d(${dir * 170}px, 0, -140px) rotateY(${-dir * 38}deg) scale(0.88)`;
+      card.style.opacity = "0.55";
+      card.style.zIndex = "5";
+      card.style.pointerEvents = "auto";
+    } else if (Math.abs(offset) === 2) {
+      // Far preview cards
+      const dir = offset > 0 ? 1 : -1;
+      card.style.display = "flex";
+      card.style.transform = `translate3d(${dir * 250}px, 0, -260px) rotateY(${-dir * 50}deg) scale(0.72)`;
+      card.style.opacity = "0.2";
+      card.style.zIndex = "2";
+      card.style.pointerEvents = "none";
     } else {
-      rotateCarousel(diffY < 0 ? 1 : -1);
+      // Completely hidden to stop overlap and lag
+      card.style.display = "none";
+      card.style.opacity = "0";
+      card.style.pointerEvents = "none";
     }
   }
+
+  // Update launch button destination
+  const activeTool = TOOLS[currentIndex];
+  launchBtn.href = `../tools/${activeTool.slug}/index.html`;
+}
+
+function moveSlide(dir) {
+  currentIndex = (currentIndex + dir + TOOLS.length) % TOOLS.length;
+  updateDeck();
+}
+
+// 3. One Scroll = One Tool Snapping
+window.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  if (isScrolling) return;
+  isScrolling = true;
+
+  if (e.deltaY > 0) moveSlide(1);
+  else moveSlide(-1);
+
+  setTimeout(() => { isScrolling = false; }, 260);
+}, { passive: false });
+
+// 4. Mobile Swipe Gesture
+let startX = 0;
+let startY = 0;
+
+window.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
 }, { passive: true });
 
-// 4. Keyboard Arrow Key Navigation
+window.addEventListener("touchend", (e) => {
+  const diffX = e.changedTouches[0].clientX - startX;
+  const diffY = e.changedTouches[0].clientY - startY;
+
+  if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
+    moveSlide(diffX < 0 ? 1 : -1);
+  }
+}, { passive: true });
+
+// 5. Arrow Keys
 window.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowRight" || e.key === "ArrowDown") rotateCarousel(1);
-  if (e.key === "ArrowLeft" || e.key === "ArrowUp") rotateCarousel(-1);
+  if (e.key === "ArrowRight" || e.key === "ArrowDown") moveSlide(1);
+  if (e.key === "ArrowLeft" || e.key === "ArrowUp") moveSlide(-1);
   if (e.key === "Enter") {
-    const activeTool = TOOLS_3D_CATALOG[currentIndex];
-    window.location.href = `../tools/${activeTool.slug}/index.html`;
+    window.location.href = `../tools/${TOOLS[currentIndex].slug}/index.html`;
   }
 });
 
-initSpatialCarousel();
+buildCards();
 </script>
 </body>
 </html>
