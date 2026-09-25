@@ -27,7 +27,7 @@
       overflow: hidden;
       background-color: var(--bg);
       background-image: 
-        radial-gradient(circle at 50% 38%, #201306 0%, #040302 78%),
+        radial-gradient(circle at 50% 34%, #201306 0%, #040302 78%),
         linear-gradient(rgba(245, 166, 35, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(245, 166, 35, 0.04) 1px, transparent 1px);
       background-size: 100% 100%, 36px 36px, 36px 36px;
@@ -77,6 +77,33 @@
     }
     .brand-text span { color: var(--amber); }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-catalog-toggle {
+      background: rgba(26, 18, 11, 0.9);
+      border: 1.5px solid rgba(245, 166, 35, 0.55);
+      color: var(--amber-bright);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+      white-space: nowrap;
+    }
+    .btn-catalog-toggle:active {
+      background: var(--amber);
+      color: #000;
+    }
+
     .switch-btn {
       background: rgba(20, 15, 10, 0.9);
       border: 1.5px solid rgba(245, 166, 35, 0.5);
@@ -84,26 +111,21 @@
       font-family: 'Space Grotesk', sans-serif;
       font-size: 12px;
       font-weight: 700;
-      padding: 7px 16px;
+      padding: 7px 14px;
       border-radius: 999px;
       text-decoration: none;
       white-space: nowrap;
       box-shadow: 0 4px 18px rgba(0,0,0,0.8);
-      transition: background 0.2s ease;
-    }
-    .switch-btn:active {
-      background: var(--amber);
-      color: #000;
     }
 
     /* 3D Viewport Chamber */
     .stage-3d {
       position: fixed;
-      top: 41%;
+      top: 38%;
       left: 50%;
       transform: translate3d(-50%, -50%, 0);
       width: min(85vw, 320px);
-      height: 370px;
+      height: 350px;
       perspective: 1100px;
       perspective-origin: center center;
       z-index: 10;
@@ -127,7 +149,7 @@
       background: linear-gradient(160deg, rgba(32, 22, 13, 0.96) 0%, rgba(12, 8, 4, 0.98) 100%);
       border: 2px solid rgba(245, 166, 35, 0.35);
       border-radius: 28px;
-      padding: 26px 20px;
+      padding: 24px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -144,7 +166,6 @@
                   box-shadow 0.25s ease;
     }
 
-    /* True 3D Spatial Positions */
     .spatial-card.center {
       transform: translate3d(0, 0, 90px) rotateY(0deg) scale(1);
       opacity: 1;
@@ -186,18 +207,17 @@
       z-index: 1;
     }
 
-    /* 3D Floating Elements */
     .pod-icon-box {
-      width: 72px;
-      height: 72px;
+      width: 68px;
+      height: 68px;
       border-radius: 20px;
       background: radial-gradient(circle at 35% 35%, rgba(245, 166, 35, 0.25), rgba(0, 0, 0, 0.85));
       border: 1.5px solid rgba(245, 166, 35, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 34px;
-      margin-bottom: 12px;
+      font-size: 32px;
+      margin-bottom: 10px;
       transform: translateZ(50px);
       box-shadow: 0 12px 25px rgba(0, 0, 0, 0.9), 0 0 20px rgba(245, 166, 35, 0.35);
       flex-shrink: 0;
@@ -215,12 +235,12 @@
 
     .pod-category {
       font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--cyan);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       transform: translateZ(30px);
     }
 
@@ -230,7 +250,7 @@
       font-weight: 800;
       color: #ffffff;
       line-height: 1.2;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       transform: translateZ(40px);
       text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
     }
@@ -252,14 +272,71 @@
       font-size: 11px;
       font-weight: 700;
       color: rgba(245, 166, 35, 0.75);
-      margin-top: 10px;
+      margin-top: 8px;
       transform: translateZ(25px);
     }
 
-    /* Single Scrollable Number + Tool Name Strip */
+    /* Active Tool Badge with Clickable Index Hint */
+    .active-number-badge-container {
+      position: fixed;
+      bottom: calc(134px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 390px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .active-number-badge {
+      background: rgba(26, 18, 11, 0.95);
+      border: 1.5px solid rgba(245, 166, 35, 0.55);
+      border-radius: 999px;
+      padding: 6px 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.85), 0 0 16px rgba(245, 166, 35, 0.3);
+      cursor: pointer;
+    }
+    .active-number-badge:active {
+      transform: scale(0.97);
+    }
+
+    .badge-number-chip {
+      background: var(--amber);
+      color: #040302;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-name-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 190px;
+    }
+
+    .badge-all-hint {
+      font-size: 10px;
+      color: var(--amber-bright);
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    /* Horizontal Strip for all 24 tools with Number & Name */
     .tools-nav-track-box {
       position: fixed;
-      bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(84px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
       width: 94%;
@@ -273,7 +350,7 @@
       gap: 8px;
       width: 100%;
       overflow-x: auto;
-      padding: 6px 12px;
+      padding: 4px 10px;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
       mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
@@ -311,7 +388,7 @@
       border-color: #ffbe53;
       font-weight: 800;
       box-shadow: 0 0 14px var(--amber-glow);
-      transform: scale(1.06);
+      transform: scale(1.05);
     }
     .tool-num-btn.active .pill-num {
       color: #040302;
@@ -320,7 +397,7 @@
     /* Bottom Controller Console */
     .bottom-hud-bar {
       position: fixed;
-      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
@@ -379,9 +456,100 @@
       transform: scale(0.96);
     }
 
+    /* ========================================================
+       MODAL: FULL 24 TOOLS NUMBERED DIRECTORY (INDEX DRAWER)
+       ======================================================== */
+    .tools-catalog-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(4, 3, 2, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .catalog-modal-content {
+      width: min(92vw, 420px);
+      max-height: 80vh;
+      background: linear-gradient(160deg, #18110a 0%, #0a0704 100%);
+      border: 2px solid #ffbe53;
+      border-radius: 24px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 45px rgba(245, 166, 35, 0.4), 0 20px 50px rgba(0,0,0,0.95);
+    }
+    .catalog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(245, 166, 35, 0.25);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+    }
+    .catalog-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .catalog-title span { color: var(--amber); }
+    .catalog-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .catalog-grid {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+    .catalog-item-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(26, 18, 11, 0.8);
+      border: 1px solid rgba(245, 166, 35, 0.2);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .catalog-item-row:hover, .catalog-item-row.is-active {
+      background: rgba(245, 166, 35, 0.2);
+      border-color: #ffbe53;
+      transform: translateX(4px);
+    }
+    .catalog-idx {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--amber);
+      min-width: 32px;
+    }
+    .catalog-icon {
+      font-size: 18px;
+    }
+    .catalog-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex: 1;
+    }
+
     .telemetry-hint {
       position: fixed;
-      bottom: 6px;
+      bottom: 4px;
       left: 0;
       width: 100vw;
       text-align: center;
@@ -402,7 +570,10 @@
       <div class="brand-badge">⚡</div>
       <div class="brand-text">FormReady <span>3D</span></div>
     </a>
-    <a href="../" class="switch-btn">◀ 2D Dashboard</a>
+    <div class="header-actions">
+      <button class="btn-catalog-toggle" onclick="toggleCatalog(true)">📑 ALL 24</button>
+      <a href="../" class="switch-btn">◀ 2D</a>
+    </div>
   </div>
 
   <!-- 3D Spatial Deck Stage -->
@@ -412,7 +583,16 @@
     </div>
   </div>
 
-  <!-- Single Number + Tool Name Interactive Strip -->
+  <!-- Active Tool Number & Name Badge (Tapping Opens All 24 Index) -->
+  <div class="active-number-badge-container">
+    <div class="active-number-badge" onclick="toggleCatalog(true)" title="Click to view all 24 tools">
+      <span class="badge-number-chip" id="badgeNumber">#19 OF 24</span>
+      <span class="badge-name-text" id="badgeName">Case Converter (aA)</span>
+      <span class="badge-all-hint">📑 ALL ▼</span>
+    </div>
+  </div>
+
+  <!-- Number + Tool Name Interactive Strip -->
   <div class="tools-nav-track-box">
     <div class="numbers-scroll-bar" id="numScrollBar"></div>
   </div>
@@ -427,8 +607,19 @@
     <button class="hud-arrow-btn" onclick="stepSlide(1)" title="Next Tool">▶</button>
   </div>
 
+  <!-- Modal: Complete 24 Numbered Tools Index -->
+  <div class="tools-catalog-modal" id="catalogModal" onclick="closeCatalog(event)">
+    <div class="catalog-modal-content">
+      <div class="catalog-header">
+        <div class="catalog-title">FORMREADY <span>TOOLS INDEX (1–24)</span></div>
+        <button class="catalog-close-btn" onclick="toggleCatalog(false)">✕</button>
+      </div>
+      <div class="catalog-grid" id="catalogGrid"></div>
+    </div>
+  </div>
+
   <div class="telemetry-hint">
-    [ 60 FPS ULTRA-LIGHT // SWIPE OR TAP TO SWITCH ]
+    [ 60 FPS ULTRA-LIGHT // SWIPE OR TAP INDEX TO SWITCH ]
   </div>
 
 <script>
@@ -459,10 +650,14 @@ const TOOLS = [
   { slug: "currency-converter", name: "Live Currency Converter", icon: "💱", cat: "Smart Calculator", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates." }
 ];
 
-let currentIndex = 16; // Land & Unit Converter
+let currentIndex = 18; // Case Converter (#19)
 const deck = document.getElementById("deck");
 const launchBtn = document.getElementById("launchBtn");
 const numScrollBar = document.getElementById("numScrollBar");
+const badgeNumber = document.getElementById("badgeNumber");
+const badgeName = document.getElementById("badgeName");
+const catalogGrid = document.getElementById("catalogGrid");
+const catalogModal = document.getElementById("catalogModal");
 const deckContainer = document.getElementById("deckContainer");
 
 const total = TOOLS.length;
@@ -472,6 +667,7 @@ let pillEls = [];
 function initDeck() {
   deck.innerHTML = "";
   numScrollBar.innerHTML = "";
+  catalogGrid.innerHTML = "";
 
   TOOLS.forEach((tool, i) => {
     // 3D Card
@@ -507,6 +703,22 @@ function initDeck() {
     };
     numScrollBar.appendChild(btn);
     pillEls.push(btn);
+
+    // Complete Directory Item Row
+    const row = document.createElement("div");
+    row.className = "catalog-item-row";
+    row.id = `cat-row-${i}`;
+    row.innerHTML = `
+      <span class="catalog-idx">#${i + 1}</span>
+      <span class="catalog-icon">${tool.icon}</span>
+      <span class="catalog-name">${tool.name}</span>
+    `;
+    row.onclick = () => {
+      currentIndex = i;
+      renderState();
+      toggleCatalog(false);
+    };
+    catalogGrid.appendChild(row);
   });
 
   renderState();
@@ -516,17 +728,19 @@ function renderState() {
   for (let i = 0; i < total; i++) {
     const card = cardEls[i];
     const pill = pillEls[i];
+    const row = document.getElementById(`cat-row-${i}`);
     let offset = i - currentIndex;
 
     if (offset > total / 2) offset -= total;
     if (offset < -total / 2) offset += total;
 
     card.className = "spatial-card";
+    if (row) row.classList.toggle("is-active", offset === 0);
 
     if (offset === 0) {
       card.classList.add("center");
       pill.className = "tool-num-btn active";
-      // Auto center active pill in scroll strip
+      // Auto-center active pill in scroll strip
       const pLeft = pill.offsetLeft;
       const pWidth = pill.offsetWidth;
       const sWidth = numScrollBar.clientWidth;
@@ -548,6 +762,10 @@ function renderState() {
 
   const active = TOOLS[currentIndex];
   launchBtn.href = `../tools/${active.slug}/index.html`;
+
+  // Update Center Badge
+  badgeNumber.innerText = `#${currentIndex + 1} OF ${total}`;
+  badgeName.innerText = active.name;
 }
 
 let isSliding = false;
@@ -559,6 +777,19 @@ function stepSlide(dir) {
   renderState();
 
   setTimeout(() => { isSliding = false; }, 200);
+}
+
+// Full 24 Catalog Modal Toggle
+function toggleCatalog(show) {
+  catalogModal.style.display = show ? "flex" : "none";
+  if (show) {
+    const activeRow = document.getElementById(`cat-row-${currentIndex}`);
+    if (activeRow) activeRow.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+}
+
+function closeCatalog(e) {
+  if (e.target.id === "catalogModal") toggleCatalog(false);
 }
 
 // Mobile Touch Swipe
@@ -596,6 +827,7 @@ window.addEventListener("mousemove", (e) => {
 window.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight") stepSlide(1);
   if (e.key === "ArrowLeft") stepSlide(-1);
+  if (e.key === "Escape") toggleCatalog(false);
   if (e.key === "Enter") {
     window.location.href = `../tools/${TOOLS[currentIndex].slug}/index.html`;
   }
