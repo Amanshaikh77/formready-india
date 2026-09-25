@@ -1,75 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://formready-india.onrender.com/</loc>
     <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://formready-india.onrender.com/tools/photo-compressor/</loc>
+    <loc>https://formready-india.onrender.com/tools/aadhaar-pan-resizer/</loc>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://formready-india.onrender.com/tools/photo-cropper/</loc>
+    <loc>https://formready-india.onrender.com/tools/add-watermark/</loc>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://formready-india.onrender.com/tools/image-converter/</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://formready-india.onrender.com/tools/image-to-text/</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://formready-india.onrender.com/tools/barcode-generator/</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://formready-india.onrender.com/tools/qr-generator/</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://formready-india.onrender.com/tools/text-cleaner/</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://formready-india.onrender.com/tools/case-converter/</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://formready-india.onrender.com/tools/word-counter/</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://formready-india.onrender.com/tools/text-to-pdf/</loc>
-    <priority>0.8</priority>
-  </url>
+
   <url>
     <loc>https://formready-india.onrender.com/tools/age-calculator/</loc>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://formready-india.onrender.com/tools/emi-calculator/</loc>
+    <loc>https://formready-india.onrender.com/tools/background-remover/</loc>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://formready-india.onrender.com/tools/discount-calculator/</loc>
+    <loc>https://formready-india.onrender.com/tools/barcode-generator/</loc>
     <priority>0.8</priority>
   </url>
+
   <url>
     <loc>https://formready-india.onrender.com/tools/bmi-calculator/</loc>
     <priority>0.8</priority>
   </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/case-converter/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/currency-converter/</loc>
+    <priority>0.8</priority>
+  </url>
+
   <url>
     <loc>https://formready-india.onrender.com/tools/date-gap-calculator/</loc>
     <priority>0.8</priority>
   </url>
+
   <url>
-    <loc>https://formready-india.onrender.com/tools/unit-converter/</loc>
+    <loc>https://formready-india.onrender.com/tools/discount-calculator/</loc>
     <priority>0.8</priority>
   </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/document-scanner/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/emi-calculator/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/govt-pdf-helper/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/gst-calculator/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/image-converter/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/image-to-text/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/jpg-to-pdf/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/lorem-generator/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/merge-pdf/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/passport-photo-maker/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/pdf-editor/</loc>
+    <priority>0.8</priority>
+  </url>
+
   <url>
     <loc>https://formready-india.onrender.com/tools/pdf-organizer/</loc>
     <priority>0.8</priority>
   </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/pdf-to-jpg/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/photo-compressor/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/photo-cropper/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/photo-resizer/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/photo-sheet/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/photo-sign-card/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/qr-generator/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/signature-maker/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/split-pdf/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/text-cleaner/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/text-to-pdf/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/unit-converter/</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://formready-india.onrender.com/tools/word-counter/</loc>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
