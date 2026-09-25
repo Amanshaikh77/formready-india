@@ -3,215 +3,524 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FormReady India - 3D Cyber Spatial Edition</title>
-  <meta name="description" content="Next-Gen 3D Interactive Spatial Interface for FormReady India tools.">
+  <title>FormReady India - 3D Circular Spatial Carousel</title>
+  <meta name="description" content="Immersive 3D Circular Carousel Experience for FormReady India tools.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #090705;
+      --bg: #070503;
       --amber: #f5a623;
-      --amber-glow: rgba(245, 166, 35, 0.45);
-      --card-bg: rgba(20, 16, 12, 0.7);
+      --amber-hover: #ffb84d;
+      --card-border: rgba(245, 166, 35, 0.35);
       --paper: #f8f4ec;
       --muted: #a0907e;
+      --panel-inner: rgba(18, 14, 10, 0.85);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: radial-gradient(circle at 50% 20%, #20150b 0%, var(--bg) 80%);
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 35%, #24170a 0%, #070503 80%);
       color: var(--paper);
       font-family: 'Plus Jakarta Sans', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-      perspective: 1200px;
-      perspective-origin: center 200px;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    /* Top Bar & Mode Switch Back to 2D */
+    /* Continuous Global Glass Shine Sweep */
+    .global-shine-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+    }
+    .global-shine-overlay::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -100%;
+      width: 300%;
+      height: 300%;
+      background: linear-gradient(
+        125deg,
+        rgba(255, 255, 255, 0) 35%,
+        rgba(255, 255, 255, 0.03) 44%,
+        rgba(255, 255, 255, 0.22) 48%,
+        rgba(255, 255, 255, 0.35) 50%,
+        rgba(255, 255, 255, 0.22) 52%,
+        rgba(255, 255, 255, 0.03) 56%,
+        rgba(255, 255, 255, 0) 65%
+      );
+      transform: translate3d(-55%, -55%, 0);
+      animation: continuousGlassSweep 4.8s linear infinite;
+      will-change: transform;
+    }
+    @keyframes continuousGlassSweep {
+      0% { transform: translate3d(-55%, -55%, 0); }
+      100% { transform: translate3d(55%, 55%, 0); }
+    }
+
+    /* Top Navigation Bar */
     .top-header {
-      position: relative;
+      position: absolute;
+      top: 16px;
+      left: 0;
+      right: 0;
       z-index: 100;
-      padding: 16px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1100px;
+      padding: 0 20px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
-    .toggle-wrap {
-      display: inline-flex;
-      background: rgba(20, 16, 12, 0.9);
-      border: 1px solid rgba(245, 166, 35, 0.4);
-      border-radius: 999px;
-      padding: 4px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-    }
-    .toggle-link {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 999px;
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       text-decoration: none;
-      color: var(--muted);
-      transition: all 0.25s;
     }
-    .toggle-link.active {
-      background: linear-gradient(135deg, #f5a623, #d97706);
-      color: #0c0a08;
-      box-shadow: 0 0 15px var(--amber-glow);
-    }
-
-    /* 3D Scene Viewport */
-    .scene-3d {
-      width: 100%;
-      max-width: 1100px;
-      margin: 20px auto 60px;
-      padding: 0 16px;
-      transform-style: preserve-3d;
-      text-align: center;
-    }
-
-    .hero-3d-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(32px, 7vw, 54px);
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff 30%, #f5a623 85%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 0 25px rgba(245, 166, 35, 0.4));
-      transform: translateZ(40px);
-    }
-
-    .hero-3d-subtitle {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 35px;
-      transform: translateZ(25px);
-    }
-
-    /* 3D Dynamic Floating Cards Grid */
-    .spatial-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 22px;
-      transform-style: preserve-3d;
-    }
-
-    .spatial-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(245, 166, 35, 0.25);
-      border-radius: 16px;
-      padding: 22px;
-      text-decoration: none;
-      color: var(--paper);
-      transform-style: preserve-3d;
-      transform: rotateX(8deg) translateZ(10px);
-      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.35s, box-shadow 0.35s;
-      box-shadow: 0 16px 35px rgba(0,0,0,0.7), 0 0 15px rgba(245, 166, 35, 0.08);
-      backdrop-filter: blur(12px);
-      text-align: left;
-      position: relative;
-    }
-
-    .spatial-card:hover {
-      transform: rotateX(0deg) translateZ(50px) scale(1.04);
-      border-color: var(--amber);
-      box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 30px var(--amber-glow);
-    }
-
-    .card-icon-3d {
-      width: 48px;
-      height: 48px;
+    .brand-badge {
+      width: 38px;
+      height: 38px;
       background: rgba(245, 166, 35, 0.12);
-      border: 1px solid rgba(245, 166, 35, 0.4);
-      border-radius: 12px;
+      border: 1px solid var(--amber);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      margin-bottom: 14px;
-      transform: translateZ(20px);
-      box-shadow: 0 0 15px rgba(245, 166, 35, 0.2);
+      font-size: 20px;
+      box-shadow: 0 0 15px rgba(245, 166, 35, 0.35);
     }
-
-    .card-title {
+    .brand-text {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 19px;
+      font-weight: 800;
       color: #fff;
-      margin-bottom: 6px;
-      transform: translateZ(15px);
+      line-height: 1;
+    }
+    .brand-text span { color: var(--amber); }
+
+    .switch-mode-btn {
+      background: rgba(20, 16, 12, 0.85);
+      border: 1px solid rgba(245, 166, 35, 0.4);
+      color: var(--amber);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      transition: all 0.2s ease;
+    }
+    .switch-mode-btn:hover {
+      background: var(--amber);
+      color: #000;
+      box-shadow: 0 0 16px rgba(245, 166, 35, 0.6);
     }
 
-    .card-desc {
-      font-size: 12.5px;
+    /* 3D Carousel Stage */
+    .viewport-3d {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      perspective: 1100px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .carousel-ring {
+      width: 280px;
+      height: 300px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.18, 0.89, 0.32, 1.15);
+      margin-top: -60px;
+    }
+
+    .tool-spatial-node {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 290px;
+      background: var(--panel-inner);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 166, 35, 0.12);
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+      opacity: 0.35;
+    }
+
+    .tool-spatial-node.is-active {
+      opacity: 1;
+      border-color: var(--amber);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 166, 35, 0.5);
+    }
+
+    .node-icon-box {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: rgba(245, 166, 35, 0.12);
+      border: 1px solid rgba(245, 166, 35, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 14px;
+      transform: translateZ(24px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .node-category {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+      transform: translateZ(16px);
+    }
+
+    .node-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 19px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      transform: translateZ(20px);
+    }
+
+    .node-desc {
+      font-size: 12px;
       color: var(--muted);
       line-height: 1.5;
-      transform: translateZ(10px);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transform: translateZ(14px);
+    }
+
+    /* Bottom Showcase Details & Action Bar */
+    .bottom-hero-panel {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 580px;
+      background: rgba(18, 14, 10, 0.9);
+      border: 1px solid rgba(245, 166, 35, 0.4);
+      border-radius: 16px;
+      padding: 16px 20px;
+      text-align: center;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(245, 166, 35, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .active-tool-desc-preview {
+      font-size: 13px;
+      color: var(--paper);
+      line-height: 1.45;
+      max-width: 94%;
+    }
+    .active-tool-desc-preview b { color: var(--amber); }
+
+    .action-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .nav-arrow-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(245, 166, 35, 0.1);
+      border: 1px solid rgba(245, 166, 35, 0.35);
+      color: var(--amber);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .nav-arrow-btn:hover {
+      background: var(--amber);
+      color: #000;
+      transform: scale(1.06);
+    }
+
+    .btn-launch-tool {
+      flex: 1;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #f5a623, #d97706);
+      color: #0c0a08;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      border-radius: 10px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px rgba(245, 166, 35, 0.4);
+      transition: all 0.25s ease;
+    }
+    .btn-launch-tool:hover {
+      background: linear-gradient(135deg, #ffb84d, #e68d20);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(245, 166, 35, 0.6);
+    }
+
+    /* Wheel Hint on Top */
+    .scroll-hint {
+      position: absolute;
+      top: 80px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      background: rgba(245, 166, 35, 0.07);
+      border: 1px solid rgba(245, 166, 35, 0.22);
+      padding: 5px 14px;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 10;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Header with 2D / 3D Navigation -->
-  <div class="top-header">
-    <div class="toggle-wrap">
-      <a href="../" class="toggle-link">2D Classic</a>
-      <a href="./" class="toggle-link active">⚡ 3D Cyber</a>
+<div class="global-shine-overlay"></div>
+
+<!-- Top Navigation -->
+<div class="top-header">
+  <a href="../" class="brand-group">
+    <div class="brand-badge">⚡</div>
+    <div class="brand-text">FormReady <span>3D</span></div>
+  </a>
+  <a href="../" class="switch-mode-btn">
+    ◀ Switch to 2D
+  </a>
+</div>
+
+<!-- 3D Viewport & Circle Carousel -->
+<div class="viewport-3d" id="viewport">
+  <div class="scroll-hint">🖱️ Scroll Wheel or Swipe to Rotate One-by-One</div>
+  
+  <div class="carousel-ring" id="carouselRing"></div>
+
+  <!-- Bottom Interactive Launch Bar -->
+  <div class="bottom-hero-panel">
+    <div class="active-tool-desc-preview" id="activeToolDesc">
+      Loading spatial tool preview...
+    </div>
+
+    <div class="action-controls-row">
+      <button class="nav-arrow-btn" onclick="rotateCarousel(-1)" title="Previous Tool">◀</button>
+      <a href="#" class="btn-launch-tool" id="btnLaunchActive">
+        ⚡ Launch Tool
+      </a>
+      <button class="nav-arrow-btn" onclick="rotateCarousel(1)" title="Next Tool">▶</button>
     </div>
   </div>
+</div>
 
-  <div class="scene-3d">
-    <h1 class="hero-3d-title">FormReady India 3D</h1>
-    <p class="hero-3d-subtitle">Interactive Spatial Environment • Select a toolkit</p>
+<script>
+// Catalog of all tools
+const TOOLS_3D_CATALOG = [
+  { slug: "aadhaar-pan-resizer", name: "ID Card to A4 Print", icon: "🪪", cat: "Govt Utility", desc: "Auto-crop front & back sides into clean top-aligned A4 print-ready PDF." },
+  { slug: "background-remover", name: "AI Background Remover", icon: "🪄", cat: "Photo AI", desc: "Make photo background white or transparent in 1-click for exam forms." },
+  { slug: "photo-sheet", name: "Passport Photo Sheet", icon: "🖨️", cat: "Photo Suite", desc: "Generate 6, 8, or 16 photo studio passport sheets ready to print." },
+  { slug: "document-scanner", name: "HD Document Cam Scanner", icon: "📷", cat: "Govt Utility", desc: "Scan certificates via mobile camera with auto black & white filter." },
+  { slug: "pdf-editor", name: "PDF Editor & Markup", icon: "📝", cat: "PDF Suite", desc: "Annotate, highlight, draw signatures and modify PDF pages offline." },
+  { slug: "photo-compressor", name: "Photo Compressor (KB)", icon: "🗜️", cat: "Optimization", desc: "Compress image file size up to 80% without losing sharpness." },
+  { slug: "photo-cropper", name: "Photo Cropper Ratios", icon: "✂️", cat: "Optimization", desc: "Crop photos with custom aspect ratios (1:1, 3.5x4.5cm) effortlessly." },
+  { slug: "image-converter", name: "Image Format Converter", icon: "🔄", cat: "Optimization", desc: "Lossless conversion between JPG, PNG, WEBP, and ICO formats." },
+  { slug: "barcode-generator", name: "Barcode Studio & Scan", icon: "🏷️", cat: "Text & Utilities", desc: "Generate Code128 barcodes or scan codes live with camera." },
+  { slug: "qr-generator", name: "HD QR Code Generator", icon: "📱", cat: "Text & Utilities", desc: "Create high-res QR codes for URLs, WiFi logins, and UPI links." },
+  { slug: "pdf-organizer", name: "PDF Page Organizer", icon: "📑", cat: "PDF Suite", desc: "Drag-and-drop to reorder, rotate or delete pages in any PDF document." },
+  { slug: "age-calculator", name: "Govt Form Age Calculator", icon: "🎂", cat: "Smart Calculator", desc: "Calculate exact age on cut-off eligibility dates in Years, Months, Days." },
+  { slug: "emi-calculator", name: "Loan EMI & Interest", icon: "💳", cat: "Smart Calculator", desc: "Calculate monthly installments and visual payment proportions." },
+  { slug: "discount-calculator", name: "Percentage & Discount", icon: "🏷️", cat: "Smart Calculator", desc: "Calculate festive shopping discounts, money saved and final price." },
+  { slug: "bmi-calculator", name: "BMI & Health Status", icon: "⚖️", cat: "Smart Calculator", desc: "Calculate Body Mass Index with gradient meter and healthy weight target." },
+  { slug: "date-gap-calculator", name: "Date Gap & Working Days", icon: "📅", cat: "Smart Calculator", desc: "Count total days between dates and exclude weekends automatically." },
+  { slug: "unit-converter", name: "Land & Unit Converter", icon: "🌾", cat: "Smart Calculator", desc: "Convert Indian land units (Bigha, Guntha, Acre, Gaj) and metrics." },
+  { slug: "text-cleaner", name: "Text Cleaner & Fixer", icon: "🧹", cat: "Text & Utilities", desc: "Remove duplicate spaces, line breaks, and messy form formatting." },
+  { slug: "case-converter", name: "Case Converter (aA)", icon: "🔠", cat: "Text & Utilities", desc: "Convert text to UPPERCASE, lowercase, Title Case or camelCase." },
+  { slug: "word-counter", name: "Word & Essay Counter", icon: "📊", cat: "Text & Utilities", desc: "Real-time character count, word density and reading time stats." },
+  { slug: "text-to-pdf", name: "Text to PDF Generator", icon: "📄", cat: "PDF Suite", desc: "Convert notes and code snippets into printable A4 PDFs." },
+  { slug: "signature-maker", name: "Digital Signature Draw", icon: "🖊️", cat: "Govt Utility", desc: "Draw ultra-smooth signature on mobile and get transparent PNG." },
+  { slug: "gst-calculator", name: "GST Calculator (CGST)", icon: "💰", cat: "Smart Calculator", desc: "Calculate GST Inclusive & Exclusive amounts across tax slabs." },
+  { slug: "currency-converter", name: "Live Currency Converter", icon: "💱", cat: "Smart Calculator", desc: "Quick live conversion estimates for USD, EUR, GBP to INR rates." }
+];
 
-    <!-- Spatial 3D Tools Grid -->
-    <div class="spatial-grid">
-      <a href="../tools/photo-compressor/" class="spatial-card">
-        <div class="card-icon-3d">🗜️</div>
-        <div class="card-title">Photo Compressor</div>
-        <div class="card-desc">Compress files up to 80% without losing visual clarity.</div>
-      </a>
+const totalItems = TOOLS_3D_CATALOG.length;
+const angleStep = 360 / totalItems;
+const radius = 540; // 3D Circular Ring Radius in pixels
 
-      <a href="../tools/barcode-generator/" class="spatial-card">
-        <div class="card-icon-3d">🏷️</div>
-        <div class="card-title">Barcode Studio & Scanner</div>
-        <div class="card-desc">Generate retail barcodes or scan product codes live with camera.</div>
-      </a>
+const carouselRing = document.getElementById("carouselRing");
+const activeToolDesc = document.getElementById("activeToolDesc");
+const btnLaunchActive = document.getElementById("btnLaunchActive");
+const viewport = document.getElementById("viewport");
 
-      <a href="../tools/qr-generator/" class="spatial-card">
-        <div class="card-icon-3d">📱</div>
-        <div class="card-title">HD QR Code Studio</div>
-        <div class="card-desc">Generate crisp custom QR codes for UPI, URLs & WiFi.</div>
-      </a>
+let currentIndex = 0;
+let isThrottled = false;
 
-      <a href="../tools/pdf-organizer/" class="spatial-card">
-        <div class="card-icon-3d">📑</div>
-        <div class="card-title">PDF Page Organizer</div>
-        <div class="card-desc">Reorder, rotate and clean PDF sheets offline in real-time.</div>
-      </a>
+// 1. Build Circular 3D Nodes
+function initSpatialCarousel() {
+  carouselRing.innerHTML = "";
 
-      <a href="../tools/emi-calculator/" class="spatial-card">
-        <div class="card-icon-3d">💳</div>
-        <div class="card-title">Loan EMI Calculator</div>
-        <div class="card-desc">Calculate monthly installments with visual payment breakdown.</div>
-      </a>
+  TOOLS_3D_CATALOG.forEach((tool, i) => {
+    const angle = i * angleStep;
+    const card = document.createElement("div");
+    card.className = "tool-spatial-node";
+    card.id = `node-${i}`;
 
-      <a href="../tools/unit-converter/" class="spatial-card">
-        <div class="card-icon-3d">🌾</div>
-        <div class="card-title">Land & Unit Converter</div>
-        <div class="card-desc">Regional Indian land area (Bigha, Guntha, Acre) and units.</div>
-      </a>
-    </div>
-  </div>
+    // Place card along the 3D circle
+    card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
 
+    card.innerHTML = `
+      <div class="node-icon-box">${tool.icon}</div>
+      <div class="node-category">${tool.cat}</div>
+      <div class="node-title">${tool.name}</div>
+      <div class="node-desc">${tool.desc}</div>
+    `;
+
+    card.onclick = () => {
+      if (currentIndex === i) {
+        window.location.href = `../tools/${tool.slug}/index.html`;
+      } else {
+        goToIndex(i);
+      }
+    };
+
+    carouselRing.appendChild(card);
+  });
+
+  updateCenterFocus();
+}
+
+function updateCenterFocus() {
+  // Rotate the ring so current item faces front (0 deg)
+  const targetRotation = -currentIndex * angleStep;
+  carouselRing.style.transform = `rotateY(${targetRotation}deg)`;
+
+  // Update styles for active node
+  TOOLS_3D_CATALOG.forEach((_, i) => {
+    const el = document.getElementById(`node-${i}`);
+    if (el) el.classList.toggle("is-active", i === currentIndex);
+  });
+
+  // Update launch bar
+  const activeTool = TOOLS_3D_CATALOG[currentIndex];
+  activeToolDesc.innerHTML = `<b>${activeTool.name}</b> (${activeTool.cat}) — ${activeTool.desc}`;
+  btnLaunchActive.href = `../tools/${activeTool.slug}/index.html`;
+}
+
+function rotateCarousel(dir) {
+  currentIndex = (currentIndex + dir + totalItems) % totalItems;
+  updateCenterFocus();
+}
+
+function goToIndex(idx) {
+  currentIndex = idx;
+  updateCenterFocus();
+}
+
+// 2. One Scroll = One Tool (Wheel Snapping with Throttle)
+window.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  if (isThrottled) return;
+  isThrottled = true;
+
+  if (e.deltaY > 0) {
+    rotateCarousel(1);
+  } else {
+    rotateCarousel(-1);
+  }
+
+  setTimeout(() => {
+    isThrottled = false;
+  }, 280);
+}, { passive: false });
+
+// 3. Touch Swipe Snapping for Mobile Screens
+let touchStartX = 0;
+let touchStartY = 0;
+
+viewport.addEventListener("touchstart", (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+viewport.addEventListener("touchend", (e) => {
+  const diffX = e.changedTouches[0].clientX - touchStartX;
+  const diffY = e.changedTouches[0].clientY - touchStartY;
+
+  // Horizontal or vertical swipe detection
+  if (Math.abs(diffX) > 40 || Math.abs(diffY) > 40) {
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      rotateCarousel(diffX < 0 ? 1 : -1);
+    } else {
+      rotateCarousel(diffY < 0 ? 1 : -1);
+    }
+  }
+}, { passive: true });
+
+// 4. Keyboard Arrow Key Navigation
+window.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight" || e.key === "ArrowDown") rotateCarousel(1);
+  if (e.key === "ArrowLeft" || e.key === "ArrowUp") rotateCarousel(-1);
+  if (e.key === "Enter") {
+    const activeTool = TOOLS_3D_CATALOG[currentIndex];
+    window.location.href = `../tools/${activeTool.slug}/index.html`;
+  }
+});
+
+initSpatialCarousel();
+</script>
 </body>
 </html>
