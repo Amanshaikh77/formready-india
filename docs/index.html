@@ -107,10 +107,12 @@
 
     /* Top Left 2D/3D Mode Bar */
     .top-mode-bar {
-      position: absolute;
-      top: 0px;
-      left: 4px;
-      z-index: 1000;
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 8px;
+      z-index: 100;
     }
     .toggle-3d-wrap {
       display: inline-flex;
@@ -145,7 +147,7 @@
     }
 
     /* Header Futuristic Branding */
-    header { text-align: center; margin-bottom: 24px; padding-top: 24px; }
+    header { text-align: center; margin-bottom: 24px; padding-top: 6px; }
     .hero-brand-box {
       display: flex;
       flex-direction: column;

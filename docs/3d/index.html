@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>FormReady India - 3D Spatial Deck</title>
   <meta name="description" content="Next-gen 3D spatial interactive deck for FormReady India tools.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,7 +39,7 @@
       top: 14px;
       left: 0;
       right: 0;
-      z-index: 50;
+      z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -74,20 +74,25 @@
     }
     .brand-text span { color: var(--amber); }
 
+    /* Reliable 2D Back Button */
     .switch-btn {
       background: #17110c;
-      border: 1px solid rgba(245, 166, 35, 0.45);
+      border: 1.5px solid rgba(245, 166, 35, 0.5);
       color: var(--amber);
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
-      padding: 7px 14px;
+      padding: 8px 16px;
       border-radius: 999px;
       text-decoration: none;
       box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-      transition: all 0.2s;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 120;
     }
-    .switch-btn:hover {
+    .switch-btn:active {
       background: var(--amber);
       color: #000;
     }
@@ -103,33 +108,34 @@
       perspective: 900px;
       position: relative;
       overflow: hidden;
+      padding-bottom: 90px; /* Space for elevated bottom controls */
     }
 
     .scroll-guide {
       position: absolute;
-      top: 68px;
-      font-size: 11.5px;
+      top: 64px;
+      font-size: 11px;
       color: var(--muted);
       background: rgba(245, 166, 35, 0.08);
       border: 1px solid rgba(245, 166, 35, 0.25);
-      padding: 4px 14px;
+      padding: 4px 12px;
       border-radius: 999px;
       z-index: 10;
     }
 
-    /* Cover Flow Cards Container */
+    /* Deck Container */
     .deck-container {
       position: relative;
-      width: 280px;
-      height: 380px;
+      width: 270px;
+      height: 350px;
       transform-style: preserve-3d;
-      margin-top: -20px;
+      margin-top: -10px;
     }
 
     @media (min-width: 480px) {
       .deck-container {
         width: 320px;
-        height: 400px;
+        height: 390px;
       }
     }
 
@@ -141,32 +147,32 @@
       height: 100%;
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
-      border-radius: 22px;
-      padding: 26px 20px;
+      border-radius: 20px;
+      padding: 22px 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
       cursor: pointer;
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease, border-color 0.3s ease;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease, border-color 0.25s ease;
       will-change: transform, opacity;
       backface-visibility: hidden;
       overflow: hidden;
     }
 
     .card-icon-box {
-      width: 70px;
-      height: 70px;
-      border-radius: 18px;
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
       background: rgba(245, 166, 35, 0.1);
       border: 1.5px solid rgba(245, 166, 35, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 34px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      font-size: 30px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
       flex-shrink: 0;
     }
 
@@ -176,26 +182,26 @@
       color: var(--amber);
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .card-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 21px;
+      font-size: 19px;
       font-weight: 800;
       color: #ffffff;
       line-height: 1.2;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       word-break: break-word;
     }
 
     .card-desc {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.45;
       margin-bottom: auto;
       display: -webkit-box;
-      -webkit-line-clamp: 4;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -204,36 +210,35 @@
       font-size: 11px;
       font-weight: 700;
       color: rgba(245, 166, 35, 0.6);
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
-    /* Fixed Active Highlight */
     .deck-card.active-center {
       border-color: var(--amber);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 35px rgba(245, 166, 35, 0.45);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 32px rgba(245, 166, 35, 0.45);
       z-index: 10;
     }
 
-    /* Bottom Controller & Direct Launch */
+    /* Fixed Elevated Bottom Controller (Above Android Navigation bar) */
     .bottom-bar {
       position: absolute;
-      bottom: 22px;
+      bottom: calc(34px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
-      width: 92%;
-      max-width: 440px;
+      width: 90%;
+      max-width: 420px;
       display: flex;
       align-items: center;
       gap: 12px;
-      z-index: 50;
+      z-index: 100;
     }
 
     .nav-arrow {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       border-radius: 12px;
-      background: #17110c;
-      border: 1px solid rgba(245, 166, 35, 0.4);
+      background: #18120c;
+      border: 1.5px solid rgba(245, 166, 35, 0.45);
       color: var(--amber);
       font-size: 16px;
       font-weight: 800;
@@ -252,7 +257,7 @@
 
     .btn-launch {
       flex: 1;
-      height: 46px;
+      height: 48px;
       background: linear-gradient(135deg, #f5a623, #d97706);
       color: #0c0a08;
       font-family: 'Space Grotesk', sans-serif;
@@ -265,7 +270,7 @@
       justify-content: center;
       gap: 8px;
       box-shadow: 0 6px 20px rgba(245, 166, 35, 0.4);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s;
     }
     .btn-launch:active {
       transform: scale(0.97);
@@ -279,7 +284,9 @@
       <div class="brand-badge">⚡</div>
       <div class="brand-text">FormReady <span>3D</span></div>
     </a>
-    <a href="../" class="switch-btn">◀ 2D Dashboard</a>
+    <a href="../" class="switch-btn" onclick="window.location.href='../'; return false;">
+      ◀ 2D Dashboard
+    </a>
   </div>
 
   <div class="stage-3d" id="stage">
@@ -326,7 +333,6 @@ const deck = document.getElementById("deck");
 const launchBtn = document.getElementById("launchBtn");
 let isScrolling = false;
 
-// 1. Initial Render
 function buildCards() {
   deck.innerHTML = "";
   TOOLS.forEach((tool, i) => {
@@ -355,7 +361,6 @@ function buildCards() {
   updateDeck();
 }
 
-// 2. High-Performance Spatial Math (Only renders visible cards, hides distant ones)
 function updateDeck() {
   const total = TOOLS.length;
 
@@ -363,44 +368,38 @@ function updateDeck() {
     const card = document.getElementById(`card-${i}`);
     let offset = i - currentIndex;
 
-    // Handle wrap-around loop
     if (offset > total / 2) offset -= total;
     if (offset < -total / 2) offset += total;
 
     card.classList.toggle("active-center", offset === 0);
 
     if (offset === 0) {
-      // Center focused card
       card.style.display = "flex";
       card.style.transform = "translate3d(0, 0, 0) scale(1)";
       card.style.opacity = "1";
       card.style.zIndex = "10";
       card.style.pointerEvents = "auto";
     } else if (Math.abs(offset) === 1) {
-      // Immediate adjacent cards (Left & Right)
       const dir = offset > 0 ? 1 : -1;
       card.style.display = "flex";
-      card.style.transform = `translate3d(${dir * 170}px, 0, -140px) rotateY(${-dir * 38}deg) scale(0.88)`;
-      card.style.opacity = "0.55";
+      card.style.transform = `translate3d(${dir * 150}px, 0, -120px) rotateY(${-dir * 35}deg) scale(0.88)`;
+      card.style.opacity = "0.5";
       card.style.zIndex = "5";
       card.style.pointerEvents = "auto";
     } else if (Math.abs(offset) === 2) {
-      // Far preview cards
       const dir = offset > 0 ? 1 : -1;
       card.style.display = "flex";
-      card.style.transform = `translate3d(${dir * 250}px, 0, -260px) rotateY(${-dir * 50}deg) scale(0.72)`;
+      card.style.transform = `translate3d(${dir * 220}px, 0, -220px) rotateY(${-dir * 45}deg) scale(0.74)`;
       card.style.opacity = "0.2";
       card.style.zIndex = "2";
       card.style.pointerEvents = "none";
     } else {
-      // Completely hidden to stop overlap and lag
       card.style.display = "none";
       card.style.opacity = "0";
       card.style.pointerEvents = "none";
     }
   }
 
-  // Update launch button destination
   const activeTool = TOOLS[currentIndex];
   launchBtn.href = `../tools/${activeTool.slug}/index.html`;
 }
@@ -410,7 +409,6 @@ function moveSlide(dir) {
   updateDeck();
 }
 
-// 3. One Scroll = One Tool Snapping
 window.addEventListener("wheel", (e) => {
   e.preventDefault();
   if (isScrolling) return;
@@ -422,7 +420,6 @@ window.addEventListener("wheel", (e) => {
   setTimeout(() => { isScrolling = false; }, 260);
 }, { passive: false });
 
-// 4. Mobile Swipe Gesture
 let startX = 0;
 let startY = 0;
 
@@ -440,7 +437,6 @@ window.addEventListener("touchend", (e) => {
   }
 }, { passive: true });
 
-// 5. Arrow Keys
 window.addEventListener("keydown", (e) => {
   if (e.key === "ArrowRight" || e.key === "ArrowDown") moveSlide(1);
   if (e.key === "ArrowLeft" || e.key === "ArrowUp") moveSlide(-1);
